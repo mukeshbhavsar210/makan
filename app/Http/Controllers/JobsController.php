@@ -83,9 +83,8 @@ class JobsController extends Controller
         ]);
     }
 
-    //This method JobDetails
+    //This method propertyDetails
     public function propertyDetails($id){
-
         $job = Job::where([
             'id' => $id,
             'status' => 1,
@@ -113,7 +112,7 @@ class JobsController extends Controller
         ]);
     }
 
-    public function applyJob(Request $request){
+    public function applyProperty(Request $request){
         $id = $request->id;
         $job = Job::where('id',$id)->first();
 
@@ -179,7 +178,7 @@ class JobsController extends Controller
         ]);
     }
 
-    public function saveJob(Request $request){
+    public function saveProperty(Request $request){
         $id = $request->id;
 
         $job = Job::find($id);

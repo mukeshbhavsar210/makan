@@ -49,7 +49,7 @@
                                             @endif
                                         </td>
                                         <td>
-                                            <a href="{{ route('jobDetails', $job->id) }}"> <i class="fa fa-eye" aria-hidden="true"></i></a>
+                                            <a href="{{ route('propertyDetails', $job->id) }}"> <i class="fa fa-eye" aria-hidden="true"></i></a>
                                             <a href="{{ route('account.editProperty', $job->id) }}"><i class="fa fa-edit" aria-hidden="true"></i></a>
                                             <a href="#" onclick="deleteJob({{ $job->id }})"><i class="fa fa-trash" aria-hidden="true"></i></a>
                                         </td>

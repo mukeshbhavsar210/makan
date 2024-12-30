@@ -59,7 +59,7 @@ class AccountController extends Controller
     }
 
     public function login(){
-        return view('front.account.login');
+        return view('front.layouts.app');
     }
 
     public function authenticate(Request $request){
@@ -127,7 +127,7 @@ class AccountController extends Controller
 
     public function logout(){
         Auth::logout();
-        return redirect()->route('account.login');
+        return redirect()->route('home');
     }
 
     public function updateProfilePic(Request $request){

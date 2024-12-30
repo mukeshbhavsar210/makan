@@ -43,13 +43,13 @@
              <div class="rh-ultra-thumb-info-box">
                 <div class="page-head-inner">
                    <div class="rh-ultra-property-tags rh-property-title">
-                      <a href="" class="rh-ultra-status rh-ultra-property-tag">For Sale</a>                      
-                      <span class="rh_ultra_featured rh-ultra-property-tag">Featured</span>                      
+                      <a href="" class="rh-ultra-status rh-ultra-property-tag">{{ $job->buy_sell }}</a>                      
+                      <span class="rh_ultra_featured rh-ultra-property-tag">{{ $job->jobType->name }}</span>                      
                    </div>
                    <div class="rh-ultra-property-title-price">
                       <h1 class="property-title">{{ $job->title }}</h1>
                       <div class="rh-ultra-property-tag-wrapper">
-                         <span class="rh-ultra-price "> $540,000 </span>
+                         <span class="rh-ultra-price "> {{ $job->price }} </span>
                       </div>
                    </div>
                    <p class="rh-ultra-property-address">
@@ -65,6 +65,7 @@
                 </div>
                 <img class="only-for-print inspiry-qr-code" src="https://chart.googleapis.com/chart?cht=qr&amp;chs=100x100&amp;chl=https://ultra.realhomes.io/property/home-in-merrick-way/&amp;choe=UTF-8" alt="Home in Merrick Way">
              </div>
+
              <div class="rh-ultra-thumb-action-box rh-ultra-action-buttons rh-ultra-action-dark hover-dark">
                 <span class="favorite-btn-wrap favorite-btn-45">
                    <span class="favorite-placeholder highlight__red hide user_not_logged_in rh-ui-tooltip " data-propertyid="45" title="Added to favorites">
@@ -73,36 +74,15 @@
                          <path class="rh-ultra-dark" d="M17.3 4c1.3 0 2.5 0.5 3.4 1.4C21.5 6.3 22 7.5 22 8.7c0 1.3-0.5 2.4-1.4 3.3L12 20.2l-8.6-8.2C2.5 11.2 2 10 2 8.7c0-1.3 0.5-2.5 1.4-3.4C4.3 4.5 5.5 4 6.7 4 8 4 9.2 4.5 10.1 5.4 10.3 5.6 11 6.2 12 6.2c0.7 0 1.4-0.3 1.9-0.8C14.8 4.5 16 4 17.3 4M17.3 2c-1.7 0-3.5 0.7-4.8 2 -0.2 0.2-0.3 0.2-0.5 0.2 -0.3 0-0.5-0.2-0.5-0.2 -1.3-1.3-3-2-4.8-2S3.3 2.7 2 4c-2.6 2.6-2.6 6.9 0 9.5L12 23l10-9.5c2.6-2.6 2.6-6.9 0-9.5C20.7 2.7 19 2 17.3 2L17.3 2z"></path>
                       </svg>
                    </span>
-                   <a href="#" class="favorite add-to-favorite user_not_logged_in rh-ui-tooltip " data-propertyid="45" title="Add to favorites">
+                   <a href="javascript:void(0)" onclick="saveProperty({{ $job->id }})" class="favorite add-to-favorite user_not_logged_in rh-ui-tooltip {{ ($count == 1) ? 'saved-job' : '' }}" data-propertyid="45" title="Add to favorites">
                       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                          <path class="rh-ultra-light" d="M2.7 12.8C1.6 11.7 1 10.3 1 8.7s0.6-3 1.7-4.1C3.8 3.6 5.2 3 6.8 3c1.5 0 3 0.6 4.1 1.7 0.1 0.1 0.5 0.5 1.2 0.5 0.4 0 0.9-0.2 1.2-0.6 1.1-1.1 2.5-1.7 4-1.7s3 0.6 4.1 1.7C22.4 5.8 23 7.2 23 8.7s-0.6 3-1.7 4.1L12 21.6 2.7 12.8z"></path>
                          <path class="rh-ultra-dark" d="M17.3 4c1.3 0 2.5 0.5 3.4 1.4C21.5 6.3 22 7.5 22 8.7c0 1.3-0.5 2.4-1.4 3.3L12 20.2l-8.6-8.2C2.5 11.2 2 10 2 8.7c0-1.3 0.5-2.5 1.4-3.4C4.3 4.5 5.5 4 6.7 4 8 4 9.2 4.5 10.1 5.4 10.3 5.6 11 6.2 12 6.2c0.7 0 1.4-0.3 1.9-0.8C14.8 4.5 16 4 17.3 4M17.3 2c-1.7 0-3.5 0.7-4.8 2 -0.2 0.2-0.3 0.2-0.5 0.2 -0.3 0-0.5-0.2-0.5-0.2 -1.3-1.3-3-2-4.8-2S3.3 2.7 2 4c-2.6 2.6-2.6 6.9 0 9.5L12 23l10-9.5c2.6-2.6 2.6-6.9 0-9.5C20.7 2.7 19 2 17.3 2L17.3 2z"></path>
                       </svg>
                    </a>
                 </span>
-                <span class="add-to-compare-span compare-btn-45" data-property-id="45" data-property-title="Home in Merrick Way" data-property-url="https://ultra.realhomes.io/property/home-in-merrick-way/" data-property-image="https://ultra-realhomes.b-cdn.net/wp-content/uploads/2022/06/architecture-home-merrick-way-488x326.jpg">
-                   <span class="compare-placeholder highlight hide rh-ui-tooltip" title="Added to compare">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                         <path class="rh-ultra-light" d="M11.1 23l-3.4-3.4v-1.2l3.4-3.4h1l2 4 9 0h-9l-2 4H11.1zM12 9l-2-4L1 5h9l2-4 1 0 3.4 3.4v1.2L12.9 9H12z"></path>
-                         <path class="rh-ultra-dark" d="M12.5 2l2.8 2.8v0.3L12.5 8l-1.4-2.9L11.1 5l0.1-0.1L12.5 2M11.5 16l1.4 2.9 0.1 0.1 -0.1 0.1L11.5 22l-2.8-2.8v-0.3L11.5 16M13.3 0h-2v0l-2 4H0v2h9.3l2 4h2l4-4V4L13.3 0 13.3 0zM12.7 14h-2l-4 4v2l4 4h2v0l2-4H24v-2h-9.3L12.7 14 12.7 14z"></path>
-                      </svg>
-                   </span>
-                   <a class="rh_trigger_compare add-to-compare rh-ui-tooltip" href="https://ultra.realhomes.io/property/home-in-merrick-way/" title="Add to compare">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                         <path class="rh-ultra-light" d="M11.1 23l-3.4-3.4v-1.2l3.4-3.4h1l2 4 9 0h-9l-2 4H11.1zM12 9l-2-4L1 5h9l2-4 1 0 3.4 3.4v1.2L12.9 9H12z"></path>
-                         <path class="rh-ultra-dark" d="M12.5 2l2.8 2.8v0.3L12.5 8l-1.4-2.9L11.1 5l0.1-0.1L12.5 2M11.5 16l1.4 2.9 0.1 0.1 -0.1 0.1L11.5 22l-2.8-2.8v-0.3L11.5 16M13.3 0h-2v0l-2 4H0v2h9.3l2 4h2l4-4V4L13.3 0 13.3 0zM12.7 14h-2l-4 4v2l4 4h2v0l2-4H24v-2h-9.3L12.7 14 12.7 14z"></path>
-                      </svg>
-                   </a>
-                </span>
-                <a href="javascript:window.print()" class="print rh-ui-tooltip" title="Print">
-                   <svg class="rh-ultra-dark" xmlns="http://www.w3.org/2000/svg" height="24" width="24">
-                      <path d="M0 0h24v24H0V0z" fill="none"></path>
-                      <path d="M8 5h8v3H8z" opacity=".3"></path>
-                      <circle cx="18" cy="11.5" r="1"></circle>
-                      <path d="M19 8h-1V3H6v5H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zM8 5h8v3H8V5zm8 14H8v-4h8v4zm4-4h-2v-2H6v2H4v-4c0-.55.45-1 1-1h14c.55 0 1 .45 1 1v4z"></path>
-                      <path d="M6 13h12v2h2v-4c0-.55-.45-1-1-1H5c-.55 0-1 .45-1 1v4h2v-2zm12-2.5c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1z" opacity=".3"></path>
-                   </svg>
-                </a>
+
+
                 <div class="rh-ultra-share-wrapper">
                    <a href="#" class="rh-ultra-share share rh-ui-tooltip" title="Share">
                       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-share-2">
@@ -112,7 +92,7 @@
                          <path d="m8.59 13.51 6.83 3.98M15.41 6.51l-6.82 3.98"></path>
                       </svg>
                    </a>
-                   <div class="share-this sharer-0 realhomes-line-social-share-enabled" data-check-mobile="" data-property-name="Home in Merrick Way" data-property-permalink="https://ultra.realhomes.io/property/home-in-merrick-way/" style="display: block;">
+                   {{-- <div class="share-this sharer-0 realhomes-line-social-share-enabled" data-check-mobile="" data-property-name="Home in Merrick Way" data-property-permalink="https://ultra.realhomes.io/property/home-in-merrick-way/" style="display: block;">
                       <label class="entypo-export"><span>Share</span></label>
                       <div class="social load center left networks-5">
                          <ul>
@@ -124,7 +104,7 @@
                             <li class="entypo-line" id="realhomes-line-social-share"><i class="fab fa-line"></i></li>
                          </ul>
                       </div>
-                   </div>
+                   </div> --}}
                 </div>
              </div>
           </div>

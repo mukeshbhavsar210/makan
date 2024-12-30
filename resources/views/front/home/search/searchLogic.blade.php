@@ -85,14 +85,11 @@
                 </div>
             </div>
 
-
-            <div class="rhea_collapsed_search_fields  rhea_advance_fields_collapsed"
-                id="collapsed_wrapper_7aa80cab">
-                <div class="rhea_collapsed_search_fields_inner"
-                    id="collapsed-7aa80cab"></div>
+            <div class="rhea_collapsed_search_fields  rhea_advance_fields_collapsed" id="collapsed_wrapper_7aa80cab">
+                <div class="rhea_collapsed_search_fields_inner" id="collapsed-7aa80cab"></div>
             </div>
             <div class="rhea_search_button_wrapper rhea_buttons_top">
-                <div class="rhea_advanced_expander  advance_button_7aa80cab">
+                <div class="rhea_advanced_expander advance_button_7aa80cab">
                     <span class="search-ultra-plus"><svg
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 330 330" xml:space="preserve">
