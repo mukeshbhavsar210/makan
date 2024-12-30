@@ -2,13 +2,19 @@
     <div class="card-body p-0">
         <ul class="list-group list-group-flush ">
             <li class="list-group-item d-flex justify-content-between p-3">
+                <a href="{{ route('admin.areas') }}">Area</a>
+            </li>
+            <li class="list-group-item d-flex justify-content-between p-3">
+                <a href="{{ route('cities.index') }}">City</a>
+            </li>
+            <li class="list-group-item d-flex justify-content-between p-3">
                 <a href="{{ route('admin.users') }}">Users</a>
             </li>
             <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                <a href="{{ route('account.myJobs') }}">Jobs</a>
+                <a href="{{ route('account.property') }}">Properties</a>
             </li>
             <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                <a href="{{ route('account.myJobApplications') }}">Job Applications</a>
+                <a href="{{ route('account.myJobApplications') }}">Interested</a>
             </li>
             <li class="list-group-item d-flex justify-content-between align-items-center p-3">
                 <a href="{{ route('account.logout') }}">Logout</a>

@@ -1,21 +1,12 @@
-@extends('front.layouts.app')
+@extends('admin.layouts.app')
 
 @section('main')
 <section class="section-5 bg-2">
-    <div class="container py-5">
-        <div class="row">
-            <div class="col">
-                <nav aria-label="breadcrumb" class=" rounded-3 p-3 mb-4">
-                    <ol class="breadcrumb mb-0">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Account Settings</li>
-                    </ol>
-                </nav>
-            </div>
-        </div>
+    <div class="container-fluid">
+        
         <div class="row">
             <div class="col-lg-3">
-                @include('front.account.sidebar')
+                @include('admin.layouts.sidebar')
             </div>
             <div class="col-lg-9">
 
@@ -173,7 +164,7 @@
                     $("#old_password").removeClass('is-invalid').siblings("p").removeClass('invalid-feedback').html();
                     $("#new_password").removeClass('is-invalid').siblings("p").removeClass('invalid-feedback').html();
                     $("#confirm_password").removeClass('is-invalid').siblings("p").removeClass('invalid-feedback').html();
-                    //window.location.href='{{ route("account.myJobs") }}'
+                    //window.location.href='{{ route("account.property") }}'
                 } else {
                     var errors = response.errors;
                     if(errors.old_password){

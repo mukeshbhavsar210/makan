@@ -13,6 +13,10 @@ class Job extends Model
         return $this->belongsTo(JobType::class);
     }
 
+    public function amenityType(){
+        return $this->belongsTo(Amenity::class);
+    }
+
     public function category(){
         return $this->belongsTo(Category::class);
     }
