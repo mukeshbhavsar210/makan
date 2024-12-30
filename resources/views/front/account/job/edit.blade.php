@@ -2,17 +2,8 @@
 
 @section('main')
 <section class="section-5 bg-2">
-    <div class="container py-5">
-        <div class="row">
-            <div class="col">
-                <nav aria-label="breadcrumb" class=" rounded-3 p-3 mb-3">
-                    <ol class="breadcrumb mb-0">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Account Settings</li>
-                    </ol>
-                </nav>
-            </div>
-        </div>
+    <div class="container-fluid">
+       
         <div class="row">
             <div class="col-lg-3">
                 @include('front.account.sidebar')
@@ -151,7 +142,7 @@
         $("button[type='submit']").prop('disabled', true);
 
         $.ajax({
-            url: '{{ route("account.updateJob", $job->id) }}',
+            url: '{{ route("account.updateProperty", $job->id) }}',
             type: 'POST',
             dataType: 'json',
             data: $("#updateJobForm").serializeArray(),
@@ -168,7 +159,7 @@
                     $("#description").removeClass('is-invalid').siblings("p").removeClass('invalid-feedback').html();
                     $("#company_name").removeClass('is-invalid').siblings("p").removeClass('invalid-feedback').html();
 
-                    window.location.href='{{ route("account.myJobs") }}'
+                    window.location.href='{{ route("account.property") }}'
 
                 } else {
 

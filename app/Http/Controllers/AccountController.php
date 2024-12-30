@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Mail\ResetPasswordEmail;
+use App\Models\Area;
 use App\Models\Category;
+use App\Models\City;
 use App\Models\Job;
 use App\Models\JobApplication;
 use App\Models\JobType;
@@ -18,6 +20,7 @@ use Illuminate\Support\Facades\Validator;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
 use Illuminate\Support\Str;
+use Spatie\Permission\Traits\HasRoles;
 
 class AccountController extends Controller
 {
@@ -84,7 +87,7 @@ class AccountController extends Controller
         $id = Auth::user()->id;
         $user = User::where('id',$id)->first();
 
-        return view('front.account.profile',[
+        return view('admin.account.profile',[
             'user' => $user
         ]);
     }
@@ -170,24 +173,27 @@ class AccountController extends Controller
         }
     }
 
-    public function createJob(){
+    public function createProperty(){
+        $cities = City::orderBy('name','ASC')->where('status',1)->get();
+        $areas = Area::orderBy('name','ASC')->where('status',1)->get();
         $categories = Category::orderBy('name','ASC')->where('status',1)->get();
         $jobtypes = JobType::orderBy('name','ASC')->where('status',1)->get();
 
-        return view('front.account.job.create',[
+        return view('admin.job.create',[
+            'cities' => $cities,
+            'areas' => $areas,
             'categories' => $categories,
-            'jobtypes' => $jobtypes
+            'jobtypes' => $jobtypes,
         ]);
     }
 
-    public function saveJob(Request $request){
+    public function saveProperty(Request $request){
         $rules = [
             'title' => 'required|min:5|max:200',
-            'category' => 'required',
-            'vacancy' => 'required|integer',
+            'category' => 'required',            
             'jobtype' => 'required',
-            'location' => 'required|max:50',
             'description' => 'required',
+            'location' => 'required|max:50',            
             'company_name' => 'required|min:3|max:75',
         ];
 
@@ -198,21 +204,15 @@ class AccountController extends Controller
             $job->category_id = $request->category;
             $job->job_type_id = $request->jobtype;
             $job->user_id = Auth::user()->id;
-            $job->vacancy = $request->vacancy;
-            $job->salary = $request->salary;
             $job->location = $request->location;
-            $job->description = $request->description;
-            $job->benefits = $request->benefits;
-            $job->responsibility = $request->responsibility;
-            $job->qualification = $request->qualification;
-            $job->keywords = $request->keywords;
-            $job->experience = $request->experience;
+            $job->description = $request->description;            
+            $job->keywords = $request->keywords;            
             $job->company_name = $request->company_name;
             $job->company_location = $request->company_location;
             $job->company_website = $request->company_website;
             $job->save();
 
-            session()->flash('success','Job added successfully.');
+            session()->flash('success','Property added successfully.');
 
             return response()->json([
                 'status' => true,
@@ -227,15 +227,22 @@ class AccountController extends Controller
         }
     }
 
-    public function myJobs(){
-        $jobs = Job::where('user_id', Auth::user()->id)->with('jobType')->orderBy('created_at','DESC')->paginate(10);
 
-        return view('front.account.job.my-jobs', [
+    public function myProperties(){
+        $jobs = Job::where('user_id', Auth::user()->id)->with('jobType')->orderBy('created_at','DESC')->paginate(10);        
+
+        // if(Auth::user()->hasRole('admin')) {
+        //     $items = Job::orderBy('id','DESC')->with('author')->paginate(5);
+        // } else {
+        //     $jobs = Job::where('user_id', Auth::user()->id)->with('jobType')->orderBy('created_at','DESC')->paginate(10);        
+        // }
+
+        return view('admin.job.my-jobs', [
             'jobs' => $jobs
         ]);
     }
 
-    public function editJob(Request $request, $id) {
+    public function editProperty(Request $request, $id) {
         $categories = Category::orderBy('name','ASC')->where('status',1)->get();
         $jobtypes = JobType::orderBy('name','ASC')->where('status',1)->get();
 
@@ -248,7 +255,7 @@ class AccountController extends Controller
             abort(404);
         }
 
-        return view('front.account.job.edit', [
+        return view('admin.job.edit', [
             'categories' => $categories,
             'jobtypes' => $jobtypes,
             'job' => $job,
@@ -256,7 +263,7 @@ class AccountController extends Controller
     }
 
 
-    public function updateJob(Request $request, $id){
+    public function updateProperty(Request $request, $id){
         $rules = [
             'title' => 'required|min:5|max:200',
             'category' => 'required',
@@ -273,22 +280,16 @@ class AccountController extends Controller
             $job->title = $request->title;
             $job->category_id = $request->category;
             $job->job_type_id = $request->jobtype;
-            $job->user_id = Auth::user()->id;
-            $job->vacancy = $request->vacancy;
-            $job->salary = $request->salary;
+            $job->user_id = Auth::user()->id;            
             $job->location = $request->location;
-            $job->description = $request->description;
-            $job->benefits = $request->benefits;
-            $job->responsibility = $request->responsibility;
-            $job->qualification = $request->qualification;
-            $job->keywords = $request->keywords;
-            $job->experience = $request->experience;
+            $job->description = $request->description;            
+            $job->keywords = $request->keywords;            
             $job->company_name = $request->company_name;
             $job->company_location = $request->company_location;
             $job->company_website = $request->company_website;
             $job->save();
 
-            session()->flash('success','Job updated successfully.');
+            session()->flash('success','Property updated successfully.');
 
             return response()->json([
                 'status' => true,
@@ -303,7 +304,7 @@ class AccountController extends Controller
         }
     }
 
-    public function deleteJob(Request $request){
+    public function deleteProperty(Request $request){
 
         $job = Job::where([
             'user_id' => Auth::user()->id,
@@ -311,7 +312,7 @@ class AccountController extends Controller
         ])->first();
 
         if($job == null){
-            session()->flash('error','Either job deleted or not found.');
+            session()->flash('error','Either property deleted or not found.');
             return response()->json([
                 'status' => true
             ]);
@@ -319,7 +320,7 @@ class AccountController extends Controller
 
         Job::where('id',$request->jobId)->delete();
 
-        session()->flash('success','Job deleted successfully.');
+        session()->flash('success','Property deleted successfully.');
         return response()->json([
             'status' => true
         ]);
@@ -331,7 +332,7 @@ class AccountController extends Controller
                             ->orderBy('created_at','DESC')
                             ->paginate(10);
 
-        return view('front.account.job.my-job-applications',[
+        return view('admin.job.my-job-applications',[
             'jobApplications' => $jobApplications,
         ]);
     }
@@ -343,7 +344,7 @@ class AccountController extends Controller
                             )->first();
 
         if($JobApplication == null) {
-            session()->flash('error','Job application not found');
+            session()->flash('error','Property interest not found');
             return response()->json([
                 'status' => false,
             ]);
@@ -351,38 +352,38 @@ class AccountController extends Controller
 
         JobApplication::find($request->id)->delete();
 
-        session()->flash('success','Job application removed successfully.');
+        session()->flash('success','Property interested removed successfully.');
         return response()->json([
             'status' => true,
         ]);
     }
 
-    public function savedJobs(Request $request){
+    public function savedProperties(Request $request){
         $savedJobs = SavedJob::where([
             'user_id' => Auth::user()->id
         ])->with(['job','job.jobType','job.applications'])->orderBy('created_at','DESC')->paginate(10);
 
-        return view('front.account.job.saved-jobs',[
+        return view('admin.job.saved-jobs',[
             'savedJobs' => $savedJobs,
         ]);
     }
 
 
-    public function removeSavedJob(Request $request) {
+    public function removeSavedProperty(Request $request) {
         $savedJob = SavedJob::where([
                                 'id' => $request->id,
                                 'user_id' => Auth::user()->id]
                             )->first();
 
         if($savedJob == null) {
-            session()->flash('error','Job not found');
+            session()->flash('error','Property not found');
             return response()->json([
                 'status' => false,
             ]);
         }
 
         SavedJob::find($request->id)->delete();
-        session()->flash('success','Job removed successfully.');
+        session()->flash('success','Property removed successfully.');
 
         return response()->json([
             'status' => true,

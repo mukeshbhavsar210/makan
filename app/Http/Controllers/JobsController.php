@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\JobNotificationEmail;
+use App\Models\Amenity;
 use Illuminate\Support\Facades\Mail;
 use App\Models\Category;
 use App\Models\Job;
@@ -18,7 +19,7 @@ class JobsController extends Controller
 {
     //this method will show Jobs page
     public function index(Request $request){
-
+        $amenityType = Amenity::where('status',1)->get();
         $categories = Category::where('status',1)->get();
         $jobTypes = JobType::where('status',1)->get();
         $jobs = Job::where('status',1);
@@ -41,11 +42,19 @@ class JobsController extends Controller
             $jobs = $jobs->where('category_id',$request->category);
         }
 
+
         //Filter using job_type
         $jobTypeArray = [];
         if(!empty($request->jobType)){
             $jobTypeArray = explode(',',$request->jobType);
             $jobs = $jobs->whereIn('job_type_id',$jobTypeArray);
+        }
+
+        //Filter using job_type
+        $amenityTypeArray = [];
+        if(!empty($request->amenityType)){
+            $amenityTypeArray = explode(',',$request->amenityType);
+            $jobs = $jobs->whereIn('amenity_id',$amenityTypeArray);
         }
 
         //Filter using experience
@@ -54,7 +63,7 @@ class JobsController extends Controller
         }
 
 
-        $jobs = $jobs->with('jobType','category');
+        $jobs = $jobs->with('jobType','amenityType','category');
 
         if($request->sort == '0'){
             $jobs = $jobs->orderBy('created_at','ASC');
@@ -64,16 +73,18 @@ class JobsController extends Controller
 
         $jobs = $jobs->paginate(10);
 
-        return view('front.jobs',[
+        return view('front.property.index',[
             'categories' => $categories,
+            'amenityType' => $amenityType,
             'jobTypes' => $jobTypes,
+            'amenityTypeArray' => $amenityTypeArray,
             'jobs' => $jobs,
             'jobTypeArray' => $jobTypeArray
         ]);
     }
 
     //This method JobDetails
-    public function jobDetails($id){
+    public function propertyDetails($id){
 
         $job = Job::where([
             'id' => $id,
@@ -95,9 +106,11 @@ class JobsController extends Controller
         //Fetch applicants
         $applications = JobApplication::where('job_id',$id)->with('user')->get();
 
-        return view('front.jobDetails',[ 'job' => $job,
-                                        'count' => $count,
-                                        'applications' => $applications ]);
+        return view('front.propertyDetails.index',[ 
+            'job' => $job,
+            'count' => $count,
+            'applications' => $applications 
+        ]);
     }
 
     public function applyJob(Request $request){

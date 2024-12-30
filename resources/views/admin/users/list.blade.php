@@ -1,26 +1,15 @@
-@extends('front.layouts.app')
+@extends('admin.layouts.app')
 
 @section('main')
 <section class="section-5 bg-2">
-    <div class="container py-5">
-        <div class="row">
-            <div class="col">
-                <nav aria-label="breadcrumb" class=" rounded-3 p-3 mb-4">
-                    <ol class="breadcrumb mb-0">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Dashboard</li>
-                    </ol>
-                </nav>
-            </div>
-        </div>
+    <div class="container-fluid">
+        
         <div class="row">
             <div class="col-lg-3">
-                @include('admin.sidebar')
+                @include('admin.layouts.sidebar')
             </div>
             <div class="col-lg-9">
-
                 @include('front.message')
-
                 <div class="card border-0 shadow mb-4">
                     <div class="card-body card-form">
                         <div class="d-flex justify-content-between">
@@ -46,24 +35,15 @@
                                             <td>{{ $user->email }}</td>
                                             <td>{{ $user->mobile }}</td>
                                             <td>
-                                                <div class="action-dots float-end">
-                                                    <button href="#" class="btn" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
-                                                    </button>
-                                                    <ul class="dropdown-menu dropdown-menu-end">
-                                                        <li><a class="dropdown-item" href="{{ route('admin.users.edit', $user->id) }}"><i class="fa fa-edit" aria-hidden="true"></i> Edit</a></li>
-                                                        <li><a class="dropdown-item" href="#"><i class="fa fa-trash" aria-hidden="true"></i> Delete</a></li>
-                                                    </ul>
-                                                </div>
+                                                <a  href="{{ route('admin.users.edit', $user->id) }}"><i class="fa fa-edit" aria-hidden="true"></i></a>
+                                                <a href="#"><i class="fa fa-trash" aria-hidden="true"></i></a>
                                             </td>
                                         </tr>
                                         @endforeach
                                     @endif
-
                                 </tbody>
                             </table>
                         </div>
-
                         {{ $users->links() }}
                     </div>
                 </div>
