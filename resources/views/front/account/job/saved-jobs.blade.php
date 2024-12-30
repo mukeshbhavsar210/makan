@@ -47,7 +47,7 @@
                                                         <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
                                                     </button>
                                                     <ul class="dropdown-menu dropdown-menu-end">
-                                                        <li><a class="dropdown-item" href="{{ route('jobDetails', $savedjob->job_id) }}"> <i class="fa fa-eye" aria-hidden="true"></i> View</a></li>
+                                                        <li><a class="dropdown-item" href="{{ route('propertyDetails', $savedjob->job_id) }}"> <i class="fa fa-eye" aria-hidden="true"></i> View</a></li>
                                                         <li><a class="dropdown-item" href="#" onclick="removeJob({{ $savedjob->id }})"><i class="fa fa-edit" aria-hidden="true"></i> Remove Job</a></li>
                                                     </ul>
                                                 </div>

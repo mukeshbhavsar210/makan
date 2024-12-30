@@ -8,7 +8,7 @@
                 <h1>Profile</h1>
             </div>
             <div class="col-sm-6 text-right">
-                <a href="{{ route('areas.create') }}" class="btn btn-primary">Add New Area</a>
+                
             </div>
         </div>
     </div>

@@ -54,13 +54,13 @@
 
 @if ($jobs->isNotEmpty())
     @foreach ($jobs as $job)
-       <a href="{{ route('jobDetails', $job->id) }}"><img class="img-fluid" src="img/property-1.jpg" alt=""></a>
+       <a href="{{ route('propertyDetails', $job->id) }}"><img class="img-fluid" src="img/property-1.jpg" alt=""></a>
        {{ $job->jobType->name }}
     
     <p>{{ Str::words(strip_tags($job->description), $words=10, '...') }}</p>
     
        {{-- {{ $job->amenityType->name }} --}}
-       <a class="d-block h5 mb-2" href="{{ route('jobDetails', $job->id) }}">{{ $job->title }}</a>
+       <a class="d-block h5 mb-2" href="{{ route('propertyDetails', $job->id) }}">{{ $job->title }}</a>
        {{ $job->location }}       
 @endforeach
    <div> {{ $jobs->withQueryString()->links() }} </div>

@@ -38,7 +38,7 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <a href="{{ route('jobDetails', $jobApplication->job_id) }}"> <i class="fa fa-eye" aria-hidden="true"></i></a>
+                                        <a href="{{ route('propertyDetails', $jobApplication->job_id) }}"> <i class="fa fa-eye" aria-hidden="true"></i></a>
                                         <a href="#" onclick="removeJob({{ $jobApplication->id }})"><i class="fa fa-edit" aria-hidden="true"></i></a>
                                     </td>
                                 </tr>
