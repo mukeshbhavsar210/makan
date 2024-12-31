@@ -2209,11 +2209,7 @@
     box-shadow: 0 2px 8px rgba(255, 0, 0, 0.18);
     border: 1px solid red;
   }
-  .rh_login_modal_ultra.rh_login_modal_wrapper button:not(.dropdown-toggle) {
-    border-radius: 40px;
-    height: 50px;
-  }
-  
+ 
   .rh_modal_login_loader svg path {
     fill: var(--rh-global-color-primary);
   }

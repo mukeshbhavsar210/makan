@@ -36,7 +36,49 @@
                       <div class="elementor-widget-wrap elementor-element-populated">
                          <div class="elementor-element elementor-element-7177611f elementor-widget elementor-widget-rhea-ultra-agents-widget" data-id="7177611f" data-element_type="widget" data-widget_type="rhea-ultra-agents-widget.default">
                             <div class="elementor-widget-container">
-                               <div class="rhea-ultra-agents-wrapper" id="rhea-ultra-7177611f">
+                              
+                              <div class="meetDeveloprs">
+                                 <div class="rhea-ultra-agent-slide-outer">
+                                    <div class="rhea-ultra-agent-slide">
+                                       <div class="rhea-ultra-agent-thumb-detail">
+                                          <div class="rhea-agent-thumb">
+                                             <a href="https://ultra.realhomes.io/agent/alice-brian/">
+                                             <img loading="lazy" decoding="async" width="210" height="210" src="https://ultra-realhomes.b-cdn.net/wp-content/uploads/2020/05/Alice-Brian-1-210x210.jpg" class="attachment-agent-image size-agent-image wp-post-image" alt="" srcset="https://ultra-realhomes.b-cdn.net/wp-content/uploads/2020/05/Alice-Brian-1-210x210.jpg 210w, https://ultra-realhomes.b-cdn.net/wp-content/uploads/2020/05/Alice-Brian-1-300x300.jpg 300w, https://ultra-realhomes.b-cdn.net/wp-content/uploads/2020/05/Alice-Brian-1-150x150.jpg 150w, https://ultra-realhomes.b-cdn.net/wp-content/uploads/2020/05/Alice-Brian-1.jpg 534w" sizes="(max-width: 210px) 100vw, 210px">                                            </a>
+                                          </div>
+                                          <div class="rhea-agent-detail">
+                                             <h3>
+                                                <a href="https://ultra.realhomes.io/agent/alice-brian/">Alice Brian</a>
+                                                <span class="rh_agent_verification__icon">
+                                                   <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="405.272px" height="405.272px" viewBox="0 0 405.272 405.272" xml:space="preserve">
+                                                      <path d="M393.401,124.425L179.603,338.208c-15.832,15.835-41.514,15.835-57.361,0L11.878,227.836
+                                                         c-15.838-15.835-15.838-41.52,0-57.358c15.841-15.841,41.521-15.841,57.355-0.006l81.698,81.699L336.037,67.064
+                                                         c15.841-15.841,41.523-15.829,57.358,0C409.23,82.902,409.23,108.578,393.401,124.425z"></path>
+                                                   </svg>
+                                                </span>
+                                             </h3>
+                                             <a class="rhea-ultra-agent-title" href="https://ultra.realhomes.io/agency-detail/alice-estate-agency/">
+                                             Alice Estate Agency                                                </a>
+                                          </div>
+                                       </div>
+                                       <div class="rhea-ultra-agent-listings-thumbs">
+                                          <img decoding="async" src="https://ultra-realhomes.b-cdn.net/wp-content/uploads/2022/11/living-room-gbb61c6983_1920-300x198.jpg" alt="living-room-gbb61c6983_1920.jpg">
+                                          <img decoding="async" src="https://ultra-realhomes.b-cdn.net/wp-content/uploads/2022/11/spacejoy-4xRP0Ajk9ys-unsplash-300x169.jpg" alt="spacejoy-4xRP0Ajk9ys-unsplash.jpg">
+                                          <img decoding="async" src="https://ultra-realhomes.b-cdn.net/wp-content/uploads/2022/11/collov-home-design-i78VpqDGDSc-unsplash-300x225.jpg" alt="collov-home-design-i78VpqDGDSc-unsplash.jpg">
+                                       </div>
+                                       <div class="rhea-ultra-agent-links">
+                                          <a class="rhea-ultra-agent-profile" href="">View Profile</a>
+                                          <a class="rhea-ultra-agent-listed" href="">3 Listed Properties<i class="rhea-fas fas fa-caret-right"></i></a>
+                                       </div>
+                                    </div>
+                                 </div>
+                                 <div>2</div>
+                                 <div>3</div>
+                                 <div>4</div>
+                                 <div>5</div>
+                                 <div>6</div>
+                              </div>
+
+                               {{-- <div class="rhea-ultra-agents-wrapper" id="rhea-ultra-7177611f">
                                   <div id="rhea-carousel-7177611f" class="owl-carousel owl-loaded owl-drag">
                                      <div class="owl-stage-outer">
                                         <div class="owl-stage" style="transform: translate3d(-1329px, 0px, 0px); transition: all; width: 4434px;">
@@ -198,46 +240,8 @@
                                      <div id="rhea-dots-7177611f" class="rhea-ultra-owl-dots owl-dots"><button role="button" class="owl-dot active"><span></span></button><button role="button" class="owl-dot"><span></span></button><button role="button" class="owl-dot"><span></span></button><button role="button" class="owl-dot"><span></span></button></div>
                                      <button type="button" role="presentation" class="owl-next"><i class="fas fa-caret-right"></i></button>
                                   </div>
-                               </div>
-                               <script type="application/javascript">
-                                  jQuery( document ).ready( function () {
-                                  
-                                  jQuery( "#rhea-carousel-7177611f" ).owlCarousel( {
-                                      items         : 3,
-                                      nav           : true,
-                                      dots          : true,
-                                      dotsEach      : true,
-                                      loop          : true,
-                                      rtl           : rheaIsRTL(),
-                                      // center: true,
-                                      navText       : ['<i class="fas fa-caret-left"></i>', '<i class="fas fa-caret-right"></i>'],
-                                      navContainer  : '#rhea-nav-7177611f',
-                                      dotsContainer : '#rhea-dots-7177611f',
-                                      responsive    : {
-                                          // breakpoint from 0 up
-                                          0    : {
-                                              items : 1
-                                              // center: false,
-                                          },
-                                          // breakpoint from 650 up
-                                          650  : {
-                                              items  : 2,
-                                              // center: false,
-                                              margin : 20
-                                          },
-                                          // breakpoint from 1140 up
-                                          1140 : {
-                                              items  : 3,
-                                              margin : 30
-                                              // center: false,
-                                          },
-                                          1400 : {
-                                              margin : 50
-                                          }
-                                      }
-                                  } );
-                                  } );
-                               </script>
+                               </div> --}}
+                               
                             </div>
                          </div>
                          <div class="elementor-element elementor-element-34c03ee6 elementor-widget__width-initial elementor-absolute elementor-widget elementor-widget-spacer" data-id="34c03ee6" data-element_type="widget" data-settings="{&quot;_position&quot;:&quot;absolute&quot;}" data-widget_type="spacer.default">

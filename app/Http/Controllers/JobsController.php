@@ -6,6 +6,7 @@ use App\Mail\JobNotificationEmail;
 use App\Models\Amenity;
 use Illuminate\Support\Facades\Mail;
 use App\Models\Category;
+use App\Models\City;
 use App\Models\Job;
 use App\Models\JobApplication;
 use App\Models\JobType;
@@ -20,6 +21,7 @@ class JobsController extends Controller
     //this method will show Jobs page
     public function index(Request $request){
         $amenityType = Amenity::where('status',1)->get();
+        //$city = City::where('status',1)->get();
         $categories = Category::where('status',1)->get();
         $jobTypes = JobType::where('status',1)->get();
         $jobs = Job::where('status',1);
@@ -33,15 +35,19 @@ class JobsController extends Controller
         }
 
         //Filter using location
-        if(!empty($request->location)){
-            $jobs = $jobs->where('location',$request->location);
+        // if(!empty($request->location)){
+        //     $jobs = $jobs->where('location',$request->location);            
+        // }
+
+        //Filter using location
+        if(!empty($request->city)){            
+            $jobs = $jobs->where('city_id',$request->city);
         }
 
         //Filter using category
         if(!empty($request->category)){
             $jobs = $jobs->where('category_id',$request->category);
         }
-
 
         //Filter using job_type
         $jobTypeArray = [];

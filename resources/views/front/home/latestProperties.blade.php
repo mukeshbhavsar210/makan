@@ -1,3 +1,4 @@
+
 <section
     class="elementor-section elementor-top-section elementor-element elementor-element-2072ba6b elementor-section-boxed elementor-section-height-default elementor-section-height-default"
     data-id="2072ba6b" data-element_type="section">
@@ -25,7 +26,7 @@
                         <section class="rhea-ultra-properties-one-section rhea-ultra-tooltip rhea-toolip-light rhea-card-style-1">                                                   
                             @if ($featuredJobs->isNotEmpty())
                                 @foreach ($featuredJobs as $featuredJob)
-                                <div class="rhea-ultra-property-card-outer">
+                                <div class="discoverProducts">
                                     <div class="rhea-ultra-property-card">
                                         <div class="rhea-ultra-card-thumb-wrapper">
                                             <div class="rhea-ultra-property-thumb">

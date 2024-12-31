@@ -1,6 +1,24 @@
+
+
+
 <div class="rh-ultra-property-slider-wrapper">
     <div class="rh-ultra-property-slider-container">
        <div class="rh-ultra-property-slider slick-initialized slick-slider" data-count="6">
+
+         <div class="slider-for">
+            <div class="rh-ultra-property-thumb-wrapper">
+            <img src="https://ultra-realhomes.b-cdn.net/wp-content/uploads/2022/06/architecture-home-merrick-way.jpg" /></div>
+            <img src="https://ultra-realhomes.b-cdn.net/wp-content/uploads/2020/06/exterior-05.jpg" />
+            <img src="https://ultra-realhomes.b-cdn.net/wp-content/uploads/2020/06/interior-00.jpg" />
+         </div>
+         
+         <div class="slider-nav">
+            <img src="https://ultra-realhomes.b-cdn.net/wp-content/uploads/2022/06/architecture-home-merrick-way.jpg" />
+            <img src="https://ultra-realhomes.b-cdn.net/wp-content/uploads/2020/06/exterior-05.jpg" />
+            <img src="https://ultra-realhomes.b-cdn.net/wp-content/uploads/2020/06/interior-00.jpg" />
+         </div>
+
+
           <button class="slick-prev slick-arrow" aria-label="Previous" type="button" style="">Previous</button>
           <div class="slick-list draggable" style="height: 716.797px;">
              <div class="slick-track" style="opacity: 1; width: 7680px;">
