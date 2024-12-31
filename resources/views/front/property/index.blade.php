@@ -41,10 +41,10 @@
        }
    
        //if experience has a value
-       var experience = $("#experience").val();
-       if(experience != ""){
-           url += '&experience=' + experience;
-       }
+    //    var experience = $("#experience").val();
+    //    if(experience != ""){
+    //        url += '&experience=' + experience;
+    //    }
    
        //if user checked job type
        var checkedJobTypes = $("input:checkbox[name='job_type']:checked").map(function(){
@@ -62,13 +62,17 @@
        window.location.href=url;
    })
    
-   // $("#sort").change(function(){
-   //     $("#searchForm").submit();
-   // });
+   $("#sort").change(function(){
+       $("#searchForm").submit();
+   });
    
-   // $("#category").change(function(){
-   //     $("#searchForm").submit();
-   // });
+   $("#location").change(function(){
+       $("#searchForm").submit();
+   });
+
+   $("#category").change(function(){
+       $("#searchForm").submit();
+   });
    
    // $("#experience").change(function(){
    //     $("#searchForm").submit();
@@ -78,8 +82,8 @@
    //     $("#searchForm").submit();
    // });
    
-   // $("#location").keydown(function(){
-   //     $("#searchForm").submit();
-   // });
+   $("#location").keydown(function(){
+       $("#searchForm").submit();
+   });
 </script>
 @endsection
