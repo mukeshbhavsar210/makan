@@ -34,9 +34,6 @@ $(document).ready(function(){
 
 
     $('.discoverProducts').slick({
-        lazyLoad: 'ondemand',
-        centerMode: true,
-        centerPadding: '60px',
         autoplay: true,
         autoplaySpeed: 2000,
         slidesToShow: 3,

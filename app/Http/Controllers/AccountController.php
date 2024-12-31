@@ -3,12 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Mail\ResetPasswordEmail;
+use App\Models\Amenity;
 use App\Models\Area;
+use App\Models\Bath;
+use App\Models\bhk_type;
 use App\Models\Category;
 use App\Models\City;
+use App\Models\Developer;
+use App\Models\Facing;
 use App\Models\Job;
 use App\Models\JobApplication;
 use App\Models\JobType;
+use App\Models\Property;
+use App\Models\PropertyType;
+use App\Models\SaleType;
 use App\Models\SavedJob;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -176,41 +184,61 @@ class AccountController extends Controller
     public function createProperty(){
         $cities = City::orderBy('name','ASC')->where('status',1)->get();
         $areas = Area::orderBy('name','ASC')->where('status',1)->get();
+        $amenities = Amenity::orderBy('name','ASC')->where('status',1)->get();
+        $developers = Developer::orderBy('name','ASC')->where('status',1)->get();
+        $bhk = bhk_type::orderBy('name','ASC')->where('status',1)->get();        
+        $bath = Bath::orderBy('name','ASC')->where('status',1)->get();        
+        $facings = Facing::orderBy('name','ASC')->where('status',1)->get();    
         $categories = Category::orderBy('name','ASC')->where('status',1)->get();
-        $jobtypes = JobType::orderBy('name','ASC')->where('status',1)->get();
+        $propertyTypes = PropertyType::orderBy('name','ASC')->where('status',1)->get();
+        $saleTypes = SaleType::orderBy('name','ASC')->where('status',1)->get();        
 
-        return view('admin.job.create',[
+        $data = [ 
             'cities' => $cities,
             'areas' => $areas,
-            'categories' => $categories,
-            'jobtypes' => $jobtypes,
-        ]);
+            'amenities' => $amenities,
+            'developers' => $developers,
+            'bhk' => $bhk,
+            'bath' => $bath,
+            'facings' => $facings,
+            'categories' => $categories,            
+            'propertyTypes' => $propertyTypes, 
+            'saleTypes' => $saleTypes, 
+        ];
+
+        return view('admin.job.create', $data);
     }
+
+
 
     public function saveProperty(Request $request){
         $rules = [
-            'title' => 'required|min:5|max:200',
-            'category' => 'required',            
-            'jobtype' => 'required',
-            'description' => 'required',
-            'location' => 'required|max:50',            
-            'company_name' => 'required|min:3|max:75',
+            'title' => 'required|min:5|max:200',            
         ];
 
         $validator = Validator::make($request->all(),$rules);
         if ($validator->passes()) {
-            $job = new Job();
-            $job->title = $request->title;
-            $job->category_id = $request->category;
-            $job->job_type_id = $request->jobtype;
-            $job->user_id = Auth::user()->id;
-            $job->location = $request->location;
-            $job->description = $request->description;            
-            $job->keywords = $request->keywords;            
-            $job->company_name = $request->company_name;
-            $job->company_location = $request->company_location;
-            $job->company_website = $request->company_website;
-            $job->save();
+            $property = new Property();
+            $property->user_id = Auth::user()->id;
+            $property->title = $request->title;            
+            $property->category_id = $request->category;       
+            $property->sale_type_id = $request->saleType; 
+            $property->city_id = $request->city;   
+            $property->area_id = $request->area;   
+            $property->developer_id = $request->developer;   
+            $property->bhk_type_id = $request->bhk;            
+            $property->bath_id = $request->bath;
+            $property->facing_id = $request->facing;
+            $property->property_type_id = $request->propertyType;
+            $property->amenities = $request->amenities;
+            $property->description = $request->description;  
+            $property->location = $request->location;
+            $property->keywords = $request->keywords;            
+            $property->size = $request->size;
+            $property->price = $request->price;
+            $property->compare_price = $request->compare_price;
+            $property->location = $request->location;
+            $property->save();
 
             session()->flash('success','Property added successfully.');
 
@@ -227,9 +255,8 @@ class AccountController extends Controller
         }
     }
 
-
     public function myProperties(){
-        $jobs = Job::where('user_id', Auth::user()->id)->with('jobType')->orderBy('created_at','DESC')->paginate(10);        
+        $properties = Property::where('user_id', Auth::user()->id)->with('jobType')->orderBy('created_at','DESC')->paginate(10);        
 
         // if(Auth::user()->hasRole('admin')) {
         //     $items = Job::orderBy('id','DESC')->with('author')->paginate(5);
@@ -238,7 +265,7 @@ class AccountController extends Controller
         // }
 
         return view('admin.job.my-jobs', [
-            'jobs' => $jobs
+            'properties' => $properties
         ]);
     }
 

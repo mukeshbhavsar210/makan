@@ -9,22 +9,22 @@
 <section class="section-4 bg-2">
    @include('front.message')
    
-   Added on: {{ \Carbon\Carbon::parse($job->created_at)->format('d M, Y') }}
+   Added on: {{ \Carbon\Carbon::parse($property->created_at)->format('d M, Y') }}
 
    @if(Auth::check())
-      <a href="#" onclick="saveProperty({{ $job->id }})" class="btn btn-secondary">Save Property</a>
+      <a href="#" onclick="saveProperty({{ $property->id }})" class="btn btn-secondary">Save Property</a>
    @else
       <a href="javascript:void()" class="btn btn-secondary disabled">Login to Save</a>
    @endif
 
    @if(Auth::check())
-      <a href="#" onclick="applyProperty({{ $job->id }})" class="btn btn-primary">Apply</a>
+      <a href="#" onclick="applyProperty({{ $property->id }})" class="btn btn-primary">Apply</a>
    @else
       <a href="javascript:void()" class="btn btn-primary disabled">Login to Apply</a>
    @endif
            
        {{-- @if (Auth::user())
-           @if (Auth::user()->id == $job->user_id)               
+           @if (Auth::user()->id == $property->user_id)               
                @if ($applications->isNotEmpty())
                    @foreach ($applications as $application)
                            <p>{{ $application->user->name }}</p>
@@ -38,21 +38,16 @@
            @endif
        @endif --}}
 
-
     <div class="rh-ultra-property-content">
        <div class="rh-ultra-property-content-box">
           <div class="rh-ultra-overview-box">
-             <h4 class="rh_property__heading">
-                Overview    
-             </h4>
+             <h4 class="rh_property__heading">Overview</h4>
              <span class="rh-overview-separator">|</span>
              <div class="rh-property-id">
-                <span>
-                Property ID :        </span>
+                <span>Property ID:</span>
                 <span>RH-2015-06</span>
              </div>
-             <span class="rh-ultra-featured">
-             Featured            </span>
+             <span class="rh-ultra-featured">Featured</span>
           </div>
 
           @include('front.propertyDetails.moreDetails')
@@ -60,7 +55,7 @@
           <div class="rh-content-wrapper">
              <h4 class="rh_property__heading">Description</h4>
              <div class="rh_content margin-bottom-40px">
-               {!! nl2br($job->description) !!}
+               {!! nl2br($property->description) !!}
              </div>
           </div>
 

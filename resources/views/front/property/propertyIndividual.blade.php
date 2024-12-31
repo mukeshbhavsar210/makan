@@ -1,17 +1,17 @@
 
-   @if ($jobs->isNotEmpty())
-       @foreach ($jobs as $job)
+   @if ($properties->isNotEmpty())
+       @foreach ($properties as $value)
        <div class="rh-ultra-half-layout-list">
          <div class="rh-ultra-property-card rh-half-map-card rh_popup_info_map" data-rh-id="RH-45">
             <div class="rh-ultra-list-card-thumb">
                
               <div class="rh-ultra-status-box">
-                  <a href="#" class="rh-ultra-status">{{ $job->jobType->name }}</a>
-                  <span class="rh-ultra-featured">{{ $job->buy_sell }}</span>
+                  {{-- <a href="#" class="rh-ultra-status">{{ $value->jobType->name }}</a> --}}
+                  <span class="rh-ultra-featured">Buy</span>
                   {{-- <span class="rh-ultra-hot">Hot</span> --}}
                </div>
                
-               <a class="rh-permalink rh-thumb-with-bg" href="{{ route('propertyDetails', $job->id) }}" style="background-image: url('https://ultra-realhomes.b-cdn.net/wp-content/uploads/2022/06/architecture-home-merrick-way-1024x683.jpg')"></a>        
+               <a class="rh-permalink rh-thumb-with-bg" href="{{ route('propertyDetails', $value->id) }}" style="background-image: url('https://ultra-realhomes.b-cdn.net/wp-content/uploads/2022/06/architecture-home-merrick-way-1024x683.jpg')"></a>        
                
                <div class="rh-ultra-bottom-box rh-ultra-flex-end">
                   <div class="rh-ultra-action-buttons rh-ultra-action-dark hover-dark">
@@ -48,7 +48,7 @@
             </div>
             
             <div class="rh-ultra-card-detail-wrapper">
-               <h3 class="rh-ultra-property-title"><a href="{{ route('propertyDetails', $job->id) }}">{{ $job->title }}</a></h3>
+               <h3 class="rh-ultra-property-title"><a href="{{ route('propertyDetails', $value->id) }}">{{ $value->title }}</a></h3>
                <div class="rh-address-ultra">
                   <a class="rhea_trigger_map rhea_facnybox_trigger- " data-rhea-map-source="rhea-map-source-" data-rhea-map-location="25.749806376111,-80.25448590517,13" data-rhea-map-title="Home in Merrick Way" data-rhea-map-price=" $540,000 " data-rhea-map-thumb="https://ultra-realhomes.b-cdn.net/wp-content/uploads/2022/06/architecture-home-merrick-way-488x326.jpg" href="">
                      <span class="rh-ultra-address-pin">
@@ -58,7 +58,7 @@
                            <circle cx="12" cy="9" r="2.5" fill="#1db2ff" class="rh-ultra-dark"></circle>
                         </svg>
                      </span>
-                     {{ $job->location }}
+                     {{ $value->location }}
                   </a>
                </div>
      
@@ -87,7 +87,7 @@
                               </svg>
                            </span>
                            <span class="rh-ultra-meta-box">
-                           <span class="figure">3</span>
+                           <span class="figure">Bath</span>
                            </span>
                         </div>
                      </div>
@@ -101,7 +101,7 @@
                               </svg>
                            </span>
                            <span class="rh-ultra-meta-box">
-                           <span class="figure">4300</span>
+                           <span class="figure">{{ $value->size }}</span>
                            <span class="label">sq ft</span>
                            </span>
                         </div>
@@ -113,25 +113,23 @@
                <div class="rh-ultra-price-meta-box">
                   <div class="rh_prop_card__priceLabel_ultra">
                      <p class="rh_prop_card__price_ultra hide-ultra-price-postfix-separator">
-                        <span class="ere-price-display">${{ $job->price }}/-</span>    
+                        <span class="ere-price-display">${{ $value->price }}/-</span>    
                      </p>
                   </div>
-                  {{-- {{ Str::words(strip_tags($job->description), $words=10, '...') }} --}}
+                  {{-- {{ Str::words(strip_tags($value->description), $words=10, '...') }} --}}
       
-                  <div class="rh-ultra-year-built">Build 2018</div>
+                  <div class="rh-ultra-year-built">Build {{ \Carbon\Carbon::parse($value->created_at)->format('Y') }}</div>
                </div>
      
                <div class="rvr_card_info_wrap">
-                  <p class="added-date"><span class="added-title">Added:</span> June 15, 2022</p>
+                  <p class="added-date"><span class="added-title">Added:</span> {{ \Carbon\Carbon::parse($value->created_at)->format('d M, Y') }}</p>
                </div>
             </div>
          </div>
       </div>
 
-      
-                     
        @endforeach
-         {{ $jobs->withQueryString()->links() }}
+         {{ $properties->withQueryString()->links() }}
    @else
        <div>Property not found</div>
    @endif

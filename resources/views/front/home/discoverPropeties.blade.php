@@ -37,7 +37,7 @@
 	<div class="elementor-container elementor-column-gap-custom">
 
 		@if ($categories->isNotEmpty())
-			@foreach ($categories as $category)
+			@foreach ($categories as $value)
 				<div class="elementor-column elementor-col-25 elementor-top-column elementor-element elementor-element-53aff573" >
 					<div class="elementor-widget-wrap elementor-element-populated">
 						<div class="elementor-element elementor-element-16bfe2f8 elementor-widget elementor-widget-rhea-ultra-city"
@@ -45,12 +45,12 @@
 							
 							<div class="elementor-widget-container">
 								<section class="rhea_ultra_City rhea_ultra_City-16bfe2f8" style="background-image: url('https://ultra-realhomes.b-cdn.net/wp-content/uploads/2022/11/Untitled-3-600x1080.jpg');">
-									<a href="{{ route('jobs').'?category='.$category->id }}" class="rhea_ultra_city_thumb">
+									<a href="{{ route('properties').'?category='.$value->id }}" class="rhea_ultra_city_thumb">
 										<span>View All <i class="fas fa-caret-right"></i></span>
 									</a>
 									<div class="rhea_ultra_city_tag_wrapper">
 										<div class="rhea_ultra_city_tag">
-											<span class="rhea_ultra_city_name">{{ $category->name }} </span>
+											<span class="rhea_ultra_city_name">{{ $value->name }} </span>
 											<span class="rhea_ultra_city_properties">2 </span>
 											<span class="rhea_ultra_city_properties_label">Properties</span>
 										</div>

@@ -4,115 +4,123 @@ namespace App\Http\Controllers;
 
 use App\Mail\JobNotificationEmail;
 use App\Models\Amenity;
+use App\Models\Bath;
+use App\Models\bhk_type;
 use Illuminate\Support\Facades\Mail;
 use App\Models\Category;
 use App\Models\City;
-use App\Models\Job;
+use App\Models\Developer;
 use App\Models\JobApplication;
 use App\Models\JobType;
-use App\Models\SavedJob;
+use App\Models\Property;
+use App\Models\SavedProperty;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 
-class JobsController extends Controller
+class PropertiesController extends Controller
 {
     //this method will show Jobs page
     public function index(Request $request){
-        $amenityType = Amenity::where('status',1)->get();
-        //$city = City::where('status',1)->get();
+        $cities = City::where('status',1)->get();
         $categories = Category::where('status',1)->get();
-        $jobTypes = JobType::where('status',1)->get();
-        $jobs = Job::where('status',1);
+        $properties = Property::where('status',1);
+        //$bhkTypes = bhk_type::where('status',1)->get();
+        //$bathTypes = Bath::where('status',1)->get();
+        //$amenityType = Amenity::where('status',1)->get();        
+        //$developers = Developer::where('status',1)->get();
 
         //Filter using keyword
-        if(!empty($request->keyword)){
-            $jobs = $jobs->where(function($query) use ($request){
-                $query->orWhere('title','like','%'.$request->keyword.'%');
-                $query->orWhere('keywords','like','%'.$request->keyword.'%');
-            });
-        }
-
-        //Filter using location
-        // if(!empty($request->location)){
-        //     $jobs = $jobs->where('location',$request->location);            
+        // if(!empty($request->keyword)){
+        //     $property = $property->where(function($query) use ($request){
+        //         $query->orWhere('title','like','%'.$request->keyword.'%');
+        //         $query->orWhere('keywords','like','%'.$request->keyword.'%');
+        //     });
         // }
 
         //Filter using location
+        // if(!empty($request->location)){
+        //     $property = $property->where('location',$request->location);            
+        // }
+
+        //Filter using city
         if(!empty($request->city)){            
-            $jobs = $jobs->where('city_id',$request->city);
+            $properties = $properties->where('city_id',$request->city);
         }
 
         //Filter using category
         if(!empty($request->category)){
-            $jobs = $jobs->where('category_id',$request->category);
+            $properties = $properties->where('category_id',$request->category);
         }
 
         //Filter using job_type
-        $jobTypeArray = [];
-        if(!empty($request->jobType)){
-            $jobTypeArray = explode(',',$request->jobType);
-            $jobs = $jobs->whereIn('job_type_id',$jobTypeArray);
+        $bathTypeArray = [];
+        if(!empty($request->bathType)){
+            $bathTypeArray = explode(',',$request->bathType);
+            $properties = $properties->whereIn('bath_type_id',$bathTypeArray);
         }
 
         //Filter using job_type
-        $amenityTypeArray = [];
-        if(!empty($request->amenityType)){
-            $amenityTypeArray = explode(',',$request->amenityType);
-            $jobs = $jobs->whereIn('amenity_id',$amenityTypeArray);
-        }
+        // $jobTypeArray = [];
+        // if(!empty($request->jobType)){
+        //     $jobTypeArray = explode(',',$request->jobType);
+        //     $property = $property->whereIn('job_type_id',$jobTypeArray);
+        // }
 
-        //Filter using experience
-        if(!empty($request->experience)){
-            $jobs = $jobs->where('experience',$request->experience);
-        }
+        //Filter using job_type
+        // $amenityTypeArray = [];
+        // if(!empty($request->amenityType)){
+        //     $amenityTypeArray = explode(',',$request->amenityType);
+        //     $property = $property->whereIn('amenity_id',$amenityTypeArray);
+        // }
 
 
-        $jobs = $jobs->with('jobType','amenityType','category');
+        $properties = $properties->with('room','bathroom','developer','category','city');
 
         if($request->sort == '0'){
-            $jobs = $jobs->orderBy('created_at','ASC');
+            $properties = $properties->orderBy('created_at','ASC');
         } else {
-            $jobs = $jobs->orderBy('created_at','DESC');
+            $properties = $properties->orderBy('created_at','DESC');
         }
 
-        $jobs = $jobs->paginate(10);
+        $properties = $properties->paginate(10);
 
-        return view('front.property.index',[
+        $data = [
             'categories' => $categories,
-            'amenityType' => $amenityType,
-            'jobTypes' => $jobTypes,
-            'amenityTypeArray' => $amenityTypeArray,
-            'jobs' => $jobs,
-            'jobTypeArray' => $jobTypeArray
-        ]);
+            'cities' => $cities,
+            'properties' => $properties,
+            //'bathTypeArray' => $bathTypeArray            
+        ];
+
+        return view('front.property.index', $data);
     }
 
     //This method propertyDetails
     public function propertyDetails($id){
-        $job = Job::where([
+        $property = Property::where([
             'id' => $id,
             'status' => 1,
-        ])->with(['jobType','category'])->first();
+        ])->with(['room','bathroom','developer','category','city'])->first();
+        
 
-        if($job == null){
+        if($property == null){
             abort(404);
         }
 
         $count = 0;
         if(Auth::user()){
-            $count = SavedJob::where([
+            $count = SavedProperty::where([
                 'user_id' => Auth::user()->id,
-                'job_id' => $id,
+                'property_id' => $id,
             ])->count();
         }
 
         //Fetch applicants
-        $applications = JobApplication::where('job_id',$id)->with('user')->get();
+        $applications = JobApplication::where('property_id',$id)->with('user')->get();
 
         return view('front.propertyDetails.index',[ 
-            'job' => $job,
+            'property' => $property,
             'count' => $count,
             'applications' => $applications 
         ]);
@@ -120,11 +128,11 @@ class JobsController extends Controller
 
     public function applyProperty(Request $request){
         $id = $request->id;
-        $job = Job::where('id',$id)->first();
+        $property = Property::where('id',$id)->first();
 
         //If job not found in database
-        $message = 'Job does not exist.';
-        if($job == null){
+        $message = 'Property does not exist.';
+        if($property == null){
             session()->flash('error',$message);
             return response()->json([
                 'status' => false,
@@ -133,7 +141,7 @@ class JobsController extends Controller
         }
 
         //User can not apply on posted own job
-        $employer_id = $job->user_id;
+        $employer_id = $property->user_id;
         $message = 'You can not apply on your job.';
 
         if($employer_id == Auth::user()->id){
@@ -147,7 +155,7 @@ class JobsController extends Controller
         //You can not apply more than one time
         $jobApplicationCount = JobApplication::where([
             'user_id' => Auth::user()->id,
-            'job_id' => $id,
+            'property_id' => $id,
         ])->count();
 
         if($jobApplicationCount > 0){
@@ -160,7 +168,7 @@ class JobsController extends Controller
         }
 
         $application = New JobApplication();
-        $application->job_id = $id;
+        $application->property_id = $id;
         $application->user_id = Auth::user()->id;
         $application->employer_id = $employer_id;
         $application->applied_date = now();
@@ -187,10 +195,10 @@ class JobsController extends Controller
     public function saveProperty(Request $request){
         $id = $request->id;
 
-        $job = Job::find($id);
+        $property = Property::find($id);
 
-        if($job == null) {
-            $message = 'Job not found';
+        if($property == null) {
+            $message = 'Property not found';
             session()->flash('error', $message);
 
             return response()->json([
@@ -200,9 +208,9 @@ class JobsController extends Controller
         }
 
         //Check if user already saved the job
-        $count = SavedJob::where([
+        $count = SavedProperty::where([
             'user_id' => Auth::user()->id,
-            'job_id' => Auth::user()->id,
+            'property_id' => Auth::user()->id,
         ])->count();
 
         if($count > 0) {
@@ -213,8 +221,8 @@ class JobsController extends Controller
             ]);
         }
 
-        $savedJob = new SavedJob;
-        $savedJob->job_id = $id;
+        $savedJob = new SavedProperty;
+        $savedJob->property_id = $id;
         $savedJob->user_id = Auth::user()->id;
         $savedJob->save();
 

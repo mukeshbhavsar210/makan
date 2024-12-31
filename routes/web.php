@@ -9,7 +9,7 @@ use App\Http\Controllers\admin\ProductSubCategoryController;
 use App\Http\Controllers\admin\SettingController;
 use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\JobsController;
+use App\Http\Controllers\PropertiesController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
@@ -25,10 +25,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get("/",[HomeController::class, 'index'])->name('home');
-Route::get("/properties",[JobsController::class, 'index'])->name('jobs');
-Route::get("/details/{id}",[JobsController::class, 'propertyDetails'])->name('propertyDetails');
-Route::post("/apply-property",[JobsController::class, 'applyProperty'])->name('applyProperty');
-Route::post("/save-property",[JobsController::class, 'saveProperty'])->name('saveProperty');
+Route::get("/properties",[PropertiesController::class, 'index'])->name('properties');
+Route::get("/details/{id}",[PropertiesController::class, 'propertyDetails'])->name('propertyDetails');
+Route::post("/apply-property",[PropertiesController::class, 'applyProperty'])->name('applyProperty');
+Route::post("/save-property",[PropertiesController::class, 'saveProperty'])->name('saveProperty');
 Route::get("/forgot-password",[AccountController::class, 'forgotPassword'])->name('account.forgotPassword');
 Route::post("/process-forgot-password",[AccountController::class, 'processForgotPassword'])->name('account.processForgotPassword');
 Route::get("/reset-password/{token}",[AccountController::class, 'resetPassword'])->name('account.resetPassword');
