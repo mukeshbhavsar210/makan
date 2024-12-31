@@ -61,13 +61,13 @@
              <div class="rh-ultra-thumb-info-box">
                 <div class="page-head-inner">
                    <div class="rh-ultra-property-tags rh-property-title">
-                      <a href="" class="rh-ultra-status rh-ultra-property-tag">{{ $job->buy_sell }}</a>                      
-                      <span class="rh_ultra_featured rh-ultra-property-tag">{{ $job->jobType->name }}</span>                      
+                      <a href="" class="rh-ultra-status rh-ultra-property-tag">{{ $property->buy_sell }}</a>                      
+                      {{-- <span class="rh_ultra_featured rh-ultra-property-tag">{{ $property->jobType->name }}</span>                       --}}
                    </div>
                    <div class="rh-ultra-property-title-price">
-                      <h1 class="property-title">{{ $job->title }}</h1>
+                      <h1 class="property-title">{{ $property->title }}</h1>
                       <div class="rh-ultra-property-tag-wrapper">
-                         <span class="rh-ultra-price "> {{ $job->price }} </span>
+                         <span class="rh-ultra-price "> {{ $property->price }} </span>
                       </div>
                    </div>
                    <p class="rh-ultra-property-address">
@@ -78,7 +78,7 @@
                             <circle cx="12" cy="9" r="2.5" fill="#1db2ff" class="rh-ultra-dark"></circle>
                          </svg>
                       </span>
-                      {{ $job->location }}          
+                      {{ $property->location }}          
                    </p>
                 </div>
                 <img class="only-for-print inspiry-qr-code" src="https://chart.googleapis.com/chart?cht=qr&amp;chs=100x100&amp;chl=https://ultra.realhomes.io/property/home-in-merrick-way/&amp;choe=UTF-8" alt="Home in Merrick Way">
@@ -92,7 +92,7 @@
                          <path class="rh-ultra-dark" d="M17.3 4c1.3 0 2.5 0.5 3.4 1.4C21.5 6.3 22 7.5 22 8.7c0 1.3-0.5 2.4-1.4 3.3L12 20.2l-8.6-8.2C2.5 11.2 2 10 2 8.7c0-1.3 0.5-2.5 1.4-3.4C4.3 4.5 5.5 4 6.7 4 8 4 9.2 4.5 10.1 5.4 10.3 5.6 11 6.2 12 6.2c0.7 0 1.4-0.3 1.9-0.8C14.8 4.5 16 4 17.3 4M17.3 2c-1.7 0-3.5 0.7-4.8 2 -0.2 0.2-0.3 0.2-0.5 0.2 -0.3 0-0.5-0.2-0.5-0.2 -1.3-1.3-3-2-4.8-2S3.3 2.7 2 4c-2.6 2.6-2.6 6.9 0 9.5L12 23l10-9.5c2.6-2.6 2.6-6.9 0-9.5C20.7 2.7 19 2 17.3 2L17.3 2z"></path>
                       </svg>
                    </span>
-                   <a href="javascript:void(0)" onclick="saveProperty({{ $job->id }})" class="favorite add-to-favorite user_not_logged_in rh-ui-tooltip {{ ($count == 1) ? 'saved-job' : '' }}" data-propertyid="45" title="Add to favorites">
+                   <a href="javascript:void(0)" onclick="saveProperty({{ $property->id }})" class="favorite add-to-favorite user_not_logged_in rh-ui-tooltip {{ ($count == 1) ? 'saved-job' : '' }}" data-propertyid="45" title="Add to favorites">
                       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                          <path class="rh-ultra-light" d="M2.7 12.8C1.6 11.7 1 10.3 1 8.7s0.6-3 1.7-4.1C3.8 3.6 5.2 3 6.8 3c1.5 0 3 0.6 4.1 1.7 0.1 0.1 0.5 0.5 1.2 0.5 0.4 0 0.9-0.2 1.2-0.6 1.1-1.1 2.5-1.7 4-1.7s3 0.6 4.1 1.7C22.4 5.8 23 7.2 23 8.7s-0.6 3-1.7 4.1L12 21.6 2.7 12.8z"></path>
                          <path class="rh-ultra-dark" d="M17.3 4c1.3 0 2.5 0.5 3.4 1.4C21.5 6.3 22 7.5 22 8.7c0 1.3-0.5 2.4-1.4 3.3L12 20.2l-8.6-8.2C2.5 11.2 2 10 2 8.7c0-1.3 0.5-2.5 1.4-3.4C4.3 4.5 5.5 4 6.7 4 8 4 9.2 4.5 10.1 5.4 10.3 5.6 11 6.2 12 6.2c0.7 0 1.4-0.3 1.9-0.8C14.8 4.5 16 4 17.3 4M17.3 2c-1.7 0-3.5 0.7-4.8 2 -0.2 0.2-0.3 0.2-0.5 0.2 -0.3 0-0.5-0.2-0.5-0.2 -1.3-1.3-3-2-4.8-2S3.3 2.7 2 4c-2.6 2.6-2.6 6.9 0 9.5L12 23l10-9.5c2.6-2.6 2.6-6.9 0-9.5C20.7 2.7 19 2 17.3 2L17.3 2z"></path>

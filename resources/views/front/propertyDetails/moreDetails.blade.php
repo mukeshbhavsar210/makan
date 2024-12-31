@@ -10,7 +10,11 @@
                 </svg>
              </span>
              <span class="rh_ultra_meta_box">
-             <span class="figure"> {{ $job->bath }}  </span>
+             <span class="figure"> 
+               @if(!empty($property->room->name))
+                  {{ $property->room->name }}
+               @endif 
+               </span>
              </span>
           </div>
        </div>
@@ -27,7 +31,11 @@
                 </svg>
              </span>
              <span class="rh_ultra_meta_box">
-             <span class="figure">3</span>
+             <span class="figure">
+               @if(!empty($property->bathroom->name))
+                  {{ $property->bathroom->name }}
+               @endif
+             </span>
              </span>
           </div>
        </div>
@@ -44,7 +52,11 @@
                 </svg>
              </span>
              <span class="rh_ultra_meta_box">
-             <span class="figure">2018</span>
+             <span class="figure">
+               @if(!empty($property->year_build))
+                  {{ $property->year_build }}
+               @endif 
+             </span>
              </span>
           </div>
        </div>
@@ -61,7 +73,11 @@
                 </svg>
              </span>
              <span class="rh_ultra_meta_box">
-             <span class="figure">4300</span>
+             <span class="figure">
+               @if(!empty($property->size))
+                  {{ $property->size }}
+               @endif 
+             </span>
              <span class="label">sq ft</span>
              </span>
           </div>
@@ -90,7 +106,11 @@
                 </svg>
              </span>
              <span class="rh_ultra_meta_box">
-             <span class="figure">5400</span>
+             <span class="figure">
+               @if(!empty($property->total_area))
+                  {{ $property->total_area }}
+               @endif 
+             </span>
              <span class="label">sq ft</span>
              </span>
           </div>

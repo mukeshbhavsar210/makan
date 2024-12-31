@@ -5,12 +5,24 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Job extends Model
+class Property extends Model
 {
     use HasFactory;
 
     public function jobType(){
         return $this->belongsTo(JobType::class);
+    }
+
+    public function room(){
+        return $this->belongsTo(Room::class);
+    }
+
+    public function bathroom(){
+        return $this->belongsTo(Bathroom::class);
+    }
+
+    public function developer(){
+        return $this->belongsTo(Developer::class);
     }
 
     public function amenityType(){
@@ -19,6 +31,10 @@ class Job extends Model
 
     public function category(){
         return $this->belongsTo(Category::class);
+    }
+
+    public function city(){
+        return $this->belongsTo(City::class);
     }
 
     public function applications(){

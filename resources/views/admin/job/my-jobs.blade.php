@@ -32,26 +32,26 @@
                                 </tr>
                             </thead>
                             <tbody class="border-0">
-                                @if ($jobs->isNotEmpty())
-                                    @foreach ($jobs as $job)
+                                @if ($properties->isNotEmpty())
+                                    @foreach ($properties as $value)
                                     <tr class="active">
                                         <td>
-                                            <div class="job-name fw-500">{{ $job->title }}</div>
-                                            <div class="info1">{{ $job->jobType->name }} . {{ $job->location }}</div>
+                                            <div class="job-name fw-500">{{ $value->title }}</div>
+                                            {{-- <div class="info1">{{ $job->jobType->name }} . {{ $job->location }}</div> --}}
                                         </td>
-                                        <td>{{ \Carbon\Carbon::parse($job->created_at)->format('d M, Y') }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($value->created_at)->format('d M, Y') }}</td>
                                         <td>0 Applications</td>
                                         <td>
-                                            @if ($job->status == 1)
+                                            @if ($value->status == 1)
                                                 <div class="job-status text-capitalize">Active</div>
                                             @else
                                                 <div class="job-status text-capitalize">Block</div>
                                             @endif
                                         </td>
                                         <td>
-                                            <a href="{{ route('propertyDetails', $job->id) }}"> <i class="fa fa-eye" aria-hidden="true"></i></a>
-                                            <a href="{{ route('account.editProperty', $job->id) }}"><i class="fa fa-edit" aria-hidden="true"></i></a>
-                                            <a href="#" onclick="deleteJob({{ $job->id }})"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                            <a href="{{ route('propertyDetails', $value->id) }}"> <i class="fa fa-eye" aria-hidden="true"></i></a>
+                                            <a href="{{ route('account.editProperty', $value->id) }}"><i class="fa fa-edit" aria-hidden="true"></i></a>
+                                            <a href="#" onclick="deleteJob({{ $value->id }})"><i class="fa fa-trash" aria-hidden="true"></i></a>
                                         </td>
                                     </tr>
                                     @endforeach
@@ -61,7 +61,7 @@
                         </table>
                     </div>
 
-                    {{ $jobs->links() }}
+                    {{ $properties->links() }}
                 </div>
             </div>
         </div>

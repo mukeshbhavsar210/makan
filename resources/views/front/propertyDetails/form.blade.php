@@ -10,7 +10,7 @@
                 <div class="rh-side-title-box">
                    <span class="rh-agent-label">Agent</span>
                    <h3 class="rh_property_agent__title">
-                      <a href="">{{ $job->company_name }}</a>
+                      <a href="">{{ $property->company_name }}</a>
                    </h3>
                 </div>
                 <a class="rh-property-agent-link" href="">View My Listings</a>
@@ -20,33 +20,34 @@
           <div class="rh-property-agent-info-sidebar">
              <p class="contact office">
                 <span>Office</span>
-                <a href="tel:{{ $job->developer_landline }}">
+                <a href="tel: ">
                    <svg class="rh-ultra-dark" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
                       <path d="M0 0h24v24H0V0z" fill="none"></path>
                       <path d="M19 17.47c-.88-.07-1.75-.22-2.6-.45l-1.19 1.19c1.2.41 2.48.67 3.8.75v-1.49zM6.54 5h-1.5c.09 1.32.35 2.59.75 3.8l1.2-1.2c-.24-.84-.39-1.71-.45-2.6z" opacity=".3"></path>
                       <path d="M20 21c.55 0 1-.45 1-1v-3.49c0-.55-.45-1-1-1-1.24 0-2.45-.2-3.57-.57-.1-.04-.21-.05-.31-.05-.26 0-.51.1-.71.29l-2.2 2.2c-2.83-1.45-5.15-3.76-6.59-6.59l2.2-2.2c.28-.28.36-.67.25-1.02C8.7 6.45 8.5 5.25 8.5 4c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1 0 9.39 7.61 17 17 17zm-3.6-3.98c.85.24 1.72.39 2.6.45v1.49c-1.32-.09-2.59-.35-3.8-.75l1.2-1.19zM5.03 5h1.5c.07.89.22 1.76.46 2.59l-1.2 1.2c-.41-1.2-.67-2.47-.76-3.79z"></path>
                    </svg>
-                   @if(!empty($job->developer_landline))
-                     {{ $job->developer_landline }}
+                   
+                  @if(!empty($property->developer->landline))
+                     {{ $property->developer->landline }}
                   @endif                       
                 </a>
              </p>
              <p class="contact mobile">
                 <span>Mobile</span>
-                <a href="tel: {{ $job->developer_mobile }}">
+                <a href="tel: ">
                    <svg class="rh-ultra-dark" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
                       <path d="M0 0h24v24H0V0z" fill="none"></path>
                       <path d="M19 17.47c-.88-.07-1.75-.22-2.6-.45l-1.19 1.19c1.2.41 2.48.67 3.8.75v-1.49zM6.54 5h-1.5c.09 1.32.35 2.59.75 3.8l1.2-1.2c-.24-.84-.39-1.71-.45-2.6z" opacity=".3"></path>
                       <path d="M20 21c.55 0 1-.45 1-1v-3.49c0-.55-.45-1-1-1-1.24 0-2.45-.2-3.57-.57-.1-.04-.21-.05-.31-.05-.26 0-.51.1-.71.29l-2.2 2.2c-2.83-1.45-5.15-3.76-6.59-6.59l2.2-2.2c.28-.28.36-.67.25-1.02C8.7 6.45 8.5 5.25 8.5 4c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1 0 9.39 7.61 17 17 17zm-3.6-3.98c.85.24 1.72.39 2.6.45v1.49c-1.32-.09-2.59-.35-3.8-.75l1.2-1.19zM5.03 5h1.5c.07.89.22 1.76.46 2.59l-1.2 1.2c-.41-1.2-.67-2.47-.76-3.79z"></path>
                    </svg>
-                   @if(!empty($job->developer_mobile))
-                     {{ $job->developer_mobile }}
-                  @endif                      
+                  @if(!empty($property->developer->phone))
+                     {{ $property->developer->phone }}
+                  @endif                     
                 </a>
              </p>
              <p class="contact whatsapp">
                 <span>WhatsApp</span>
-                <a href="callto: {{ $job->developer_whatsapp }}">
+                <a href="callto: ">
                    <svg class="rh-ultra-dark" xmlns="http://www.w3.org/2000/svg" width="24" height="24">
                       <g>
                          <path d="M12 19.3c-1.3 0-2.6-.4-3.8-1l-.3-.2-2.8.7.7-2.7-.2-.3c-.7-1.2-1.1-2.5-1.1-3.9 0-4.1 3.3-7.4 7.4-7.4 2 0 3.8.8 5.2 2.2 1.4 1.4 2.3 3.3 2.3 5.2.1 4.1-3.3 7.4-7.4 7.4z" opacity=".3"></path>
@@ -56,9 +57,9 @@
                          <path d="M16.1 13.8c-.2-.1-1.3-.7-1.5-.7-.3-.1-.4-.1-.6.1-.1.2-.6.7-.7.9-.1.1-.3.2-.5.1-1.3-.7-2.2-1.2-3-2.7-.2-.4.2-.4.7-1.2.1-.1 0-.3 0-.4-.1-.1-.5-1.2-.7-1.7-.2-.4-.4-.4-.5-.4h-.4c-.1 0-.4.1-.6.3-.3.2-.8.7-.8 1.8s.8 2.2.9 2.3c.1.1 1.6 2.4 3.8 3.4 1.4.6 2 .7 2.7.6.4-.1 1.3-.5 1.5-1.1.2-.5.2-1 .1-1.1-.1 0-.2-.1-.4-.2z"></path>
                       </g>
                    </svg>
-                   @if(!empty($job->developer_whatsapp))
-                     {{ $job->developer_whatsapp }}
-                  @endif                                           
+                   @if(!empty($property->developer->whatsapp))
+                     {{ $property->developer->whatsapp }}
+                  @endif                                          
                 </a>
              </p>
              <p class="contact email">
@@ -69,9 +70,9 @@
                       <path d="M20 8l-8 5-8-5v10h16zm0-2H4l8 4.99z" opacity=".3"></path>
                       <path d="M4 20h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2zM20 6l-8 4.99L4 6h16zM4 8l8 5 8-5v10H4V8z"></path>
                    </svg>
-                   @if(!empty($job->developer_email))
-                     <a href="mailto:{{ $job->developer_email }}">{{ $job->developer_email }}</a>
-                  @endif                                              
+                   @if(!empty($property->developer->email))
+                     {{ $property->developer->email }}
+                  @endif                                                
                 </a>
              </p>
           </div>

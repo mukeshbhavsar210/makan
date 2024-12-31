@@ -40,8 +40,7 @@
                                             <a class="elementor-button elementor-button-link elementor-size-sm"
                                                 href="#">
                                                 <span class="elementor-button-content-wrapper">
-                                                    <span class="elementor-button-text">Let Us Call
-                                                        You!</span>
+                                                    <span class="elementor-button-text">Let Us Call You!</span>
                                                 </span>
                                             </a>
                                         </div>
@@ -56,20 +55,14 @@
     </div>
 </section>
 
-<section
-    class="elementor-section elementor-top-section elementor-element elementor-element-2367b4d8 elementor-section-boxed elementor-section-height-default elementor-section-height-default"
-    data-id="2367b4d8" data-element_type="section"
-    data-settings="{&quot;background_background&quot;:&quot;classic&quot;}">
+<section  class="elementor-section elementor-top-section elementor-element elementor-element-2367b4d8 elementor-section-boxed elementor-section-height-default elementor-section-height-default">
     <div class="elementor-container elementor-column-gap-no">
         <div class="elementor-column elementor-col-100 elementor-top-column elementor-element elementor-element-3a850d80"
             data-id="3a850d80" data-element_type="column">
             <div class="elementor-widget-wrap elementor-element-populated">
-                <div class="elementor-element elementor-element-7aa80cab elementor-widget elementor-widget-rhea-ultra-search-form-widget"
-                    data-id="7aa80cab" data-element_type="widget"
-                    data-settings="{&quot;rhea_top_field_count&quot;:&quot;5&quot;}"
-                    data-widget_type="rhea-ultra-search-form-widget.default">
-                    <div class="elementor-widget-container">
-                        <div class="rhea_ultra_search_form_wrapper rhea-search-form-1" id="rhea-7aa80cab">
+                <div class="elementor-element elementor-element-7aa80cab elementor-widget elementor-widget-rhea-ultra-search-form-widget">
+                    <div class="elementor-widget-container" >
+                        <div class="rhea_ultra_search_form_wrapper rhea-search-form-1" style="display: block;" >
                             
                             @include('front.home.search.searchLogic')
                             

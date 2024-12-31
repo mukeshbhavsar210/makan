@@ -1,4 +1,4 @@
-<form action="" name="searchForm" id="searchForm" class="rhea_search_form advance-search-form">                            
+<form action="" name="searchForm" id="searchForm" class="rhea_search_form advance-search-form">
 <div class="rh-custom-search-form-wrapper" >
     <div data-elementor-type="page" data-elementor-id="4763" class="elementor elementor-4763">
        <section class="elementor-section elementor-top-section elementor-element elementor-element-8200375 elementor-section-boxed elementor-section-height-default elementor-section-height-default" data-id="8200375" data-element_type="section">
@@ -68,19 +68,19 @@
                                      </div>
 
                                      <div class="rhea_search_button_wrapper rhea_buttons_top">
-                                        <div class="rhea_advanced_expander advance_button_27a00c8">
+                                        {{-- <div class="rhea_advanced_expander advance_button_27a00c8">
                                            <span class="search-ultra-plus">
                                               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 330 330" xml:space="preserve">
                                                  <path d="M325.606 304.394 223.328 202.117c16.707-21.256 26.683-48.041 26.683-77.111C250.011 56.077 193.934 0 125.005 0 56.077 0 0 56.077 0 125.006 0 193.933 56.077 250.01 125.005 250.01c29.07 0 55.855-9.975 77.11-26.681l102.278 102.277c2.929 2.93 6.768 4.394 10.607 4.394s7.678-1.464 10.606-4.394c5.859-5.857 5.859-15.355 0-21.212zM30 125.006C30 72.619 72.619 30 125.005 30c52.387 0 95.006 42.619 95.006 95.005 0 52.386-42.619 95.004-95.006 95.004C72.619 220.01 30 177.391 30 125.006z"></path>
                                               </svg>
                                            </span>
                                            <span>Advance Search</span>
-                                        </div>
+                                        </div> --}}
 
                                         <button class="rhea_search_form_button" type="submit"><span>Search</span></button>
 
                                         <div class="rhea_advanced_expander advance_button_27a00c8">                                          
-                                          <a href="{{ route('jobs') }}"  type="submit"><span>Reset</span></a>
+                                          <a href="{{ route('properties') }}"  type="submit"><span>Reset</span></a>
                                        </div>
                                      </div>
                                   </div>

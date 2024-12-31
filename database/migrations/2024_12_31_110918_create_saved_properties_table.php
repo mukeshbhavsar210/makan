@@ -11,14 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table("jobs", function (Blueprint $table) {
-            $table->unsignedBigInteger('bhk_id')->nullable()->after('user_id'); //
-            
-            // Define the foreign key constraint
-            $table->foreign('bhk_id')
-            ->references('id')
-            ->on('jobs')
-            ->onDelete('cascade');
+        Schema::create('saved_properties', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('property_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->timestamps();
         });
     }
 
@@ -27,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('saved_properties');
     }
 };

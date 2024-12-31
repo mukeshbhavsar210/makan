@@ -14,20 +14,26 @@
    $("#searchForm").submit(function(e){
        e.preventDefault();
    
-       var url = '{{ route("jobs") }}?';
+       var url = '{{ route("properties") }}?';
    
        //if keyword has a value
-       var keyword = $("#keyword").val();
-       if(keyword != ""){
-           url += '&keyword=' + keyword;
-       }
+    //    var keyword = $("#keyword").val();
+    //    if(keyword != ""){
+    //        url += '&keyword=' + keyword;
+    //    }
    
        //if location has a value
-       var location = $("#location").val();
-       if(location != ""){
-           url += '&location=' + location;
-       }
+    //    var location = $("#location").val();
+    //    if(location != ""){
+    //        url += '&location=' + location;
+    //    }
    
+       //if category has a value
+       var city = $("#city").val();
+       if(city != ""){
+           url += '&city=' + city;
+       }
+
        //if category has a value
        var category = $("#category").val();
        if(category != ""){
@@ -35,10 +41,10 @@
        }
    
        //if amenities has a value
-       var amenity = $("#amenity").val();
-       if(amenity != ""){
-           url += '&amenity=' + amenity;
-       }
+    //    var amenity = $("#amenity").val();
+    //    if(amenity != ""){
+    //        url += '&amenity=' + amenity;
+    //    }
    
        //if experience has a value
     //    var experience = $("#experience").val();
@@ -66,24 +72,13 @@
        $("#searchForm").submit();
    });
    
-   $("#location").change(function(){
-       $("#searchForm").submit();
-   });
-
    $("#category").change(function(){
        $("#searchForm").submit();
    });
-   
-   // $("#experience").change(function(){
-   //     $("#searchForm").submit();
-   // });
-   
-   // $("#keyword").keydown(function(){
-   //     $("#searchForm").submit();
-   // });
-   
-   $("#location").keydown(function(){
+
+   $("#city").change(function(){
        $("#searchForm").submit();
    });
+   
 </script>
 @endsection

@@ -2,11 +2,11 @@
     <span class="rhea_prop_search__selectwrap ">
          <select name="category" id="category" class="rhea_multi_select_picker show-tick">
             <option value="">Category</option>
-            @if ($categories)
-                  @foreach ($categories as $category)
-                     <option {{ (Request::get('category') == $category->id) ? 'selected' : '' }} value="{{ $category->id }}">{{ $category->name }}</option>
-                  @endforeach
-            @endif
+               @if ($categories)
+                     @foreach ($categories as $value)
+                        <option {{ (Request::get('category') == $value->id) ? 'selected' : '' }} value="{{ $value->id }}">{{ $value->name }}</option>
+                     @endforeach
+               @endif
          </select>
     </span>
  </div>
