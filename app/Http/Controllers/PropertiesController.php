@@ -3,15 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Mail\JobNotificationEmail;
-use App\Models\Amenity;
-use App\Models\Bath;
-use App\Models\bhk_type;
 use Illuminate\Support\Facades\Mail;
 use App\Models\Category;
 use App\Models\City;
-use App\Models\Developer;
 use App\Models\JobApplication;
-use App\Models\JobType;
 use App\Models\Property;
 use App\Models\SavedProperty;
 use App\Models\User;
@@ -75,33 +70,31 @@ class PropertiesController extends Controller
         //     $property = $property->whereIn('amenity_id',$amenityTypeArray);
         // }
 
-
-        $properties = $properties->with('room','bathroom','developer','category','city');
+        $properties = $properties->with('room','bathroom','category','city');
 
         if($request->sort == '0'){
             $properties = $properties->orderBy('created_at','ASC');
         } else {
             $properties = $properties->orderBy('created_at','DESC');
         }
-
         $properties = $properties->paginate(10);
-
         $data = [
             'categories' => $categories,
             'cities' => $cities,
             'properties' => $properties,
             //'bathTypeArray' => $bathTypeArray            
         ];
-
         return view('front.property.index', $data);
     }
 
-    //This method propertyDetails
+
+
+    //PROPERTY DETAILS ID
     public function propertyDetails($id){
         $property = Property::where([
             'id' => $id,
             'status' => 1,
-        ])->with(['room','bathroom','developer','category','city'])->first();
+        ])->with(['room','bathroom','category','city'])->first();
         
 
         if($property == null){

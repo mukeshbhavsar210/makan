@@ -16,7 +16,7 @@
                     <div class="card-body card-form">
                         <div class="d-flex justify-content-between">
                             <div>
-                                <h3 class="fs-4 mb-1">My Properties</h3>
+                                <h3 class="fs-4 mb-1">My22 Properties</h3>
                             </div>
                             <div style="margin-top: -10px;">
                                 <a href="{{ route('account.createProperty' )}}" class="btn btn-primary">Post a Property</a>

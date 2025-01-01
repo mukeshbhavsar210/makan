@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 29, 2024 at 02:49 PM
+-- Generation Time: Dec 31, 2024 at 02:28 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.2.0
 
@@ -50,6 +50,17 @@ CREATE TABLE `amenities` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `amenities`
+--
+
+INSERT INTO `amenities` (`id`, `name`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Swimming Pool', 1, '2023-12-25 00:29:49', '2023-12-25 00:29:49'),
+(2, 'Gym', 1, '2023-12-25 00:29:49', '2023-12-25 00:29:49'),
+(3, 'Garden', 1, '2023-12-25 00:29:50', '2023-12-25 00:29:50'),
+(4, 'Security', 1, '2023-12-25 00:29:50', '2023-12-25 00:29:50'),
+(5, 'Studio', 1, '2023-12-25 00:29:50', '2023-12-25 00:29:50');
+
 -- --------------------------------------------------------
 
 --
@@ -66,29 +77,35 @@ CREATE TABLE `areas` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `areas`
+--
+
+INSERT INTO `areas` (`id`, `name`, `slug`, `city_id`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Chandkheda', 'chandkheda', 1, 1, '2024-12-30 06:14:19', '2024-12-30 06:14:19'),
+(2, 'Electronic City', 'electronic-city', 2, 1, '2024-12-30 06:14:44', '2024-12-30 06:14:44');
+
 -- --------------------------------------------------------
 
 --
--- Table structure for table `bhk_types`
+-- Table structure for table `bathrooms`
 --
 
-CREATE TABLE `bhk_types` (
+CREATE TABLE `bathrooms` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `status` int(11) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `bhk_types`
+-- Dumping data for table `bathrooms`
 --
 
-INSERT INTO `bhk_types` (`id`, `name`, `slug`, `status`, `created_at`, `updated_at`) VALUES
-(1, '1', '1', 1, '2024-12-29 17:55:12', '2024-12-29 17:55:12'),
-(2, '2', '2', 1, '2024-12-29 17:55:31', '2024-12-29 17:55:31'),
-(3, '3', '3', 1, '2024-12-29 17:55:43', '2024-12-29 17:55:43');
+INSERT INTO `bathrooms` (`id`, `name`, `status`, `created_at`, `updated_at`) VALUES
+(1, '2', 1, '2024-12-31 09:14:46', '2024-12-31 09:14:46'),
+(2, '3', 1, '2024-12-31 09:14:57', '2024-12-31 09:14:57');
 
 -- --------------------------------------------------------
 
@@ -124,11 +141,8 @@ CREATE TABLE `categories` (
 --
 
 INSERT INTO `categories` (`id`, `name`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'Engineering', 1, '2023-12-25 00:29:49', '2023-12-25 00:29:49'),
-(2, 'Accountant', 1, '2023-12-25 00:29:49', '2023-12-25 00:29:49'),
-(3, 'Information Technology', 1, '2023-12-25 00:29:50', '2023-12-25 00:29:50'),
-(4, 'Fashion designing', 1, '2023-12-25 00:29:50', '2023-12-25 00:29:50'),
-(5, 'HR', 1, '2023-12-25 00:29:50', '2023-12-25 00:29:50');
+(1, 'Category One', 1, '2023-12-25 00:29:49', '2023-12-25 00:29:49'),
+(6, 'Category Two', 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -144,6 +158,14 @@ CREATE TABLE `cities` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `cities`
+--
+
+INSERT INTO `cities` (`id`, `name`, `slug`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Ahmedabad', 'ahmedabad', 1, '2024-12-30 06:13:43', '2024-12-30 06:13:43'),
+(2, 'Banglore', 'banglore', 1, '2024-12-30 06:13:43', '2024-12-30 06:13:43');
 
 -- --------------------------------------------------------
 
@@ -171,6 +193,8 @@ CREATE TABLE `developers` (
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `phone` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `whatsapp` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `landline` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `logo` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `year_estd` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `address` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -178,6 +202,14 @@ CREATE TABLE `developers` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `developers`
+--
+
+INSERT INTO `developers` (`id`, `name`, `email`, `phone`, `whatsapp`, `landline`, `logo`, `year_estd`, `address`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Uma Infracom', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL),
+(2, 'Keerthi Estate', 'info@keerthiestate.com', '9978835005', '9978835005', '079-98784587', 'Logo', '1985', 'Hyderbad', 1, '2024-12-31 12:26:00', '2024-12-31 12:26:00');
 
 -- --------------------------------------------------------
 
@@ -193,6 +225,13 @@ CREATE TABLE `facings` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `facings`
+--
+
+INSERT INTO `facings` (`id`, `name`, `slug`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'North', 'north', 1, '2024-12-31 08:57:55', '2024-12-31 08:57:55');
 
 -- --------------------------------------------------------
 
@@ -213,44 +252,6 @@ CREATE TABLE `failed_jobs` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `jobs`
---
-
-CREATE TABLE `jobs` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `user_id` bigint(20) UNSIGNED NOT NULL,
-  `category_id` bigint(20) UNSIGNED NOT NULL,
-  `job_type_id` bigint(20) UNSIGNED NOT NULL,
-  `vacancy` int(11) NOT NULL,
-  `salary` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `location` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `benefits` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `responsibility` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `qualification` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `keywords` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `experience` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `company_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `company_location` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `company_website` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `isFeatured` int(11) NOT NULL DEFAULT 1,
-  `status` int(11) NOT NULL DEFAULT 1,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `jobs`
---
-
-INSERT INTO `jobs` (`id`, `title`, `user_id`, `category_id`, `job_type_id`, `vacancy`, `salary`, `location`, `description`, `benefits`, `responsibility`, `qualification`, `keywords`, `experience`, `company_name`, `company_location`, `company_website`, `isFeatured`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'Wordpress', 3, 5, 1, 5, '100000', 'Ahmedabad', '<p>Looking wordpress Deevloper</p>', '<p>Salary</p>', '<p>Wordpress</p>', '<p>BCA</p>', 'Full', '1', 'Deloitte', 'Ahmedabad', 'www.deloitte.com', 1, 1, '2024-12-28 06:02:41', '2024-12-29 15:44:40'),
-(2, 'UX Designer', 3, 3, 1, 2, '50000', 'Banglore', '<p>UX Designer Chennai based</p>', '<p><span style=\"font-size: 16px;\">UX Designer Chennai based</span></p>', '<p><span style=\"font-size: 16px;\">UX Designer Chennai based</span></p>', '<p><span style=\"font-size: 16px;\">UX Designer Chennai based</span></p>', 'UI UX Design Agency', '4', 'Indianic', 'Chennai', 'www.uxteam.com', 1, 1, '2024-12-28 06:13:04', '2024-12-28 06:13:04');
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `job_applications`
 --
 
@@ -261,16 +262,17 @@ CREATE TABLE `job_applications` (
   `employer_id` bigint(20) UNSIGNED DEFAULT NULL,
   `applied_date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `property_id` bigint(20) UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `job_applications`
 --
 
-INSERT INTO `job_applications` (`id`, `job_id`, `user_id`, `employer_id`, `applied_date`, `created_at`, `updated_at`) VALUES
-(43, 1, 4, 3, '2024-12-28 06:03:17', '2024-12-28 06:03:17', '2024-12-28 06:03:17'),
-(45, 2, 4, 3, '2024-12-28 06:13:53', '2024-12-28 06:13:53', '2024-12-28 06:13:53');
+INSERT INTO `job_applications` (`id`, `job_id`, `user_id`, `employer_id`, `applied_date`, `created_at`, `updated_at`, `property_id`) VALUES
+(43, 1, 4, 3, '2024-12-31 12:23:40', '2024-12-28 06:03:17', '2024-12-28 06:03:17', 8),
+(45, 2, 4, 3, '2024-12-31 12:23:46', '2024-12-28 06:13:53', '2024-12-28 06:13:53', 6);
 
 -- --------------------------------------------------------
 
@@ -291,8 +293,8 @@ CREATE TABLE `job_types` (
 --
 
 INSERT INTO `job_types` (`id`, `name`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'Full Time', 1, '2023-12-25 00:29:50', '2023-12-25 00:29:50'),
-(2, 'Contract', 1, '2023-12-25 00:29:50', '2023-12-25 00:29:50');
+(1, 'Swimming Pool', 1, '2023-12-25 00:29:50', '2023-12-25 00:29:50'),
+(2, 'Gym', 1, '2023-12-25 00:29:50', '2023-12-25 00:29:50');
 
 -- --------------------------------------------------------
 
@@ -353,7 +355,15 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (25, '2024_12_29_160244_create_facings_table', 17),
 (26, '2024_12_29_160330_create_ages_table', 18),
 (27, '2024_12_29_160832_create_buy_sell_table', 19),
-(28, '2024_12_29_160854_create_properties_table', 20);
+(28, '2024_12_29_160854_create_properties_table', 20),
+(29, '2024_12_30_064105_alter_jobs_table', 21),
+(30, '2024_12_30_065158_alter_jobs_table', 22),
+(31, '2024_12_30_070432_create_jobs_table', 23),
+(32, '2024_12_31_084527_create_properties_table', 24),
+(33, '2024_12_31_091246_create_baths_table', 25),
+(34, '2024_12_31_091530_alter_proprties_table', 26),
+(35, '2024_12_31_110918_create_saved_properties_table', 27),
+(36, '2024_12_31_122143_alter_job_applications_table', 28);
 
 -- --------------------------------------------------------
 
@@ -401,37 +411,40 @@ CREATE TABLE `personal_access_tokens` (
 
 CREATE TABLE `properties` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `age_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `area_id` bigint(20) UNSIGNED NOT NULL,
-  `bhk_type_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `city_id` bigint(20) UNSIGNED NOT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_id` bigint(20) UNSIGNED NOT NULL,
+  `category_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `room_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `city_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `area_id` bigint(20) UNSIGNED DEFAULT NULL,
   `developer_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `sale_type_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `property_type_id` bigint(20) UNSIGNED DEFAULT NULL,
   `facing_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `listing_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `sale_types_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `price` double(10,2) NOT NULL,
+  `price` double(10,2) DEFAULT NULL,
   `compare_price` double(10,2) DEFAULT NULL,
   `is_featured` enum('Yes','No') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'No',
-  `cover_photo` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `property_images` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `address` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `launch_date` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `possession_date` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `possession_status` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `contact_seller` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `google_location` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `keywords` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `amenities` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `location` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `size` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `area` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `rera` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `content` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `nearby_places` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`nearby_places`)),
-  `amenities` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`amenities`)),
+  `year_build` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `total_area` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `status` int(11) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `bathroom_id` bigint(20) UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `properties`
+--
+
+INSERT INTO `properties` (`id`, `title`, `user_id`, `category_id`, `room_id`, `city_id`, `area_id`, `developer_id`, `sale_type_id`, `property_type_id`, `facing_id`, `price`, `compare_price`, `is_featured`, `description`, `keywords`, `amenities`, `location`, `size`, `year_build`, `total_area`, `status`, `created_at`, `updated_at`, `bathroom_id`) VALUES
+(6, 'Shlok Heights', 3, 6, 3, 1, 1, 2, 1, 2, 1, NULL, NULL, 'No', 'Hello', '3 BHK Apartment', NULL, NULL, '1000', '2018', '5800', 1, '2024-12-31 04:42:04', '2024-12-31 04:42:04', 2),
+(7, 'Parmeshwar', 3, 1, 2, 1, 1, 2, 1, 2, 1, NULL, NULL, 'No', 'hwerwrw werwerw', 'UXTeam is a niche UI UX design agency specializing in UX strategy, UX/UI design, Ecommerce &amp; Enterprise UX, and Marketing design services.', NULL, NULL, '1000', NULL, NULL, 1, '2024-12-31 04:44:09', '2024-12-31 04:44:09', 1),
+(8, 'Nilyam Paremeshwar', 3, 1, 2, 1, 1, 1, 1, 2, 1, 700.00, 1200.00, 'No', 'he', '3 BHK Apartment', NULL, 'Banglore', '1270', NULL, NULL, 1, '2024-12-31 04:47:07', '2024-12-31 04:47:07', 1);
 
 -- --------------------------------------------------------
 
@@ -448,6 +461,37 @@ CREATE TABLE `property_types` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `property_types`
+--
+
+INSERT INTO `property_types` (`id`, `name`, `slug`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Villa', 'villa', 1, '2024-12-31 08:56:55', '2024-12-31 08:56:55'),
+(2, 'Apartment', 'apartment', 1, '2024-12-31 09:20:05', '2024-12-31 09:20:05');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `rooms`
+--
+
+CREATE TABLE `rooms` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` int(11) NOT NULL DEFAULT 1,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `rooms`
+--
+
+INSERT INTO `rooms` (`id`, `name`, `status`, `created_at`, `updated_at`) VALUES
+(1, '2', 1, '2024-12-29 17:55:12', '2024-12-29 17:55:12'),
+(2, '3', 1, '2024-12-29 17:55:31', '2024-12-29 17:55:31'),
+(3, '4', 1, '2024-12-29 17:55:43', '2024-12-29 17:55:43');
+
 -- --------------------------------------------------------
 
 --
@@ -462,6 +506,14 @@ CREATE TABLE `sale_types` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `sale_types`
+--
+
+INSERT INTO `sale_types` (`id`, `name`, `slug`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Buy', 'buy', 1, '2024-12-31 08:57:22', '2024-12-31 08:57:22'),
+(2, 'Sell', 'sell', 1, '2024-12-31 09:09:33', '2024-12-31 09:09:33');
 
 -- --------------------------------------------------------
 
@@ -483,7 +535,22 @@ CREATE TABLE `saved_jobs` (
 
 INSERT INTO `saved_jobs` (`id`, `job_id`, `user_id`, `created_at`, `updated_at`) VALUES
 (17, 3, 4, '2024-12-28 05:51:55', '2024-12-28 05:51:55'),
-(18, 1, 4, '2024-12-28 06:03:15', '2024-12-28 06:03:15');
+(18, 1, 4, '2024-12-28 06:03:15', '2024-12-28 06:03:15'),
+(19, 2, 4, '2024-12-30 05:14:38', '2024-12-30 05:14:38');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `saved_properties`
+--
+
+CREATE TABLE `saved_properties` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `property_id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` bigint(20) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -538,9 +605,9 @@ ALTER TABLE `areas`
   ADD KEY `areas_city_id_foreign` (`city_id`);
 
 --
--- Indexes for table `bhk_types`
+-- Indexes for table `bathrooms`
 --
-ALTER TABLE `bhk_types`
+ALTER TABLE `bathrooms`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -587,22 +654,13 @@ ALTER TABLE `failed_jobs`
   ADD UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`);
 
 --
--- Indexes for table `jobs`
---
-ALTER TABLE `jobs`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `jobs_user_id_foreign` (`user_id`),
-  ADD KEY `jobs_category_id_foreign` (`category_id`),
-  ADD KEY `jobs_job_type_id_foreign` (`job_type_id`);
-
---
 -- Indexes for table `job_applications`
 --
 ALTER TABLE `job_applications`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `job_applications_job_id_foreign` (`job_id`),
   ADD KEY `job_applications_user_id_foreign` (`user_id`),
-  ADD KEY `job_applications_employer_id_foreign` (`employer_id`);
+  ADD KEY `job_applications_employer_id_foreign` (`employer_id`),
+  ADD KEY `job_applications_property_id_foreign` (`property_id`);
 
 --
 -- Indexes for table `job_types`
@@ -641,19 +699,27 @@ ALTER TABLE `personal_access_tokens`
 --
 ALTER TABLE `properties`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `properties_age_id_foreign` (`age_id`),
-  ADD KEY `properties_area_id_foreign` (`area_id`),
-  ADD KEY `properties_bhk_type_id_foreign` (`bhk_type_id`),
+  ADD KEY `properties_user_id_foreign` (`user_id`),
+  ADD KEY `properties_category_id_foreign` (`category_id`),
   ADD KEY `properties_city_id_foreign` (`city_id`),
+  ADD KEY `properties_area_id_foreign` (`area_id`),
   ADD KEY `properties_developer_id_foreign` (`developer_id`),
+  ADD KEY `properties_sale_type_id_foreign` (`sale_type_id`),
+  ADD KEY `properties_property_type_id_foreign` (`property_type_id`),
   ADD KEY `properties_facing_id_foreign` (`facing_id`),
-  ADD KEY `properties_listing_id_foreign` (`listing_id`),
-  ADD KEY `properties_sale_types_id_foreign` (`sale_types_id`);
+  ADD KEY `properties_room_id_foreign` (`room_id`) USING BTREE,
+  ADD KEY `properties_bathroom_id_foreign` (`bathroom_id`) USING BTREE;
 
 --
 -- Indexes for table `property_types`
 --
 ALTER TABLE `property_types`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `rooms`
+--
+ALTER TABLE `rooms`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -669,6 +735,14 @@ ALTER TABLE `saved_jobs`
   ADD PRIMARY KEY (`id`),
   ADD KEY `saved_jobs_job_id_foreign` (`job_id`),
   ADD KEY `saved_jobs_user_id_foreign` (`user_id`);
+
+--
+-- Indexes for table `saved_properties`
+--
+ALTER TABLE `saved_properties`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `saved_properties_property_id_foreign` (`property_id`),
+  ADD KEY `saved_properties_user_id_foreign` (`user_id`);
 
 --
 -- Indexes for table `users`
@@ -691,19 +765,19 @@ ALTER TABLE `ages`
 -- AUTO_INCREMENT for table `amenities`
 --
 ALTER TABLE `amenities`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `areas`
 --
 ALTER TABLE `areas`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `bhk_types`
+-- AUTO_INCREMENT for table `bathrooms`
 --
-ALTER TABLE `bhk_types`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+ALTER TABLE `bathrooms`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `buysell`
@@ -715,13 +789,13 @@ ALTER TABLE `buysell`
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `cities`
 --
 ALTER TABLE `cities`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `construction_status`
@@ -733,25 +807,19 @@ ALTER TABLE `construction_status`
 -- AUTO_INCREMENT for table `developers`
 --
 ALTER TABLE `developers`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `facings`
 --
 ALTER TABLE `facings`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
 --
 ALTER TABLE `failed_jobs`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `jobs`
---
-ALTER TABLE `jobs`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `job_applications`
@@ -775,7 +843,7 @@ ALTER TABLE `listings`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
@@ -787,25 +855,37 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `properties`
 --
 ALTER TABLE `properties`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `property_types`
 --
 ALTER TABLE `property_types`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `rooms`
+--
+ALTER TABLE `rooms`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `sale_types`
 --
 ALTER TABLE `sale_types`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `saved_jobs`
 --
 ALTER TABLE `saved_jobs`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+
+--
+-- AUTO_INCREMENT for table `saved_properties`
+--
+ALTER TABLE `saved_properties`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -824,33 +904,35 @@ ALTER TABLE `areas`
   ADD CONSTRAINT `areas_city_id_foreign` FOREIGN KEY (`city_id`) REFERENCES `cities` (`id`) ON DELETE CASCADE;
 
 --
--- Constraints for table `jobs`
---
-ALTER TABLE `jobs`
-  ADD CONSTRAINT `jobs_category_id_foreign` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `jobs_job_type_id_foreign` FOREIGN KEY (`job_type_id`) REFERENCES `job_types` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `jobs_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
-
---
 -- Constraints for table `job_applications`
 --
 ALTER TABLE `job_applications`
   ADD CONSTRAINT `job_applications_employer_id_foreign` FOREIGN KEY (`employer_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `job_applications_job_id_foreign` FOREIGN KEY (`job_id`) REFERENCES `jobs` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `job_applications_property_id_foreign` FOREIGN KEY (`property_id`) REFERENCES `properties` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `job_applications_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `properties`
 --
 ALTER TABLE `properties`
-  ADD CONSTRAINT `properties_age_id_foreign` FOREIGN KEY (`age_id`) REFERENCES `ages` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `properties_area_id_foreign` FOREIGN KEY (`area_id`) REFERENCES `areas` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `properties_bhk_type_id_foreign` FOREIGN KEY (`bhk_type_id`) REFERENCES `bhk_types` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `properties_bath_id_foreign` FOREIGN KEY (`bathroom_id`) REFERENCES `bathrooms` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `properties_bhk_type_id_foreign` FOREIGN KEY (`room_id`) REFERENCES `rooms` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `properties_category_id_foreign` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `properties_city_id_foreign` FOREIGN KEY (`city_id`) REFERENCES `cities` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `properties_developer_id_foreign` FOREIGN KEY (`developer_id`) REFERENCES `developers` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `properties_facing_id_foreign` FOREIGN KEY (`facing_id`) REFERENCES `facings` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `properties_listing_id_foreign` FOREIGN KEY (`listing_id`) REFERENCES `listings` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `properties_sale_types_id_foreign` FOREIGN KEY (`sale_types_id`) REFERENCES `sale_types` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `properties_property_type_id_foreign` FOREIGN KEY (`property_type_id`) REFERENCES `property_types` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `properties_sale_type_id_foreign` FOREIGN KEY (`sale_type_id`) REFERENCES `sale_types` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `properties_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `saved_properties`
+--
+ALTER TABLE `saved_properties`
+  ADD CONSTRAINT `saved_properties_property_id_foreign` FOREIGN KEY (`property_id`) REFERENCES `properties` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `saved_properties_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

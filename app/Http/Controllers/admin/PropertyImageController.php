@@ -8,7 +8,7 @@ use App\Models\ProductImage;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\Facades\Image;
 
-class ProductImageController extends Controller
+class PropertyImageController extends Controller
 {
     public function update(Request $request){
 

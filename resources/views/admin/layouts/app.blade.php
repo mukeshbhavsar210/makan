@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>Housing.com :: Administrative</title>
+		<title>Housing.com</title>
 		<!-- Google Font: Source Sans Pro -->
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
 		<!-- Font Awesome -->
@@ -96,34 +96,23 @@
         <script src="{{ asset('admin-assets/js/datetimepicker.js') }}"></script>
 		<!-- AdminLTE for demo purposes -->
 		<script src="{{ asset('admin-assets/js/demo.js') }}"></script>
-		<script src="{{ asset('admin-assets/js/custom.js') }}"></script>
-		<script type="text/javascript">
-			$('.textarea').trumbowyg();
-			// $.ajaxSetup({
-			// 	headers: {
-			// 		'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-			// 	}
-			// });
-		</script>
-
         <script type="text/javascript">
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-
             $(document).ready(function(){
                 $(".summernote").summernote({
                     //height:250;
                 });
             })
-
             //Alert timeout
             setTimeout(function () {
                 $('.alert').fadeOut(300);
             }, 1500);
         </script>
+
 
         @yield('customJs')
 	</body>

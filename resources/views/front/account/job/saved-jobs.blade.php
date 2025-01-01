@@ -48,7 +48,7 @@
                                                     </button>
                                                     <ul class="dropdown-menu dropdown-menu-end">
                                                         <li><a class="dropdown-item" href="{{ route('propertyDetails', $savedjob->job_id) }}"> <i class="fa fa-eye" aria-hidden="true"></i> View</a></li>
-                                                        <li><a class="dropdown-item" href="#" onclick="removeJob({{ $savedjob->id }})"><i class="fa fa-edit" aria-hidden="true"></i> Remove Job</a></li>
+                                                        <li><a class="dropdown-item" href="#" onclick="removeProperty({{ $savedjob->id }})"><i class="fa fa-edit" aria-hidden="true"></i> Remove Job</a></li>
                                                     </ul>
                                                 </div>
                                             </td>
@@ -73,7 +73,7 @@
 
 @section('customJs')
 <script type="text/javascript">
-    function removeJob(id){
+    function removeProperty(id){
         if(confirm("Are you sure you want to remove?")){
                 $.ajax({
                 url: '{{ route("account.removeSavedJob") }}',

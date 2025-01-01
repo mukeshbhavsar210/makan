@@ -29,7 +29,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('account.myJobApplications') }}" class="nav-link">
+                    <a href="{{ route('account.myPropertyApplications') }}" class="nav-link">
                         <i class="nav-icon  fas fa-users"></i>
                         <p>Interested</p>
                     </a>
