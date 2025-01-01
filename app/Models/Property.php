@@ -9,6 +9,20 @@ class Property extends Model
 {
     use HasFactory;
 
+    public function product_images(){
+        return $this->hasMany(ProductImage::class);
+    }
+
+    public function amenities(){
+        return $this->hasMany('App\Models\Amenity','id','amenities');
+    }
+
+
+    public function view(){
+        return $this->belongsTo(View::class);
+    }
+
+  
     public function jobType(){
         return $this->belongsTo(JobType::class);
     }
@@ -31,6 +45,10 @@ class Property extends Model
 
     public function category(){
         return $this->belongsTo(Category::class);
+    }
+
+    public function saleType(){
+        return $this->belongsTo(SaleType::class);
     }
 
     public function city(){

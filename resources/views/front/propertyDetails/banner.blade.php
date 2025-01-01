@@ -1,68 +1,25 @@
-
-
-
 <div class="rh-ultra-property-slider-wrapper">
     <div class="rh-ultra-property-slider-container">
-       <div class="rh-ultra-property-slider slick-initialized slick-slider" data-count="6">
-
-         <div class="slider-for">
-            <div class="rh-ultra-property-thumb-wrapper">
-            <img src="https://ultra-realhomes.b-cdn.net/wp-content/uploads/2022/06/architecture-home-merrick-way.jpg" /></div>
-            <img src="https://ultra-realhomes.b-cdn.net/wp-content/uploads/2020/06/exterior-05.jpg" />
-            <img src="https://ultra-realhomes.b-cdn.net/wp-content/uploads/2020/06/interior-00.jpg" />
+      
+      <div class="slider-for"> 
+         <div class="rh-ultra-property-slider" >
+            <img src="https://ultra-realhomes.b-cdn.net/wp-content/uploads/2020/06/bedroom-02.jpg" />               
          </div>
-         
-         <div class="slider-nav">
-            <img src="https://ultra-realhomes.b-cdn.net/wp-content/uploads/2022/06/architecture-home-merrick-way.jpg" />
-            <img src="https://ultra-realhomes.b-cdn.net/wp-content/uploads/2020/06/exterior-05.jpg" />
-            <img src="https://ultra-realhomes.b-cdn.net/wp-content/uploads/2020/06/interior-00.jpg" />
+         <div class="rh-ultra-property-slider" >
+            <img src="https://ultra-realhomes.b-cdn.net/wp-content/uploads/2020/06/exterior-05.jpg" />               
          </div>
-
-
-          <button class="slick-prev slick-arrow" aria-label="Previous" type="button" style="">Previous</button>
-          <div class="slick-list draggable" style="height: 716.797px;">
-             <div class="slick-track" style="opacity: 1; width: 7680px;">
-                <div class="slick-slide slick-current slick-active" data-slick-index="0" aria-hidden="false" style="width: 1280px; position: relative; left: 0px; top: 0px; z-index: 999; opacity: 1;" tabindex="0">
-                   <div class="rh-ultra-property-thumb-wrapper">
-                      <a class="rh-ultra-property-thumb" href="https://ultra-realhomes.b-cdn.net/wp-content/uploads/2022/06/architecture-home-merrick-way.jpg" style="background-image: url(&quot;https://ultra-realhomes.b-cdn.net/wp-content/uploads/2022/06/architecture-home-merrick-way.jpg&quot;)" data-fancybox="gallery" tabindex="0"></a>
-                   </div>
-                </div>
-                <div class="slick-slide" data-slick-index="1" aria-hidden="true" tabindex="-1" style="width: 1280px; position: relative; left: -1280px; top: 0px; z-index: 998; opacity: 0;">
-                   <div class="rh-ultra-property-thumb-wrapper">
-                      <a class="rh-ultra-property-thumb" href="https://ultra-realhomes.b-cdn.net/wp-content/uploads/2020/06/bedroom-02.jpg" style="background-image: url(&quot;https://ultra-realhomes.b-cdn.net/wp-content/uploads/2020/06/bedroom-02.jpg&quot;)" data-fancybox="gallery" tabindex="-1"></a>
-                   </div>
-                </div>
-                <div class="slick-slide" data-slick-index="2" aria-hidden="true" tabindex="-1" style="width: 1280px; position: relative; left: -2560px; top: 0px; z-index: 998; opacity: 0;">
-                   <div class="rh-ultra-property-thumb-wrapper">
-                      <a class="rh-ultra-property-thumb" href="https://ultra-realhomes.b-cdn.net/wp-content/uploads/2020/06/exterior-05.jpg" style="background-image: url(&quot;https://ultra-realhomes.b-cdn.net/wp-content/uploads/2020/06/exterior-05.jpg&quot;)" data-fancybox="gallery" tabindex="-1"></a>
-                   </div>
-                </div>
-                <div class="slick-slide" data-slick-index="3" aria-hidden="true" tabindex="-1" style="width: 1280px; position: relative; left: -3840px; top: 0px; z-index: 998; opacity: 0;">
-                   <div class="rh-ultra-property-thumb-wrapper">
-                      <a class="rh-ultra-property-thumb" href="https://ultra-realhomes.b-cdn.net/wp-content/uploads/2020/06/interior-00.jpg" style="background-image: url(&quot;https://ultra-realhomes.b-cdn.net/wp-content/uploads/2020/06/interior-00.jpg&quot;)" data-fancybox="gallery" tabindex="-1"></a>
-                   </div>
-                </div>
-                <div class="slick-slide" data-slick-index="4" aria-hidden="true" tabindex="-1" style="width: 1280px; position: relative; left: -5120px; top: 0px; z-index: 998; opacity: 0;">
-                   <div class="rh-ultra-property-thumb-wrapper">
-                      <a class="rh-ultra-property-thumb" href="https://ultra-realhomes.b-cdn.net/wp-content/uploads/2020/06/interior-02.jpg" style="background-image: url(&quot;https://ultra-realhomes.b-cdn.net/wp-content/uploads/2020/06/interior-02.jpg&quot;)" data-fancybox="gallery" tabindex="-1"></a>
-                   </div>
-                </div>
-                <div class="slick-slide" data-slick-index="5" aria-hidden="true" tabindex="-1" style="width: 1280px; position: relative; left: -6400px; top: 0px; z-index: 998; opacity: 0;">
-                   <div class="rh-ultra-property-thumb-wrapper">
-                      <a class="rh-ultra-property-thumb" href="https://ultra-realhomes.b-cdn.net/wp-content/uploads/2020/06/living-00.jpg" style="background-image: url(&quot;https://ultra-realhomes.b-cdn.net/wp-content/uploads/2020/06/living-00.jpg&quot;)" data-fancybox="gallery" tabindex="-1"></a>
-                   </div>
-                </div>
-             </div>
-          </div>
-          <button class="slick-next slick-arrow" aria-label="Next" type="button" style="">Next</button>
-       </div>
+         <div class="rh-ultra-property-slider" >
+            <img src="https://ultra-realhomes.b-cdn.net/wp-content/uploads/2020/06/bathroom-02.jpg" />               
+         </div>            
+      </div>
+       
        <div class="rh-ultra-property-thumb-box">
           <div class="rh-ultra-property-thumb-container">
              <div class="rh-ultra-thumb-info-box">
                 <div class="page-head-inner">
                    <div class="rh-ultra-property-tags rh-property-title">
-                      <a href="" class="rh-ultra-status rh-ultra-property-tag">{{ $property->buy_sell }}</a>                      
-                      {{-- <span class="rh_ultra_featured rh-ultra-property-tag">{{ $property->jobType->name }}</span>                       --}}
+                      <a href="" class="rh-ultra-status rh-ultra-property-tag">{{ $property->saleType->name }}</a>                      
+                      <span class="rh_ultra_featured rh-ultra-property-tag">{{ $property->category->name }}</span>                      
                    </div>
                    <div class="rh-ultra-property-title-price">
                       <h1 class="property-title">{{ $property->title }}</h1>
@@ -70,6 +27,7 @@
                          <span class="rh-ultra-price "> {{ $property->price }} </span>
                       </div>
                    </div>
+
                    <p class="rh-ultra-property-address">
                       <span class="rh-ultra-address-pin">
                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="5 2 14 20">
@@ -81,7 +39,6 @@
                       {{ $property->location }}          
                    </p>
                 </div>
-                <img class="only-for-print inspiry-qr-code" src="https://chart.googleapis.com/chart?cht=qr&amp;chs=100x100&amp;chl=https://ultra.realhomes.io/property/home-in-merrick-way/&amp;choe=UTF-8" alt="Home in Merrick Way">
              </div>
 
              <div class="rh-ultra-thumb-action-box rh-ultra-action-buttons rh-ultra-action-dark hover-dark">
@@ -100,7 +57,6 @@
                    </a>
                 </span>
 
-
                 <div class="rh-ultra-share-wrapper">
                    <a href="#" class="rh-ultra-share share rh-ui-tooltip" title="Share">
                       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-share-2">
@@ -109,64 +65,20 @@
                          <circle cx="18" cy="19" r="3"></circle>
                          <path d="m8.59 13.51 6.83 3.98M15.41 6.51l-6.82 3.98"></path>
                       </svg>
-                   </a>
-                   {{-- <div class="share-this sharer-0 realhomes-line-social-share-enabled" data-check-mobile="" data-property-name="Home in Merrick Way" data-property-permalink="https://ultra.realhomes.io/property/home-in-merrick-way/" style="display: block;">
-                      <label class="entypo-export"><span>Share</span></label>
-                      <div class="social load center left networks-5">
-                         <ul>
-                            <li class="entypo-pinterest" data-network="pinterest"></li>
-                            <li class="entypo-twitter" data-network="twitter"></li>
-                            <li class="entypo-facebook" data-network="facebook"></li>
-                            <li class="entypo-paper-plane" data-network="email"></li>
-                            <li class="inspiry_whats_app_share"><a class="fab fa-whatsapp inspiry_whats_app_share_link" href="https://api.whatsapp.com/send?text=Home%20in%20Merrick%20Way%20https%3A%2F%2Fultra.realhomes.io%2Fproperty%2Fhome-in-merrick-way%2F" target="_blank"></a></li>
-                            <li class="entypo-line" id="realhomes-line-social-share"><i class="fab fa-line"></i></li>
-                         </ul>
-                      </div>
-                   </div> --}}
+                   </a>                   
                 </div>
              </div>
           </div>
        </div>
     </div>
-    <div class="rh-ultra-property-carousel-wrapper">
-       <div class="rh-ultra-property-carousel-box">
-          <div class="rh-ultra-property-carousel rh-ultra-horizontal-carousel-trigger slick-initialized slick-slider" data-count="6">
-             <div class="slick-list draggable">
-                <div class="slick-track" style="opacity: 1; width: 1110px; transform: translate3d(0px, 0px, 0px);">
-                   <div class="slick-slide slick-active slick-current" data-slick-index="0" aria-hidden="false" style="width: 185px;" tabindex="0">
-                      <div class="rh-ultra-property-carousel-thumb-box">
-                         <span class="rh-ultra-property-carousel-thumb" style="background-image: url(&quot;https://ultra-realhomes.b-cdn.net/wp-content/uploads/2022/06/architecture-home-merrick-way.jpg&quot;)"></span>
-                      </div>
-                   </div>
-                   <div class="slick-slide slick-active" data-slick-index="1" aria-hidden="false" tabindex="0" style="width: 185px;">
-                      <div class="rh-ultra-property-carousel-thumb-box">
-                         <span class="rh-ultra-property-carousel-thumb" style="background-image: url(&quot;https://ultra-realhomes.b-cdn.net/wp-content/uploads/2020/06/bedroom-02.jpg&quot;)"></span>
-                      </div>
-                   </div>
-                   <div class="slick-slide slick-active" data-slick-index="2" aria-hidden="false" tabindex="0" style="width: 185px;">
-                      <div class="rh-ultra-property-carousel-thumb-box">
-                         <span class="rh-ultra-property-carousel-thumb" style="background-image: url(&quot;https://ultra-realhomes.b-cdn.net/wp-content/uploads/2020/06/exterior-05.jpg&quot;)"></span>
-                      </div>
-                   </div>
-                   <div class="slick-slide slick-active" data-slick-index="3" aria-hidden="false" tabindex="0" style="width: 185px;">
-                      <div class="rh-ultra-property-carousel-thumb-box">
-                         <span class="rh-ultra-property-carousel-thumb" style="background-image: url(&quot;https://ultra-realhomes.b-cdn.net/wp-content/uploads/2020/06/interior-00.jpg&quot;)"></span>
-                      </div>
-                   </div>
-                   <div class="slick-slide slick-active" data-slick-index="4" aria-hidden="false" tabindex="0" style="width: 185px;">
-                      <div class="rh-ultra-property-carousel-thumb-box">
-                         <span class="rh-ultra-property-carousel-thumb" style="background-image: url(&quot;https://ultra-realhomes.b-cdn.net/wp-content/uploads/2020/06/interior-02.jpg&quot;)"></span>
-                      </div>
-                   </div>
-                   <div class="slick-slide slick-active" data-slick-index="5" aria-hidden="false" tabindex="0" style="width: 185px;">
-                      <div class="rh-ultra-property-carousel-thumb-box">
-                         <span class="rh-ultra-property-carousel-thumb" style="background-image: url(&quot;https://ultra-realhomes.b-cdn.net/wp-content/uploads/2020/06/living-00.jpg&quot;)"></span>
-                      </div>
-                   </div>
-                </div>
-             </div>
-          </div>
-       </div>
+
+    <div class="rh-ultra-property-carousel-wrapper"> 
+      <div class="slider-nav">
+         <img src="https://ultra-realhomes.b-cdn.net/wp-content/uploads/2020/06/bedroom-02.jpg" />
+         <img src="https://ultra-realhomes.b-cdn.net/wp-content/uploads/2020/06/exterior-05.jpg" />   
+         <img src="https://ultra-realhomes.b-cdn.net/wp-content/uploads/2020/06/bathroom-02.jpg" />         
+      </div>
+       
        <div class="rh-ultra-thumb-count">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18">
              <style type="text/css">

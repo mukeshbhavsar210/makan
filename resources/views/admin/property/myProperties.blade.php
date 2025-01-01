@@ -21,10 +21,10 @@
 
             <div class="card">
                 <div class="card-body table-responsive p-0">
-                <table class="table table-hover text-nowrap">
+                    <table class="table table-hover text-nowrap">
                             <thead class="bg-light">
                                 <tr>
-                                    <th scope="col">Project</th>
+                                    <th scope="col">Project Name</th>
                                     <th scope="col">Posted</th>
                                     <th scope="col">Interested</th>
                                     <th scope="col">Status</th>
@@ -35,10 +35,7 @@
                                 @if ($properties->isNotEmpty())
                                     @foreach ($properties as $value)
                                     <tr class="active">
-                                        <td>
-                                            <div class="job-name fw-500">{{ $value->title }}</div>
-                                            {{-- <div class="info1">{{ $job->jobType->name }} . {{ $job->location }}</div> --}}
-                                        </td>
+                                        <td>{{ $value->title }}</td>
                                         <td>{{ \Carbon\Carbon::parse($value->created_at)->format('d M, Y') }}</td>
                                         <td>0 Applications</td>
                                         <td>

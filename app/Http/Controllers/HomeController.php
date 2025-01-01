@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Amenity;
-use App\Models\bhk_type as ModelsBhk_type;
+use App\Models\Bathroom;
 use App\Models\Category;
 use App\Models\Property;
 use Illuminate\Http\Request;
@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 class HomeController extends Controller
 {
     public function index(){
-        $bhk = ModelsBhk_type::where('status',1)->orderBy('name','ASC')->get();
+        $bhk = Bathroom::where('status',1)->orderBy('name','ASC')->get();
         $amenities = Amenity::where('status',1)->orderBy('name','ASC')->take(8)->get();
         $categories = Category::where('status',1)->orderBy('name','ASC')->take(8)->get();
         $newCategories = Category::where('status',1)->orderBy('name','ASC')->get();

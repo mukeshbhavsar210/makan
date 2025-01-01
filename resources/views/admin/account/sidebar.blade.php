@@ -11,7 +11,7 @@
                 <a href="{{ route('account.savedProperties') }}">Saved Property</a>
             </li>
             <li class="list-group-item d-flex justify-content-between align-items-center p-2">
-                <a href="{{ route('account.myJobApplications') }}">Interested</a>
+                <a href="{{ route('account.myPropertyApplications') }}">Interested</a>
             </li>
             <li class="list-group-item d-flex justify-content-between p-2">
                 <a href="{{ route('account.profile') }}">Profile</a>

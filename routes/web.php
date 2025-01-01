@@ -6,7 +6,9 @@ use App\Http\Controllers\admin\AreaController;
 use App\Http\Controllers\admin\CityController;
 use App\Http\Controllers\admin\DashboardController;
 use App\Http\Controllers\admin\ProductSubCategoryController;
+use App\Http\Controllers\admin\PropertyImageController;
 use App\Http\Controllers\admin\SettingController;
+use App\Http\Controllers\admin\TempImagesController;
 use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PropertiesController;
@@ -76,23 +78,30 @@ Route::group(['prefix' => 'account'], function(){
         Route::get("/logout",[AccountController::class, 'logout'])->name('account.logout');
         Route::post("/update-profile-pic",[AccountController::class, 'updateProfilePic'])->name('account.updateProfilePic');
         
-        Route::get("/create-property",[AccountController::class, 'createProperty'])->name('account.createProperty');
+        Route::get("/createProperty",[AccountController::class, 'createProperty'])->name('account.createProperty');
         Route::get('/area', [AreaController::class, 'index'])->name('area.index');
         
-        Route::post("/save-property",[AccountController::class, 'saveProperty'])->name('account.saveProperty');
+        Route::post("/saveProperty",[AccountController::class, 'saveProperty'])->name('account.saveProperty');
         Route::get("/property",[AccountController::class, 'myProperties'])->name('account.property');
         Route::get("/property/edit/{jobId}",[AccountController::class, 'editProperty'])->name('account.editProperty');
-        Route::post("/update-property/{jobId}",[AccountController::class, 'updateProperty'])->name('account.updateProperty');
-        Route::post("/delete-property",[AccountController::class, 'deleteProperty'])->name('account.deleteProperty');
-        Route::get("/my-property-interested",[AccountController::class, 'myJobApplications'])->name('account.myJobApplications');
-        Route::post("/remove-property-interested",[AccountController::class, 'removeJobs'])->name('account.removeProperties');
-        Route::get("/saved-properties",[AccountController::class, 'savedProperties'])->name('account.savedProperties');
-        Route::post("/remove-saved-property",[AccountController::class, 'removeSavedProperty'])->name('account.removeSavedJob');
-        Route::post("/update-password",[AccountController::class, 'updatePassword'])->name('account.updatePassword');
+        Route::post("/updateProperty/{jobId}",[AccountController::class, 'updateProperty'])->name('account.updateProperty');
+        Route::post("/deleteProperty",[AccountController::class, 'deleteProperty'])->name('account.deleteProperty');
+        Route::get("/myPropertyInterested",[AccountController::class, 'myPropertyApplications'])->name('account.myPropertyApplications');
+        Route::post("/removePropertyInterested",[AccountController::class, 'removeProperty'])->name('account.removeProperties');
+        Route::get("/savedProperties",[AccountController::class, 'savedProperties'])->name('account.savedProperties');
+        Route::post("/removeSavedProperty",[AccountController::class, 'removeSavedProperty'])->name('account.removeSavedJob');
+        Route::post("/updatePassword",[AccountController::class, 'updatePassword'])->name('account.updatePassword');
 
         //Setting Route
         Route::get('/change-password', [SettingController::class, 'showChangePasswordForm'])->name('admin.showChangePasswordForm');
         Route::post('/process-change-password', [SettingController::class, 'processChangePassword'])->name('admin.processChangePassword');
+        Route::post('/uploadTempImage', [TempImagesController::class, 'create'])->name('temp-images.create');
+
+
+        //Property Images
+        Route::post('/propertyImages/update', [PropertyImageController::class, 'update'])->name('product-images.update');
+        Route::delete('/propertyImages', [PropertyImageController::class, 'destroy'])->name('product-images.destroy');
+
 
 
          //Sub Categories Connect to main Categories

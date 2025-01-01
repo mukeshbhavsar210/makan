@@ -6,6 +6,7 @@ use App\Mail\ResetPasswordEmail;
 use App\Models\Amenity;
 use App\Models\Area;
 use App\Models\Bath;
+use App\Models\Bathroom;
 use App\Models\bhk_type;
 use App\Models\Category;
 use App\Models\City;
@@ -15,10 +16,16 @@ use App\Models\Job;
 use App\Models\JobApplication;
 use App\Models\JobType;
 use App\Models\Property;
+use App\Models\PropertyApplication;
+use App\Models\PropertyImage;
 use App\Models\PropertyType;
+use App\Models\Room;
 use App\Models\SaleType;
 use App\Models\SavedJob;
+use App\Models\SavedProperty;
+use App\Models\TempImage;
 use App\Models\User;
+use App\Models\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -181,14 +188,15 @@ class AccountController extends Controller
         }
     }
 
+    //CREATE PROPERTY
     public function createProperty(){
         $cities = City::orderBy('name','ASC')->where('status',1)->get();
         $areas = Area::orderBy('name','ASC')->where('status',1)->get();
         $amenities = Amenity::orderBy('name','ASC')->where('status',1)->get();
         $developers = Developer::orderBy('name','ASC')->where('status',1)->get();
-        $bhk = bhk_type::orderBy('name','ASC')->where('status',1)->get();        
-        $bath = Bath::orderBy('name','ASC')->where('status',1)->get();        
-        $facings = Facing::orderBy('name','ASC')->where('status',1)->get();    
+        $bhk = Room::orderBy('name','ASC')->where('status',1)->get();        
+        $bath = Bathroom::orderBy('name','ASC')->where('status',1)->get();        
+        $facings = View::orderBy('name','ASC')->where('status',1)->get();    
         $categories = Category::orderBy('name','ASC')->where('status',1)->get();
         $propertyTypes = PropertyType::orderBy('name','ASC')->where('status',1)->get();
         $saleTypes = SaleType::orderBy('name','ASC')->where('status',1)->get();        
@@ -206,11 +214,11 @@ class AccountController extends Controller
             'saleTypes' => $saleTypes, 
         ];
 
-        return view('admin.job.create', $data);
+        return view('admin.property.create', $data);
     }
 
 
-
+    //SAVE PROPERTY
     public function saveProperty(Request $request){
         $rules = [
             'title' => 'required|min:5|max:200',            
@@ -221,24 +229,57 @@ class AccountController extends Controller
             $property = new Property();
             $property->user_id = Auth::user()->id;
             $property->title = $request->title;            
-            $property->category_id = $request->category;       
-            $property->sale_type_id = $request->saleType; 
+            $property->sale_type_id = $request->saleType;
+            $property->category_id = $request->category;                    
+            $property->keywords = $request->keywords;          
             $property->city_id = $request->city;   
-            $property->area_id = $request->area;   
-            $property->developer_id = $request->developer;   
-            $property->bhk_type_id = $request->bhk;            
-            $property->bath_id = $request->bath;
-            $property->facing_id = $request->facing;
+            $property->area_id = $request->area;  
+            $property->location = $request->location; 
             $property->property_type_id = $request->propertyType;
+            $property->room_id = $request->room;            
+            $property->bathroom_id = $request->bathroom;
             $property->amenities = $request->amenities;
-            $property->description = $request->description;  
-            $property->location = $request->location;
-            $property->keywords = $request->keywords;            
-            $property->size = $request->size;
             $property->price = $request->price;
             $property->compare_price = $request->compare_price;
-            $property->location = $request->location;
+            $property->developer_id = $request->developer;           
+            $property->size = $request->size;
+            $property->view_id = $request->view;                        
+            $property->description = $request->description;                           
             $property->save();
+
+            if (!empty($request->image_array)) {
+                foreach ($request->image_array as $temp_image_id) {
+    
+                    $tempImageInfo = TempImage::find($temp_image_id);
+                    $extArray = explode('.',$tempImageInfo->name);
+                    $ext = last($extArray);
+    
+                    $productImage = new PropertyImage();
+                    $productImage->product_id = $property->id;
+                    $productImage->image = "NULL";
+                    $productImage->save();
+    
+                    $imageName = $property->id.'-'.$productImage->id.'-'.time().'.'.$ext;
+                    $productImage->image = $imageName;
+                    $productImage->save();
+    
+                    //Generate Product Thumbnails
+                    //Large Image
+                    $sourcePath = public_path().'/temp/'.$tempImageInfo->name;
+                    $destPath = public_path().'/uploads/property/large/'.$imageName;
+                    $image = Image::make($sourcePath);
+                    $image->resize(1000, null, function ($constraint) {
+                        $constraint->aspectRatio();
+                    });
+                    $image->save($destPath);
+    
+                    //Small Image
+                    $destPath = public_path().'/uploads/property/small/'.$imageName;
+                    $image = Image::make($sourcePath);
+                    $image->fit(300,300);
+                    $image->save($destPath);
+                }
+            }
 
             session()->flash('success','Property added successfully.');
 
@@ -264,28 +305,28 @@ class AccountController extends Controller
         //     $jobs = Job::where('user_id', Auth::user()->id)->with('jobType')->orderBy('created_at','DESC')->paginate(10);        
         // }
 
-        return view('admin.job.my-jobs', [
+        return view('admin.property.myProperties', [
             'properties' => $properties
         ]);
     }
 
     public function editProperty(Request $request, $id) {
         $categories = Category::orderBy('name','ASC')->where('status',1)->get();
-        $jobtypes = JobType::orderBy('name','ASC')->where('status',1)->get();
+        $propertytypes = SaleType::orderBy('name','ASC')->where('status',1)->get();
 
-        $job = Job::where([
+        $property = Property::where([
             'user_id' => Auth::user()->id,
             'id' => $id
         ])->first();
 
-        if($job == null){
+        if($property == null){
             abort(404);
         }
 
-        return view('admin.job.edit', [
+        return view('admin.property.edit', [
             'categories' => $categories,
-            'jobtypes' => $jobtypes,
-            'job' => $job,
+            'propertytypes' => $propertytypes,
+            'property' => $property,
         ]);
     }
 
@@ -303,7 +344,7 @@ class AccountController extends Controller
 
         $validator = Validator::make($request->all(),$rules);
         if ($validator->passes()) {
-            $job = Job::find($id);
+            $job = Property::find($id);
             $job->title = $request->title;
             $job->category_id = $request->category;
             $job->job_type_id = $request->jobtype;
@@ -331,21 +372,22 @@ class AccountController extends Controller
         }
     }
 
-    public function deleteProperty(Request $request){
 
-        $job = Job::where([
+
+    public function deleteProperty(Request $request){
+        $property = Property::where([
             'user_id' => Auth::user()->id,
-            'id' => $request->jobId,
+            'id' => $request->propertyId,
         ])->first();
 
-        if($job == null){
+        if($property == null){
             session()->flash('error','Either property deleted or not found.');
             return response()->json([
                 'status' => true
             ]);
         }
 
-        Job::where('id',$request->jobId)->delete();
+        Property::where('id',$request->propertyId)->delete();
 
         session()->flash('success','Property deleted successfully.');
         return response()->json([
@@ -353,31 +395,36 @@ class AccountController extends Controller
         ]);
     }
 
-    public function myJobApplications(){
-        $jobApplications = JobApplication::where('user_id',Auth::user()->id)
-                            ->with(['job','job.jobType','job.applications'])
+    
+
+
+    public function myPropertyApplications(){
+        $propertyApplications = PropertyApplication::where('user_id',Auth::user()->id)
+                            ->with(['property','property.saleType','property.applications'])
                             ->orderBy('created_at','DESC')
                             ->paginate(10);
 
-        return view('admin.job.my-job-applications',[
-            'jobApplications' => $jobApplications,
+        return view('admin.property.myPropertyApplications',[
+            'propertyApplications' => $propertyApplications,
         ]);
     }
 
-    public function removeJob(Request $request) {
-        $JobApplication = JobApplication::where([
+
+
+    public function removeProperty(Request $request) {
+        $PropertyApplication = PropertyApplication::where([
                                 'id' => $request->id,
-                                'user_id' => Auth::user()->id]
+                                'property_id' => Auth::user()->id]
                             )->first();
 
-        if($JobApplication == null) {
+        if($PropertyApplication == null) {
             session()->flash('error','Property interest not found');
             return response()->json([
                 'status' => false,
             ]);
         }
 
-        JobApplication::find($request->id)->delete();
+        PropertyApplication::find($request->id)->delete();
 
         session()->flash('success','Property interested removed successfully.');
         return response()->json([
@@ -386,12 +433,12 @@ class AccountController extends Controller
     }
 
     public function savedProperties(Request $request){
-        $savedJobs = SavedJob::where([
+        $savedProperties = SavedProperty::where([
             'user_id' => Auth::user()->id
-        ])->with(['job','job.jobType','job.applications'])->orderBy('created_at','DESC')->paginate(10);
+        ])->with(['property','property.saleType','property.applications'])->orderBy('created_at','DESC')->paginate(10);
 
-        return view('admin.job.saved-jobs',[
-            'savedJobs' => $savedJobs,
+        return view('admin.property.saved-jobs',[
+            'savedProperties' => $savedProperties,
         ]);
     }
 

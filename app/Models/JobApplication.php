@@ -9,7 +9,7 @@ class JobApplication extends Model
 {
     use HasFactory;
 
-    public function job(){
+    public function property(){
         return $this->belongsTo(Property::class);
     }
 

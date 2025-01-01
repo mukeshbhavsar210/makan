@@ -5,11 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class SavedJob extends Model
+class PropertyApplication extends Model
 {
     use HasFactory;
 
-    public function job(){
+    public function property(){
         return $this->belongsTo(Property::class);
+    }
+
+    public function user(){
+        return $this->belongsTo(User::class);
     }
 }

@@ -8,12 +8,16 @@
              
              <div class="rh-agent-title-wrapper">
                 <div class="rh-side-title-box">
-                   <span class="rh-agent-label">Agent</span>
-                   <h3 class="rh_property_agent__title">
-                      <a href="">{{ $property->company_name }}</a>
-                   </h3>
+                   <span class="rh-agent-label">
+                     @if(!empty($property->developer->name))
+                        {{ $property->developer->name }}
+                     @endif 
+                   </span>
+                   <h3 class="rh_property_agent__title"><a href="">{{ $property->company_name }}</a></h3>
                 </div>
                 <a class="rh-property-agent-link" href="">View My Listings</a>
+
+                
              </div>
           </div>
 
@@ -72,9 +76,21 @@
                    </svg>
                    @if(!empty($property->developer->email))
                      {{ $property->developer->email }}
-                  @endif                                                
+                   @endif                                                
                 </a>
              </p>
+
+             @if(Auth::check())
+                  <a href="#" onclick="saveProperty({{ $property->id }})" class="rh-ultra-filled-button rh-ultra-button submit-button">Save Property</a>
+               @else
+                  <a href="javascript:void()" class="rh-ultra-filled-button rh-ultra-button submit-button">Login to Save</a>
+               @endif
+            
+               @if(Auth::check())
+                  <a href="#" onclick="applyProperty({{ $property->id }})" class="rh-ultra-filled-button rh-ultra-button submit-button">Apply</a>
+               @else
+                  <a href="javascript:void()" class="rh-ultra-filled-button rh-ultra-button submit-button">Login to Apply</a>
+               @endif
           </div>
           <div class="rh-property-agent-enquiry-form rh-ultra-form">
              <form id="agent-form-id54" class="rh_widget_form agent-form" method="post" action="https://ultra.realhomes.io/wp-admin/admin-ajax.php" novalidate="novalidate">
