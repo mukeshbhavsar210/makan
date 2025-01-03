@@ -223,7 +223,7 @@
                     $("#old_password").removeClass('is-invalid').siblings("p").removeClass('invalid-feedback').html();
                     $("#new_password").removeClass('is-invalid').siblings("p").removeClass('invalid-feedback').html();
                     $("#confirm_password").removeClass('is-invalid').siblings("p").removeClass('invalid-feedback').html();
-                    //window.location.href='{{ route("account.property") }}'
+                    //window.location.href='{{ route("property.index") }}'
                 } else {
                     var errors = response.errors;
                     if(errors.old_password){

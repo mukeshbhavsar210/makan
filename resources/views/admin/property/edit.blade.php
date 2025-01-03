@@ -9,7 +9,7 @@
                 <h1>Edit Property</h1>
             </div>            
             <div class="col-sm-6 text-right">
-                <a href="{{ route('account.property' )}}" class="btn btn-primary">Back</a>
+                <a href="{{ route('property.index' )}}" class="btn btn-primary">Back</a>
             </div>
         </div>
     </div>
@@ -84,7 +84,7 @@
         $("button[type='submit']").prop('disabled', true);
 
         $.ajax({
-            url: '{{ route("account.updateProperty", $property->id) }}',
+            url: '{{ route("property.update", $property->id) }}',
             type: 'POST',
             dataType: 'json',
             data: $("#updateJobForm").serializeArray(),
@@ -98,7 +98,7 @@
                     $("#location").removeClass('is-invalid').siblings("p").removeClass('invalid-feedback').html();
                     $("#description").removeClass('is-invalid').siblings("p").removeClass('invalid-feedback').html();
 
-                    window.location.href='{{ route("account.property") }}'
+                    window.location.href='{{ route("property.index") }}'
 
                 } else {
 

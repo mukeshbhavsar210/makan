@@ -117,7 +117,7 @@
                     $("#location").removeClass('is-invalid').siblings("p").removeClass('invalid-feedback').html();
                     $("#description").removeClass('is-invalid').siblings("p").removeClass('invalid-feedback').html();
                     $("#company_name").removeClass('is-invalid').siblings("p").removeClass('invalid-feedback').html();
-                    window.location.href='{{ route("account.property") }}'
+                    window.location.href='{{ route("property.index") }}'
                 } else {
                     var errors = response.errors;
                     if(errors.title){

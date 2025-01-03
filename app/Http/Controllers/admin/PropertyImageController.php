@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\ProductImage;
+use App\Models\PropertyImage;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\Facades\Image;
 
@@ -16,18 +17,18 @@ class PropertyImageController extends Controller
         $ext = $image->getClientOriginalExtension();
         $sourcePath = $image->getPathName();
 
-        $productImage = new ProductImage();
-        $productImage->product_id = $request->product_id;
-        $productImage->image = "NULL";
-        $productImage->save();
+        $propertyImage = new PropertyImage();
+        $propertyImage->product_id = $request->product_id;
+        $propertyImage->image = "NULL";
+        $propertyImage->save();
 
-        $imageName = $request->product_id.'-'.$productImage->id.'-'.time().'.'.$ext;
-        $productImage->image = $imageName;
-        $productImage->save();
+        $imageName = $request->product_id.'-'.$propertyImage->id.'-'.time().'.'.$ext;
+        $propertyImage->image = $imageName;
+        $propertyImage->save();
 
         //Generate Product Thumbnails
         //Large Image
-        $destPath = public_path().'/uploads/product/large/'.$imageName;
+        $destPath = public_path().'/uploads/property/large/'.$imageName;
         $image = Image::make($sourcePath);
         $image->resize(1000, null, function ($constraint) {
             $constraint->aspectRatio();
@@ -35,23 +36,23 @@ class PropertyImageController extends Controller
         $image->save($destPath);
 
         //Small Image
-        $destPath = public_path().'/uploads/product/small/'.$imageName;
-        $image = Image::make($sourcePath);
-        $image->fit(300,300);
-        $image->save($destPath);
+        // $destPath = public_path().'/uploads/product/small/'.$imageName;
+        // $image = Image::make($sourcePath);
+        // $image->fit(300,300);
+        // $image->save($destPath);
 
         return response()->json([
             'status' => true,
-            'image_id' => $productImage->id,
-            'ImagePath' => asset('uploads/product/small/'.$productImage->image),
+            'image_id' => $propertyImage->id,
+            'ImagePath' => asset('uploads/product/small/'.$propertyImage->image),
             'message' => 'Image saved successfully'
         ]);
     }
 
     public function destroy(Request $request){
-        $productImage = ProductImage::find($request->id);
+        $propertyImage = ProductImage::find($request->id);
 
-        if (empty($productImage)){
+        if (empty($propertyImage)){
             return response()->json([
                 'status' => false,
                 'message' => 'Image not found'
@@ -59,11 +60,11 @@ class PropertyImageController extends Controller
         }
 
         //Delete images from folder
-        File::delete(public_path('uploads/product/large/'.$productImage->image));
-        File::delete(public_path('uploads/product/small/'.$productImage->image));
+        File::delete(public_path('uploads/product/large/'.$propertyImage->image));
+        File::delete(public_path('uploads/product/small/'.$propertyImage->image));
 
         //Delete images from database
-        $productImage->delete();
+        $propertyImage->delete();
 
         return response()->json([
             'status' => true,

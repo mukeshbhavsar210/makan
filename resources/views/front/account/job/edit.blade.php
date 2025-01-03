@@ -142,7 +142,7 @@
         $("button[type='submit']").prop('disabled', true);
 
         $.ajax({
-            url: '{{ route("account.updateProperty", $job->id) }}',
+            url: '{{ route("property.update", $job->id) }}',
             type: 'POST',
             dataType: 'json',
             data: $("#updateJobForm").serializeArray(),
@@ -159,7 +159,7 @@
                     $("#description").removeClass('is-invalid').siblings("p").removeClass('invalid-feedback').html();
                     $("#company_name").removeClass('is-invalid').siblings("p").removeClass('invalid-feedback').html();
 
-                    window.location.href='{{ route("account.property") }}'
+                    window.location.href='{{ route("property.index") }}'
 
                 } else {
 

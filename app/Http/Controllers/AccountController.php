@@ -10,7 +10,7 @@ use App\Models\Bathroom;
 use App\Models\bhk_type;
 use App\Models\Category;
 use App\Models\City;
-use App\Models\Developer;
+use App\Models\Builder;
 use App\Models\Facing;
 use App\Models\Job;
 use App\Models\JobApplication;
@@ -36,6 +36,7 @@ use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
 use Illuminate\Support\Str;
 use Spatie\Permission\Traits\HasRoles;
+use Intervention\Image\Facades\Image;
 
 class AccountController extends Controller
 {
@@ -189,11 +190,11 @@ class AccountController extends Controller
     }
 
     //CREATE PROPERTY
-    public function createProperty(){
+    public function create(){
         $cities = City::orderBy('name','ASC')->where('status',1)->get();
         $areas = Area::orderBy('name','ASC')->where('status',1)->get();
         $amenities = Amenity::orderBy('name','ASC')->where('status',1)->get();
-        $developers = Developer::orderBy('name','ASC')->where('status',1)->get();
+        $builders = Builder::orderBy('name','ASC')->where('status',1)->get();
         $bhk = Room::orderBy('name','ASC')->where('status',1)->get();        
         $bath = Bathroom::orderBy('name','ASC')->where('status',1)->get();        
         $facings = View::orderBy('name','ASC')->where('status',1)->get();    
@@ -205,7 +206,7 @@ class AccountController extends Controller
             'cities' => $cities,
             'areas' => $areas,
             'amenities' => $amenities,
-            'developers' => $developers,
+            'builders' => $builders,
             'bhk' => $bhk,
             'bath' => $bath,
             'facings' => $facings,
@@ -219,7 +220,7 @@ class AccountController extends Controller
 
 
     //SAVE PROPERTY
-    public function saveProperty(Request $request){
+    public function store(Request $request){
         $rules = [
             'title' => 'required|min:5|max:200',            
         ];
@@ -229,6 +230,7 @@ class AccountController extends Controller
             $property = new Property();
             $property->user_id = Auth::user()->id;
             $property->title = $request->title;            
+            $property->slug = $request->slug;            
             $property->sale_type_id = $request->saleType;
             $property->category_id = $request->category;                    
             $property->keywords = $request->keywords;          
@@ -243,8 +245,13 @@ class AccountController extends Controller
             $property->compare_price = $request->compare_price;
             $property->developer_id = $request->developer;           
             $property->size = $request->size;
-            $property->view_id = $request->view;                        
-            $property->description = $request->description;                           
+            $property->view_id = $request->view;     
+            $property->rera = $request->rera;  
+            $property->year_build = $request->year_build;  
+            $property->total_area = $request->total_area;  
+            $property->description = $request->description;  
+            $property->is_featured = $request->is_featured;
+            $property->related_properties = (!empty($request->related_properties)) ? implode(',',$request->related_properties) : '';                         
             $property->save();
 
             if (!empty($request->image_array)) {
@@ -254,16 +261,16 @@ class AccountController extends Controller
                     $extArray = explode('.',$tempImageInfo->name);
                     $ext = last($extArray);
     
-                    $productImage = new PropertyImage();
-                    $productImage->product_id = $property->id;
-                    $productImage->image = "NULL";
-                    $productImage->save();
+                    $propertyImage = new PropertyImage();
+                    $propertyImage->property_id = $property->id;
+                    $propertyImage->image = "NULL";
+                    $propertyImage->save();
     
-                    $imageName = $property->id.'-'.$productImage->id.'-'.time().'.'.$ext;
-                    $productImage->image = $imageName;
-                    $productImage->save();
+                    $imageName = $property->id.'-'.$propertyImage->id.'-'.time().'.'.$ext;
+                    $propertyImage->image = $imageName;
+                    $propertyImage->save();
     
-                    //Generate Product Thumbnails
+                    //Generate Property Thumbnails
                     //Large Image
                     $sourcePath = public_path().'/temp/'.$tempImageInfo->name;
                     $destPath = public_path().'/uploads/property/large/'.$imageName;
@@ -274,10 +281,10 @@ class AccountController extends Controller
                     $image->save($destPath);
     
                     //Small Image
-                    $destPath = public_path().'/uploads/property/small/'.$imageName;
-                    $image = Image::make($sourcePath);
-                    $image->fit(300,300);
-                    $image->save($destPath);
+                    // $destPath = public_path().'/uploads/property/small/'.$imageName;
+                    // $image = Image::make($sourcePath);
+                    // $image->fit(300,300);
+                    // $image->save($destPath);
                 }
             }
 
@@ -296,7 +303,7 @@ class AccountController extends Controller
         }
     }
 
-    public function myProperties(){
+    public function index(){
         $properties = Property::where('user_id', Auth::user()->id)->with('jobType')->orderBy('created_at','DESC')->paginate(10);        
 
         // if(Auth::user()->hasRole('admin')) {
@@ -305,12 +312,12 @@ class AccountController extends Controller
         //     $jobs = Job::where('user_id', Auth::user()->id)->with('jobType')->orderBy('created_at','DESC')->paginate(10);        
         // }
 
-        return view('admin.property.myProperties', [
+        return view('admin.property.list', [
             'properties' => $properties
         ]);
     }
 
-    public function editProperty(Request $request, $id) {
+    public function edit(Request $request, $id) {
         $categories = Category::orderBy('name','ASC')->where('status',1)->get();
         $propertytypes = SaleType::orderBy('name','ASC')->where('status',1)->get();
 
@@ -331,7 +338,7 @@ class AccountController extends Controller
     }
 
 
-    public function updateProperty(Request $request, $id){
+    public function update_property(Request $request, $id){
         $rules = [
             'title' => 'required|min:5|max:200',
             'category' => 'required',
@@ -374,7 +381,7 @@ class AccountController extends Controller
 
 
 
-    public function deleteProperty(Request $request){
+    public function delete_property(Request $request){
         $property = Property::where([
             'user_id' => Auth::user()->id,
             'id' => $request->propertyId,
@@ -565,5 +572,26 @@ class AccountController extends Controller
         ]);
 
         return redirect()->route('account.login')->with('success','You have successfully changed your password');
+    }
+
+
+    //Similar Property show 
+    public function get_similar_properties(Request $request){
+        $tempProperty = [];
+        if($request->term != ""){
+            $properties = Property::where('title','like','%'.$request->term.'%')->get();
+            if ($properties != null){
+                foreach ($properties as $property){
+                    $tempProperty[] = array(
+                        'id' => $property->id,
+                        'text' => $property->title,
+                    );
+                }
+            }
+        }
+        return response()->json([
+            'tags' => $tempProperty,
+            'status' => true,
+        ]);
     }
 }

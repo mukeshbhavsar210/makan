@@ -26,11 +26,11 @@
                                                                          
                             <div class="discoverProducts">
                                 @if ($featuredJobs->isNotEmpty())
-                                    @foreach ($featuredJobs as $featuredJob)                                
+                                    @foreach ($featuredJobs as $value)                                
                                         <div class="rhea-ultra-property-card">
                                             <div class="rhea-ultra-card-thumb-wrapper">
                                                 <div class="rhea-ultra-property-thumb">
-                                                    <a class="{{ route('propertyDetails', $featuredJob->id) }}">
+                                                    <a class="{{ route('propertyDetails', $value->id) }}">
                                                         <img loading="lazy" decoding="async" width="488"
                                                             height="326" src="https://ultra-realhomes.b-cdn.net/wp-content/uploads/2022/06/meeting-working-room-office-building-488x326.jpg"
                                                             class="attachment-property-thumb-image size-property-thumb-image wp-post-image"
@@ -67,8 +67,18 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <a href="{{ route('propertyDetails', $featuredJob->id) }}"><img class="img-fluid" src="img/property-1.jpg" alt=""></a>
-                                                
+
+                                                 {{-- @php
+                                                    $propertyImage = $value->property_images->first();
+                                                @endphp
+
+                                               @if (!empty($propertyImage->image))
+                                                    <img class="card-img-top" src="{{ asset('uploads/property/small/'.$propertyImage->image) }}" >
+                                                @else
+                                                    <img class="card-img-top" src="{{ asset('admin-assets/img/default-150x150.png') }}" alt="" />
+                                                @endif --}}
+
+                                                <a href="{{ route('propertyDetails', $value->id) }}"><img class="img-fluid" src="img/property-1.jpg" alt=""></a>
                                                 
                                                 <div class="rhea-ultra-bottom-box rhea-ultra-flex-end">
                                                     <div class="rhea-ultra-action-buttons rh-ultra-action-light hover-light">
@@ -129,7 +139,7 @@
                                                 </div>
                                             </div>
                                             <div class="rhea-ultra-card-detail-wrapper">
-                                                <h3 class="rhea-ultra-property-title"><a href="">{{ $featuredJob->title }}</a></h3>
+                                                <h3 class="rhea-ultra-property-title"><a href="">{{ $value->title }}</a></h3>
                                                 <div class="rhea_address_ultra">
                                                     <a class="rhea_trigger_map rhea_facnybox_trigger-4943001a "
                                                         data-rhea-map-source="rhea-map-source-4943001a"
@@ -160,13 +170,13 @@
                                                                 <circle cx="12" cy="9" r="2.5" />
                                                             </svg>
                                                         </span>
-                                                        {{ $featuredJob->location }} </a>
+                                                        {{ $value->location }} </a>
                                                 </div>
-                                                {{-- <span class="rhea-ultra-property-types"><small><a href="">{{ $featuredJob->jobType->name }}</a></small></span> --}}
+                                                {{-- <span class="rhea-ultra-property-types"><small><a href="">{{ $value->jobType->name }}</a></small></span> --}}
                                                 <div class="rhea-ultra-price-meta-box  ">
                                                     <div class="rh_prop_card__priceLabel_ultra">
                                                         <p class="rh_prop_card__price_ultra">
-                                                            <span class="ere-price-display">{{ $featuredJob->price }}/-</span>                                                            
+                                                            <span class="ere-price-display">{{ $value->price }}/-</span>                                                            
                                                         </p>
                                                     </div>
                                                     <div class="rh_prop_card_meta_wrap_ultra rh-ul-tooltip">
@@ -183,18 +193,18 @@
                                                                     </svg> 
                                                                 </span>
                                                                 <span class="rhea_ultra_meta_box">
-                                                                    <span class="figure">{{ $featuredJob->size }}</span>
+                                                                    <span class="figure">{{ $value->size }}</span>
                                                                     <span class="label">sq ft</span>
                                                                 </span>
 
-                                                                {{-- {{ Str::words(strip_tags($featuredJob->description), 5) }} --}}
+                                                                {{-- {{ Str::words(strip_tags($value->description), 5) }} --}}
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="rvr_card_info_wrap">
                                                     <div class="rh-ultra-rvr-rating"></div>
-                                                    <p class="added-date"><span class="added-title">Added:</span> {{ \Carbon\Carbon::parse($featuredJob->created_at)->format('M d, Y') }}</p>
+                                                    <p class="added-date"><span class="added-title">Added:</span> {{ \Carbon\Carbon::parse($value->created_at)->format('M d, Y') }}</p>
                                                 </div>
                                             </div>
                                         </div>                                

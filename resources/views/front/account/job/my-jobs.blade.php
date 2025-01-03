@@ -19,7 +19,7 @@
                                 <h3 class="fs-4 mb-1">My22 Properties</h3>
                             </div>
                             <div style="margin-top: -10px;">
-                                <a href="{{ route('account.createProperty' )}}" class="btn btn-primary">Post a Property</a>
+                                <a href="{{ route('property.create' )}}" class="btn btn-primary">Post a Property</a>
                             </div>
                         </div>
                         <div class="table-responsive">
@@ -52,7 +52,7 @@
                                             </td>
                                             <td>
                                                 <a href="{{ route('propertyDetails', $job->id) }}"> <i class="fa fa-eye" aria-hidden="true"></i></a>
-                                                <a href="{{ route('account.editProperty', $job->id) }}"><i class="fa fa-edit" aria-hidden="true"></i></a>
+                                                <a href="{{ route('property.edit', $job->id) }}"><i class="fa fa-edit" aria-hidden="true"></i></a>
                                                 <a href="#" onclick="deleteJob({{ $job->id }})"><i class="fa fa-trash" aria-hidden="true"></i></a>
                                             </td>
                                         </tr>
@@ -126,12 +126,12 @@
     function deleteJob(jobId){
         if(confirm("Are you sure you want to delete?")){
             $.ajax({
-            url: '{{ route("account.deleteProperty") }}',
+            url: '{{ route("property.delete") }}',
             type: 'post',
             data: { jobId: jobId },
             dataType: 'json',
             success: function(response){
-                window.location.href='{{ route("account.property") }}';
+                window.location.href='{{ route("property.index") }}';
             }
             });
         }
