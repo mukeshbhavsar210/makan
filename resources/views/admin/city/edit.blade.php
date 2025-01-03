@@ -5,10 +5,10 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-6">
-                <h1>Edit Category</h1>
+                <h1>Edit City</h1>
             </div>
             <div class="col-sm-6 text-right">
-                <a href="{{ route('categories.index') }}" class="btn btn-primary">Back</a>
+                <a href="{{ route('cities.index') }}" class="btn btn-primary">Back</a>
             </div>
         </div>
     </div>
@@ -18,53 +18,31 @@
 <section class="content">
     <!-- Default box -->
     <div class="container-fluid">
-        <form action="" method="post" id="categoryForm" name="categoryForm">
+        <form action="" method="post" id="cityForm" name="cityForm">
             <div class="card">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-5">
                             <div class="mb-3">
                                 <label for="name">Name</label>
-                                <input type="text" value="{{ $category->name}}" name="name" id="name" class="form-control" placeholder="Name">
+                                <input type="text" value="{{ $city->name}}" name="name" id="name" class="form-control" placeholder="Name">
                                 <p></p>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-5">
                             <div class="mb-3">
                                 <label for="slug">Slug</label>
-                                <input type="text" value="{{ $category->slug}}" readonly name="slug" id="slug" class="form-control" placeholder="">
+                                <input type="text" value="{{ $city->slug}}" readonly name="slug" id="slug" class="form-control" placeholder="">
                                 <p></p>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <input type="hidden" id="image_id" name="image_id" value=" ">
-                                <label for="image">Image</label>
-                                <div id="image" class="dropzone dz-clickable">
-                                    <div class="dz-message needsclick">
-                                        <br>Drop files here or click to upload.<br><br>
-                                    </div>
-                                </div>
-                            </div>
-
-                            @if(!empty($category->image))
-                                <img style="border-radius: 7px; width:200px" src="{{ asset('uploads/category/thumb/'.$category->image) }}" alt="" />
-                            @endif
-                        </div>
-                        <div class="col-md-6">
+                       
+                        <div class="col-md-2">
                             <div class="mb-3">
                                 <label for="status">Status</label>
                                 <select name="status" id="status" class="form-control">
-                                    <option {{ ($category->status == 1 ? 'selected' : '')}} value="1">Active</option>
-                                    <option  {{ ($category->status == 0 ? 'selected' : '')}} value="0">Block</option>
-                                </select>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="showHome">Show on Home</label>
-                                <select name="showHome" id="showHome" class="form-control">
-                                    <option {{ ($category->showHome == 'Yes' ? 'selected' : '')}} value="Yes">Yes</option>
-                                    <option  {{ ($category->showHome == 'No' ? 'selected' : '')}} value="No">No</option>
+                                    <option {{ ($city->status == 1 ? 'selected' : '')}} value="1">Active</option>
+                                    <option  {{ ($city->status == 0 ? 'selected' : '')}} value="0">Block</option>
                                 </select>
                             </div>
                         </div>
@@ -84,12 +62,12 @@
 
 @section('customJs')
     <script>
-        $("#categoryForm").submit(function(event){
+        $("#cityForm").submit(function(event){
             event.preventDefault();
             var element = $(this);
             $("button[type=submit]").prop('disabled', true);
             $.ajax({
-                url: '{{ route("categories.update",$category->id) }}',
+                url: '{{ route("cities.update",$city->id) }}',
                 type: 'put',
                 data: element.serializeArray(),
                 dataType: 'json',
@@ -98,7 +76,7 @@
 
                     if(response["status"] == true){
 
-                        window.location.href="{{ route('categories.index') }}"
+                        window.location.href="{{ route('cities.index') }}"
 
                         $('#name').removeClass('is-invalid')
                         .siblings('p')

@@ -8,7 +8,7 @@
                 <h1>Add City</h1>
             </div>
             <div class="col-sm-6 text-right">
-                <a href="{{ route('categories.index') }}" class="btn btn-primary">Back</a>
+                <a href="{{ route('cities.index') }}" class="btn btn-primary">Back</a>
             </div>
         </div>
     </div>
@@ -75,7 +75,7 @@
 
                     if(response["status"] == true){
 
-                        window.location.href="{{ route('categories.index') }}"
+                        window.location.href="{{ route('cities.index') }}"
 
                         $('#name').removeClass('is-invalid')
                         .siblings('p')

@@ -2,7 +2,7 @@
     <div class="card-body p-0">
         <ul class="list-group list-group-flush ">
             <li class="list-group-item d-flex justify-content-between align-items-center p-2">
-                <a href="{{ route('account.createProperty') }}">Add Property</a>
+                <a href="{{ route('property.create') }}">Add Property</a>
             </li>
             <li class="list-group-item d-flex justify-content-between align-items-center p-2">
                 <a href="{{ route('account.property') }}">My Properties</a>

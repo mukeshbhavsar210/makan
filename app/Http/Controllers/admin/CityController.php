@@ -16,30 +16,28 @@ class CityController extends Controller
         ]);
     }
 
-    public function edit($id){
-        $city = City::findOrFail($id);
-        return view('admin.city.edit',[
-            'city' => $city
-        ]);
+    public function create(){
+        return view('admin.city.create');
     }
 
-    public function update($id, Request $request){
-        $validator = Validator::make($request->all(),[
-            'name' => 'required|min:5|max:30',            
-            'slug' => 'required|min:5|max:30',
+    public function store(Request $request){
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|unique:cities',
+            'slug' => 'required|unique:cities',
         ]);
 
-        if($validator->passes()) {
-            $user = City::find($id);
-            $user->name = $request->name;
-            $user->slug = $request->slug;
-            $user->save();
+        if ($validator->passes()) {
+            $city = new City();
+            $city->name = $request->name;
+            $city->slug = $request->slug;
+            $city->status = $request->status;
+            $city->save();
 
-            session()->flash('success','City updated successfully.');
+            $request->session()->flash('success', 'City added successfully');
 
             return response()->json([
                 'status' => true,
-                'errors' => []
+                'message' => 'City added successfully'
             ]);
 
         } else {
@@ -48,5 +46,114 @@ class CityController extends Controller
                 'errors' => $validator->errors()
             ]);
         }
+    }
+
+    // public function edit($id){
+    //     $city = City::findOrFail($id);
+    //     return view('admin.city.edit',[
+    //         'city' => $city
+    //     ]);
+    // }
+
+    // public function update($id, Request $request){
+    //     $validator = Validator::make($request->all(),[
+    //         'name' => 'required|unique:cities',
+    //         'slug' => 'required|unique:cities',
+    //     ]);
+
+    //     if($validator->passes()) {
+    //         $user = City::find($id);
+    //         $user->name = $request->name;
+    //         $user->slug = $request->slug;
+    //         $user->save();
+
+    //         session()->flash('success','City updated successfully.');
+
+    //         return response()->json([
+    //             'status' => true,
+    //             'errors' => []
+    //         ]);
+
+    //     } else {
+    //         return response()->json([
+    //             'status' => false,
+    //             'errors' => $validator->errors()
+    //         ]);
+    //     }
+    // }
+
+
+
+    public function edit($cityId, Request $request){
+        $city = City::find($cityId);
+
+        if (empty($city)) {
+            return redirect()->route('cities.index');
+        }
+
+        return view('admin.city.edit', compact('city'));
+    }
+
+
+
+    public function update($cityId, Request $request){
+        $city = City::find($cityId);
+        if (empty($city)) {
+            $request->session()->flash('error', 'City not found');
+            return response()->json([
+                'status' => false,
+                'notFound' => true,
+                'message' => 'City not found'
+            ]);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'slug' => 'required|unique:city,slug,'.$city->id.',id',
+        ]);
+
+        if ($validator->passes()) {
+            $city->name = $request->name;
+            $city->slug = $request->slug;
+            $city->status = $request->status;
+            $city->showHome = $request->showHome;
+            $city->save();
+
+            $request->session()->flash('success', 'City updated successfully');
+
+            return response()->json([
+                'status' => true,
+                'message' => 'City updated successfully'
+            ]);
+
+        } else {
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors()
+            ]);
+        }
+    }
+
+    public function destroy($cityId, Request $request){
+        $city = City::find($cityId);
+
+        if(empty($city)){
+            $request->session()->flash('error', 'City not found');
+            return response()->json([
+                'status' => true,
+                'message' => 'City not found'
+            ]);
+            //return redirect()->route('categories.index');
+        }
+
+
+        $city->delete();
+
+        $request->session()->flash('success', 'City deleted successfully');
+
+        return response()->json([
+            'status' => true,
+            'message' => 'City deleted successfully'
+        ]);
     }
 }
