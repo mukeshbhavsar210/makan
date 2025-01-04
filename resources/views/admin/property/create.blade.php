@@ -28,27 +28,27 @@
                             <div class="card-body card-form p-4">                    
                                 <div class="row">
                                     <div class="col-md-8">
-                                        <div class="from-group">
+                                        <div class="form-group">
                                             <label for="title" class="mb-1">Property name<span class="req">*</span></label>
                                             <input type="text" placeholder="Title" id="title" name="title" class="form-control">
                                             <p></p>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
-                                        <div class="from-group">
+                                        <div class="form-group">
                                             <label for="slug">Slug</label>
                                             <input type="text" readonly name="slug" id="slug" class="form-control" placeholder="Slug">
                                             <p class="error"></p>
                                         </div>
                                     </div>
                                     <div class="col-md-8">
-                                        <div class="from-group">
+                                        <div class="form-group">
                                             <label for="" class="mb-1">Search Keywords</label>
                                             <input type="text" placeholder="Search keywords" id="keywords" name="keywords" class="form-control">
                                         </div>
                                     </div>            
                                     <div class="col-md-4">
-                                        <div class="from-group">
+                                        <div class="form-group">
                                             <label for="saletype" class="mb-1">Sale Type<span class="req">*</span></label>
                                             <select name="saleType" id="saleType" class="form-control">
                                                 @if ($saleTypes->isNotEmpty())
@@ -60,13 +60,13 @@
                                         </div>
                                     </div>
                                     <div class="col-md-8">
-                                        <div class="from-group">
+                                        <div class="form-group">
                                             <label for="location" class="mb-1">Location<span class="req">*</span></label>
                                             <input type="text" placeholder="Location" id="location" name="location" class="form-control">                            
                                         </div>                        
                                     </div>
                                     <div class="col-md-4">
-                                        <div class="from-group">
+                                        <div class="form-group">
                                             <label for="category" class="mb-1">Category<span class="req">*</span></label>
                                             <select name="category" id="category" class="form-control">
                                                 @if ($categories->isNotEmpty())
@@ -80,7 +80,7 @@
                                     
                                      
                                     <div class="col-md-4">
-                                        <div class="from-group">
+                                        <div class="form-group">
                                             <label for="" class="mb-1">City<span class="req">*</span></label>
                                             <select name="city" id="city" class="form-control">
                                                 <option value="">Select a City</option>
@@ -93,7 +93,7 @@
                                         </div>
                                     </div>                                             
                                     <div class="col-md-4">
-                                        <div class="from-group">
+                                        <div class="form-group">
                                             <label for="" class="mb-1">Area<span class="req">*</span></label>
                                             <select name="area" id="area" class="form-control">
                                                 <option value="">Select Area</option>
@@ -101,7 +101,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4">
-                                        <div class="from-group">
+                                        <div class="form-group">
                                             <label for="" class="mb-1">Facing<span class="req">*</span></label>
                                             <select name="view" id="view" class="form-control">
                                                 <option value="">Facing</option>
@@ -114,19 +114,19 @@
                                         </div>
                                     </div> 
                                     <div class="col-md-4">
-                                        <div class="from-group">
+                                        <div class="form-group">
                                             <label for="price" class="mb-1">Price<span class="req">*</span></label>
                                             <input type="text" placeholder="Price" id="price" name="price" class="form-control">                            
                                         </div>
                                     </div>
                                     <div class="col-md-4">
-                                        <div class="from-group">
+                                        <div class="form-group">
                                             <label for="compare_price" class="mb-1">Compare Price<span class="req">*</span></label>
                                             <input type="text" placeholder="Compare price" id="compare_price" name="compare_price" class="form-control">                            
                                         </div>
                                     </div>
                                     <div class="col-md-4">
-                                        <div class="from-group">
+                                        <div class="form-group">
                                             <label for="" class="mb-1">BHK<span class="req">*</span></label>
                                             <select name="room" id="room" class="form-control">  
                                                 <option value="">Room</option>                              
@@ -139,13 +139,13 @@
                                         </div>
                                     </div>    
                                     <div class="col-md-4">
-                                        <div class="from-group">
+                                        <div class="form-group">
                                             <label for="size" class="mb-1">Size<span class="req">*</span></label>
                                             <input type="text" placeholder="Size" id="size" name="size" class="form-control">                            
                                         </div>
                                     </div>        
                                     <div class="col-md-4">
-                                        <div class="from-group">
+                                        <div class="form-group">
                                             <label for="" class="mb-1">Bathroom<span class="req">*</span></label>
                                             <select name="bathroom" id="bathroom" class="form-control">   
                                                 <option value="">Bath</option>                             
@@ -158,7 +158,7 @@
                                         </div>
                                     </div>                                                                         
                                     <div class="col-md-4">
-                                        <div class="from-group">
+                                        <div class="form-group">
                                             <label for="" class="mb-1">Property Type<span class="req">*</span></label>
                                             <select name="propertyType" id="propertyType" class="form-control">
                                                 <option value="">Select a type</option>
@@ -171,25 +171,25 @@
                                         </div>
                                     </div>                                    
                                     <div class="col-md-8">
-                                        <div class="from-group">
+                                        <div class="form-group">
                                             <label for="rera" class="mb-1">RERA<span class="req">*</span></label>
                                             <input type="text" placeholder="RERA" id="rera" name="rera" class="form-control">                            
                                         </div>
                                     </div>   
                                     <div class="col-md-2">
-                                        <div class="from-group">
+                                        <div class="form-group">
                                             <label for="year_build" class="mb-1">Year Build<span class="req">*</span></label>
                                             <input type="text" placeholder="Year Build" id="year_build" name="year_build" class="form-control">                            
                                         </div>
                                     </div> 
                                     <div class="col-md-2">
-                                        <div class="from-group">
+                                        <div class="form-group">
                                             <label for="total_area" class="mb-1">Total Area<span class="req">*</span></label>
                                             <input type="text" placeholder="Total area" id="total_area" name="total_area" class="form-control">                            
                                         </div>
                                     </div> 
                                     <div class="col-md-12">
-                                        <div class="from-group">
+                                        <div class="form-group">
                                             <label for="size" class="mb-1">Amenities<span class="req">*</span></label>
                                             <select multiple class="related_amenities" name="related_amenities[]" id="related_amenities">
                                                 
@@ -197,7 +197,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-12">
-                                        <div class="from-group">
+                                        <div class="form-group">
                                             <label for="" class="mb-1">Description<span class="req">*</span></label>
                                             <textarea class="form-control" name="description" id="description" cols="5" rows="5" placeholder="Description"></textarea>                            
                                         </div>
@@ -231,7 +231,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <h2 class="h4 mb-3">Developer's Details</h2>
-                                <div class="from-group">      
+                                <div class="form-group">      
                                     <select name="builder" id="builder" class="form-control">                                                                  
                                         <option value="">Select a Builder</option>
                                         @if ($builders->isNotEmpty())
@@ -287,7 +287,7 @@
     $("#city").change(function(){
         var city_id = $(this).val();
         $.ajax({
-            url: '{{ route("area.index") }}',
+            url: '{{ route("areas.index") }}',
             type: 'get',
             data: {city_id:city_id},
             dataType: 'json',

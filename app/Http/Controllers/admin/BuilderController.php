@@ -4,10 +4,9 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Builder;
+use App\Models\City;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Flash;
-use App\Models\Category;
 use App\Models\Property;
 use App\Models\TempImage;
 use Illuminate\Support\Facades\File;
@@ -32,9 +31,13 @@ class BuilderController extends Controller
         return view('admin.builder.list', $data);
     }
 
-
+    //CREATE
     public function create(){
-        return view('admin.builder.create');
+        $properties = Property::orderBy('title','ASC')->get();
+        $data['properties'] = $properties;
+        $cities = City::orderBy('name','ASC')->get();
+        $data['cities'] = $cities;
+        return view("admin.builder.create", $data);
     }
 
 
@@ -52,26 +55,31 @@ class BuilderController extends Controller
             $builder->whatsapp = $request->whatsapp;
             $builder->year_estd = $request->year_estd;
             $builder->address = $request->address;
-            //$builder->property_id = $request->property_id;
-            $builder->status = $request->status;            
+            $builder->property_id = $request->property;                     
             $builder->save();
 
-            //Logo
+            // Save image here
             if (!empty($request->image_id)) {
                 $tempImage = TempImage::find($request->image_id);
                 $extArray = explode('.',$tempImage->name);
                 $ext = last($extArray);
 
-                $newImageName = $builder->id.'.'.$ext;
+                $newImageName = $builder->id.'_'.$builder->name.'.'.$ext;
                 $sPath = public_path().'/temp/'.$tempImage->name;
-                $dPath = public_path().'/uploads/builder_logo_photo/'.$newImageName;
+                $dPath = public_path().'/uploads/builder/'.$newImageName;
                 File::copy($sPath,$dPath);
+
+                // //Generate image thumbnail
+                // $dPath = public_path().'/uploads/builder/thumb/'.$newImageName;
+                // $img = Image::make($sPath);
+                // $img->resize(200, 200);
+                // $img->save($dPath);
+                // File::copy($sPath,$dPath);
 
                 $builder->logo = $newImageName;
                 $builder->save();
             }
             
-
             $request->session()->flash('success', 'Builder added successfully');
 
             return response()->json([
@@ -91,11 +99,9 @@ class BuilderController extends Controller
 
     public function edit($builderId, Request $request){
         $builder = Builder::find($builderId);
-
         if (empty($builder)) {
             return redirect()->route('builders.index');
         }
-
         return view('admin.builder.edit', compact('builder'));
     }
 
@@ -112,7 +118,7 @@ class BuilderController extends Controller
                 'status' => true,
                 'message' => 'Builder not found'
             ]);
-            //return redirect()->route('categories.index');
+            return redirect()->route('builders.index');
         }
 
         //Delete old image
@@ -130,6 +136,49 @@ class BuilderController extends Controller
     }
 
 
+
+
+    public function update($id, Request $request){
+        $builder = Builder::find($id);
+        if (empty($builder)) {
+            $request->session()->flash('error', 'Builder not found');
+            return response()->json([
+                'status' => false,
+                'notFound' => true,
+                'message' => 'builder not found'
+            ]);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',            
+        ]);
+
+        if ($validator->passes()) {
+            $builder->name = $request->name;
+            $builder->email = $request->email;
+            $builder->landline = $request->landline;
+            $builder->mobile = $request->mobile;
+            $builder->whatsapp = $request->whatsapp;
+            $builder->year_estd = $request->year_estd;
+            $builder->address = $request->address;
+            $builder->property_id = $request->property_id;
+            $builder->status = $request->status;             
+            $builder->save();
+
+            $request->session()->flash('success', 'builder updated successfully');
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Builder updated successfully'
+            ]);
+
+        } else {
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors()
+            ]);
+        }
+    }
 
 
     public function updateProfilePic(Request $request){

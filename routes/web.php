@@ -47,21 +47,34 @@ Route::post("/process-forgot-password",[AccountController::class, 'processForgot
 Route::get("/reset-password/{token}",[AccountController::class, 'resetPassword'])->name('account.resetPassword');
 Route::post("/process-reset-password",[AccountController::class, 'processResetPassword'])->name('account.processResetPassword');
 
+
+//ADMIN ROLES
 Route::group(['prefix' => 'admin','middleware' => 'checkRole'], function(){
     Route::get("/dashboard",[DashboardController::class, 'index'])->name('admin.dashboard');
 
     //Users
-    Route::get("/users",[UserController::class, 'index'])->name('admin.users');
-    Route::get("/users/{id}",[UserController::class, 'edit'])->name('admin.users.edit');
-    Route::put("/users/{id}",[UserController::class, 'update'])->name('admin.users.update');
+    Route::get("/users",[UserController::class, 'index'])->name('users.index');
+    Route::get("/users/{id}",[UserController::class, 'edit'])->name('users.index.edit');
+    Route::put("/users/{id}",[UserController::class, 'update'])->name('users.index.update');
 
-    // //City
+    //City
     Route::get("/cities",[CityController::class, 'index'])->name('cities.index');
-    Route::get("/create-city",[CityController::class, 'create'])->name('cities.create');
+    Route::get("/add_city",[CityController::class, 'create'])->name('cities.create');
     Route::post('/cities', [CityController::class, 'store'])->name('cities.store');
-    Route::get("/cities/{id}",[CityController::class, 'edit'])->name('cities.edit');
-    Route::put("/cities/{id}",[CityController::class, 'update'])->name('cities.update');
-    Route::delete('/cities/{id}', [CityController::class, 'destroy'])->name('cities.delete');
+    Route::get("/edit_city/{id}",[CityController::class, 'edit'])->name('cities.edit');
+    Route::put("/update_city/{id}",[CityController::class, 'update'])->name('cities.update');
+    Route::delete('/delete_city/{id}', [CityController::class, 'destroy'])->name('cities.delete');
+
+    //Area
+    Route::get("/areas",[AreaController::class, 'index'])->name('areas.index');
+    Route::get("/add_area",[AreaController::class, 'create'])->name('areas.create');
+    Route::post('/areas', [AreaController::class, 'store'])->name('areas.store');
+    Route::get("/edit_area/{id}",[AreaController::class, 'edit'])->name('areas.edit');
+    Route::put("/update_area/{id}",[AreaController::class, 'update'])->name('areas.update');
+    Route::delete('/delete_area/{id}', [AreaController::class, 'destroy'])->name('areas.delete');
+
+    //Get area name parent city
+    //Route::get('/area', [AreaController::class, 'area'])->name('area.index');
 
     //Category Routes
     Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
@@ -75,18 +88,12 @@ Route::group(['prefix' => 'admin','middleware' => 'checkRole'], function(){
     Route::get('/builders', [BuilderController::class, 'index'])->name('builders.index');
     Route::get('/builders/create', [BuilderController::class, 'create'])->name('builders.create');
     Route::post('/builders', [BuilderController::class, 'store'])->name('builders.store');
-    Route::get('/builders/{category}/edit', [BuilderController::class, 'edit'])->name('builders.edit');
-    Route::put('/builders/{category}', [BuilderController::class, 'update'])->name('builders.update');
-    Route::delete('/builders/{category}', [BuilderController::class, 'destroy'])->name('builders.delete');
+    Route::get('/builders/{id}/edit', [BuilderController::class, 'edit'])->name('builders.edit');
+    Route::put('/builders/{id}', [BuilderController::class, 'update'])->name('builders.update');
+    Route::delete('/builders/{id}', [BuilderController::class, 'destroy'])->name('builders.delete');
     Route::post("/updateProfilePic",[BuilderController::class, 'updateProfilePic'])->name('builders.updateProfilePic');
 
-    //Delete Product Images Route
-    Route::post('/product-images/update', [PropertyImageController::class, 'update'])->name('product-images.update');
-    Route::delete('/product-images', [PropertyImageController::class, 'destroy'])->name('product-images.destroy');
-
-    //Property Images
-    Route::post('/propertyImages/update', [PropertyImageController::class, 'update'])->name('product-images.update');
-    Route::delete('/propertyImages', [PropertyImageController::class, 'destroy'])->name('product-images.destroy');
+    
 
     Route::get('/getSlug', function(Request $request){
         $slug = '';
@@ -125,6 +132,10 @@ Route::group(['prefix' => 'account'], function(){
         Route::post("/updateProperty/{jobId}",[PropertyController::class, 'update'])->name('property.update');
         Route::post("/deleteProperty",[PropertyController::class, 'delete'])->name('property.delete');
 
+        //Delete Product Images Route
+        Route::post('/product-images/update', [PropertyImageController::class, 'update'])->name('product-images.update');
+        Route::delete('/product-images', [PropertyImageController::class, 'destroy'])->name('product-images.destroy');   
+
         Route::get('/get-amenities',[PropertyController::class,'get_amenities'])->name('property.amenities');
         Route::get('/get-properties',[PropertyController::class,'similar_properties'])->name('property.similarProperty');
         Route::get("/savedProperties",[PropertyController::class, 'savedProperties'])->name('property.savedProperties');
@@ -132,26 +143,13 @@ Route::group(['prefix' => 'account'], function(){
         Route::post("/removePropertyInterested",[PropertyController::class, 'removeProperty'])->name('account.removeProperties');
         Route::get("/myPropertyInterested",[PropertyController::class, 'myPropertyApplications'])->name('account.myPropertyApplications');
 
-        //Get area name parent city
-        Route::get('/area', [AreaController::class, 'area'])->name('area.index');
+        
 
         Route::post("/updatePassword",[AccountController::class, 'updatePassword'])->name('account.updatePassword');
 
         //Setting Route
         Route::get('/change-password', [SettingController::class, 'showChangePasswordForm'])->name('admin.showChangePasswordForm');
         Route::post('/process-change-password', [SettingController::class, 'processChangePassword'])->name('admin.processChangePassword');
-        Route::post('/uploadTempImage', [TempImagesController::class, 'create'])->name('temp-images.create');
-        
+        Route::post('/uploadTempImage', [TempImagesController::class, 'create'])->name('temp-images.create');        
     });
 });
-
-
-//Admin related
-// Route::group(['prefix' => 'admin'], function(){
-//     Route::group(['middleware' => 'admin.auth'], function(){
-//         //Setting Route
-//         Route::get('/change-password', [SettingController::class, 'showChangePasswordForm'])->name('admin.showChangePasswordForm');
-//         Route::post('/process-change-password', [SettingController::class, 'processChangePassword'])->name('admin.processChangePassword');
-//     });
-// });
-

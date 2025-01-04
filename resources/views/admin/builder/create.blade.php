@@ -18,46 +18,30 @@
 <section class="content">
     <!-- Default box -->
     <div class="container-fluid">
-        <form action="" method="post" id="categoryForm" name="categoryForm">
+        <form action="" method="post" id="builderForm" name="builderForm">
             <div class="card">
                 <div class="card-body">
-                    <div class="row">
-                        
+                    <div class="row"> 
                         <div class="col-md-6">
-                            <div class="mb-3">
+                            <div class="form-group">
                                 <label for="name">Name</label>
                                 <input type="text" name="name" id="name" class="form-control" placeholder="Name">
                                 <p></p>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="email">Email</label>
-                                <input type="text" name="email" id="email" class="form-control" placeholder="Email">
-                                <p></p>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="landline">Landline</label>
-                                <input type="text" name="landline" id="landline" class="form-control" placeholder="Landeline">
-                                <p></p>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="mobile">Mobile</label>
-                                <input type="text" name="mobile" id="mobile" class="form-control" placeholder="mobile">
-                                <p></p>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="mobile">Mobile</label>
-                                <input type="text" name="mobile" id="mobile" class="form-control" placeholder="mobile">
-                                <p></p>
-                            </div>
-                        </div>
+                        </div>                          
+                        <div class="col-md-3">  
+                            <div class="form-group">                          
+                            <label for="property">Property</label>
+                            <select name="property" id="property" class="form-control">
+                                <option value="">Select a Property</option>
+                                @if($properties->isNotEmpty())
+                                    @foreach ($properties as $value)
+                                        <option value="{{ $value->id }}">{{ $value->title }}</option>
+                                    @endforeach
+                                @endif
+                            </select>                            
+                            </div>                       
+                        </div> 
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="year_estd">Year Estd.</label>
@@ -65,47 +49,55 @@
                                 <p></p>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label for="address">Address</label>
                                 <input type="text" name="address" id="address" class="form-control" placeholder="Address">
                                 <p></p>
                             </div>
                         </div>
-                        {{-- <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="property_id">Property ID</label>
-                                <select name="property_id" id="property_id" class="form-control">
-                                    <option value="1">Select Property</option>
-                                       
-                                    <option value="0">Block</option>
-                                </select>
-                            </div>
-                        </div> --}}
                         <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="status">Status</label>
-                                <select name="status" id="status" class="form-control">
-                                    <option value="1">Active</option>
-                                    <option value="0">Block</option>
-                                </select>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="text" name="email" id="email" class="form-control" placeholder="Email">
+                                <p></p>
                             </div>
                         </div>
                         
-                        <div class="col-md-4">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="mobile">Mobile</label>
+                                <input type="text" name="mobile" id="mobile" class="form-control" placeholder="Mobile">
+                                <p></p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="whatsapp">Whatsapp</label>
+                                <input type="text" name="whatsapp" id="whatsapp" class="form-control" placeholder="Whatsapp">
+                                <p></p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="landline">Landline</label>
+                                <input type="text" name="landline" id="landline" class="form-control" placeholder="Landeline">
+                                <p></p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
                             <div class="mb-3">
                                 <input type="hidden" id="image_id" name="image_id" value=" ">
-                                <label for="logo">Logo</label>
-                                <div id="logo" class="dropzone dz-clickable">
+                                <label for="image">Image</label>
+                                <div id="image" class="dropzone dz-clickable">
                                     <div class="dz-message needsclick">
                                         <br>Drop files here or click to upload.<br><br>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
-                        {{-- <div class="col-md-4">
-                            <div class="mb-3">
+                        {{-- <div class="col-md-6">
+                            <div class="form-group">
                                 <input type="hidden" id="image_id" name="image_id" value=" ">
                                 <label for="photo">photo</label>
                                 <div id="photo" class="dropzone dz-clickable">
@@ -121,7 +113,7 @@
 
             <div class="pb-5 pt-3">
                 <button type="submit" class="btn btn-primary">Create</button>
-                <a href="{{ route('categories.index') }}" class="btn btn-outline-dark ml-3">Cancel</a>
+                <a href="{{ route('builders.index') }}" class="btn btn-outline-dark ml-3">Cancel</a>
             </div>
         </form>
     </div>
@@ -162,7 +154,7 @@
 
 
     
-        $("#categoryForm").submit(function(event){
+        $("#builderForm").submit(function(event){
             event.preventDefault();
             var element = $(this);
             $("button[type=submit]").prop('disabled', true);
@@ -181,8 +173,6 @@
                         $('#name').removeClass('is-invalid')
                         .siblings('p')
                         .removeClass('invalid-feedback').html("");
-
-                     
 
                     } else {
                         var errors = response['errors']
@@ -206,7 +196,7 @@
 
 
         Dropzone.autoDiscover = false;
-            const dropzone = $("#logo").dropzone({
+            const dropzone = $("#image").dropzone({
                 init: function() {
                     this.on('addedfile', function(file) {
                         if (this.files.length > 1) {
@@ -226,8 +216,5 @@
                     //console.log(response)
                 }
             });
-
-
-            
     </script>
 @endsection

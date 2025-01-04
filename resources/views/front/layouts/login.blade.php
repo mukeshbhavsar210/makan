@@ -21,7 +21,7 @@
                             <form action="{{ route('account.authenticate') }}" method="post">
                                 @csrf
                                 
-                                <div class="from-group">
+                                <div class="form-group">
                                     <label class="rh_modal_labels" for="username">Email</label>
                                     <input type="text" value="{{ old('email') }}" name="email" id="email" class="form-control @error('email') is-invalid @enderror" placeholder="example@example.com">
                                     @error('email')
@@ -29,7 +29,7 @@
                                     @enderror
                                 </div>
             
-                                <div class="from-group">
+                                <div class="form-group">
                                     <label class="rh_modal_labels rh_modal_label_password" for="password">Password</label>
                                     <input type="password" name="password" id="password" class="form-control @error('password') is-invalid @enderror" placeholder="Enter Password">
                                     @error('password')
