@@ -27,7 +27,6 @@ class UserController extends Controller
         $validator = Validator::make($request->all(),[
             'name' => 'required|min:5|max:30',
             'email' => 'required|email|unique:users,email,'.$id.',id',
-            'designation' => 'required|min:5|max:30',
             'mobile' => 'required|min:10|max:10',
         ]);
 
@@ -36,7 +35,6 @@ class UserController extends Controller
             $user->name = $request->name;
             $user->email = $request->email;
             $user->mobile = $request->mobile;
-            $user->designation = $request->designation;
             $user->save();
 
             session()->flash('success','User information updated successfully.');

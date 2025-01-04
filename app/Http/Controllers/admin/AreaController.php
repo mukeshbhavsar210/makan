@@ -10,18 +10,11 @@ use Illuminate\Http\Request;
 
 class AreaController extends Controller
 {
-    public function index(Request $request){
-        $areas = Area::select('areas.*','cities.name as cityName')
-            ->latest('areas.id')
-            ->leftJoin('cities', 'cities.id', 'areas.city_id');
-
-        if(!empty($request->get('keyword'))){
-            $areas = $areas->where('areas.name', 'like', '%'.$request->get('keyword').'%');
-            $areas = $areas->orWhere('cities.name', 'like', '%'.$request->get('keyword').'%');
-        }
-
-        $areas = $areas->paginate(10);
-        return view('admin.area.list', compact('areas'));
+    public function index(){
+        $areas = Area::orderBy('created_at','DESC')->paginate(10);
+        return view('admin.area.list',[
+            'areas' => $areas
+        ]);
     }
 
     public function create(){
@@ -30,18 +23,18 @@ class AreaController extends Controller
         return view("admin.area.create", $data);
     }
 
+
+
     public function store(Request $request){
         $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'slug' => 'required|unique:areas',
-            'city' => 'required',
+            'name' => 'required',            
         ]);
 
         if ($validator->passes()) {
             $area = new Area();
             $area->name = $request->name;
-            $area->slug = $request->slug;
-            $area->city_id = $request->city;
+            $area->slug = $request->slug;            
+            $area->city_id = $request->city;  
             $area->save();
 
             $request->session()->flash('success', 'Area added successfully');
@@ -59,10 +52,12 @@ class AreaController extends Controller
         }
     }
 
+    
 
     public function edit($id, Request $request){
-
         $area = Area::find($id);
+        $cities = City::orderBy('name','ASC')->get();        
+
         if(empty($area)){
             $request->session()->flash('error','Record not found');
             return redirect()->route('areas.index');
@@ -74,10 +69,10 @@ class AreaController extends Controller
         return view("admin.area.edit", $data);
     }
 
+
+
     public function update($id, Request $request){
-
         $area = Area::find($id);
-
         if(empty($area)){
             $request->session()->flash('error','Record not found');
             return response([
@@ -89,18 +84,15 @@ class AreaController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'slug' => 'required|unique:areas,slug,'.$area->id.',id',
-            'city' => 'required',
+            // 'city' => 'required',
         ]);
 
         if ($validator->passes()) {
-
             $area->name = $request->name;
             $area->slug = $request->slug;
             $area->city_id = $request->city;
             $area->save();
-
             $request->session()->flash('success', 'Area updated successfully');
-
             return response([
                 'status' => true,
                 'message' => 'Area updated successfully',
@@ -114,6 +106,8 @@ class AreaController extends Controller
         }
     }
 
+
+    
     public function destroy($id, Request $request){
         $area = Area::find($id);
 
@@ -135,7 +129,7 @@ class AreaController extends Controller
         ]);
     }
 
-    public function area(Request $request){
+    public function areaSub(Request $request){
 
         if (!empty($request->city_id)) {
             $subAreas = Area::where('city_id',$request->city_id)

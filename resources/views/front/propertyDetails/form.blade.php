@@ -3,21 +3,21 @@
        <section class="widget rh_property_agent  ">
           <div class="rh-agent-thumb-title-wrapper">
              <a class="agent-image" href="">
-               <img width="210" height="210" src="https://ultra-realhomes.b-cdn.net/wp-content/uploads/2020/05/Melissa-William-210x210.jpg" class="attachment-agent-image size-agent-image wp-post-image" alt="" decoding="async" srcset="https://ultra-realhomes.b-cdn.net/wp-content/uploads/2020/05/Melissa-William-210x210.jpg 210w, https://ultra-realhomes.b-cdn.net/wp-content/uploads/2020/05/Melissa-William-300x300.jpg 300w, https://ultra-realhomes.b-cdn.net/wp-content/uploads/2020/05/Melissa-William-150x150.jpg 150w, https://ultra-realhomes.b-cdn.net/wp-content/uploads/2020/05/Melissa-William.jpg 534w" sizes="(max-width: 210px) 100vw, 210px">                
+               @if(!empty($property->builder->name))
+                  <img width="210" height="210" src="{{ asset('uploads/builder/'.$property->builder->logo) }}" alt="" />
+               @endif 
             </a>
              
              <div class="rh-agent-title-wrapper">
                 <div class="rh-side-title-box">
                    <span class="rh-agent-label">
-                     @if(!empty($property->developer->name))
-                        {{ $property->developer->name }}
+                     @if(!empty($property->builder->name))
+                        {{ $property->builder->name }}
                      @endif 
                    </span>
                    <h3 class="rh_property_agent__title"><a href="">{{ $property->company_name }}</a></h3>
                 </div>
                 <a class="rh-property-agent-link" href="">View My Listings</a>
-
-                
              </div>
           </div>
 
@@ -31,8 +31,8 @@
                       <path d="M20 21c.55 0 1-.45 1-1v-3.49c0-.55-.45-1-1-1-1.24 0-2.45-.2-3.57-.57-.1-.04-.21-.05-.31-.05-.26 0-.51.1-.71.29l-2.2 2.2c-2.83-1.45-5.15-3.76-6.59-6.59l2.2-2.2c.28-.28.36-.67.25-1.02C8.7 6.45 8.5 5.25 8.5 4c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1 0 9.39 7.61 17 17 17zm-3.6-3.98c.85.24 1.72.39 2.6.45v1.49c-1.32-.09-2.59-.35-3.8-.75l1.2-1.19zM5.03 5h1.5c.07.89.22 1.76.46 2.59l-1.2 1.2c-.41-1.2-.67-2.47-.76-3.79z"></path>
                    </svg>
                    
-                  @if(!empty($property->developer->landline))
-                     {{ $property->developer->landline }}
+                  @if(!empty($property->builder->landline))
+                     {{ $property->builder->landline }}
                   @endif                       
                 </a>
              </p>
@@ -44,8 +44,8 @@
                       <path d="M19 17.47c-.88-.07-1.75-.22-2.6-.45l-1.19 1.19c1.2.41 2.48.67 3.8.75v-1.49zM6.54 5h-1.5c.09 1.32.35 2.59.75 3.8l1.2-1.2c-.24-.84-.39-1.71-.45-2.6z" opacity=".3"></path>
                       <path d="M20 21c.55 0 1-.45 1-1v-3.49c0-.55-.45-1-1-1-1.24 0-2.45-.2-3.57-.57-.1-.04-.21-.05-.31-.05-.26 0-.51.1-.71.29l-2.2 2.2c-2.83-1.45-5.15-3.76-6.59-6.59l2.2-2.2c.28-.28.36-.67.25-1.02C8.7 6.45 8.5 5.25 8.5 4c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1 0 9.39 7.61 17 17 17zm-3.6-3.98c.85.24 1.72.39 2.6.45v1.49c-1.32-.09-2.59-.35-3.8-.75l1.2-1.19zM5.03 5h1.5c.07.89.22 1.76.46 2.59l-1.2 1.2c-.41-1.2-.67-2.47-.76-3.79z"></path>
                    </svg>
-                  @if(!empty($property->developer->phone))
-                     {{ $property->developer->phone }}
+                  @if(!empty($property->builder->phone))
+                     {{ $property->builder->phone }}
                   @endif                     
                 </a>
              </p>
@@ -61,8 +61,8 @@
                          <path d="M16.1 13.8c-.2-.1-1.3-.7-1.5-.7-.3-.1-.4-.1-.6.1-.1.2-.6.7-.7.9-.1.1-.3.2-.5.1-1.3-.7-2.2-1.2-3-2.7-.2-.4.2-.4.7-1.2.1-.1 0-.3 0-.4-.1-.1-.5-1.2-.7-1.7-.2-.4-.4-.4-.5-.4h-.4c-.1 0-.4.1-.6.3-.3.2-.8.7-.8 1.8s.8 2.2.9 2.3c.1.1 1.6 2.4 3.8 3.4 1.4.6 2 .7 2.7.6.4-.1 1.3-.5 1.5-1.1.2-.5.2-1 .1-1.1-.1 0-.2-.1-.4-.2z"></path>
                       </g>
                    </svg>
-                   @if(!empty($property->developer->whatsapp))
-                     {{ $property->developer->whatsapp }}
+                   @if(!empty($property->builder->whatsapp))
+                     {{ $property->builder->whatsapp }}
                   @endif                                          
                 </a>
              </p>
@@ -74,8 +74,8 @@
                       <path d="M20 8l-8 5-8-5v10h16zm0-2H4l8 4.99z" opacity=".3"></path>
                       <path d="M4 20h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2zM20 6l-8 4.99L4 6h16zM4 8l8 5 8-5v10H4V8z"></path>
                    </svg>
-                   @if(!empty($property->developer->email))
-                     {{ $property->developer->email }}
+                   @if(!empty($property->builder->email))
+                     {{ $property->builder->email }}
                    @endif                                                
                 </a>
              </p>
