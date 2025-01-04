@@ -117,31 +117,24 @@ Route::group(['prefix' => 'account'], function(){
         Route::get("/logout",[AccountController::class, 'logout'])->name('account.logout');
         Route::post("/updateProfilePic",[AccountController::class, 'updateProfilePic'])->name('account.updateProfilePic');
         
-        
-
-        //Property Controller
-        // Route::get('/properties', [PropertyController::class, 'index'])->name('properties.index');
-        // Route::get('/properties/create', [PropertyController::class, 'create'])->name('properties.create');
-        // Route::post('/properties', [PropertyController::class, 'store'])->name('properties.store');
-        // Route::get('/properties/{property}/edit', [PropertyController::class, 'edit'])->name('properties.edit');
-        // Route::put('/properties/{property}', [PropertyController::class, 'update'])->name('properties.update');
-        // Route::delete('/properties/{property}', [PropertyController::class, 'destroy'])->name('properties.delete');
-        // Route::get('/get-properties',[PropertyController::class,'get_similar_properties'])->name('properties.get_similar_properties');
-        
         //Working Property
-        Route::get("/property",[AccountController::class, 'index'])->name('property.index');
-        Route::get("/property/create",[AccountController::class, 'create'])->name('property.create');
-        Route::post("/property/store",[AccountController::class, 'store'])->name('property.store');                
-        Route::get("/property/edit/{jobId}",[AccountController::class, 'edit'])->name('property.edit');
-        Route::post("/updateProperty/{jobId}",[AccountController::class, 'update_property'])->name('property.update');
-        Route::post("/deleteProperty",[AccountController::class, 'delete_property'])->name('property.delete');
-        Route::get('/get-properties',[AccountController::class,'get_similar_properties'])->name('property.similarProperty');
+        Route::get("/property",[PropertyController::class, 'index'])->name('property.index');
+        Route::get("/property/create",[PropertyController::class, 'create'])->name('property.create');
+        Route::post("/property/store",[PropertyController::class, 'store'])->name('property.store');                
+        Route::get("/property/edit/{jobId}",[PropertyController::class, 'edit'])->name('property.edit');
+        Route::post("/updateProperty/{jobId}",[PropertyController::class, 'update'])->name('property.update');
+        Route::post("/deleteProperty",[PropertyController::class, 'delete'])->name('property.delete');
 
-        //Property interested
-        Route::get("/myPropertyInterested",[AccountController::class, 'myPropertyApplications'])->name('account.myPropertyApplications');
-        Route::post("/removePropertyInterested",[AccountController::class, 'removeProperty'])->name('account.removeProperties');
-        Route::get("/savedProperties",[AccountController::class, 'savedProperties'])->name('account.savedProperties');
-        Route::post("/removeSavedProperty",[AccountController::class, 'removeSavedProperty'])->name('account.removeSavedJob');
+        Route::get('/get-amenities',[PropertyController::class,'get_amenities'])->name('property.amenities');
+        Route::get('/get-properties',[PropertyController::class,'similar_properties'])->name('property.similarProperty');
+        Route::get("/savedProperties",[PropertyController::class, 'savedProperties'])->name('property.savedProperties');
+        Route::post("/removeSavedProperty",[PropertyController::class, 'removeSavedProperty'])->name('account.removeSavedJob');
+        Route::post("/removePropertyInterested",[PropertyController::class, 'removeProperty'])->name('account.removeProperties');
+        Route::get("/myPropertyInterested",[PropertyController::class, 'myPropertyApplications'])->name('account.myPropertyApplications');
+
+        //Get area name parent city
+        Route::get('/area', [AreaController::class, 'area'])->name('area.index');
+
         Route::post("/updatePassword",[AccountController::class, 'updatePassword'])->name('account.updatePassword');
 
         //Setting Route

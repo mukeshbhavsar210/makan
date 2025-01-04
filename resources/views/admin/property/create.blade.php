@@ -47,25 +47,12 @@
                                             <input type="text" placeholder="Search keywords" id="keywords" name="keywords" class="form-control">
                                         </div>
                                     </div>            
-                                    <div class="col-md-2">
+                                    <div class="col-md-4">
                                         <div class="from-group">
                                             <label for="saletype" class="mb-1">Sale Type<span class="req">*</span></label>
                                             <select name="saleType" id="saleType" class="form-control">
                                                 @if ($saleTypes->isNotEmpty())
                                                     @foreach ($saleTypes as $value)
-                                                        <option value="{{ $value->id }}">{{ $value->name }}</option>
-                                                    @endforeach
-                                                @endif
-                                            </select>                            
-                                        </div>
-                                    </div>
-            
-                                    <div class="col-md-2">
-                                        <div class="from-group">
-                                            <label for="category" class="mb-1">Category<span class="req">*</span></label>
-                                            <select name="category" id="category" class="form-control">
-                                                @if ($categories->isNotEmpty())
-                                                    @foreach ($categories as $value)
                                                         <option value="{{ $value->id }}">{{ $value->name }}</option>
                                                     @endforeach
                                                 @endif
@@ -78,35 +65,20 @@
                                             <input type="text" placeholder="Location" id="location" name="location" class="form-control">                            
                                         </div>                        
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-md-4">
                                         <div class="from-group">
-                                            <label for="" class="mb-1">BHK<span class="req">*</span></label>
-                                            <select name="room" id="room" class="form-control">  
-                                                <option value="">Room</option>                              
-                                                @if ($bhk->isNotEmpty())
-                                                    @foreach ($bhk as $value)
+                                            <label for="category" class="mb-1">Category<span class="req">*</span></label>
+                                            <select name="category" id="category" class="form-control">
+                                                @if ($categories->isNotEmpty())
+                                                    @foreach ($categories as $value)
                                                         <option value="{{ $value->id }}">{{ $value->name }}</option>
                                                     @endforeach
                                                 @endif
                                             </select>                            
                                         </div>
-                                    </div>            
-                                    <div class="col-md-2">
-                                        <div class="from-group">
-                                            <label for="" class="mb-1">Bathroom<span class="req">*</span></label>
-                                            <select name="bathroom" id="bathroom" class="form-control">   
-                                                <option value="">Bath</option>                             
-                                                @if ($bath->isNotEmpty())
-                                                    @foreach ($bath as $value)
-                                                        <option value="{{ $value->id }}">{{ $value->name }}</option>
-                                                    @endforeach
-                                                @endif
-                                            </select>                        
-                                        </div>
-                                    </div>  
-            
+                                    </div>
                                     
-            
+                                     
                                     <div class="col-md-4">
                                         <div class="from-group">
                                             <label for="" class="mb-1">City<span class="req">*</span></label>
@@ -119,33 +91,28 @@
                                                 @endif
                                             </select>                            
                                         </div>
-                                    </div>            
+                                    </div>                                             
                                     <div class="col-md-4">
                                         <div class="from-group">
                                             <label for="" class="mb-1">Area<span class="req">*</span></label>
                                             <select name="area" id="area" class="form-control">
-                                                <option value="">Select a Area</option>
-                                                @if ($areas->isNotEmpty())
-                                                    @foreach ($areas as $value)
+                                                <option value="">Select Area</option>
+                                            </select>                        
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="from-group">
+                                            <label for="" class="mb-1">Facing<span class="req">*</span></label>
+                                            <select name="view" id="view" class="form-control">
+                                                <option value="">Facing</option>
+                                                @if ($facings->isNotEmpty())
+                                                    @foreach ($facings as $value)
                                                         <option value="{{ $value->id }}">{{ $value->name }}</option>
                                                     @endforeach
                                                 @endif
                                             </select>                            
                                         </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="from-group">
-                                            <label for="" class="mb-1">Property Type<span class="req">*</span></label>
-                                            <select name="propertyType" id="propertyType" class="form-control">
-                                                <option value="">Select a type</option>
-                                                @if ($propertyTypes->isNotEmpty())
-                                                    @foreach ($propertyTypes as $value)
-                                                        <option value="{{ $value->id }}">{{ $value->name }}</option>
-                                                    @endforeach
-                                                @endif
-                                            </select>
-                                        </div>
-                                    </div>
+                                    </div> 
                                     <div class="col-md-4">
                                         <div class="from-group">
                                             <label for="price" class="mb-1">Price<span class="req">*</span></label>
@@ -160,72 +127,81 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="from-group">
+                                            <label for="" class="mb-1">BHK<span class="req">*</span></label>
+                                            <select name="room" id="room" class="form-control">  
+                                                <option value="">Room</option>                              
+                                                @if ($bhk->isNotEmpty())
+                                                    @foreach ($bhk as $value)
+                                                        <option value="{{ $value->id }}">{{ $value->name }}</option>
+                                                    @endforeach
+                                                @endif
+                                            </select>                            
+                                        </div>
+                                    </div>    
+                                    <div class="col-md-4">
+                                        <div class="from-group">
                                             <label for="size" class="mb-1">Size<span class="req">*</span></label>
                                             <input type="text" placeholder="Size" id="size" name="size" class="form-control">                            
                                         </div>
-                                    </div>
+                                    </div>        
                                     <div class="col-md-4">
+                                        <div class="from-group">
+                                            <label for="" class="mb-1">Bathroom<span class="req">*</span></label>
+                                            <select name="bathroom" id="bathroom" class="form-control">   
+                                                <option value="">Bath</option>                             
+                                                @if ($bath->isNotEmpty())
+                                                    @foreach ($bath as $value)
+                                                        <option value="{{ $value->id }}">{{ $value->name }}</option>
+                                                    @endforeach
+                                                @endif
+                                            </select>                        
+                                        </div>
+                                    </div>                                                                         
+                                    <div class="col-md-4">
+                                        <div class="from-group">
+                                            <label for="" class="mb-1">Property Type<span class="req">*</span></label>
+                                            <select name="propertyType" id="propertyType" class="form-control">
+                                                <option value="">Select a type</option>
+                                                @if ($propertyTypes->isNotEmpty())
+                                                    @foreach ($propertyTypes as $value)
+                                                        <option value="{{ $value->id }}">{{ $value->name }}</option>
+                                                    @endforeach
+                                                @endif
+                                            </select>
+                                        </div>
+                                    </div>                                    
+                                    <div class="col-md-8">
                                         <div class="from-group">
                                             <label for="rera" class="mb-1">RERA<span class="req">*</span></label>
                                             <input type="text" placeholder="RERA" id="rera" name="rera" class="form-control">                            
                                         </div>
                                     </div>   
-                                    <div class="col-md-4">
+                                    <div class="col-md-2">
                                         <div class="from-group">
                                             <label for="year_build" class="mb-1">Year Build<span class="req">*</span></label>
                                             <input type="text" placeholder="Year Build" id="year_build" name="year_build" class="form-control">                            
                                         </div>
                                     </div> 
-                                    <div class="col-md-4">
+                                    <div class="col-md-2">
                                         <div class="from-group">
                                             <label for="total_area" class="mb-1">Total Area<span class="req">*</span></label>
                                             <input type="text" placeholder="Total area" id="total_area" name="total_area" class="form-control">                            
                                         </div>
                                     </div> 
-                                    <div class="col-md-8">
+                                    <div class="col-md-12">
                                         <div class="from-group">
                                             <label for="size" class="mb-1">Amenities<span class="req">*</span></label>
-                                            <select name="amenities"  id="amenities" class="form-control">
-                                                @if ($amenities->isNotEmpty())
-                                                    @foreach ($amenities as $value)
-                                                        <option value="{{ $value->id }}">{{ $value->name }}</option>
-                                                    @endforeach
-                                                @endif
-                                            </select>                            
+                                            <select multiple class="related_amenities" name="related_amenities[]" id="related_amenities">
+                                                
+                                            </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
-                                        <div class="from-group">
-                                            <label for="" class="mb-1">Facing<span class="req">*</span></label>
-                                            <select name="view" id="view" class="form-control">
-                                                <option value="">Select a Facing</option>
-                                                @if ($facings->isNotEmpty())
-                                                    @foreach ($facings as $value)
-                                                        <option value="{{ $value->id }}">{{ $value->name }}</option>
-                                                    @endforeach
-                                                @endif
-                                            </select>                            
-                                        </div>
-                                    </div>  
-                                           
                                     <div class="col-md-12">
                                         <div class="from-group">
                                             <label for="" class="mb-1">Description<span class="req">*</span></label>
                                             <textarea class="form-control" name="description" id="description" cols="5" rows="5" placeholder="Description"></textarea>                            
                                         </div>
                                     </div>
-            
-                                    {{-- <div class="col-md-6">
-                                        <div class="from-group">    
-                                            <label for="" class="mb-1">Media<span class="req">*</span></label>                           
-                                            <input type="hidden" id="image_id" name="image_id" value=" ">
-                                            <div id="image" class="dropzone dz-clickable">
-                                                <div class="dz-message needsclick">
-                                                    <br>Drop files here or click to upload.<br><br>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div> --}}
                                 </div>
                             </div>
                         </div>
@@ -255,8 +231,8 @@
                         <div class="card">
                             <div class="card-body">
                                 <h2 class="h4 mb-3">Developer's Details</h2>
-                                <div class="from-group">                                    
-                                    <select name="view" id="view" class="form-control">
+                                <div class="from-group">      
+                                    <select name="builder" id="builder" class="form-control">                                                                  
                                         <option value="">Select a Builder</option>
                                         @if ($builders->isNotEmpty())
                                             @foreach ($builders as $value)
@@ -308,10 +284,46 @@
 
 @section('customJs')
 <script>   
+    $("#city").change(function(){
+        var city_id = $(this).val();
+        $.ajax({
+            url: '{{ route("area.index") }}',
+            type: 'get',
+            data: {city_id:city_id},
+            dataType: 'json',
+            success: function(response) {
+                $("#area").find("option").not(":first").remove();
+                $.each(response["subAreas"],function(key,item){
+                    $("#area").append(`<option value='${item.id}' >${item.name}</option>`)
+                })
+            },
+            error: function(){
+                console.log("Something went wrong")
+            }
+        });
+    })
+
+
     //Similar property
     $('.relatedProperty').select2({
         ajax: {
             url: '{{ route('property.similarProperty') }}',
+            dataType: 'json',
+            tags: true,
+            multiple: true,
+            minimumInputLength: 3,
+            processResults: function (data) {
+                return {
+                    results: data.tags
+                };
+            }
+        }
+    });
+
+    //Similar property
+    $('.related_amenities').select2({
+        ajax: {
+            url: '{{ route('property.amenities') }}',
             dataType: 'json',
             tags: true,
             multiple: true,
@@ -345,9 +357,7 @@
     //Submit Post Form
     $("#createPropertyForm").submit(function(event){
         event.preventDefault();
-
         $("button[type='submit']").prop('disabled', true);
-
         $.ajax({
             url: '{{ route("property.store") }}',
             type: 'POST',
