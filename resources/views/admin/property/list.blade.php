@@ -28,6 +28,7 @@
                                     <th scope="col">Project Name</th>
                                     <th scope="col">Posted</th>
                                     <th scope="col">Interested</th>
+                                    <th scope="col">Showing</th>
                                     <th scope="col">Status</th>
                                     <th scope="col">Action</th>
                                 </tr>
@@ -51,6 +52,13 @@
                                         <td>{{ \Carbon\Carbon::parse($value->created_at)->format('d M, Y') }}</td>
                                         <td>0 Applications</td>
                                         <td>
+                                            @if ($value->is_featured == 'Yes')
+                                                <div class="job-status text-capitalize">Approved</div>
+                                            @else
+                                                <div class="job-status text-capitalize">Rejected</div>
+                                            @endif
+                                        </td>
+                                        <td>
                                             @if ($value->status == 1)
                                                 <div class="job-status text-capitalize">Active</div>
                                             @else
@@ -58,7 +66,7 @@
                                             @endif
                                         </td>
                                         <td>
-                                            <a href="{{ route('propertyDetails', $value->id) }}"> <i class="fa fa-eye" aria-hidden="true"></i></a>
+                                            <a href="{{ route('propertyDetails', $value->id) }}" target="_blank"> <i class="fa fa-eye" aria-hidden="true"></i></a>
                                             <a href="{{ route('property.edit', $value->id ) }}">
                                                 <svg class="filament-link-icon w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                                     <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
@@ -85,62 +93,13 @@
 @endsection
 
 @section('customJs')
-<script>
-    $("#userForm").submit(function(event){
-        event.preventDefault();
-
-        $("button[type='submit']").prop('disabled', true);
-
-        $.ajax({
-            url: '{{ route("account.updateProfile") }}',
-            type: 'put',
-            data: $("#userForm").serializeArray(),
-            dataType: 'json',
-            success: function(response){
-                $("button[type='submit']").prop('disabled', false);
-
-                var errors = response.errors;
-
-                if(response.status == false){
-                    if(errors.name){
-                        $("#name").siblings("p").addClass('invalid-feedback').html(errors.name);
-                        $("#name").addClass('is-invalid');
-                    } else {
-                        $("#name").siblings("p").removeClass('invalid-feedback').html();
-                        $("#name").removeClass('is-invalid');
-                    }
-
-                    if(errors.email){
-                        $("#email").siblings("p").addClass('invalid-feedback').html(errors.email);
-                        $("#email").addClass('is-invalid');
-                    } else {
-                        $("#email").siblings("p").removeClass('invalid-feedback').html();
-                        $("#email").removeClass('is-invalid');
-                    }
-
-                    window.location.href="{{ route('account.profile') }}";
-
-                } else {
-                    $("#name").siblings("p").removeClass('invalid-feedback').html();
-                    $("#name").removeClass('is-invalid');
-                    $("#email").siblings("p").removeClass('invalid-feedback').html();
-                    $("#email").removeClass('is-invalid');
-
-                    window.location.href='{{ route("account.login") }}'
-                }
-            },
-            error: function(JQXHR, exception){
-                console.log("Something went wrong");
-            }
-        })
-    });
-
-    function deleteJob(jobId){
+<script>    
+    function deleteJob(propertyId){
         if(confirm("Are you sure you want to delete?")){
             $.ajax({
             url: '{{ route("property.delete") }}',
             type: 'post',
-            data: { jobId: jobId },
+            data: { propertyId: propertyId },
             dataType: 'json',
             success: function(response){
                 window.location.href='{{ route("property.index") }}';

@@ -80,7 +80,7 @@
                 data: {id: id},
                 dataType: 'json',
                 success: function(response){
-                    window.location.href='{{ route("account.savedProperties") }}';
+                    window.location.href='{{ route("property.savedProperties") }}';
             }
             });
         }

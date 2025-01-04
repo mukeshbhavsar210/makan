@@ -53,7 +53,7 @@
                     </a>
                 </li> --}}
                 <li class="nav-item">
-                    <a href="{{ route('account.savedProperties') }}" class="nav-link">
+                    <a href="{{ route('property.savedProperties') }}" class="nav-link">
                         <i class="nav-icon  fas fa-users"></i>
                         <p>Saved Property</p>
                     </a>
