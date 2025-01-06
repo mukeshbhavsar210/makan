@@ -30,11 +30,15 @@
                                         <div class="rhea-ultra-property-card">
                                             <div class="rhea-ultra-card-thumb-wrapper">
                                                 <div class="rhea-ultra-property-thumb">
-                                                    <a class="{{ route('propertyDetails', $value->id) }}">
-                                                        <img loading="lazy" decoding="async" width="488"
-                                                            height="326" src="https://ultra-realhomes.b-cdn.net/wp-content/uploads/2022/06/meeting-working-room-office-building-488x326.jpg"
-                                                            class="attachment-property-thumb-image size-property-thumb-image wp-post-image"
-                                                            alt="" />
+                                                    @php
+                                                        $propertyImage = $value->property_images->first();
+                                                    @endphp
+
+                                                    <a href="details/{{ $value->id }}" class="product-img">
+                                                        @if (!empty($propertyImage->image))
+                                                            <img loading="lazy" decoding="async" width="488" height="326" class="attachment-property-thumb-image size-property-thumb-image wp-post-image"
+                                                            alt=""  src="{{ asset('uploads/property/small/'.$propertyImage->image) }}" >
+                                                        @endif
                                                     </a>
                                                 </div>
 
@@ -68,18 +72,6 @@
                                                     </div>
                                                 </div>
 
-                                                 {{-- @php
-                                                    $propertyImage = $value->property_images->first();
-                                                @endphp
-
-                                               @if (!empty($propertyImage->image))
-                                                    <img class="card-img-top" src="{{ asset('uploads/property/small/'.$propertyImage->image) }}" >
-                                                @else
-                                                    <img class="card-img-top" src="{{ asset('admin-assets/img/default-150x150.png') }}" alt="" />
-                                                @endif --}}
-
-                                                <a href="{{ route('propertyDetails', $value->id) }}"><img class="img-fluid" src="img/property-1.jpg" alt=""></a>
-                                                
                                                 <div class="rhea-ultra-bottom-box rhea-ultra-flex-end">
                                                     <div class="rhea-ultra-action-buttons rh-ultra-action-light hover-light">
                                                         <span class="favorite-btn-wrap favorite-btn-87">

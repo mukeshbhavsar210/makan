@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\JobNotificationEmail;
+use App\Models\Amenity;
 use Illuminate\Support\Facades\Mail;
 use App\Models\Category;
 use App\Models\City;
@@ -63,12 +64,7 @@ class PropertiesController extends Controller
         //     $property = $property->whereIn('job_type_id',$jobTypeArray);
         // }
 
-        //Filter using job_type
-        // $amenityTypeArray = [];
-        // if(!empty($request->amenityType)){
-        //     $amenityTypeArray = explode(',',$request->amenityType);
-        //     $property = $property->whereIn('amenity_id',$amenityTypeArray);
-        // }
+        
 
         $properties = $properties->with('room','bathroom','category','city');
 
@@ -81,8 +77,7 @@ class PropertiesController extends Controller
         $data = [
             'categories' => $categories,
             'cities' => $cities,
-            'properties' => $properties,
-            //'bathTypeArray' => $bathTypeArray            
+            'properties' => $properties,                    
         ];
         return view('front.property.index', $data);
     }
@@ -90,7 +85,30 @@ class PropertiesController extends Controller
 
 
     //PROPERTY DETAILS ID
+    // public function product($slug){
+    //     $product = Product::where('slug',$slug)->with('product_images')->first();
+
+    //     if($product == null){
+    //         abort(404);
+    //     }
+
+    //     //Fetch Related products
+    //     $relatedProducts = [];
+    //     if ($product->related_products != '') {
+    //         $productArray = explode(',',$product->related_products);
+    //         $relatedProducts = Product::whereIn('id',$productArray)->where('status',1)->with('product_images')->get();
+    //     }
+
+    //     $data['product'] = $product;
+    //     $data['relatedProducts'] = $relatedProducts;
+
+
+    //     return view('front.products.index',$data);
+    // }
+
+
     public function propertyDetails($id){
+        $properties = Property::with('property_images')->first();
         $property = Property::where([
             'id' => $id,
             'status' => 1,
@@ -111,12 +129,28 @@ class PropertiesController extends Controller
 
         //Fetch applicants
         $applications = JobApplication::where('property_id',$id)->with('user')->get();
+        $relatedProperties = [];
+        if ($property->related_properties != '') {
+            $propertyArray = explode(',',$property->related_properties);
+            $relatedProperties = Property::whereIn('id',$propertyArray)->where('status',1)->with('property_images')->get();
+        }
+        //Amenities
+        $relatedAmenities = [];
+        if ($property->related_amenities != '') {
+            $amenityArray = explode(',',$property->related_amenities);
+            $relatedAmenities = Amenity::whereIn('id',$amenityArray)->where('status',1)->get();
+        }
 
-        return view('front.propertyDetails.index',[ 
-            'property' => $property,
-            'count' => $count,
-            'applications' => $applications 
-        ]);
+        $data['property'] = $property;
+        $data['relatedProperties'] = $relatedProperties;
+        $data['relatedAmenities'] = $relatedAmenities;
+        $data['properties'] = $properties;
+        $data['applications'] = $applications;
+        $data['count'] = $count;
+
+        //dd($relatedAmenities);
+
+        return view('front.propertyDetails.index',$data);       
     }
 
     public function applyProperty(Request $request){

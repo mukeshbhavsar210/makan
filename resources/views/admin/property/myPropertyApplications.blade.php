@@ -17,7 +17,7 @@
 
 <section class="content">
     <div class="container-fluid">
-        @include('front.message')
+        @include('admin.layouts.message')
 
         <div class="card">
             <div class="card-body table-responsive p-0">

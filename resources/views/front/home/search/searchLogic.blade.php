@@ -6,17 +6,15 @@
 
                     @include('front.home.search.location')
                     @include('front.home.search.rentSale')
-                    @include('front.home.search.propertyType')                
-                    @include('front.home.search.priceRange')   
-                    @include('front.home.search.amenity')
+                    @include('front.home.search.propertyType')                                    
                     @include('front.home.search.bed')   
                     @include('front.home.search.bath')   
-                    @include('front.home.search.minArea')  
-                    @include('front.home.search.maxArea')  
                     
-                    <div class="rhea_prop_search__option rhea_mod_text_field rhea_keyword_field   rhea-ultra-field-separator  "
-                        data-key-position="1" id="keyword-search7aa80cab"
-                        style="order: 1">
+                    {{-- @include('front.home.search.priceRange')                        
+                    @include('front.home.search.minArea')  
+                    @include('front.home.search.maxArea')   --}}
+                    
+                    <div class="rhea_prop_search__option rhea_mod_text_field rhea_keyword_field   rhea-ultra-field-separator" style="order: 1">
                         <span class="rhea-text-field-wrapper">
                             <label for="keyword-txt-7aa80cab"
                                 class="rhea-field-icon-wrapper ">

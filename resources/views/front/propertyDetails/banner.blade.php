@@ -1,16 +1,13 @@
 <div class="rh-ultra-property-slider-wrapper">
-    <div class="rh-ultra-property-slider-container">
-      
+    <div class="rh-ultra-property-slider-container">      
       <div class="slider-for"> 
-         <div class="rh-ultra-property-slider" >
-            <img src="https://ultra-realhomes.b-cdn.net/wp-content/uploads/2020/06/bedroom-02.jpg" />               
-         </div>
-         <div class="rh-ultra-property-slider" >
-            <img src="https://ultra-realhomes.b-cdn.net/wp-content/uploads/2020/06/exterior-05.jpg" />               
-         </div>
-         <div class="rh-ultra-property-slider" >
-            <img src="https://ultra-realhomes.b-cdn.net/wp-content/uploads/2020/06/bathroom-02.jpg" />               
-         </div>            
+            @if ($properties->property_images)
+               @foreach ($properties->property_images as $key => $propertyImage)
+                  <div class="rh-ultra-property-slider" >
+                     <img class="w-100 h-100" src="{{ asset('uploads/property/large/'.$propertyImage->image) }}" alt="Image">
+                  </div>
+               @endforeach
+            @endif                   
       </div>
        
        <div class="rh-ultra-property-thumb-box">
@@ -74,9 +71,11 @@
 
     <div class="rh-ultra-property-carousel-wrapper"> 
       <div class="slider-nav">
-         <img src="https://ultra-realhomes.b-cdn.net/wp-content/uploads/2020/06/bedroom-02.jpg" />
-         <img src="https://ultra-realhomes.b-cdn.net/wp-content/uploads/2020/06/exterior-05.jpg" />   
-         <img src="https://ultra-realhomes.b-cdn.net/wp-content/uploads/2020/06/bathroom-02.jpg" />         
+         @if ($properties->property_images)
+            @foreach ($properties->property_images as $key => $propertyImage)
+               <img src="{{ asset('uploads/property/large/'.$propertyImage->image) }}" alt="Image">
+            @endforeach
+         @endif         
       </div>
        
        <div class="rh-ultra-thumb-count">

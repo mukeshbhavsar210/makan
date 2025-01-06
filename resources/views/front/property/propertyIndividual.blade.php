@@ -10,8 +10,17 @@
                   <span class="rh-ultra-featured">Buy</span>
                   {{-- <span class="rh-ultra-hot">Hot</span> --}}
                </div>
+
+               @php
+                  $propertyImage = $value->property_images->first();
+               @endphp
                
-               <a class="rh-permalink rh-thumb-with-bg" href="{{ route('propertyDetails', $value->id) }}" style="background-image: url('https://ultra-realhomes.b-cdn.net/wp-content/uploads/2022/06/architecture-home-merrick-way-1024x683.jpg')"></a>        
+               @if (!empty($propertyImage->image))
+                  <a href="{{ route('propertyDetails', $value->id) }}" class="product-img">
+                  <img loading="lazy" decoding="async" 
+                  alt=""  src="{{ asset('uploads/property/small/'.$propertyImage->image) }}" >
+               </a>
+               @endif
                
                <div class="rh-ultra-bottom-box rh-ultra-flex-end">
                   <div class="rh-ultra-action-buttons rh-ultra-action-dark hover-dark">
@@ -123,6 +132,17 @@
      
                <div class="rvr_card_info_wrap">
                   <p class="added-date"><span class="added-title">Added:</span> {{ \Carbon\Carbon::parse($value->created_at)->format('d M, Y') }}</p>
+
+                  @if (!empty($relatedProperties))
+                        @foreach ($relatedProperties as $relProperty)                                
+                            <div class="col-md-3">
+                                @php
+                                    $propertyImage = $relProperty->property_images->first();
+                                @endphp
+                                {{ $relProperty->title }}
+                            </div>
+                        @endforeach
+                    @endif
                </div>
             </div>
          </div>

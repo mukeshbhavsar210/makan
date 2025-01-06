@@ -8,7 +8,7 @@
                 @include('admin.layouts.sidebar')
             </div>
             <div class="col-lg-9">
-                @include('front.message')
+                @include('admin.layouts.message')
                 <div class="card border-0 shadow mb-4">
                     <div class="card-body">
                         <h2>Welcome Admin</h2>

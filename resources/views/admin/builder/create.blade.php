@@ -22,73 +22,10 @@
             <div class="card">
                 <div class="card-body">
                     <div class="row"> 
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="name">Name</label>
-                                <input type="text" name="name" id="name" class="form-control" placeholder="Name">
-                                <p></p>
-                            </div>
-                        </div>                          
-                        <div class="col-md-3">  
-                            <div class="form-group">                          
-                            <label for="property">Property</label>
-                            <select name="property" id="property" class="form-control">
-                                <option value="">Select a Property</option>
-                                @if($properties->isNotEmpty())
-                                    @foreach ($properties as $value)
-                                        <option value="{{ $value->id }}">{{ $value->title }}</option>
-                                    @endforeach
-                                @endif
-                            </select>                            
-                            </div>                       
-                        </div> 
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label for="year_estd">Year Estd.</label>
-                                <input type="text" name="year_estd" id="year_estd" class="form-control" placeholder="Year Estd.">
-                                <p></p>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="address">Address</label>
-                                <input type="text" name="address" id="address" class="form-control" placeholder="Address">
-                                <p></p>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="email">Email</label>
-                                <input type="text" name="email" id="email" class="form-control" placeholder="Email">
-                                <p></p>
-                            </div>
-                        </div>
-                        
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="mobile">Mobile</label>
-                                <input type="text" name="mobile" id="mobile" class="form-control" placeholder="Mobile">
-                                <p></p>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="whatsapp">Whatsapp</label>
-                                <input type="text" name="whatsapp" id="whatsapp" class="form-control" placeholder="Whatsapp">
-                                <p></p>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="landline">Landline</label>
-                                <input type="text" name="landline" id="landline" class="form-control" placeholder="Landeline">
-                                <p></p>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
                                 <input type="hidden" id="image_id" name="image_id" value=" ">
-                                <label for="image">Image</label>
+                                <label for="image">Logo</label>
                                 <div id="image" class="dropzone dz-clickable">
                                     <div class="dz-message needsclick">
                                         <br>Drop files here or click to upload.<br><br>
@@ -96,28 +33,81 @@
                                 </div>
                             </div>
                         </div>
-                        {{-- <div class="col-md-6">
-                            <div class="form-group">
-                                <input type="hidden" id="image_id" name="image_id" value=" ">
-                                <label for="photo">photo</label>
-                                <div id="photo" class="dropzone dz-clickable">
-                                    <div class="dz-message needsclick">
-                                        <br>Drop files here or click to upload.<br><br>
+                        <div class="col-md-9">
+                            <div class="row"> 
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="name">Name</label>
+                                        <input type="text" name="name" id="name" class="form-control" placeholder="Name">
+                                        <p></p>
+                                    </div>
+                                </div>                          
+                                <div class="col-md-3">  
+                                    <div class="form-group">                          
+                                    <label for="property">Property</label>
+                                    <select name="property" id="property" class="form-control">
+                                        <option value="">Select a Property</option>
+                                        @if($properties->isNotEmpty())
+                                            @foreach ($properties as $value)
+                                                <option value="{{ $value->id }}">{{ $value->title }}</option>
+                                            @endforeach
+                                        @endif
+                                    </select>                            
+                                    </div>                       
+                                </div> 
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="year_estd">Year Estd.</label>
+                                        <input type="text" name="year_estd" id="year_estd" class="form-control" placeholder="Year Estd.">
+                                        <p></p>
                                     </div>
                                 </div>
-                            </div>
-                        </div>                         --}}
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="address">Address</label>
+                                        <input type="text" name="address" id="address" class="form-control" placeholder="Address">
+                                        <p></p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="email">Email</label>
+                                        <input type="text" name="email" id="email" class="form-control" placeholder="Email">
+                                        <p></p>
+                                    </div>
+                                </div>                        
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="mobile">Mobile</label>
+                                        <input type="text" name="mobile" id="mobile" class="form-control" placeholder="Mobile">
+                                        <p></p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="whatsapp">Whatsapp</label>
+                                        <input type="text" name="whatsapp" id="whatsapp" class="form-control" placeholder="Whatsapp">
+                                        <p></p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="landline">Landline</label>
+                                        <input type="text" name="landline" id="landline" class="form-control" placeholder="Landeline">
+                                        <p></p>
+                                    </div>
+                                </div>
+                            </div>  
+                        </div>          
                     </div>
                 </div>
-            </div>
-
-            <div class="pb-5 pt-3">
-                <button type="submit" class="btn btn-primary">Create</button>
-                <a href="{{ route('builders.index') }}" class="btn btn-outline-dark ml-3">Cancel</a>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary">Create</button>
+                    <a href="{{ route('builders.index') }}" class="btn btn-outline-dark ml-3">Cancel</a>
+                </div>
             </div>
         </form>
     </div>
-    <!-- /.card -->
 </section>
 @endsection
 
@@ -129,7 +119,7 @@
         var formData = new FormData(this);
 
         $.ajax({
-            url: '{{ route("account.updateProfilePic") }}',
+            url: '{{ route("profile.updatePic") }}',
             type: 'post',
             data: formData,
             dataType: 'json',

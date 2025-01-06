@@ -12,7 +12,7 @@ class HomeController extends Controller
 {
     public function index(){
         $bhk = Bathroom::where('status',1)->orderBy('name','ASC')->get();
-        $amenities = Amenity::where('status',1)->orderBy('name','ASC')->take(8)->get();
+        $amenities = Amenity::where('status',1)->orderBy('title','ASC')->take(8)->get();
         $categories = Category::where('status',1)->orderBy('name','ASC')->take(8)->get();
         $newCategories = Category::where('status',1)->orderBy('name','ASC')->get();
         $featuredJobs = Property::where('status',1)->orderBy('created_at','DESC')->take(6)->get();

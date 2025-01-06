@@ -9,7 +9,7 @@
                 @include('front.account.sidebar')
             </div>
             <div class="col-lg-9">
-                @include('front.message')
+                @include('admin.layouts.message')
 
                 <form action="" method="post" id="updateJobForm" name="updateJobForm">
                     <div class="card border-0 shadow mb-3 ">

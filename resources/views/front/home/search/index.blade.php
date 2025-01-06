@@ -24,21 +24,15 @@
                         <div class="elementor-column elementor-col-100 elementor-inner-column elementor-element elementor-element-4717a41a"
                             data-id="4717a41a" data-element_type="column">
                             <div class="elementor-widget-wrap elementor-element-populated">
-                                <div class="elementor-element elementor-element-64aef43d elementor-widget__width-auto elementor-widget elementor-widget-heading"
-                                    data-id="64aef43d" data-element_type="widget"
-                                    data-widget_type="heading.default">
+                                <div class="elementor-element elementor-element-64aef43d elementor-widget__width-auto elementor-widget elementor-widget-heading">
                                     <div class="elementor-widget-container">
-                                        <h2 class="elementor-heading-title elementor-size-default">Need
-                                            Help To Choose Your Property</h2>
+                                        <h2 class="elementor-heading-title elementor-size-default">Need Help To Choose Your Property</h2>
                                     </div>
                                 </div>
-                                <div class="elementor-element elementor-element-73c6c4fc elementor-widget__width-auto elementor-tablet_extra-align-center elementor-widget elementor-widget-button"
-                                    data-id="73c6c4fc" data-element_type="widget"
-                                    data-widget_type="button.default">
+                                <div class="elementor-element elementor-element-73c6c4fc elementor-widget__width-auto elementor-tablet_extra-align-center elementor-widget elementor-widget-button">
                                     <div class="elementor-widget-container">
                                         <div class="elementor-button-wrapper">
-                                            <a class="elementor-button elementor-button-link elementor-size-sm"
-                                                href="#">
+                                            <a class="elementor-button elementor-button-link elementor-size-sm" href="#">
                                                 <span class="elementor-button-content-wrapper">
                                                     <span class="elementor-button-text">Let Us Call You!</span>
                                                 </span>
