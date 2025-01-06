@@ -14,7 +14,7 @@
                 <a href="{{ route('account.myPropertyApplications') }}">Interested</a>
             </li>
             <li class="list-group-item d-flex justify-content-between p-2">
-                <a href="{{ route('account.profile') }}">Profile</a>
+                <a href="{{ route('profile.index') }}">Profile</a>
             </li>
             <li class="list-group-item d-flex justify-content-between align-items-center p-2">
                 <a href="{{ route('account.logout') }}">Logout</a>

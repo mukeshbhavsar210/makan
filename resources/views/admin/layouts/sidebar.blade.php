@@ -12,29 +12,18 @@
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 @if( Auth::user()->role == 'admin')
                     <li class="nav-item">
-                        <a href="{{ route('cities.index') }}" class="nav-link">
+                        <a href="{{ route('cities.create') }}" class="nav-link">
                             <i class="nav-icon fas fa-file-alt"></i>
-                            <p>City</p>
+                            <p>Settings</p>
                         </a>
-                    </li>
+                    </li>                                    
                     <li class="nav-item">
-                        <a href="{{ route('areas.index') }}" class="nav-link">
-                            <i class="nav-icon fas fa-file-alt"></i>
-                            <p>Area</p>
-                        </a>
-                    </li>                
-                    <li class="nav-item">
-                        <a href="{{ route('categories.index') }}" class="nav-link">
-                            <i class="nav-icon  far fa-file-alt"></i>
+                        <a href="{{ route('categories.create') }}" class="nav-link">
+                            <i class="nav-icon  fas fa-users"></i>
                             <p>Category</p>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a href="{{ route('users.index') }}" class="nav-link">
-                            <i class="nav-icon  fas fa-users"></i>
-                            <p>Users</p>
-                        </a>
-                    </li>
+                    
                     <li class="nav-item">
                         <a href="{{ route('builders.index') }}" class="nav-link">
                             <i class="nav-icon  fas fa-users"></i>
@@ -43,23 +32,11 @@
                     </li>
                 @endif
                 <li class="nav-item">
-                    <a href="" class="nav-link">
-                        <i class="nav-icon  far fa-file-alt"></i>
-                        <p>Dashboard</p>
+                    <a href="{{ route('properties.index') }}" class="nav-link">
+                        <i class="nav-icon  fas fa-users"></i>
+                        <p>Property</p>
                     </a>
-                </li>  
-                <li class="nav-item">
-                    <a href="{{  route('account.profile') }}" class="nav-link">
-                        <i class="nav-icon  far fa-file-alt"></i>
-                        <p>Profile</p>
-                    </a>
-                </li> 
-                <li class="nav-item">
-                    <a href="{{ route('property.index') }}" class="nav-link">
-                        <i class="nav-icon  far fa-file-alt"></i>
-                        <p>Properties</p>
-                    </a>
-                </li>               
+                </li>
                 <li class="nav-item">
                     <a href="{{ route('account.myPropertyApplications') }}" class="nav-link">
                         <i class="nav-icon  fas fa-users"></i>

@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Validator;
 class SettingController extends Controller
 {
     public function showChangePasswordForm(){
-        return view("admin.change-password");
+        return view("admin.users.change-password");
     }
 
     public function processChangePassword(Request $request){

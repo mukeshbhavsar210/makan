@@ -4,20 +4,11 @@
 
 <section class="content-header">
     <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-6">
-                <h1>Categories</h1>
-            </div>
-            <div class="col-sm-6 text-right">
-                <a href="{{ route('categories.create') }}" class="btn btn-primary">New Category</a>
-            </div>
-        </div>
+        <h1>Categories</h1>
     </div>
-    <!-- /.container-fluid -->
+    
 </section>
-<!-- Main content -->
 <section class="content">
-    <!-- Default box -->
     <div class="container-fluid">
 
         @include('admin.message')
@@ -26,7 +17,7 @@
             <form action="" method="get" >
                 <div class="card-header">
                     <div class="card-title">
-                        <button type="button" onclick="window.location.href='{{ route('categories.index') }}'" class="btn btn-default btn-sm">Reset</button>
+                        <button type="button" onclick="window.location.href='{{ route('categories.create') }}'" class="btn btn-default btn-sm">Reset</button>
                     </div>
 
                     <div class="card-tools">
@@ -44,11 +35,42 @@
             </form>
 
             <div class="card-body table-responsive p-0">
+                <form action="" method="post" id="categoryForm" name="categoryForm">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="name">Name</label>
+                                        <input type="text" name="name" id="name" class="form-control" placeholder="Name">
+                                        <p></p>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 my-4">
+                                    <button type="submit" class="btn btn-primary">Create</button>                                    
+                                </div>
+                                
+                                {{-- <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <input type="hidden" id="image_id" name="image_id" value=" ">
+                                        <label for="image">Image</label>
+                                        <div id="image" class="dropzone dz-clickable">
+                                            <div class="dz-message needsclick">
+                                                <br>Drop files here or click to upload.<br><br>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> --}}
+                                
+                            </div>
+                        </div>
+                    </div>            
+                </form>
+
                 <table class="table table-hover text-nowrap">
                     <thead>
                         <tr>
                             <th width="60">ID</th>
-                            <th>Image</th>
                             <th>Name</th>
                             <th width="100">Status</th>
                             <th width="100">Action</th>
@@ -59,7 +81,7 @@
                             @foreach ($categories as $category)
                                 <tr>
                                     <td>{{ $category->id }}</td>
-                                    <td><img style="border-radius: 100px; width:35px; height:35px" src="{{ asset('uploads/category/'.$category->image) }}" alt="" /></td>
+                                    {{-- <td><img style="border-radius: 100px; width:35px; height:35px" src="{{ asset('uploads/category/'.$category->image) }}" alt="" /></td> --}}
                                     <td>{{ $category->name }}</td>
                                     <td>
                                         @if($category->status == 1)
@@ -108,6 +130,72 @@
 
 @section('customJs')
 <script>
+    $("#categoryForm").submit(function(event){
+            event.preventDefault();
+            var element = $(this);
+            $("button[type=submit]").prop('disabled', true);
+            $.ajax({
+                url: '{{ route("categories.store") }}',
+                type: 'post',
+                data: element.serializeArray(),
+                dataType: 'json',
+                success: function(response){
+                    $("button[type=submit]").prop('disabled', false);
+
+                    if(response["status"] == true){
+
+                        window.location.href="{{ route('categories.create') }}"
+
+                        $('#name').removeClass('is-invalid')
+                        .siblings('p')
+                        .removeClass('invalid-feedback').html("");
+
+                     
+
+                    } else {
+                        var errors = response['errors']
+                        if(errors['name']){
+                            $('#name').addClass('is-invalid')
+                            .siblings('p')
+                            .addClass('invalid-feedback').html(errors['name']);
+                        } else {
+                            $('#name').removeClass('is-invalid')
+                            .siblings('p')
+                            .removeClass('invalid-feedback').html("");
+                        }
+
+                    }
+
+                }, error: function(jqXHR, exception) {
+                    console.log("Something event wrong");
+                }
+            })
+        });
+
+
+        Dropzone.autoDiscover = false;
+            const dropzone = $("#image").dropzone({
+                init: function() {
+                    this.on('addedfile', function(file) {
+                        if (this.files.length > 1) {
+                            this.removeFile(this.files[0]);
+                        }
+                    });
+                },
+                url:  "{{ route('temp-images.create') }}",
+                maxFiles: 1,
+                paramName: 'image',
+                addRemoveLinks: true,
+                acceptedFiles: "image/jpeg,image/png,image/gif",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }, success: function(file, response){
+                    $("#image_id").val(response.image_id);
+                    //console.log(response)
+                }
+            });
+
+
     function deleteCategory(id){
 
         var url = '{{ route("categories.delete","ID") }}'
@@ -124,7 +212,7 @@
                 },
                 success: function(response){
                     if(response["status"]){
-                        window.location.href="{{ route('categories.index') }}"
+                        window.location.href="{{ route('categories.create') }}"
                     }
                 }
             });

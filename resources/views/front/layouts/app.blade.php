@@ -11,15 +11,8 @@
 <link rel='stylesheet' href='{{ asset('assets/css/main.css') }}' type='text/css' media='all' />	
 <link rel='stylesheet' href='{{ asset('assets/css/vendors.css') }}' type='text/css' media='all' />	
 <link rel='stylesheet' href='{{ asset('assets/css/frontend-styles.min.css') }}' type='text/css' media='all' />
-<link rel='stylesheet' href='{{ asset('assets/css/custom-frontend.min.css') }}' type='text/css' media='all' />
 <link rel='stylesheet' href='{{ asset('assets/css/elementor-styles.min.css') }}' type='text/css' media='all' />
-<link rel='stylesheet' href='{{ asset('assets/css/post-130.css') }}' type='text/css' media='all' />
 	
-<script type="text/javascript" src="https://ultra-realhomes.b-cdn.net/wp-includes/js/jquery/jquery.min.js?ver=3.7.1"
-	></script>
-	
-<script type="text/javascript" src="https://ultra-realhomes.b-cdn.net/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"
-	></script>
 </head>
 <body>
 	<header class="site-header rh-ultra-header-wrapper">
@@ -47,20 +40,121 @@
 						</svg>
 						<a target="_blank" href="tel://18005554321" class="contact-number">9978835005</a>
 					</div>
-					<div class="rh-ultra-menu-user-profile">
-						<svg class="user-icon" xmlns="http://www.w3.org/2000/svg" width="28" height="28"
-							viewBox="0 0 510 510">
-							<path
-								d="M255 0C114.75 0 0 114.75 0 255s114.75 255 255 255 255-114.75 255-255S395.25 0 255 0zm0 76.5c43.35 0 76.5 33.15 76.5 76.5s-33.15 76.5-76.5 76.5-76.5-33.15-76.5-76.5 33.15-76.5 76.5-76.5zm0 362.1c-63.75 0-119.85-33.149-153-81.6 0-51 102-79.05 153-79.05S408 306 408 357c-33.15 48.45-89.25 81.6-153 81.6z" />
+
+					@if (Auth::check())
+						<a href="{{ route('profile.index')}}" class="nav-link text-dark">My Account</a>
+					@else
+						<a href="{{ route('account.login')}}" class="nav-link text-dark">Login/Register</a>
+						<button type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">
+							<svg class="user-icon" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 510 510">
+								<path d="M255 0C114.75 0 0 114.75 0 255s114.75 255 255 255 255-114.75 255-255S395.25 0 255 0zm0 76.5c43.35 0 76.5 33.15 76.5 76.5s-33.15 76.5-76.5 76.5-76.5-33.15-76.5-76.5 33.15-76.5 76.5-76.5zm0 362.1c-63.75 0-119.85-33.149-153-81.6 0-51 102-79.05 153-79.05S408 306 408 357c-33.15 48.45-89.25 81.6-153 81.6z" />
+							</svg>
+						</button>
+					@endif
+										
+					<!-- Modal -->
+					<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+						<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="exampleModalLabel">Login</h5>
+								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+							</div>
+
+							<div class="modal-body">								                  
+								<ul class="nav nav-pills mb-3" role="tablist">
+									<li class="nav-item" role="presentation">
+										<button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Home</button>
+									</li>
+									<li class="nav-item" role="presentation">
+										<button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Register Account</button>
+									</li>
+								</ul>
+									
+								<div class="tab-content" id="pills-tabContent">
+									<div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+										<form action="{{ route('account.authenticate') }}" method="post">
+											@csrf
+											
+											<div class="form-group">
+												<label class="rh_modal_labels" for="username">Email</label>
+												<input type="text" value="{{ old('email') }}" name="email" id="email" class="form-control @error('email') is-invalid @enderror" placeholder="example@example.com">
+												@error('email')
+													<p class="invalid-feedback">{{ $message }}</p>
+												@enderror
+											</div>
+						
+											<div class="form-group">
+												<label class="rh_modal_labels rh_modal_label_password" for="password">Password</label>
+												<input type="password" name="password" id="password" class="form-control @error('password') is-invalid @enderror" placeholder="Enter Password">
+												@error('password')
+													<p class="invalid-feedback">{{ $message }}</p>
+												@enderror
+											</div>
+											
+											<button class="btn btn-primary">Login</button>
+											<a href="{{ route('account.forgotPassword') }}" class="rh_forget_password_trigger">Forgot Password?</a>
+										</form>
+									</div>
+			
+									<div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+										<form action="" name="registrationForm" id="registrationForm">
+											<div class="row p-3">
+												<div class="col-md-6">
+													<div class="form-group">
+														<label class="rh_modal_labels" for="name">Name</label>                                    
+														<input type="text" name="name" id="name" class="form-control" placeholder="Enter Name">
+														<p></p>
+													</div>
+												</div>
+												<div class="col-md-6">
+													<div class="form-group">
+														<label for="" class="mb-2">Email*</label>
+														<input type="text" name="email" id="email" class="form-control" placeholder="Enter Email">
+														<p></p>
+													</div>
+												</div>
+												<div class="col-md-6">
+													<div class="form-group">
+														<label for="">Password*</label>
+														<input type="password" name="password" id="password" class="form-control" placeholder="Enter Password">
+														<p></p>
+													</div>
+												</div>
+												<div class="col-md-6">
+													<div class="form-group">
+														<label for="confirm_password">Confirm Password*</label>
+														<input type="password" name="confirm_password" id="confirm_password" class="form-control" placeholder="Enter Confirm Password">
+														<p></p>
+													</div>
+												</div>
+											</div>														
+											<button class="btn btn-primary">Register Account</button>
+										</form>
+									</div>											
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary">Save changes</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+					{{-- <div class="rh-ultra-menu-user-profile">
+						<svg class="user-icon" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 510 510">
+							<path d="M255 0C114.75 0 0 114.75 0 255s114.75 255 255 255 255-114.75 255-255S395.25 0 255 0zm0 76.5c43.35 0 76.5 33.15 76.5 76.5s-33.15 76.5-76.5 76.5-76.5-33.15-76.5-76.5 33.15-76.5 76.5-76.5zm0 362.1c-63.75 0-119.85-33.149-153-81.6 0-51 102-79.05 153-79.05S408 306 408 357c-33.15 48.45-89.25 81.6-153 81.6z" />
 						</svg>
 						<div class="rh-ultra-modal">
-							<div class="rh_modal__corner"></div>
 							<div class="rh_modal__wrap">
-								<div class="rh_modal__dashboard rh-trigger-nav">
+								<div class="rh_modal__dashboard">
 									@if (!Auth::check())
-										{{-- <a class="rh_modal__dash_link add-favorites-without-login" href="{{ route('account.login') }}" type="submit">
+										<a class="rh_modal__dash_link add-favorites-without-login" href="{{ route('account.login') }}" type="submit">
 											<span>Login</span>
-										</a> --}}
+										</a>
 									@else
 									@if (Auth::user()->role == 'admin')
 										<a class="rh_modal__dash_link add-favorites-without-login" href="{{ route('admin.dashboard') }}" type="submit">
@@ -73,7 +167,7 @@
 											<span>Admin</span>
 										</a>
 									@endif
-										<a class="rh_modal__dash_link add-favorites-without-login" href="{{ route('account.profile') }}" type="submit">
+										<a class="rh_modal__dash_link add-favorites-without-login" href="{{ route('profile.index') }}" type="submit">
 											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="14"
 											viewBox="0 0 16 14">
 											<path
@@ -86,7 +180,7 @@
 								</div>	
 							</div>
 						</div>
-					</div>
+					</div> --}}
 				</div>
 			</div>
 		</div>
@@ -196,25 +290,12 @@
 	</div>
 </footer>
 
-@include('front.layouts.login')	
-
 <script src="{{ asset('assets/js/jquery-3.6.0.min.js') }}"></script>
 <script src="{{ asset('assets/js/bootstrap.bundle.5.1.3.min.js') }}"></script>
 <script src="{{ asset('assets/js/instantpages.5.1.0.min.js') }} "></script>
 <script src="{{ asset('assets/js/lazyload.17.6.0.min.js') }} "></script>
 <script src="{{ asset('assets/js/slick.min.js') }}"></script>
 <script src="{{ asset('assets/js/lightbox.min.js') }}"></script>
-
-<script type="text/javascript" src="{{ asset('assets/js/core.min.js') }}" ></script>
-<script type="text/javascript" src="{{ asset('assets/js/tooltip.min.js') }}" ></script>
-<script type="text/javascript" src="{{ asset('assets/js/inspiry-login.js') }}" ></script>
-{{-- Home Carousal js --}}
-<script type="text/javascript" src="https://ultra-realhomes.b-cdn.net/wp-content/themes/realhomes/common/optimize/vendors.js?ver=4.3.5"
-id="vendors-js-js"></script>
-<script type="text/javascript" src="{{ asset('assets/js/mouse.min.js') }}" ></script>
-<script type="text/javascript" src="{{ asset('assets/js/slider.min.js') }}" ></script>
-<script type="text/javascript" src="{{ asset('assets/js/frontend.js') }}" ></script>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.27.3/trumbowyg.min.js" integrity="sha512-YJgZG+6o3xSc0k5wv774GS+W1gx0vuSI/kr0E0UylL/Qg/noNspPtYwHPN9q6n59CTR/uhgXfjDXLTRI+uIryg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="{{ asset('assets/js/custom.js') }}"></script>
 <script type="text/javascript">

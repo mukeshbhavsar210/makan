@@ -51,14 +51,23 @@
 							</a>
 						@endif
 						
-						<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right p-3">
+						<div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
 							<div class="dropdown-item">
 								<i class="fas fa-lock mr-2"></i> {{ Auth::user()->name }}
 							</div>
+							
 							<div class="dropdown-divider"></div>
-							<a href="{{ route('account.profile') }}" class="dropdown-item">
+							<a href="{{ route('profile.index') }}" class="dropdown-item">
 								<i class="fas fa-lock mr-2"></i> Profile
-							</a>							
+							</a>
+							
+							<div class="dropdown-divider"></div>
+							@if( Auth::user()->role == 'admin')
+								<a href="{{ route('users.index') }}" class="dropdown-item">
+									<i class="fas fa-users mr-2"></i> Users
+								</a>
+							@endif					
+
 							<div class="dropdown-divider"></div>
 							<a href="{{ route('account.logout') }}" class="dropdown-item text-danger">
 								<i class="fas fa-sign-out-alt mr-2"></i> Logout

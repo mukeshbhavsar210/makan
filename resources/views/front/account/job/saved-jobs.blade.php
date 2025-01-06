@@ -9,7 +9,7 @@
             </div>
             <div class="col-lg-9">
 
-                @include('front.message')
+                @include('admin.layouts.message')
 
                 <div class="card border-0 shadow mb-4 p-3">
                     <div class="card-body card-form">

@@ -13,16 +13,12 @@ class Property extends Model
         return $this->hasMany(PropertyImage::class);
     }
 
-    // public function amenities(){
-    //     return $this->hasMany('App\Models\Amenity','id','amenities');
-    // }
+    public function amenities(){
+        return $this->hasMany('App\Models\Amenity','id','amenities');
+    }
 
     public function view(){
         return $this->belongsTo(View::class);
-    }
-
-    public function jobType(){
-        return $this->belongsTo(JobType::class);
     }
 
     public function room(){

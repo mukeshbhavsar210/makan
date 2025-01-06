@@ -10,7 +10,7 @@
             </div>
             <div class="col-lg-9">
 
-                @include('front.message')
+                @include('admin.layouts.message')
 
                 <div class="card border-0 shadow mb-4">
                     <form action="" method="post" id="userForm" name="userForm">
@@ -100,7 +100,7 @@
         $("button[type='submit']").prop('disabled', true);
 
         $.ajax({
-            url: '{{ route("account.updateProfile") }}',
+            url: '{{ route("profile.update") }}',
             type: 'put',
             data: $("#userForm").serializeArray(),
             dataType: 'json',
@@ -113,7 +113,7 @@
                     $("#designation").removeClass('is-invalid').siblings("p").removeClass('invalid-feedback').html('');
                     $("#mobile").removeClass('is-invalid').siblings("p").removeClass('invalid-feedback').html('');
 
-                    window.location.href='{{ route("account.profile") }}'
+                    window.location.href='{{ route("profile.index") }}'
 
                 } else {
                     var errors = response.errors;

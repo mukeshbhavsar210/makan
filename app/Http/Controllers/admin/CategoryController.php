@@ -12,9 +12,10 @@ use Illuminate\Support\Facades\File;
 use Intervention\Image\Facades\Image;
 use Intervention\Image\ImageManager;
 
+
 class CategoryController extends Controller
 {
-    public function index(Request $request){
+    public function create(Request $request){
         $categories = Category::latest();
 
         if(!empty($request->get('keyword'))){
@@ -23,10 +24,6 @@ class CategoryController extends Controller
 
         $categories = $categories->paginate(10);
         return view('admin.category.list', compact('categories'));
-    }
-
-    public function create(){
-        return view('admin.category.create');
     }
 
     public function store(Request $request){

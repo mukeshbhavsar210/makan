@@ -8,7 +8,7 @@
                 <h1>Edit City</h1>
             </div>
             <div class="col-sm-6 text-right">
-                <a href="{{ route('cities.index') }}" class="btn btn-primary">Back</a>
+                <a href="{{ route('cities.create') }}" class="btn btn-primary">Back</a>
             </div>
         </div>
     </div>
@@ -51,8 +51,7 @@
             </div>
 
             <div class="pb-5 pt-3">
-                <button type="submit" class="btn btn-primary">Update</button>
-                <a href="{{ route('categories.index') }}" class="btn btn-outline-dark ml-3">Cancel</a>
+                <button type="submit" class="btn btn-primary">Update</button>                
             </div>
         </form>
     </div>
@@ -76,7 +75,7 @@
 
                     if(response["status"] == true){
 
-                        window.location.href="{{ route('cities.index') }}"
+                        window.location.href="{{ route('cities.create') }}"
 
                         $('#name').removeClass('is-invalid')
                         .siblings('p')
@@ -89,7 +88,7 @@
                     } else {
 
                         if(response['notFound'] == true){
-                            window.location.href="{{ route('categories.index') }}"
+                            window.location.href="{{ route('categories.create') }}"
                         }
 
                         var errors = response['errors']

@@ -3,7 +3,7 @@
 @section('content')
 <section class="section-5 bg-2">
     <div class="container-fluid">
-        @include('front.message')
+        @include('admin.layouts.message')
         <div class="card border-0 shadow mb-4 p-3">
             <div class="card-body card-form">
                 <div class="d-flex justify-content-between">

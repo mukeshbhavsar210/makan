@@ -14,113 +14,106 @@
     </div>
 </section>
 
-<section class="section-5 bg-2">
+<section class="content">
     <div class="container-fluid">
-        @include('front.message')
+        @include('admin.layouts.message')
+            <div class="row">
+                <div class="col-md-9">
+                    <div class="card">
+                        <div class="card-body">
+                            <form action="" method="post" id="userForm" name="userForm">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="" class="mb-2">Name*</label>
+                                            <input type="text" id="name" name="name" placeholder="Enter Name" class="form-control" value="{{ $user->name }}">
+                                            <p></p>
+                                        </div>
+                                    </div>                            
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="" class="mb-2">Email*</label>
+                                            <input type="text" id="email" name="email" placeholder="Enter Email" class="form-control" value="{{ $user->email }}">
+                                            <p></p>
+                                        </div>                        
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="" class="mb-2">Mobile*</label>
+                                            <input type="text" id="mobile" name="mobile" placeholder="Mobile" class="form-control" value="{{ $user->mobile }}">
+                                            <p></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>                    
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-primary">Update</button>
+                            </div>
+                        </form>                
+                    </div>
 
-        <div class="card">
-            <form action="" method="post" id="userForm" name="userForm">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-9">
+                <div class="card">
+                    <div class="card-body">
+                        <form action="" method="post" id="changePasswordForm" name="changePasswordForm">
+                            <h3 class="fs-4 mb-1">Change Password</h3>
                             <div class="row">
                                 <div class="col-md-4">
-                                    <label for="" class="mb-2">Name*</label>
-                                    <input type="text" id="name" name="name" placeholder="Enter Name" class="form-control" value="{{ $user->name }}">
-                                    <p></p>
+                                    <div class="form-group">
+                                        <label for="" class="mb-2">Old Password*</label>
+                                        <input type="password" name="old_password" id="old_password" placeholder="Old Password" class="form-control">
+                                        <p></p>
+                                    </div>
                                 </div>
-                        
                                 <div class="col-md-4">
-                                    <label for="" class="mb-2">Email*</label>
-                                    <input type="text" id="email" name="email" placeholder="Enter Email" class="form-control" value="{{ $user->email }}">
-                                    <p></p>
-                                </div>                        
+                                    <div class="form-group">
+                                        <label for="" class="mb-2">New Password*</label>
+                                        <input type="password" name="new_password" id="new_password" placeholder="New Password" class="form-control">
+                                        <p></p>
+                                    </div>
+                                </div>
                                 <div class="col-md-4">
-                                    <label for="" class="mb-2">Mobile*</label>
-                                    <input type="text" id="mobile" name="mobile" placeholder="Mobile" class="form-control" value="{{ $user->mobile }}">
-                                    <p></p>
+                                    <div class="form-group">
+                                        <label for="" class="mb-2">Confirm Password*</label>
+                                        <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm Password" class="form-control">
+                                        <p></p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3">                    
-                            @if (Auth::user()->image != '')
-                                <img src="{{ asset('profile_pic/thumb/'.Auth::user()->image) }}" alt="avatar"  class="rounded-circle img-fluid" style="width: 100px;">
-                            @else
-                                <img src="{{ asset('assets/images/avatar7.png') }}" alt="avatar"  class="rounded-circle img-fluid" style="width: 100px;">
-                            @endif
-        
-                            <h5 class="mt-3 pb-0">{{ Auth::user()->name }}</h5>
-                            <div class="d-flex justify-content-center mb-2">
-                                <button data-bs-toggle="modal" data-bs-target="#exampleModal" type="button" class="btn btn-primary">Change Profile Picture</button>
-                            </div>
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-primary">Change Password</button>
                         </div>
+                    </form>
                 </div>
-                <div class="card-footer  p-4">
-                    <button type="submit" class="btn btn-primary">Update</button>
-                </div>
-            </form>
-        </div>
+            </div>
 
-        <div class="card border-0 shadow mb-4">
-            <form action="" method="post" id="changePasswordForm" name="changePasswordForm">
-                <div class="card-body p-4">
-                    <h3 class="fs-4 mb-1">Change Password</h3>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="">
-                                <label for="" class="mb-2">Old Password*</label>
-                                <input type="password" name="old_password" id="old_password" placeholder="Old Password" class="form-control">
-                                <p></p>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="fs-4 mb-1">Profile Pic</h3>                        
+                                @if (Auth::user()->image != '')
+                                    <img src="{{ asset('profile_pic/thumb/'.Auth::user()->image) }}" alt="avatar"  class="rounded-circle img-fluid" style="width: 100px;">
+                                @else
+                                    <img src="{{ asset('assets/images/avatar7.png') }}" alt="avatar"  class="rounded-circle img-fluid" style="width: 100px;">
+                                @endif 
+                            
+                                <form id="profilePicForm" name="profilePicForm" action="" method="post" class="my-3">
+                                    <div class="form-group">
+                                        <input type="file" class="form-control" id="image" name="image">
+                                        <p class="text-danger" id="image-error"></p>
+                                    </div>                                    
+                                    <button type="submit" class="btn btn-primary">Update Photo</button>                                                    
+                                </form>
                             </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="">
-                                <label for="" class="mb-2">New Password*</label>
-                                <input type="password" name="new_password" id="new_password" placeholder="New Password" class="form-control">
-                                <p></p>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="">
-                                <label for="" class="mb-2">Confirm Password*</label>
-                                <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm Password" class="form-control">
-                                <p></p>
-                            </div>
-                        </div>
+                        </div> 
                     </div>
-                </div>
-                <div class="card-footer  p-4">
-                    <button type="submit" class="btn btn-primary">Update</button>
-                </div>
-            </form>
+                </div> 
+            </div>
         </div>
-    </div>
+    </div>    
 </section>
 @endsection
 
-{{-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title pb-0" id="exampleModalLabel">Change Profile Picture</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <form id="profilePicForm" name="profilePicForm" action="" method="post">
-                <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label">Profile Image</label>
-                    <input type="file" class="form-control" id="image" name="image">
-                    <p class="text-danger" id="image-error"></p>
-                </div>
-                <div class="d-flex justify-content-end">
-                    <button type="submit" class="btn btn-primary mx-3">Update</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
-            </form>
-        </div>
-        </div>
-    </div>
-</div> --}}
 
 @section('customJs')
 <script>
@@ -128,7 +121,7 @@
         event.preventDefault();
         var formData = new FormData(this);
         $.ajax({
-            url: '{{ route("account.updateProfilePic") }}',
+            url: '{{ route("profile.updatePic") }}',
             type: 'post',
             data: formData,
             dataType: 'json',
@@ -159,7 +152,7 @@
         $("button[type='submit']").prop('disabled', true);
 
         $.ajax({
-            url: '{{ route("account.updateProfile") }}',
+            url: '{{ route("profile.update") }}',
             type: 'put',
             data: $("#userForm").serializeArray(),
             dataType: 'json',
@@ -170,7 +163,7 @@
                     $("#name").removeClass('is-invalid').siblings("p").removeClass('invalid-feedback').html('');
                     $("#email").removeClass('is-invalid').siblings("p").removeClass('invalid-feedback').html('');
                     $("#mobile").removeClass('is-invalid').siblings("p").removeClass('invalid-feedback').html('');
-                    window.location.href='{{ route("account.profile") }}'
+                    window.location.href='{{ route("profile.index") }}'
                 } else {
                     var errors = response.errors;
 
@@ -214,8 +207,7 @@
                 if(response.status == true){
                     $("#old_password").removeClass('is-invalid').siblings("p").removeClass('invalid-feedback').html();
                     $("#new_password").removeClass('is-invalid').siblings("p").removeClass('invalid-feedback').html();
-                    $("#confirm_password").removeClass('is-invalid').siblings("p").removeClass('invalid-feedback').html();
-                    //window.location.href='{{ route("property.index") }}'
+                    $("#confirm_password").removeClass('is-invalid').siblings("p").removeClass('invalid-feedback').html();                    
                 } else {
                     var errors = response.errors;
                     if(errors.old_password){

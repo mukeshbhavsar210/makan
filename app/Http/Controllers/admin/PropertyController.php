@@ -6,57 +6,40 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Category;
 use App\Models\Property;
-use App\Models\ProductImage;
-use App\Models\SubCategory;
+use App\Models\PropertyImage;
 use App\Models\TempImage;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Validator;
-use Intervention\Image\Facades\Image;
-use App\Models\Amenity;
-use App\Models\Area;
-use App\Models\Bath;
-use App\Models\Bathroom;
-use App\Models\bhk_type;
 use App\Models\City;
+use App\Models\Area;
+use App\Models\Amenity;
 use App\Models\Builder;
-use App\Models\Facing;
-use App\Models\Job;
-use App\Models\JobApplication;
-use App\Models\JobType;
-use App\Models\PropertyApplication;
-use App\Models\PropertyImage;
-use App\Models\PropertyType;
 use App\Models\Room;
+use App\Models\Bathroom;
+use App\Models\PropertyApplication;
+use App\Models\View;
+use App\Models\PropertyType;
 use App\Models\SaleType;
 use App\Models\SavedJob;
 use App\Models\SavedProperty;
-use App\Models\User;
-use App\Models\View;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Validator;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
 
-class PropertyController extends Controller
-{
+class PropertyController extends Controller {
 
     public function index(){
-        $properties = Property::where('user_id', Auth::user()->id)->with('jobType')->orderBy('created_at','DESC')->paginate(10);        
-
-        // if(Auth::user()->hasRole('admin')) {
-        //     $items = Job::orderBy('id','DESC')->with('author')->paginate(5);
-        // } else {
-        //     $jobs = Job::where('user_id', Auth::user()->id)->with('jobType')->orderBy('created_at','DESC')->paginate(10);        
-        // }
-
+        $properties = Property::where('user_id', Auth::user()->id)->with('saleType')->orderBy('created_at','DESC')->paginate(10);        
         return view('admin.property.list', [
             'properties' => $properties
         ]);
     }
 
-
     //CREATE PROPERTY
     public function create(){
+        $data = [];
         $cities = City::orderBy('name','ASC')->where('status',1)->get();
         $areas = Area::orderBy('name','ASC')->where('status',1)->get();
-        $amenities = Amenity::orderBy('name','ASC')->where('status',1)->get();
         $builders = Builder::orderBy('name','ASC')->where('status',1)->get();
         $bhk = Room::orderBy('name','ASC')->where('status',1)->get();        
         $bath = Bathroom::orderBy('name','ASC')->where('status',1)->get();        
@@ -64,11 +47,11 @@ class PropertyController extends Controller
         $categories = Category::orderBy('name','ASC')->where('status',1)->get();
         $propertyTypes = PropertyType::orderBy('name','ASC')->where('status',1)->get();
         $saleTypes = SaleType::orderBy('name','ASC')->where('status',1)->get();        
+        $categories = Category::orderBy('name','ASC')->get();
 
         $data = [ 
             'cities' => $cities,
-            'areas' => $areas,
-            'amenities' => $amenities,
+            'areas' => $areas,            
             'builders' => $builders,
             'bhk' => $bhk,
             'bath' => $bath,
@@ -77,19 +60,18 @@ class PropertyController extends Controller
             'propertyTypes' => $propertyTypes, 
             'saleTypes' => $saleTypes, 
         ];
-
         return view('admin.property.create', $data);
     }
-    
-    //SAVE PROPERTY
+
+    //STORE PROPERTY
     public function store(Request $request){
         $rules = [
-            'title' => 'required|min:5|max:200',            
+            'title' => 'required',            
         ];
 
         $validator = Validator::make($request->all(),$rules);
         if ($validator->passes()) {
-            $property = new Property();
+            $property = new Property;
             $property->user_id = Auth::user()->id;
             $property->title = $request->title;            
             $property->slug = $request->slug;            
@@ -112,142 +94,231 @@ class PropertyController extends Controller
             $property->description = $request->description;  
             $property->is_featured = $request->is_featured;
             $property->related_properties = (!empty($request->related_properties)) ? implode(',',$request->related_properties) : '';
-            $property->amenities = (!empty($request->related_amenities)) ? implode(',',$request->related_amenities) : '';
+            $property->related_amenities = (!empty($request->related_amenities)) ? implode(',',$request->related_amenities) : '';
             $property->builder_id = $request->builder;           
             $property->save();
 
-            // if (!empty($request->image_array)) {
-            //     foreach ($request->image_array as $temp_image_id) {
-    
-            //         $tempImageInfo = TempImage::find($temp_image_id);
-            //         $extArray = explode('.',$tempImageInfo->name);
-            //         $ext = last($extArray);
-    
-            //         $propertyImage = new PropertyImage();
-            //         $propertyImage->property_id = $property->id;
-            //         $propertyImage->image = "NULL";
-            //         $propertyImage->save();
-    
-            //         $imageName = $property->id.'-'.$propertyImage->id.'-'.time().'.'.$ext;
-            //         $propertyImage->image = $imageName;
-            //         $propertyImage->save();
-    
-            //         //Generate Property Thumbnails
-            //         //Large Image
-            //         $sourcePath = public_path().'/temp/'.$tempImageInfo->name;
-            //         $destPath = public_path().'/uploads/property/large/'.$imageName;
-            //         $image = Image::make($sourcePath);
-            //         $image->resize(1000, null, function ($constraint) {
-            //             $constraint->aspectRatio();
-            //         });
-            //         $image->save($destPath);
-    
-            //         //Small Image
-            //         // $destPath = public_path().'/uploads/property/small/'.$imageName;
-            //         // $image = Image::make($sourcePath);
-            //         // $image->fit(300,300);
-            //         // $image->save($destPath);
-            //     }
-            // }
+        if (!empty($request->image_array)) {
+            foreach ($request->image_array as $temp_image_id) {
+                $tempImageInfo = TempImage::find($temp_image_id);
+                $extArray = explode('.',$tempImageInfo->name);
+                $ext = last($extArray);
 
-            session()->flash('success','Property added successfully.');
+                $productImage = new PropertyImage();
+                $productImage->property_id = $property->id;
+                $productImage->image = "NULL";
+                $productImage->save();
 
-            return response()->json([
-                'status' => true,
-                'errors' => [],
-            ]);
+                $imageName = $property->id.'-'.$property->title.'-'.time().'.'.$ext;
+                $productImage->image = $imageName;
+                $productImage->save();
 
-        } else {
-            return response()->json([
-                'status' => false,
-                'errors' => $validator->errors(),
-            ]);
-        }
-    }
+                //Large Image
+                $sourcePath = public_path().'/temp/'.$tempImageInfo->name;
+                $destPath = public_path().'/uploads/property/large/'.$imageName;
+                $manager = new ImageManager(new Driver());
+                $image = $manager->read($sourcePath);
+                $image->resize(1000,600, function ($constraint) {
+                    $constraint->aspectRatio();
+                });
+                $image->save($destPath);
 
-    
-
-    public function edit(Request $request, $id) {
-        $categories = Category::orderBy('name','ASC')->where('status',1)->get();
-        $propertytypes = SaleType::orderBy('name','ASC')->where('status',1)->get();
-
-        $property = Property::where([
-            'user_id' => Auth::user()->id,
-            'id' => $id
-        ])->first();
-
-        if($property == null){
-            abort(404);
+                //Generate Thumnail
+                $destPath = public_path().'/uploads/property/small/'.$imageName;
+                $manager = new ImageManager(new Driver());
+                $image = $manager->read($sourcePath);
+                $image->cover(300,300);
+                $image->save($destPath);
+            }
         }
 
-        return view('admin.property.edit', [
-            'categories' => $categories,
-            'propertytypes' => $propertytypes,
-            'property' => $property,
-        ]);
-    }
+        $request->session()->flash('success','Property added successfully');
 
-
-    public function update(Request $request, $id){
-        $rules = [
-            'title' => 'required|min:5|max:200',
-        ];
-
-        $validator = Validator::make($request->all(),$rules);
-        if ($validator->passes()) {
-            $job = Property::find($id);
-            $job->title = $request->title;
-            $job->user_id = Auth::user()->id;                        
-            $job->save();
-
-            session()->flash('success','Property updated successfully.');
-
-            return response()->json([
-                'status' => true,
-                'errors' => [],
-            ]);
-
-        } else {
-            return response()->json([
-                'status' => false,
-                'errors' => $validator->errors(),
-            ]);
-        }
-    }
-
-
-    //Delete Property
-    public function delete(Request $request){
-        $property = Property::where([
-            'user_id' => Auth::user()->id,
-            'id' => $request->propertyId,
-        ])->first();
-
-        if($property == null){
-            session()->flash('error','Either property deleted or not found.');
-            return response()->json([
-                'status' => true
-            ]);
-        }
-        Property::where('id',$request->propertyId)->delete();
-        session()->flash('success','Property deleted successfully.');
         return response()->json([
-            'status' => true
+            'status' => true,
+            'message' => 'Property added successfully'
+        ]);
+
+        } else {
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors()
+            ]);
+        }
+    }
+
+
+    //EDIT PROPERTY
+    public function edit($id, Request $request){
+        $property = Property::find($id);        
+
+        if (empty($property)) {
+            return redirect()->route('properties.index')->with('error','Property not found');
+        }
+
+        //Fetch Product Images
+        $propertyImage = PropertyImage::where('property_id',$property->id)->get();   
+        $areas = Area::where('city_id',$property->city_id)->get();        
+
+        //Fetch Related products
+        $relatedProperties = [];
+        if ($property->related_properties != '') {
+            $propertyArray = explode(',',$property->related_properties);
+            $relatedProperties = Property::whereIn('id',$propertyArray)->get();
+        }
+
+        //Fetch Amenities
+        $relatedAmenities = [];
+        if ($property->related_amenities != '') {
+            $amenityArray = explode(',',$property->related_amenities);
+            $relatedAmenities = Amenity::whereIn('id',$amenityArray)->get();
+        }
+
+        $data = [];
+        $categories = Category::orderBy('name','ASC')->get();
+        $saleTypes = SaleType::orderBy('name','ASC')->get();  
+        $cities = City::orderBy('name','ASC')->get();
+        $areas = Area::orderBy('name','ASC')->get();        
+        $builders = Builder::orderBy('name','ASC')->get();
+        $room = Room::orderBy('name','ASC')->get();        
+        $bathroom = Bathroom::orderBy('name','ASC')->get();        
+        $facings = View::orderBy('name','ASC')->get();    
+        $categories = Category::orderBy('name','ASC')->get();
+        $propertyTypes = PropertyType::orderBy('name','ASC')->get();
+
+        $data['categories'] = $categories;
+        $data['saleTypes'] = $saleTypes;
+        $data['propertyTypes'] = $propertyTypes;
+        $data['cities'] = $cities;
+        $data['areas'] = $areas;
+        $data['facings'] = $facings;
+        $data['room'] = $room;
+        $data['bathroom'] = $bathroom;
+        $data['builders'] = $builders;
+        $data['property'] = $property;
+        $data['propertyImage'] = $propertyImage;
+        $data['relatedProperties'] = $relatedProperties;
+        $data['relatedAmenities'] = $relatedAmenities;        
+
+        return view('admin.property.edit',$data);
+    }
+
+
+
+    public function update($id, Request $request){
+        $property = Property::find($id);
+        $rules = [
+            'title' => 'required',
+            'slug' => 'required|unique:properties,slug,'.$property->id.',id',
+            'price' => 'required|numeric',
+            'is_featured' => 'required|in:Yes,No',
+        ];
+      
+        $validator = Validator::make($request->all(),$rules);
+
+        if ($validator->passes()) {
+            $property->title = $request->title;            
+            $property->slug = $request->slug;            
+            $property->sale_type_id = $request->saleType;
+            $property->category_id = $request->category;                    
+            $property->keywords = $request->keywords;          
+            $property->city_id = $request->city;   
+            $property->area_id = $request->area;  
+            $property->location = $request->location; 
+            $property->property_type_id = $request->propertyType;
+            $property->room_id = $request->room;            
+            $property->bathroom_id = $request->bathroom;
+            $property->price = $request->price;
+            $property->compare_price = $request->compare_price;            
+            $property->size = $request->size;
+            $property->view_id = $request->view;     
+            $property->rera = $request->rera;  
+            $property->year_build = $request->year_build;  
+            $property->total_area = $request->total_area;  
+            $property->description = $request->description;  
+            $property->is_featured = $request->is_featured;
+            $property->related_properties = (!empty($request->related_properties)) ? implode(',',$request->related_properties) : '';
+            $property->related_amenities = (!empty($request->related_amenities)) ? implode(',',$request->related_amenities) : '';
+            $property->builder_id = $request->builder;    
+            $property->save();
+
+        $request->session()->flash('success','Property updated successfully');
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Property updated successfully'
+        ]);
+
+        } else {
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors()
+            ]);
+        }
+    }
+
+    //DELETE PROPERTY
+    public function destroy($id, Request $request){
+        $property = Property::find($id);
+
+        if (empty($property)) {
+            $request->session()->flash('error','Property not found');
+            return response()->json([
+                'status' => false,
+                'notFound' => true,
+            ]);
+        }
+
+        $propertyImages = PropertyImage::where('property_id',$id)->get();
+
+        if (!empty($propertyImages)) {
+            foreach ($propertyImages as $propertyImage) {
+                File::delete(public_path('uploads/property/large/'.$propertyImage->image));
+                File::delete(public_path('uploads/property/small/'.$propertyImage->image));
+            }
+            PropertyImage::where('property_id',$id)->delete();
+        }
+        $property->delete();
+        $request->session()->flash('success','Property deleted successfully');
+        return response()->json([
+            'status' => true,
+            'message' => 'Property deleted successfully',
         ]);
     }
 
 
-    
+
+    public function getProducts(Request $request){
+        $tempProduct = [];
+        if($request->term != ""){
+            $properties = Property::where('title','like','%'.$request->term.'%')->get();
+
+            if ($properties != null){
+                foreach ($properties as $value){
+                    $tempProduct[] = array(
+                        'id' => $value->id,
+                        'text' => $value->title,
+                    );
+                }
+            }
+        }
+        return response()->json([
+            'tags' => $tempProduct,
+            'status' => true,
+        ]);
+    }
+
+
     //Similar Property show 
     public function similar_properties(Request $request){
         $tempProperty = [];
         if($request->term != ""){
             $properties = Property::where('title','like','%'.$request->term.'%')->get();
             if ($properties != null){
-                foreach ($properties as $property){
+                foreach ($properties as $value){
                     $tempProperty[] = array(
-                        'id' => $property->id,
-                        'text' => $property->title,
+                        'id' => $value->id,
+                        'text' => $value->title,
                     );
                 }
             }
@@ -259,22 +330,24 @@ class PropertyController extends Controller
     }
 
 
+
+
     //Similar Property show 
-    public function get_amenities(Request $request){
-        $tempAmenities = [];
+    public function similar_amenities(Request $request){
+        $tempAmenity = [];
         if($request->term != ""){
-            $amenities = Amenity::where('name','like','%'.$request->term.'%')->get();
+            $amenities = Amenity::where('title','like','%'.$request->term.'%')->get();
             if ($amenities != null){
                 foreach ($amenities as $value){
-                    $tempAmenities[] = array(
+                    $tempAmenity[] = array(
                         'id' => $value->id,
-                        'text' => $value->name,
+                        'text' => $value->title,
                     );
                 }
             }
         }
         return response()->json([
-            'tags' => $tempAmenities,
+            'tags' => $tempAmenity,
             'status' => true,
         ]);
     }
