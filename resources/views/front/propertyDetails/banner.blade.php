@@ -73,7 +73,7 @@
       <div class="slider-nav">
          @if ($properties->property_images)
             @foreach ($properties->property_images as $key => $propertyImage)
-               <img src="{{ asset('uploads/property/large/'.$propertyImage->image) }}" alt="Image">
+               <div><img style="width: 200px" src="{{ asset('uploads/property/small/'.$propertyImage->image) }}" alt="Image"></div>
             @endforeach
          @endif         
       </div>
@@ -90,36 +90,4 @@
        </div>
     </div>
  </div>
-
- <div class="print-property-gallery only-for-print">
-       <img src="https://ultra-realhomes.b-cdn.net/wp-content/uploads/2022/06/architecture-home-merrick-way-1240x720.jpg" alt="architecture-home-merrick-way"><img src="https://ultra-realhomes.b-cdn.net/wp-content/uploads/2020/06/bedroom-02-1240x720.jpg" alt="bedroom-02"><img src="https://ultra-realhomes.b-cdn.net/wp-content/uploads/2020/06/exterior-05-1240x720.jpg" alt="exterior-05"><img src="https://ultra-realhomes.b-cdn.net/wp-content/uploads/2020/06/interior-00-1240x720.jpg" alt="interior-00"><img src="https://ultra-realhomes.b-cdn.net/wp-content/uploads/2020/06/interior-02-1240x720.jpg" alt="interior-02"><img src="https://ultra-realhomes.b-cdn.net/wp-content/uploads/2020/06/living-00-1240x720.jpg" alt="living-00">            
-    </div>
-    <div class="only-for-print">
-       <div class="rh-ultra-thumb-info-box">
-          <div class="page-head-inner">
-             <div class="rh-ultra-property-tags rh-property-title">
-                <a href="https://ultra.realhomes.io/property-status/for-sale/" class="rh-ultra-status rh-ultra-property-tag">For Sale</a>
-                <a href="https://ultra.realhomes.io/property-type/single-family/" class="rh-ultra-type rh-ultra-property-tag">Single Family</a>
-                <span class="rh_ultra_featured rh-ultra-property-tag">Featured</span>
-                <span style="background: #dd3333" class="property-label rh-ultra-label rh-ultra-property-tag">Hot</span>
-             </div>
-             <div class="rh-ultra-property-title-price">
-                <span class="property-title">Home in Merrick Way</span>
-                <div class="rh-ultra-property-tag-wrapper">
-                   <span class="rh-ultra-price "> $540,000 </span>
-                </div>
-             </div>
-             <p class="rh-ultra-property-address">
-                <span class="rh-ultra-address-pin">
-                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="5 2 14 20">
-                      <path d="M12 4C9.2 4 7 6.2 7 9c0 2.9 2.9 7.2 5 9.9 2.1-2.7 5-7 5-9.9C17 6.2 14.8 4 12 4zM12 11.5c-1.4 0-2.5-1.1-2.5-2.5s1.1-2.5 2.5-2.5 2.5 1.1 2.5 2.5S13.4 11.5 12 11.5z" fill="#1db2ff" class="rh-ultra-dark" style="opacity:0.24;"></path>
-                      <path d="M12 2C8.1 2 5 5.1 5 9c0 5.3 7 13 7 13s7-7.8 7-13C19 5.1 15.9 2 12 2zM7 9c0-2.8 2.2-5 5-5s5 2.2 5 5c0 2.9-2.9 7.2-5 9.9C9.9 16.2 7 11.9 7 9z" fill="#1db2ff" class="rh-ultra-dark"></path>
-                      <circle cx="12" cy="9" r="2.5" fill="#1db2ff" class="rh-ultra-dark"></circle>
-                   </svg>
-                </span>
-                Merrick Way, Miami, FL 33134, USA            
-             </p>
-          </div>
-          <img class="only-for-print inspiry-qr-code" src="https://chart.googleapis.com/chart?cht=qr&amp;chs=100x100&amp;chl=https://ultra.realhomes.io/property/home-in-merrick-way/&amp;choe=UTF-8" alt="Home in Merrick Way">
-       </div>
-    </div>
+   

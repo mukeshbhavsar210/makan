@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\admin\AdminLoginController;
+use App\Http\Controllers\admin\AmenityController;
 use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\CityController;
 use App\Http\Controllers\admin\DashboardController;
@@ -15,6 +16,7 @@ use App\Http\Controllers\admin\BuilderController;
 use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\admin\PropertyController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ContactFormController;
 use App\Http\Controllers\PropertiesController;
 use App\Models\User;
@@ -34,8 +36,9 @@ use Illuminate\Support\Str;
 |
 */
 
-Route::get("/contact",[ContactFormController::class, 'index']);
-Route::post("/contact",[ContactFormController::class, 'store']);
+Route::get("/contact",[ContactController::class, 'index'])->name('contact.index');;
+Route::post("/contact",[ContactController::class, 'store'])->name('contact.store');
+Route::get("/contact/{id}",[ContactController::class, 'details'])->name('contact.details');;
 
 Route::get("/",[HomeController::class, 'index'])->name('home');
 Route::get("/properties",[PropertiesController::class, 'index'])->name('properties');
@@ -46,6 +49,7 @@ Route::get("/forgot-password",[AccountController::class, 'forgotPassword'])->nam
 Route::post("/process-forgot-password",[AccountController::class, 'processForgotPassword'])->name('account.processForgotPassword');
 Route::get("/reset-password/{token}",[AccountController::class, 'resetPassword'])->name('account.resetPassword');
 Route::post("/process-reset-password",[AccountController::class, 'processResetPassword'])->name('account.processResetPassword');
+
 
 //ADMIN ROLES
 Route::group(['prefix' => 'admin','middleware' => 'checkRole'], function(){
@@ -58,7 +62,7 @@ Route::group(['prefix' => 'admin','middleware' => 'checkRole'], function(){
 
     //City
     Route::get("/city/create",[CityController::class, 'city_create'])->name('cities.create');
-    Route::post('/city', [CityController::class, 'city_store'])->name('cities.store');       
+    Route::post('/city/store', [CityController::class, 'city_store'])->name('cities.store');       
     Route::get("/city/edit/{id}",[CityController::class, 'city_edit'])->name('cities.edit');    
     Route::put("/city/{id}",[CityController::class, 'city_update'])->name('cities.update');
     Route::delete('/city/{id}', [CityController::class, 'city_destroy'])->name('cities.delete');
@@ -85,6 +89,13 @@ Route::group(['prefix' => 'admin','middleware' => 'checkRole'], function(){
     Route::get('/builders/{id}/edit', [BuilderController::class, 'edit'])->name('builders.edit');
     Route::put('/builders/{id}', [BuilderController::class, 'update'])->name('builders.update');
     Route::delete('/builders/{id}', [BuilderController::class, 'destroy'])->name('builders.delete');
+
+    //Amienites routes
+    Route::get('/amenities', [AmenityController::class, 'index'])->name('amenities.index');    
+    Route::post('/amenities', [AmenityController::class, 'store'])->name('amenities.store');
+    Route::get('/amenities/{id}/edit', [AmenityController::class, 'edit'])->name('amenities.edit');
+    Route::put('/amenities/{id}', [AmenityController::class, 'update'])->name('amenities.update');
+    Route::delete('/amenities/{id}', [AmenityController::class, 'destroy'])->name('amenities.delete');
 
     Route::get('/getSlug', function(Request $request){
         $slug = '';
@@ -137,7 +148,6 @@ Route::group(['prefix' => 'account'], function(){
         Route::post("/removePropertyInterested",[PropertyController::class, 'removeProperty'])->name('account.removeProperties');
         Route::get("/myPropertyInterested",[PropertyController::class, 'myPropertyApplications'])->name('account.myPropertyApplications');
 
-        
         Route::post("/updatePassword",[AccountController::class, 'updatePassword'])->name('account.updatePassword');
 
         //Setting Route

@@ -113,37 +113,6 @@
 
 @section('customJs')
     <script>
-        $("#profilePicForm").submit(function(event){
-        event.preventDefault();
-
-        var formData = new FormData(this);
-
-        $.ajax({
-            url: '{{ route("profile.updatePic") }}',
-            type: 'post',
-            data: formData,
-            dataType: 'json',
-            contentType: false,
-            processData: false,
-            success: function(response){
-                if(response.status == false){
-                    var errors = response.errors;
-                    if(errors.image){
-                        $("#image-error").html(errors.name);
-                    }
-                } else {
-                    window.location.href='{{ url()->current() }}'
-                }
-            },
-            error: function(JQXHR, exception){
-                console.log("Something went wrong");
-            }
-        })
-    });
-
-
-
-    
         $("#builderForm").submit(function(event){
             event.preventDefault();
             var element = $(this);
@@ -183,6 +152,39 @@
                 }
             })
         });
+        
+        $("#profilePicForm").submit(function(event){
+        event.preventDefault();
+
+        var formData = new FormData(this);
+
+        $.ajax({
+            url: '{{ route("profile.updatePic") }}',
+            type: 'post',
+            data: formData,
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            success: function(response){
+                if(response.status == false){
+                    var errors = response.errors;
+                    if(errors.image){
+                        $("#image-error").html(errors.name);
+                    }
+                } else {
+                    window.location.href='{{ url()->current() }}'
+                }
+            },
+            error: function(JQXHR, exception){
+                console.log("Something went wrong");
+            }
+        })
+    });
+
+
+
+    
+        
 
 
         Dropzone.autoDiscover = false;

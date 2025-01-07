@@ -106,38 +106,6 @@ class BuilderController extends Controller
     }
 
 
-
-
-
-    public function destroy($builderId, Request $request){
-        $builder = Builder::find($builderId);
-
-        if(empty($builder)){
-            $request->session()->flash('error', 'Builder not found');
-            return response()->json([
-                'status' => true,
-                'message' => 'Builder not found'
-            ]);
-            return redirect()->route('builders.index');
-        }
-
-        //Delete old image
-        File::delete(public_path().'/uploads/builder_logo_photo/thumb/'.$builder->image);
-        File::delete(public_path().'/uploads/builder_logo_photo/'.$builder->image);
-
-        $builder->delete();
-
-        $request->session()->flash('success', 'Builder deleted successfully');
-
-        return response()->json([
-            'status' => true,
-            'message' => 'Builder deleted successfully'
-        ]);
-    }
-
-
-
-
     public function update($id, Request $request){
         $builder = Builder::find($id);
         if (empty($builder)) {
@@ -179,6 +147,38 @@ class BuilderController extends Controller
             ]);
         }
     }
+
+
+    public function destroy($builderId, Request $request){
+        $builder = Builder::find($builderId);
+
+        if(empty($builder)){
+            $request->session()->flash('error', 'Builder not found');
+            return response()->json([
+                'status' => true,
+                'message' => 'Builder not found'
+            ]);
+            return redirect()->route('builders.index');
+        }
+
+        //Delete old image
+        File::delete(public_path().'/uploads/builder_logo_photo/thumb/'.$builder->image);
+        File::delete(public_path().'/uploads/builder_logo_photo/'.$builder->image);
+
+        $builder->delete();
+
+        $request->session()->flash('success', 'Builder deleted successfully');
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Builder deleted successfully'
+        ]);
+    }
+
+
+
+
+   
 
 
     public function updateProfilePic(Request $request){
