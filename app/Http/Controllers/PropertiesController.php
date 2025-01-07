@@ -241,7 +241,7 @@ class PropertiesController extends Controller
         ])->count();
 
         if($count > 0) {
-            session()->flash('error', 'You already saved this job.');
+            session()->flash('error', 'You already saved this property.');
 
             return response()->json([
                 'status' => false
@@ -253,7 +253,7 @@ class PropertiesController extends Controller
         $savedJob->user_id = Auth::user()->id;
         $savedJob->save();
 
-        session()->flash('success', 'You have successfully saved this job.');
+        session()->flash('success', 'You have successfully saved this property.');
 
         return response()->json([
             'status' => true

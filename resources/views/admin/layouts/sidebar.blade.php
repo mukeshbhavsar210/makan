@@ -22,15 +22,22 @@
                             <i class="nav-icon  fas fa-users"></i>
                             <p>Category</p>
                         </a>
+                    </li>                    
+                    <li class="nav-item">
+                        <a href="{{ route('amenities.index') }}" class="nav-link">
+                            <i class="nav-icon  fas fa-users"></i>
+                            <p>Amenities</p>
+                        </a>
                     </li>
-                    
                     <li class="nav-item">
                         <a href="{{ route('builders.index') }}" class="nav-link">
                             <i class="nav-icon  fas fa-users"></i>
-                            <p>Builder</p>
+                            <p>Builders</p>
                         </a>
                     </li>
                 @endif
+
+              
                 <li class="nav-item">
                     <a href="{{ route('properties.index') }}" class="nav-link">
                         <i class="nav-icon  fas fa-users"></i>

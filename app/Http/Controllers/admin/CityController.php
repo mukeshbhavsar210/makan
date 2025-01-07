@@ -14,17 +14,9 @@ class CityController extends Controller
     public function city_create(Request $request){
         $cities = City::orderBy('created_at','DESC')->paginate(10);
         $areas = Area::orderBy('created_at','DESC')->paginate(10);
-        $categories = Category::latest();
-
-        if(!empty($request->get('keyword'))){
-            $categories = $categories->where('name', 'like', '%'.$request->get('keyword').'%');
-        }
-
-        $categories = $categories->paginate(10);
 
         $data['areas'] = $areas;
-        $data['cities'] = $cities;
-        $data['categories'] = $categories;
+        $data['cities'] = $cities;        
         
         return view('admin.city.list',$data);      
     }

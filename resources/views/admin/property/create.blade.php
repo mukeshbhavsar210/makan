@@ -79,32 +79,8 @@
                                             <input type="text" placeholder="Location" id="location" name="location" class="form-control">                            
                                         </div>                        
                                     </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label for="" class="mb-1">Property Type<span class="req">*</span></label>
-                                            <select name="propertyType" id="propertyType" class="form-control">
-                                                <option value="">Select a type</option>
-                                                @if ($propertyTypes->isNotEmpty())
-                                                    @foreach ($propertyTypes as $value)
-                                                        <option value="{{ $value->id }}">{{ $value->name }}</option>
-                                                    @endforeach
-                                                @endif
-                                            </select>
-                                        </div>
-                                    </div> 
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label for="" class="mb-1">Facing<span class="req">*</span></label>
-                                            <select name="view" id="view" class="form-control">
-                                                <option value="">Facing</option>
-                                                @if ($facings->isNotEmpty())
-                                                    @foreach ($facings as $value)
-                                                        <option value="{{ $value->id }}">{{ $value->name }}</option>
-                                                    @endforeach
-                                                @endif
-                                            </select>                            
-                                        </div>
-                                    </div> 
+                                    
+                                    
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label for="" class="mb-1">City<span class="req">*</span></label>
@@ -117,7 +93,7 @@
                                                 @endif
                                             </select>                            
                                         </div>
-                                    </div>                                             
+                                    </div>  
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label for="" class="mb-1">Area<span class="req">*</span></label>
@@ -126,75 +102,64 @@
                                             </select>                        
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label for="year_build" class="mb-1">Year Build<span class="req">*</span></label>
-                                            <input type="text" placeholder="Year Build" id="year_build" name="year_build" class="form-control">                            
-                                        </div>
-                                    </div> 
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label for="total_area" class="mb-1">Total Area<span class="req">*</span></label>
-                                            <input type="text" placeholder="Total area" id="total_area" name="total_area" class="form-control">                            
-                                        </div>
-                                    </div> 
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label for="price" class="mb-1">Price<span class="req">*</span></label>
-                                            <input type="text" placeholder="Price" id="price" name="price" class="form-control">                            
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label for="compare_price" class="mb-1">Compare Price<span class="req">*</span></label>
-                                            <input type="text" placeholder="Compare price" id="compare_price" name="compare_price" class="form-control">                            
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label for="size" class="mb-1">Size<span class="req">*</span></label>
-                                            <input type="text" placeholder="Size" id="size" name="size" class="form-control">                            
-                                        </div>
-                                    </div> 
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label for="rera" class="mb-1">RERA<span class="req">*</span></label>
-                                            <input type="text" placeholder="RERA" id="rera" name="rera" class="form-control">                            
-                                        </div>
-                                    </div>                                    
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label for="" class="mb-1">BHK<span class="req">*</span></label>
-                                            <select name="room" id="room" class="form-control">  
-                                                <option value="">Room</option>                              
-                                                @if ($bhk->isNotEmpty())
-                                                    @foreach ($bhk as $value)
-                                                        <option value="{{ $value->id }}">{{ $value->name }}</option>
-                                                    @endforeach
-                                                @endif
-                                            </select>                            
-                                        </div>
-                                    </div>    
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label for="" class="mb-1">Bathroom<span class="req">*</span></label>
-                                            <select name="bathroom" id="bathroom" class="form-control">   
-                                                <option value="">Bath</option>                             
-                                                @if ($bath->isNotEmpty())
-                                                    @foreach ($bath as $value)
-                                                        <option value="{{ $value->id }}">{{ $value->name }}</option>
-                                                    @endforeach
-                                                @endif
-                                            </select>                        
-                                        </div>
-                                    </div>  
-                                    <div class="col-md-6"></div>
+                                </div>
+                                    
+                                <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="" class="mb-1">Description<span class="req">*</span></label>
                                             <textarea class="form-control" name="description" id="description" cols="5" rows="5" placeholder="Description"></textarea>                            
                                         </div>
                                     </div>
+                                    <div class="col-md-6">  
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="" class="mb-1">Property Type<span class="req">*</span></label>
+                                                    <select name="propertyType" id="propertyType" class="form-control">
+                                                        <option value="">Select a type</option>
+                                                        @if ($propertyTypes->isNotEmpty())
+                                                            @foreach ($propertyTypes as $value)
+                                                                <option value="{{ $value->id }}">{{ $value->name }}</option>
+                                                            @endforeach
+                                                        @endif
+                                                    </select>
+                                                </div>
+                                            </div> 
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="year_build" class="mb-1">Year Build<span class="req">*</span></label>
+                                                    <input type="text" placeholder="Year Build" id="year_build" name="year_build" class="form-control">                            
+                                                </div>
+                                            </div> 
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="price" class="mb-1">Price<span class="req">*</span></label>
+                                                    <input type="text" placeholder="Price" id="price" name="price" class="form-control">                            
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="compare_price" class="mb-1">Compare Price<span class="req">*</span></label>
+                                                    <input type="text" placeholder="Compare price" id="compare_price" name="compare_price" class="form-control">                            
+                                                </div>
+                                            </div>                                  
+                                        </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+                <!-- Accordion item 1 -->
+
+                    <div class="card">
+                        <div id="headingTwo" class="card-header bg-white shadow-sm border-0">
+                            <h4 data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false"
+                            aria-controls="collapseTwo" >Details</h4>
+                        </div>
+                        <div id="collapseTwo" aria-labelledby="headingTwo" data-parent="#accordionExample" class="collapse">
+                            <div class="card-body">
+                                <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>Similar property</label>
@@ -209,88 +174,149 @@
                                             </select>
                                         </div>                                        
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Accordion item 1 -->
-
-                <div class="card">
-                    <div id="headingTwo" class="card-header bg-white shadow-sm border-0">
-                        <h4 data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false"
-                        aria-controls="collapseTwo" >Property Photos</h4>
-                    </div>
-                    <div id="collapseTwo" aria-labelledby="headingTwo" data-parent="#accordionExample" class="collapse">
-                        <div class="card-body">
-                            <div class="row">
-                                {{-- <div class="col-md-6">
-                                    <h2 class="h4 mb-3">Cover Picture</h2>
-                                    <input type="hidden" id="image_id" name="image_id" value=" ">
-                                    <div id="cover_photo" class="dropzone dz-clickable">
-                                        <div class="dz-message needsclick">
-                                            <br>Drop files here or click to upload.<br><br>
+                                    <div class="col-md-6">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="total_area" class="mb-1">Total Area<span class="req">*</span></label>
+                                                    <input type="text" placeholder="Total area" id="total_area" name="total_area" class="form-control">                            
+                                                </div>
+                                            </div>                                     
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="size" class="mb-1">Size<span class="req">*</span></label>
+                                                    <input type="text" placeholder="Size" id="size" name="size" class="form-control">                            
+                                                </div>
+                                            </div> 
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label for="rera" class="mb-1">RERA<span class="req">*</span></label>
+                                                    <input type="text" placeholder="RERA" id="rera" name="rera" class="form-control">                            
+                                                </div>
+                                            </div>                                    
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label for="" class="mb-1">BHK<span class="req">*</span></label>
+                                                    <select name="room" id="room" class="form-control">  
+                                                        <option value="">Room</option>                              
+                                                        @if ($bhk->isNotEmpty())
+                                                            @foreach ($bhk as $value)
+                                                                <option value="{{ $value->id }}">{{ $value->name }}</option>
+                                                            @endforeach
+                                                        @endif
+                                                    </select>                            
+                                                </div>
+                                            </div>    
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label for="" class="mb-1">Bathroom<span class="req">*</span></label>
+                                                    <select name="bathroom" id="bathroom" class="form-control">   
+                                                        <option value="">Bath</option>                             
+                                                        @if ($bath->isNotEmpty())
+                                                            @foreach ($bath as $value)
+                                                                <option value="{{ $value->id }}">{{ $value->name }}</option>
+                                                            @endforeach
+                                                        @endif
+                                                    </select>                        
+                                                </div>
+                                            </div> 
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label for="" class="mb-1">Facing<span class="req">*</span></label>
+                                                    <select name="view" id="view" class="form-control">
+                                                        <option value="">Facing</option>
+                                                        @if ($facings->isNotEmpty())
+                                                            @foreach ($facings as $value)
+                                                                <option value="{{ $value->id }}">{{ $value->name }}</option>
+                                                            @endforeach
+                                                        @endif
+                                                    </select>                            
+                                                </div>
+                                            </div>   
                                         </div>
                                     </div>                                    
-                                </div> --}}
-                                <div class="col-md-12">
-                                    <div id="image" class="dropzone dz-clickable">
-                                        <div class="dz-message needsclick">
-                                            <br>Drop files here or click to upload.<br><br>
-                                        </div>
-                                    </div>
-                                    <div class="row" id="product-gallery"></div>
-                                </div>
-                            </div>                                                    
+                                </div>                                                    
+                            </div>
                         </div>
                     </div>
-                </div>
-                <!-- Accordion item 2 -->
-                    
-                <div class="card">
-                    <div id="headingThree" class="card-header bg-white shadow-sm border-0">
-                        <h4 type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false"
-                            aria-controls="collapseThree" >Developer's Details</h4>
-                    </div>
-                    <div id="collapseThree" aria-labelledby="headingThree" data-parent="#accordionExample" class="collapse">
-                        <div class="card-body">
-                            <div class="row">                                    
-                                <div class="col-md-6">
-                                    <div class="form-group">   
-                                        <label>Select Builder</label>   
-                                        <select name="builder" id="builder" class="form-control">                                                                  
-                                            <option value="">Select a Builder</option>
-                                            @if ($builders->isNotEmpty())
-                                                @foreach ($builders as $value)
-                                                    <option value="{{ $value->id }}">{{ $value->name }}</option>
-                                                @endforeach
-                                            @endif
-                                        </select>                            
-                                    </div>   
-                                </div>   
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Status</label>
-                                        <select name="status" id="status" class="form-control">
-                                            <option value="1">Active</option>
-                                            <option value="0">Block</option>
-                                        </select>
+                    <!-- Accordion item 2 -->
+
+                    <div class="card">
+                        <div id="headingThree" class="card-header bg-white shadow-sm border-0">
+                            <h4 data-toggle="collapse" data-target="#collapseThree" aria-expanded="false"
+                            aria-controls="collapseThree" >Property Photos</h4>
+                        </div>
+                        <div id="collapseThree" aria-labelledby="headingThree" data-parent="#accordionExample" class="collapse">
+                            <div class="card-body">
+                                <div class="row">
+                                    {{-- <div class="col-md-6">
+                                        <h2 class="h4 mb-3">Cover Picture</h2>
+                                        <input type="hidden" id="image_id" name="image_id" value=" ">
+                                        <div id="cover_photo" class="dropzone dz-clickable">
+                                            <div class="dz-message needsclick">
+                                                <br>Drop files here or click to upload.<br><br>
+                                            </div>
+                                        </div>                                    
+                                    </div> --}}
+                                    <div class="col-md-12">
+                                        <div id="image" class="dropzone dz-clickable">
+                                            <div class="dz-message needsclick">
+                                                <br>Drop files here or click to upload.<br><br>
+                                            </div>
+                                        </div>
+                                        <div class="row" id="product-gallery"></div>
                                     </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Show on page?</label>
-                                        <select name="is_featured" id="is_featured" class="form-control">
-                                            <option value="No">No</option>
-                                            <option value="Yes">Yes</option>
-                                        </select>
-                                        <p class="error"></p>
+                                </div>                                                    
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Accordion item 2 -->
+                        
+                    <div class="card">
+                        <div id="headingFour" class="card-header bg-white shadow-sm border-0">
+                            <h4 type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false"
+                                aria-controls="collapseFour" >Developer's Details</h4>
+                        </div>
+                        <div id="collapseFour" aria-labelledby="headingFour" data-parent="#accordionExample" class="collapse">
+                            <div class="card-body">
+                                <div class="row">                                    
+                                    <div class="col-md-6">
+                                        <div class="form-group">   
+                                            <label>Select Builder</label>   
+                                            <select name="builder" id="builder" class="form-control">                                                                  
+                                                <option value="">Select a Builder</option>
+                                                @if ($builders->isNotEmpty())
+                                                    @foreach ($builders as $value)
+                                                        <option value="{{ $value->id }}">{{ $value->name }}</option>
+                                                    @endforeach
+                                                @endif
+                                            </select>                            
+                                        </div>   
+                                    </div>   
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Status</label>
+                                            <select name="status" id="status" class="form-control">
+                                                <option value="1">Active</option>
+                                                <option value="0">Block</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Show on page?</label>
+                                            <select name="is_featured" id="is_featured" class="form-control">
+                                                <option value="No">No</option>
+                                                <option value="Yes">Yes</option>
+                                            </select>
+                                            <p class="error"></p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            <!-- Accordion item 3 -->
+                <!-- Accordion item 3 -->
             </div>
 
             <div class="pb-5 pt-3">
