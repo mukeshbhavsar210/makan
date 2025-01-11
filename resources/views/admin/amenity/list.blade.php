@@ -4,18 +4,53 @@
 <section class="content-header">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-sm-6">
+            <div class="col-sm-9">
                 <h1>Amenities</h1>
-            </div>            
+            </div>      
+            <div class="col-sm-3">
+                <button type="button" class="btn btn-primary float-lg-right" data-toggle="modal" data-target="#exampleModalRight">Add Amenity</button>
+            </div>      
         </div>
     </div>
 </section>
-<section class="content">
+<section>
     <div class="container-fluid">
 
         @include('admin.message')
+
+        <div class="modal fade drawer right-align" id="exampleModalRight" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Add City</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form action="" method="post" id="amenityForm" name="amenityForm">
+                            <div class="modal-body">                        
+                                <div class="form-group">
+                                    <label for="title">Name</label>
+                                    <input type="text" name="title" id="title" class="form-control" placeholder="title">
+                                    <p></p>
+                                </div>                                                      
+                                <div class="form-group">
+                                    <label for="icon">Icon</label>
+                                    <input type="text" name="icon" id="icon" class="form-control" placeholder="Icon">
+                                    <p></p>
+                                </div>                                
+                            </div>
+                        
+                            <div class="modal-footer">                                
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Create</button>   
+                            </div>
+                        </form>
+                    </div>                   
+                </div>
+            </div>
         
-        <form action="" method="post" id="amenityForm" name="amenityForm">
+        {{-- <form action="" method="post" id="amenityForm" name="amenityForm">
 
             <div class="card">
                 <div class="card-body">
@@ -40,7 +75,7 @@
                     </div>
                 </div>
             </div>
-        </form>
+        </form> --}}
 
 
         <div class="card">

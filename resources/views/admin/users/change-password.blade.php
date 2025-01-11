@@ -13,7 +13,7 @@
     <!-- /.container-fluid -->
 </section>
 <!-- Main content -->
-<section class="content">
+<section>
     <!-- Default box -->
     <div class="container-fluid">
         @include('admin.message')

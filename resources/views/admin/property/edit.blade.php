@@ -15,17 +15,15 @@
     </section>
     <!-- Main content -->
 
-    <section class="content">
+    <section>
         <form action="" method="post" id="updateJobForm" name="updateJobForm">
             <div class="container-fluid">                              
                 <div id="accordionExample" class="accordion ">
                     <div class="card">
                         <div id="headingOne" class="card-header bg-white shadow-sm border-0">
-                            <h2 class="mb-0">
-                                <button type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true"
-                                aria-controls="collapseOne"
-                                class="btn btn-link text-dark font-weight-bold text-uppercase collapsible-link">Property details</button>
-                            </h2>
+                            
+                            <h4 data-toggle="collapse" data-target="#collapseOne" aria-expanded="false"
+                             aria-controls="collapseOne" >Property details</h4>
                         </div>
                         <div id="collapseOne" aria-labelledby="headingOne" data-parent="#accordionExample" class="collapse show">
                             <div class="card-body">
@@ -83,32 +81,6 @@
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label for="" class="mb-1">Property Type<span class="req">*</span></label>
-                                            <select name="propertyType" id="propertyType" class="form-control">
-                                                <option value="">Select a type</option>
-                                                @if ($propertyTypes->isNotEmpty())
-                                                    @foreach ($propertyTypes as $value)
-                                                        <option {{ ($property->property_type_id == $value->id) ? 'selected' : ''}} value="{{ $value->id }}">{{ $value->name }}</option>
-                                                    @endforeach
-                                                @endif                                               
-                                            </select>
-                                        </div>
-                                    </div> 
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label for="" class="mb-1">Facing<span class="req">*</span></label>
-                                            <select name="view" id="view" class="form-control">
-                                                <option value="">Facing</option>
-                                                @if ($facings->isNotEmpty())
-                                                    @foreach ($facings as $value)
-                                                        <option {{ ($property->view_id == $value->id) ? 'selected' : ''}} value="{{ $value->id }}">{{ $value->name }}</option>
-                                                    @endforeach
-                                                @endif
-                                            </select>                            
-                                        </div>
-                                    </div> 
-                                    <div class="col-md-3">
-                                        <div class="form-group">
                                             <label for="" class="mb-1">City<span class="req">*</span></label>
                                             <select name="city" id="city" class="form-control">
                                                 <option value="">Select a City</option>
@@ -133,69 +105,8 @@
                                             </select>                        
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label for="year_build" class="mb-1">Year Build<span class="req">*</span></label>
-                                            <input type="text" value="{{ $property->year_build}}" id="year_build" name="year_build" class="form-control">                            
-                                        </div>
-                                    </div> 
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label for="total_area" class="mb-1">Total Area<span class="req">*</span></label>
-                                            <input type="text" value="{{ $property->total_area}}" id="total_area" name="total_area" class="form-control">                            
-                                        </div>
-                                    </div> 
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label for="price" class="mb-1">Price<span class="req">*</span></label>
-                                            <input type="text" value="{{ $property->price}}"  id="price" name="price" class="form-control">                            
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label for="compare_price" class="mb-1">Compare Price<span class="req">*</span></label>
-                                            <input type="text" value="{{ $property->compare_price}}" id="compare_price" name="compare_price" class="form-control">                            
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label for="size" class="mb-1">Size<span class="req">*</span></label>
-                                            <input type="text" value="{{ $property->size}}" id="size" name="size" class="form-control">                            
-                                        </div>
-                                    </div> 
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label for="rera" class="mb-1">RERA<span class="req">*</span></label>
-                                            <input type="text" value="{{ $property->rera}}" id="rera" name="rera" class="form-control">                            
-                                        </div>
-                                    </div>                                    
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label for="" class="mb-1">BHK<span class="req">*</span></label>
-                                            <select name="room" id="room" class="form-control">  
-                                                <option value="">Room</option>                              
-                                                @if ($room->isNotEmpty())
-                                                    @foreach ($room as $value)
-                                                        <option {{ ($property->room_id == $value->id) ? 'selected' : ''}} value="{{ $value->id }}">{{ $value->name }}</option>
-                                                    @endforeach
-                                                @endif
-                                            </select>                            
-                                        </div>
-                                    </div>    
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label for="" class="mb-1">Bathroom<span class="req">*</span></label>
-                                            <select name="bathroom" id="bathroom" class="form-control">   
-                                                <option value="">Bath</option>                             
-                                                @if ($bathroom->isNotEmpty())
-                                                    @foreach ($bathroom as $value)
-                                                        <option {{ ($property->bathroom_id == $value->id) ? 'selected' : ''}} value="{{ $value->id }}">{{ $value->name }}</option>
-                                                    @endforeach
-                                                @endif
-                                            </select>                        
-                                        </div>
-                                    </div>  
-                                    <div class="col-md-6"></div>
+                                    
+                                    
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="" class="mb-1">Description<span class="req">*</span></label>
@@ -203,9 +114,57 @@
                                         </div>
                                     </div>
                                     <div class="col-md-6">
+                                        <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="" class="mb-1">Property Type<span class="req">*</span></label>
+                                                <select name="propertyType" id="propertyType" class="form-control">
+                                                    <option value="">Select a type</option>
+                                                    @if ($propertyTypes->isNotEmpty())
+                                                        @foreach ($propertyTypes as $value)
+                                                            <option {{ ($property->property_type_id == $value->id) ? 'selected' : ''}} value="{{ $value->id }}">{{ $value->name }}</option>
+                                                        @endforeach
+                                                    @endif                                               
+                                                </select>
+                                            </div>
+                                        </div> 
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="year_build" class="mb-1">Year Build<span class="req">*</span></label>
+                                                <input type="text" value="{{ $property->year_build}}" id="year_build" name="year_build" class="form-control">                            
+                                            </div>
+                                        </div> 
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="price" class="mb-1">Price<span class="req">*</span></label>
+                                                <input type="text" value="{{ $property->price}}"  id="price" name="price" class="form-control">                            
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="compare_price" class="mb-1">Compare Price<span class="req">*</span></label>
+                                                <input type="text" value="{{ $property->compare_price}}" id="compare_price" name="compare_price" class="form-control">                            
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                                                            
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Accordion item 1 -->
+
+                        <div id="headingTwo" class="card-header bg-white shadow-sm border-0">
+                            <h4 data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false"
+                            aria-controls="collapseTwo" >Details</h4>
+                        </div>
+                        <div id="collapseTwo" aria-labelledby="headingTwo" data-parent="#accordionExample" class="collapse">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
                                         <div class="form-group">
                                             <label>Similar property</label>
-                                            <select multiple class="related-product " name="related_products[]" id="related_products">
+                                            <select multiple class="relatedProperty" name="related_products[]" id="related_products">
                                                 @if (!empty($relatedProperties))
                                                     @foreach ($relatedProperties as $value)
                                                         <option selected value="{{ $value->id }}">{{ $value->title }}</option>
@@ -213,68 +172,122 @@
                                                 @endif
                                             </select>
                                         </div>
+                                    </div>
+                                    <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="size" class="mb-1">Amenities<span class="req">*</span></label>
-                                            <select multiple class="related-product" name="amenities[]" id="amenities">
-                                                @if (!empty($getAmenities))
-                                                    @foreach ($getAmenities as $value)
+                                            <label for="rera" class="mb-1">RERA<span class="req">*</span></label>
+                                            <input type="text" value="{{ $property->rera}}" id="rera" name="rera" class="form-control">                            
+                                        </div>
+                                    </div>
+                                   
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="size" class="mb-1">Facings<span class="req">*</span></label>
+                                            <select multiple class="relatedFacings" name="related_facings[]" id="related_facings">
+                                                @if (!empty($relatedFacings))
+                                                    @foreach ($relatedFacings as $value)
                                                         <option selected value="{{ $value->id }}">{{ $value->title }}</option>
                                                     @endforeach
                                                 @endif
                                             </select>
-                                        </div>                                        
-                                </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="room" class="mb-1">Rooms<span class="req">*</span></label>
+                                            <select name="room" id="room" class="form-control">
+                                                <option value="">Select a Room</option>
+                                                @if ($rooms->isNotEmpty())
+                                                    @foreach ($rooms as $value)
+                                                        <option {{ ($property->room_id == $value->id) ? 'selected' : ''}} value="{{ $value->id }}">{{ $value->title }}</option>
+                                                    @endforeach
+                                                @endif
+                                            </select>  
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="bathroom" class="mb-1">Bathroom<span class="req">*</span></label>
+                                            <select name="bathroom" id="bathroom" class="form-control">
+                                                <option value="">Select a Bathroom</option>
+                                                @if ($bathrooms->isNotEmpty())
+                                                    @foreach ($bathrooms as $value)
+                                                        <option {{ ($property->room_id == $value->id) ? 'selected' : ''}} value="{{ $value->id }}">{{ $value->title }}</option>
+                                                    @endforeach
+                                                @endif
+                                            </select>  
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="size" class="mb-1">Amenities<span class="req">*</span></label>
+                                            <select multiple class="relatedAmenity" name="related_amenities[]" id="related_amenities">
+                                                @if (!empty($relatedAmenities))
+                                                    @foreach ($relatedAmenities as $value)
+                                                        <option selected value="{{ $value->id }}">{{ $value->title }}</option>
+                                                    @endforeach
+                                                @endif
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="size" class="mb-1">Size<span class="req">*</span></label>
+                                            <input type="text" value="{{ $property->size}}" id="size" name="size" class="form-control">                            
+                                        </div>
+                                    </div>                                    
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="total_area" class="mb-1">Total Area<span class="req">*</span></label>
+                                            <input type="text" value="{{ $property->total_area}}" id="total_area" name="total_area" class="form-control">                            
+                                        </div>
+                                    </div>
+                                </div>                                                    
                             </div>
                         </div>
-                    </div>
-                </div>
-                <!-- Accordion item 1 -->
-
-                <div class="card">
-                    <div id="headingTwo" class="card-header bg-white shadow-sm border-0">
-                    <h2 class="mb-0">
-                        <button type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false"
-                        aria-controls="collapseTwo"
-                        class="btn btn-link collapsed text-dark font-weight-bold text-uppercase collapsible-link">Details about Property</button>
-                    </h2>
-                    </div>
-                    <div id="collapseTwo" aria-labelledby="headingTwo" data-parent="#accordionExample" class="collapse">
-                        <div class="card-body">                                                
-                            <div id="image" class="dropzone dz-clickable mb-4">
-                                <div class="dz-message needsclick">
-                                    <br>Drop files here or click to upload.<br><br>
-                                </div>
-                            </div>
-                            <div id="product-gallery">
-                                @if ($propertyImage->isNotEmpty())
-                                <h6>Uploaded images</h6>
-                                <div class="row">
-                                    @foreach ( $propertyImage as $image)
-                                        <div class="col-md-2" id="image-row-{{ $image->id }}">
-                                            <div class="card">
-                                                <input type="hidden" name="image_array[]" value="{{ $image->id }}" >
-                                                <img src="{{ asset('uploads/property/small/'.$image->image ) }}" />
-                                                <a href="javascript:void(0)" onclick="deleteImage({{ $image->id }})" class="deleteCardImg">X</a>
-                                            </div>
-                                        </div>
-                                    @endforeach
+                        <!-- Accordion item 2 -->
+                 
+                        <div id="headingThree" class="card-header bg-white shadow-sm border-0">
+                            <h4 data-toggle="collapse" data-target="#collapseThree" aria-expanded="false"
+                            aria-controls="collapseThree" >Photos</h4>
+                        </div>
+                        <div id="collapseThree" aria-labelledby="headingThree" data-parent="#accordionExample" class="collapse">
+                            <div class="card-body">                                                
+                                <div id="image" class="dropzone dz-clickable mb-4">
+                                    <div class="dz-message needsclick">
+                                        <br>Drop files here or click to upload.<br><br>
                                     </div>
-                                @endif
-                            </div>
-                    </div>
-                    </div>
-                </div>
-                <!-- Accordion item 2 -->
-                    
-                <div class="card">
-                    <div id="headingThree" class="card-header bg-white shadow-sm border-0">
-                        <h2 class="mb-0">
+                                </div>
+                                <div id="product-gallery">
+                                    @if ($propertyImage->isNotEmpty())
+                                    <h6>Uploaded images</h6>
+                                    <div class="row">
+                                        @foreach ( $propertyImage as $image)
+                                            <div class="col-md-2" id="image-row-{{ $image->id }}">
+                                                <div class="card">
+                                                    <input type="hidden" name="image_array[]" value="{{ $image->id }}" >
+                                                    <img src="{{ asset('uploads/property/small/'.$image->image ) }}" />
+                                                    <a href="javascript:void(0)" onclick="deleteImage({{ $image->id }})" class="deleteCardImg">X</a>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                        </div>
+                                    @endif
+                                </div>
+                        </div>
+                        </div>
+                        <!-- Accordion item 3 -->
+                                    
+                    <div id="headingFour" class="card-header bg-white shadow-sm border-0">
+                        {{-- <h2 class="mb-0">
                             <button type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false"
                             aria-controls="collapseThree"
                             class="btn btn-link collapsed text-dark font-weight-bold text-uppercase collapsible-link">Developer's Details</button>
-                        </h2>
+                        </h2> --}}
+                        <h4 data-toggle="collapse" data-target="#collapseFour" aria-expanded="false"
+                        aria-controls="collapseFour" >Developer's Details</h4>
                     </div>
-                <div id="collapseThree" aria-labelledby="headingThree" data-parent="#accordionExample" class="collapse">
+                    <div id="collapseFour" aria-labelledby="headingFour" data-parent="#accordionExample" class="collapse">
                     <div class="p-4">
                         <div class="row">                                    
                             <div class="col-md-6">
@@ -311,24 +324,58 @@
                             </div>
                         </div>
                     </div>
-            </div>
                 </div>
                 <!-- Accordion item 3 -->
-                </div>
-
-                <div class="pb-5 pt-3">
-                    <button type="submit" class="btn btn-primary">Update Property</button>
-                    <a href="{{ route('properties.index') }}" class="btn btn-outline-dark ml-3">Cancel</a>
-                </div>
             </div>
-        </form> 
+
+            <div class="pb-5 pt-3">
+                <button type="submit" class="btn btn-primary">Update Property</button>
+                <a href="{{ route('properties.index') }}" class="btn btn-outline-dark ml-3">Cancel</a>
+            </div>
+        </div>
+    </form> 
 @endsection
 
 @section('customJs')
 <script>
-    $('.related-product').select2({
+   
+    //Similar property
+    $('.relatedProperty').select2({
         ajax: {
-            url: '',
+            url: '{{ route('property.properties') }}',
+            dataType: 'json',
+            tags: true,
+            multiple: true,
+            minimumInputLength: 3,
+            processResults: function (data) {
+                return {
+                    results: data.tags
+                };
+            }
+        }
+    });
+
+
+    //Similar property
+    $('.relatedAmenity').select2({
+        ajax: {
+            url: '{{ route('property.amenities') }}',
+            dataType: 'json',
+            tags: true,
+            multiple: true,
+            minimumInputLength: 3,
+            processResults: function (data) {
+                return {
+                    results: data.tags
+                };
+            }
+        }
+    });
+
+    //Similar property
+    $('.relatedFacings').select2({
+        ajax: {
+            url: '{{ route('property.facings') }}',
             dataType: 'json',
             tags: true,
             multiple: true,
@@ -410,10 +457,10 @@
     //File image uplaod
     Dropzone.autoDiscover = false;
         const dropzone = $("#image").dropzone({
-            url:  "{{ route('product-images.update') }}",
+            url:  "{{ route('property-images.update') }}",
             maxFiles: 10,
             paramName: 'image',
-            params: {'product_id' : '{{ $property->id }}'},
+            params: {'property_id' : '{{ $property->id }}'},
             addRemoveLinks: true,
             acceptedFiles: "image/jpeg,image/png,image/gif",
             headers: {
@@ -437,12 +484,14 @@
             }
         });
 
+
+        //Delete Images
         function deleteImage(id){
             $("#image-row-"+id).remove();
 
             if (confirm("Are you sure you want to delete image?")) {
                 $.ajax({
-                    url: '{{ route("product-images.destroy") }}',
+                    url: '{{ route("property-images.destroy") }}',
                     type: 'delete',
                     data: {id:id},
                         success: function(response) {

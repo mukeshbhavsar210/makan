@@ -17,16 +17,25 @@ class BuilderController extends Controller
 {
     public function index(Request $request){
         $builders = Builder::latest();
-        $addedProperty = Property::latest();
-
+        $addedProperty = Property::latest();        
+        $properties = Property::orderBy('title','ASC')->get();
+       
         if(!empty($request->get('keyword'))){
             $builders = $builders->where('name', 'like', '%'.$request->get('keyword').'%');
         }
 
+        $relatedProperties = [];
+        // if ($builders->related_properties != '') {
+        //     $propertyArray = explode(',',$builders->related_properties);
+        //     $relatedProperties = Builder::whereIn('id',$propertyArray)->where('status',1)->get();
+        // }
+
         $builders = $builders->paginate(10);
 
         $data['builders'] = $builders;
+        $data['properties'] = $properties;
         $data['addedProperty'] = $addedProperty;
+        $data['relatedProperties'] = $relatedProperties;
 
         return view('admin.builder.list', $data);
     }
@@ -55,7 +64,8 @@ class BuilderController extends Controller
             $builder->whatsapp = $request->whatsapp;
             $builder->year_estd = $request->year_estd;
             $builder->address = $request->address;
-            $builder->property_id = $request->property;                     
+            $builder->property_id = $request->property;     
+            $builder->related_properties = (!empty($request->related_properties)) ? implode(',',$request->related_properties) : '';                
             $builder->save();
 
             // Save image here
