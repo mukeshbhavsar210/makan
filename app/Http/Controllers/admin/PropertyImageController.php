@@ -49,8 +49,9 @@ class PropertyImageController extends Controller
         ]);
     }
 
+    
     public function destroy(Request $request){
-        $propertyImage = ProductImage::find($request->id);
+        $propertyImage = PropertyImage::find($request->id);
 
         if (empty($propertyImage)){
             return response()->json([
@@ -60,8 +61,8 @@ class PropertyImageController extends Controller
         }
 
         //Delete images from folder
-        File::delete(public_path('uploads/product/large/'.$propertyImage->image));
-        File::delete(public_path('uploads/product/small/'.$propertyImage->image));
+        File::delete(public_path('uploads/property/large/'.$propertyImage->image));
+        File::delete(public_path('uploads/property/small/'.$propertyImage->image));
 
         //Delete images from database
         $propertyImage->delete();

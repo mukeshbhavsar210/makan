@@ -11,9 +11,11 @@
              </span>
              <span class="rh_ultra_meta_box">
              <span class="figure"> 
-               @if(!empty($property->room->name))
-                  {{ $property->room->name }}
-               @endif 
+                  @if (!empty($relatedRooms))
+                        @foreach ($relatedRooms as $value)  
+                           {{ $value->title }},
+                        @endforeach
+                  @endif
                </span>
              </span>
           </div>
@@ -32,8 +34,10 @@
              </span>
              <span class="rh_ultra_meta_box">
              <span class="figure">
-               @if(!empty($property->bathroom->name))
-                  {{ $property->bathroom->name }}
+               @if (!empty($relatedBathrooms))
+                     @foreach ($relatedBathrooms as $value)  
+                        {{ $value->title }},
+                     @endforeach
                @endif
              </span>
              </span>

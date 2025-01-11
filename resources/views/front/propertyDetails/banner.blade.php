@@ -15,7 +15,7 @@
              <div class="rh-ultra-thumb-info-box">
                 <div class="page-head-inner">
                    <div class="rh-ultra-property-tags rh-property-title">
-                      <a href="" class="rh-ultra-status rh-ultra-property-tag">{{ $property->saleType->name }}</a>                      
+                      {{-- <a href="" class="rh-ultra-status rh-ultra-property-tag">{{ $property->saleType->name }}</a>                       --}}
                       <span class="rh_ultra_featured rh-ultra-property-tag">{{ $property->category->name }}</span>                      
                    </div>
                    <div class="rh-ultra-property-title-price">

@@ -2287,7 +2287,7 @@
     }
   }
   .site-footer-default-bg {
-    background-image: url(../../images/ultra-footer.png);
+    
   }
   .site-footer-top {
     display: flex;
@@ -11698,3 +11698,12 @@
 
     
 
+.modal-content {  padding:25px; border-radius: 10px;}
+.modal-content .btn-close { position: absolute; right:15px; top:15px;}
+.modal-content .form-group { margin-bottom: 10px;}
+.modal-content .form-group label { font-size: 12px; text-transform: uppercase;}
+.modal-content .form-control { padding:8px 10px; font-size: 13px;}
+.modal-content .modal-body .nav .nav-item { margin: 0 20px 35px 0;}
+.modal-content .modal-body .nav .nav-item a { cursor: pointer;}
+.modal-content .modal-body .nav .nav-item .active { border-bottom:2px #000 solid; padding-bottom:10px; }
+.modal-content .modal-body .formPadding {  padding:0 30px 0 10px;}

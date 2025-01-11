@@ -14,10 +14,8 @@
     </div>
     <!-- /.container-fluid -->
 </section>
-<!-- Main content -->
-<section class="content">
-    <!-- Default box -->
-    <div class="container-fluid">
+
+<div class="container-fluid">
 
         @include('admin.message')
 
@@ -114,8 +112,6 @@
             </div>
         </div>
     </div>
-    <!-- /.card -->
-</section>
 @endsection
 
 @section('customJs')

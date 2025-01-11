@@ -8,7 +8,7 @@
     </div>
     
 </section>
-<section class="content">
+<section>
     <div class="container-fluid">
 
         @include('admin.message')

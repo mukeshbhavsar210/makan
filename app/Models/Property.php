@@ -19,7 +19,7 @@ class Property extends Model
 
     public function view(){
         return $this->belongsTo(View::class);
-    }
+    }   
 
     public function room(){
         return $this->belongsTo(Room::class);
@@ -37,16 +37,23 @@ class Property extends Model
         return $this->belongsTo(Amenity::class);
     }
 
-    public function category(){
-        return $this->belongsTo(Category::class);
-    }
-
+    
     public function saleType(){
         return $this->belongsTo(SaleType::class);
     }
 
+    public function category(){
+        return $this->belongsTo(Category::class);
+    }
     public function city(){
         return $this->belongsTo(City::class);
+    }
+    public function area(){
+        return $this->belongsTo(Area::class);
+    }
+
+    public function propertyType(){
+        return $this->belongsTo(PropertyType::class);
     }
 
     public function applications(){

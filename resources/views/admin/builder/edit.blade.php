@@ -15,7 +15,7 @@
     <!-- /.container-fluid -->
 </section>
 <!-- Main content -->
-<section class="content">
+<section>
     <!-- Default box -->
     <div class="container-fluid">
         <form action="" method="post" id="builderForm" name="builderForm">

@@ -93,9 +93,6 @@
             </div>
         @endif
             
-
-        
-
           @include('front.propertyDetails.attachments')
 
           {{-- @include('front.propertyDetails.floorPlan')

@@ -17,12 +17,9 @@
             data-id="72d94fcb" data-element_type="column"
             data-settings="{&quot;background_background&quot;:&quot;classic&quot;}">
             <div class="elementor-widget-wrap elementor-element-populated">
-                <section
-                    class="elementor-section elementor-inner-section elementor-element elementor-element-1015d33d elementor-section-full_width elementor-section-content-middle elementor-section-height-default elementor-section-height-default"
-                    data-id="1015d33d" data-element_type="section">
+                <section class="elementor-section elementor-inner-section elementor-element elementor-element-1015d33d elementor-section-full_width elementor-section-content-middle elementor-section-height-default elementor-section-height-default">
                     <div class="elementor-container elementor-column-gap-default">
-                        <div class="elementor-column elementor-col-100 elementor-inner-column elementor-element elementor-element-4717a41a"
-                            data-id="4717a41a" data-element_type="column">
+                        <div class="elementor-column elementor-col-100 elementor-inner-column elementor-element elementor-element-4717a41a">
                             <div class="elementor-widget-wrap elementor-element-populated">
                                 <div class="elementor-element elementor-element-64aef43d elementor-widget__width-auto elementor-widget elementor-widget-heading">
                                     <div class="elementor-widget-container">
@@ -51,15 +48,12 @@
 
 <section  class="elementor-section elementor-top-section elementor-element elementor-element-2367b4d8 elementor-section-boxed elementor-section-height-default elementor-section-height-default">
     <div class="elementor-container elementor-column-gap-no">
-        <div class="elementor-column elementor-col-100 elementor-top-column elementor-element elementor-element-3a850d80"
-            data-id="3a850d80" data-element_type="column">
+        <div class="elementor-column elementor-col-100 elementor-top-column elementor-element elementor-element-3a850d80"        >
             <div class="elementor-widget-wrap elementor-element-populated">
                 <div class="elementor-element elementor-element-7aa80cab elementor-widget elementor-widget-rhea-ultra-search-form-widget">
                     <div class="elementor-widget-container" >
                         <div class="rhea_ultra_search_form_wrapper rhea-search-form-1" style="display: block;" >
-                            
                             @include('front.home.search.searchLogic')
-                            
                         </div>
                     </div>
                 </div>

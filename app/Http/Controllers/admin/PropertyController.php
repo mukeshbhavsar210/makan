@@ -41,9 +41,9 @@ class PropertyController extends Controller {
         $cities = City::orderBy('name','ASC')->where('status',1)->get();
         $areas = Area::orderBy('name','ASC')->where('status',1)->get();
         $builders = Builder::orderBy('name','ASC')->where('status',1)->get();
-        $bhk = Room::orderBy('name','ASC')->where('status',1)->get();        
-        $bath = Bathroom::orderBy('name','ASC')->where('status',1)->get();        
-        $facings = View::orderBy('name','ASC')->where('status',1)->get();    
+        $rooms = Room::orderBy('title','ASC')->where('status',1)->get();        
+        $bathrooms = Bathroom::orderBy('title','ASC')->where('status',1)->get();        
+        $views = View::orderBy('title','ASC')->where('status',1)->get();    
         $categories = Category::orderBy('name','ASC')->where('status',1)->get();
         $propertyTypes = PropertyType::orderBy('name','ASC')->where('status',1)->get();
         $saleTypes = SaleType::orderBy('name','ASC')->where('status',1)->get();        
@@ -53,9 +53,9 @@ class PropertyController extends Controller {
             'cities' => $cities,
             'areas' => $areas,            
             'builders' => $builders,
-            'bhk' => $bhk,
-            'bath' => $bath,
-            'facings' => $facings,
+            'rooms' => $rooms,
+            'bathrooms' => $bathrooms,
+            'views' => $views,
             'categories' => $categories,            
             'propertyTypes' => $propertyTypes, 
             'saleTypes' => $saleTypes, 
@@ -82,8 +82,6 @@ class PropertyController extends Controller {
             $property->area_id = $request->area;  
             $property->location = $request->location; 
             $property->property_type_id = $request->propertyType;
-            $property->room_id = $request->room;            
-            $property->bathroom_id = $request->bathroom;
             $property->price = $request->price;
             $property->compare_price = $request->compare_price;            
             $property->size = $request->size;
@@ -93,8 +91,11 @@ class PropertyController extends Controller {
             $property->total_area = $request->total_area;  
             $property->description = $request->description;  
             $property->is_featured = $request->is_featured;
+            $property->room_id = $request->room;  
+            $property->bathroom_id = $request->bathroom;  
             $property->related_properties = (!empty($request->related_properties)) ? implode(',',$request->related_properties) : '';
             $property->related_amenities = (!empty($request->related_amenities)) ? implode(',',$request->related_amenities) : '';
+            $property->related_facings = (!empty($request->related_facings)) ? implode(',',$request->related_facings) : '';
             $property->builder_id = $request->builder;           
             $property->save();
 
@@ -104,21 +105,21 @@ class PropertyController extends Controller {
                 $extArray = explode('.',$tempImageInfo->name);
                 $ext = last($extArray);
 
-                $productImage = new PropertyImage();
-                $productImage->property_id = $property->id;
-                $productImage->image = "NULL";
-                $productImage->save();
+                $propertyImage = new PropertyImage();
+                $propertyImage->property_id = $property->id;
+                $propertyImage->image = "NULL";
+                $propertyImage->save();
 
                 $imageName = $property->id.'-'.$property->title.'-'.time().'.'.$ext;
-                $productImage->image = $imageName;
-                $productImage->save();
+                $propertyImage->image = $imageName;
+                $propertyImage->save();
 
                 //Large Image
                 $sourcePath = public_path().'/temp/'.$tempImageInfo->name;
                 $destPath = public_path().'/uploads/property/large/'.$imageName;
                 $manager = new ImageManager(new Driver());
                 $image = $manager->read($sourcePath);
-                $image->resize(1000,600, function ($constraint) {
+                $image->resize(1300,731, function ($constraint) {
                     $constraint->aspectRatio();
                 });
                 $image->save($destPath);
@@ -127,7 +128,7 @@ class PropertyController extends Controller {
                 $destPath = public_path().'/uploads/property/small/'.$imageName;
                 $manager = new ImageManager(new Driver());
                 $image = $manager->read($sourcePath);
-                $image->cover(300,300);
+                $image->cover(488,326);
                 $image->save($destPath);
             }
         }
@@ -172,6 +173,13 @@ class PropertyController extends Controller {
         if ($property->related_amenities != '') {
             $amenityArray = explode(',',$property->related_amenities);
             $relatedAmenities = Amenity::whereIn('id',$amenityArray)->get();
+        }       
+
+        //Fetch Bathrooms
+        $relatedFacings = [];
+        if ($property->related_facings != '') {
+            $facingsArray = explode(',',$property->related_facings);
+            $relatedFacings = Amenity::whereIn('id',$facingsArray)->get();
         }
 
         $data = [];
@@ -180,9 +188,9 @@ class PropertyController extends Controller {
         $cities = City::orderBy('name','ASC')->get();
         $areas = Area::orderBy('name','ASC')->get();        
         $builders = Builder::orderBy('name','ASC')->get();
-        $room = Room::orderBy('name','ASC')->get();        
-        $bathroom = Bathroom::orderBy('name','ASC')->get();        
-        $facings = View::orderBy('name','ASC')->get();    
+        $rooms = Room::orderBy('title','ASC')->get();        
+        $bathrooms = Bathroom::orderBy('title','ASC')->get();        
+        $views = View::orderBy('title','ASC')->get();    
         $categories = Category::orderBy('name','ASC')->get();
         $propertyTypes = PropertyType::orderBy('name','ASC')->get();
 
@@ -191,17 +199,19 @@ class PropertyController extends Controller {
         $data['propertyTypes'] = $propertyTypes;
         $data['cities'] = $cities;
         $data['areas'] = $areas;
-        $data['facings'] = $facings;
-        $data['room'] = $room;
-        $data['bathroom'] = $bathroom;
+        $data['views'] = $views;
+        $data['rooms'] = $rooms;
+        $data['bathrooms'] = $bathrooms;
         $data['builders'] = $builders;
         $data['property'] = $property;
         $data['propertyImage'] = $propertyImage;
         $data['relatedProperties'] = $relatedProperties;
-        $data['relatedAmenities'] = $relatedAmenities;        
-
+        $data['relatedAmenities'] = $relatedAmenities;  
+        $data['relatedFacings'] = $relatedFacings;  
+        
         return view('admin.property.edit',$data);
     }
+
 
 
 
@@ -215,6 +225,7 @@ class PropertyController extends Controller {
         ];
       
         $validator = Validator::make($request->all(),$rules);
+        $propertyImage = PropertyImage::where('property_id',$property->id)->get();   
 
         if ($validator->passes()) {
             $property->title = $request->title;            
@@ -226,8 +237,6 @@ class PropertyController extends Controller {
             $property->area_id = $request->area;  
             $property->location = $request->location; 
             $property->property_type_id = $request->propertyType;
-            $property->room_id = $request->room;            
-            $property->bathroom_id = $request->bathroom;
             $property->price = $request->price;
             $property->compare_price = $request->compare_price;            
             $property->size = $request->size;
@@ -237,10 +246,46 @@ class PropertyController extends Controller {
             $property->total_area = $request->total_area;  
             $property->description = $request->description;  
             $property->is_featured = $request->is_featured;
+            $property->room_id = $request->room;  
+            $property->bathroom_id = $request->bathroom; 
             $property->related_properties = (!empty($request->related_properties)) ? implode(',',$request->related_properties) : '';
-            $property->related_amenities = (!empty($request->related_amenities)) ? implode(',',$request->related_amenities) : '';
+            $property->related_amenities = (!empty($request->related_amenities)) ? implode(',',$request->related_amenities) : '';            
             $property->builder_id = $request->builder;    
             $property->save();
+
+            if (!empty($request->image_array)) {
+                foreach ($request->image_array as $temp_image_id) {
+                    $tempImageInfo = TempImage::find($temp_image_id);
+                    $extArray = explode('.',$tempImageInfo->name);
+                    $ext = last($extArray);
+    
+                    $propertyImage = new PropertyImage();
+                    $propertyImage->property_id = $property->id;
+                    $propertyImage->image = "NULL";
+                    $propertyImage->save();
+    
+                    $imageName = $property->id.'-'.$property->title.'-'.time().'.'.$ext;
+                    $propertyImage->image = $imageName;
+                    $propertyImage->save();
+    
+                    //Large Image
+                    $sourcePath = public_path().'/temp/'.$tempImageInfo->name;
+                    $destPath = public_path().'/uploads/property/large/'.$imageName;
+                    $manager = new ImageManager(new Driver());
+                    $image = $manager->read($sourcePath);
+                    $image->resize(1300,731, function ($constraint) {
+                        $constraint->aspectRatio();
+                    });
+                    $image->save($destPath);
+    
+                    //Generate Thumnail
+                    $destPath = public_path().'/uploads/property/small/'.$imageName;
+                    $manager = new ImageManager(new Driver());
+                    $image = $manager->read($sourcePath);
+                    $image->cover(488,326);
+                    $image->save($destPath);
+                }
+            }
 
         $request->session()->flash('success','Property updated successfully');
 
@@ -248,7 +293,6 @@ class PropertyController extends Controller {
             'status' => true,
             'message' => 'Property updated successfully'
         ]);
-
         } else {
             return response()->json([
                 'status' => false,
@@ -256,6 +300,8 @@ class PropertyController extends Controller {
             ]);
         }
     }
+
+
 
     //DELETE PROPERTY
     public function destroy($id, Request $request){
@@ -348,6 +394,70 @@ class PropertyController extends Controller {
         }
         return response()->json([
             'tags' => $tempAmenity,
+            'status' => true,
+        ]);
+    }
+
+
+
+    //Similar Rooms 
+    public function similar_rooms(Request $request){
+        $tempRooms = [];
+        if($request->term != ""){
+            $rooms = Room::where('title','like','%'.$request->term.'%')->get();
+            if ($rooms != null){
+                foreach ($rooms as $value){
+                    $tempRooms[] = array(
+                        'id' => $value->id,
+                        'text' => $value->title,
+                    );
+                }
+            }
+        }
+        return response()->json([
+            'tags' => $tempRooms,
+            'status' => true,
+        ]);
+    }
+
+
+    
+    //Similar Rooms 
+    public function similar_bathrooms(Request $request){
+        $tempBathrooms = [];
+        if($request->term != ""){
+            $bathrooms = Bathroom::where('title','like','%'.$request->term.'%')->get();
+            if ($bathrooms != null){
+                foreach ($bathrooms as $value){
+                    $tempBathrooms[] = array(
+                        'id' => $value->id,
+                        'text' => $value->title,
+                    );
+                }
+            }
+        }
+        return response()->json([
+            'tags' => $tempBathrooms,
+            'status' => true,
+        ]);
+    }
+
+    //Similar Facings 
+    public function similar_facings(Request $request){
+        $tempFacings = [];
+        if($request->term != ""){
+            $facings = View::where('title','like','%'.$request->term.'%')->get();
+            if ($facings != null){
+                foreach ($facings as $value){
+                    $tempFacings[] = array(
+                        'id' => $value->id,
+                        'text' => $value->title,
+                    );
+                }
+            }
+        }
+        return response()->json([
+            'tags' => $tempFacings,
             'status' => true,
         ]);
     }

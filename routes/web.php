@@ -3,27 +3,22 @@
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\admin\AdminLoginController;
 use App\Http\Controllers\admin\AmenityController;
+use App\Http\Controllers\admin\AreaController;
 use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\CityController;
 use App\Http\Controllers\admin\DashboardController;
-use App\Http\Controllers\admin\DeveloperController;
-use App\Http\Controllers\admin\ProductSubCategoryController;
 use App\Http\Controllers\admin\PropertyImageController;
-use App\Http\Controllers\admin\SettingController;
 use App\Http\Controllers\admin\TempImagesController;
 use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\admin\BuilderController;
-use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\admin\PropertyController;
 use App\Http\Controllers\ContactController;
-use App\Http\Controllers\ContactFormController;
-use App\Http\Controllers\PropertiesController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -36,20 +31,21 @@ use Illuminate\Support\Str;
 |
 */
 
-Route::get("/contact",[ContactController::class, 'index'])->name('contact.index');;
-Route::post("/contact",[ContactController::class, 'store'])->name('contact.store');
-Route::get("/contact/{id}",[ContactController::class, 'details'])->name('contact.details');;
+// Route::get("/contact",[ContactController::class, 'index'])->name('contact.index');;
+// Route::post("/contact",[ContactController::class, 'store'])->name('contact.store');
+// Route::get("/contact/{id}",[ContactController::class, 'details'])->name('contact.details');;
 
 Route::get("/",[HomeController::class, 'index'])->name('home');
-Route::get("/properties",[PropertiesController::class, 'index'])->name('properties');
-Route::get("/details/{id}",[PropertiesController::class, 'propertyDetails'])->name('propertyDetails');
-Route::post("/apply-property",[PropertiesController::class, 'applyProperty'])->name('applyProperty');
-Route::post("/save-property",[PropertiesController::class, 'saveProperty'])->name('saveProperty');
+
+Route::get("/properties",[HomeController::class, 'properties'])->name('properties');
+Route::get("/details/{id}",[HomeController::class, 'propertyDetails'])->name('propertyDetails');
+Route::post("/apply-property",[HomeController::class, 'applyProperty'])->name('applyProperty');
+Route::post("/save-property",[HomeController::class, 'saveProperty'])->name('saveProperty');
+
 Route::get("/forgot-password",[AccountController::class, 'forgotPassword'])->name('account.forgotPassword');
 Route::post("/process-forgot-password",[AccountController::class, 'processForgotPassword'])->name('account.processForgotPassword');
 Route::get("/reset-password/{token}",[AccountController::class, 'resetPassword'])->name('account.resetPassword');
 Route::post("/process-reset-password",[AccountController::class, 'processResetPassword'])->name('account.processResetPassword');
-
 
 //ADMIN ROLES
 Route::group(['prefix' => 'admin','middleware' => 'checkRole'], function(){
@@ -61,17 +57,19 @@ Route::group(['prefix' => 'admin','middleware' => 'checkRole'], function(){
     Route::put("/users/{id}",[UserController::class, 'update'])->name('users.index.update');
 
     //City
-    Route::get("/city/create",[CityController::class, 'city_create'])->name('cities.create');
-    Route::post('/city/store', [CityController::class, 'city_store'])->name('cities.store');       
-    Route::get("/city/edit/{id}",[CityController::class, 'city_edit'])->name('cities.edit');    
-    Route::put("/city/{id}",[CityController::class, 'city_update'])->name('cities.update');
-    Route::delete('/city/{id}', [CityController::class, 'city_destroy'])->name('cities.delete');
+    Route::get('/cities', [CityController::class, 'index'])->name('cities.index');    
+    Route::post('/cities', [CityController::class, 'store'])->name('cities.store');
+    Route::get('/cities/{id}/edit', [CityController::class, 'edit'])->name('cities.edit');
+    Route::put('/cities/{id}', [CityController::class, 'update'])->name('cities.update');
+    Route::delete('/cities/{id}', [CityController::class, 'destroy'])->name('cities.delete');
 
     //Area
-    Route::post('/areas', [CityController::class, 'area_store'])->name('areas.store'); 
-    Route::get("/area/edit/{id}",[CityController::class, 'area_edit'])->name('areas.edit');    
-    Route::put("/area/{id}",[CityController::class, 'area_update'])->name('areas.update');
-    Route::delete('/area/{id}', [CityController::class, 'area_destroy'])->name('areas.delete');    
+    Route::get('/areas', [AreaController::class, 'index'])->name('areas.index');    
+    Route::post('/areas', [AreaController::class, 'store'])->name('areas.store');
+    Route::get('/areas/{id}/edit', [AreaController::class, 'edit'])->name('areas.edit');
+    Route::put('/areas/{id}', [AreaController::class, 'update'])->name('areas.update');
+    Route::delete('/areas/{id}', [AreaController::class, 'destroy'])->name('areas.delete');
+      
     //Get area name parent city
     Route::get('/areaSub', [CityController::class, 'areaSub'])->name('areaSub.index');
 
@@ -137,12 +135,16 @@ Route::group(['prefix' => 'account'], function(){
         Route::get('/get-properties',[PropertyController::class,'getProducts'])->name('properties.getProducts');
 
         //Delete Product Images Route
-        Route::post('/product-images/update', [PropertyImageController::class, 'update'])->name('product-images.update');
-        Route::delete('/product-images', [PropertyImageController::class, 'destroy'])->name('product-images.destroy');   
+        Route::post('/property-images/update', [PropertyImageController::class, 'update'])->name('property-images.update');
+        Route::delete('/property-images', [PropertyImageController::class, 'destroy'])->name('property-images.destroy');   
 
+        //Array Data
         Route::get('/get-amenities',[PropertyController::class,'get_amenities'])->name('property.amenities');
-        Route::get('/get-properties',[PropertyController::class,'similar_properties'])->name('property.similarProperty');
-        Route::get('/get-amenities',[PropertyController::class,'similar_amenities'])->name('property.similarAmenity');
+        Route::get('/get-properties',[PropertyController::class,'similar_properties'])->name('property.properties');
+        Route::get('/get-amenities',[PropertyController::class,'similar_amenities'])->name('property.amenities');
+        Route::get('/get-rooms',[PropertyController::class,'similar_rooms'])->name('property.rooms');
+        Route::get('/get-bathrooms',[PropertyController::class,'similar_bathrooms'])->name('property.bathrooms');
+        Route::get('/get-facings',[PropertyController::class,'similar_facings'])->name('property.facings');
         Route::get("/savedProperties",[PropertyController::class, 'savedProperties'])->name('property.savedProperties');
         Route::post("/removeSavedProperty",[PropertyController::class, 'removeSavedProperty'])->name('account.removeSavedJob');
         Route::post("/removePropertyInterested",[PropertyController::class, 'removeProperty'])->name('account.removeProperties');
