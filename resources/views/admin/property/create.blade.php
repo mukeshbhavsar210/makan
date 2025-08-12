@@ -231,27 +231,28 @@
                         
                         <div id="headingThree" class="card-header bg-white shadow-sm border-0">
                             <h4 data-toggle="collapse" data-target="#collapseThree" aria-expanded="false"
-                            aria-controls="collapseThree" >Photos</h4>
+                            aria-controls="collapseThree" >Photos/Documents</h4>
                         </div>
                         <div id="collapseThree" aria-labelledby="headingThree" data-parent="#accordionExample" class="collapse">
                             <div class="card-body">
                                 <div class="row">
-                                    {{-- <div class="col-md-6">
-                                        <h2 class="h4 mb-3">Cover Picture</h2>
-                                        <input type="hidden" id="image_id" name="image_id" value=" ">
-                                        <div id="cover_photo" class="dropzone dz-clickable">
-                                            <div class="dz-message needsclick">
-                                                <br>Drop files here or click to upload.<br><br>
-                                            </div>
-                                        </div>                                    
-                                    </div> --}}
-                                    <div class="col-md-12">
+                                    <div class="col-md-6">
+                                        <h5>Photos</h5>
                                         <div id="image" class="dropzone dz-clickable">
                                             <div class="dz-message needsclick">
                                                 <br>Drop files here or click to upload.<br><br>
                                             </div>
                                         </div>
                                         <div class="row" id="product-gallery"></div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h5>Documents (only PDF)</h5>
+                                        <div id="document" class="dropzone dz-clickable">
+                                            <div class="dz-message needsclick">
+                                                <br>Drop files here or click to upload.<br><br>
+                                            </div>
+                                        </div>
+                                        <div class="row" id="document-gallery"></div>
                                     </div>
                                 </div>                                                    
                             </div>
@@ -457,7 +458,7 @@
                 $("#image_id").val(response.image_id);
                 console.log(response)
 
-               var html = `<div class="col-md-2" id="image-row-${response.image_id}">
+               var html = `<div class="col-md-3 mt-3" id="image-row-${response.image_id}">
                     <div class="card">
                         <input type="hidden" name="image_array[]" value="${response.image_id}" >
                         <img src="${response.ImagePath}" />
@@ -471,8 +472,47 @@
                 this.removeFile(file);
             }
         });
+
+        //Delete image
         function deleteImage(id){
             $("#image-row-"+id).remove();
+        }
+
+
+    //Document image uplaod
+    Dropzone.autoDiscover = false;
+        const dropzone2 = $("#document").dropzone({
+            url:  "{{ route('temp-images.create') }}",
+            maxFiles: 3,
+            paramName: 'pdf',            
+            addRemoveLinks: true,
+            acceptedFiles: "application/pdf",
+
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }, success: function(file, response){
+                $("#document_id").val(response.document_id);
+                console.log(response)
+               var html = `<div class="col-md-3 mt-3" id="document-row-${response.document_id}">
+                    <div class="card">
+                        <input type="hidden" name="document_array[]" value="${response.document_id}" >
+                        <img src="https://play-lh.googleusercontent.com/kXHLqzBASXjDuVVEVPRuFvdLRDU2GAiS7BBA9uOLB-uiKByzt4-YDhmBfuLaWIV_7xJ6=w240-h480-rw" />
+                        <a href="javascript:void(0)" onclick="deleteDocument(${response.document_id})" class="deleteCardImg">X</a>
+                    </div>
+                </div>`;
+
+                $("#document-gallery").append(html);
+            },
+
+
+            complete: function(file){
+                this.removeFile(file);
+            }
+        });
+
+        //Delete document
+        function deleteDocument(id){
+            $("#document-row-"+id).remove();
         }
 </script>
 

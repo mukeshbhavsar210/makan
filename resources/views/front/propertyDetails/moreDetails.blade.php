@@ -10,12 +10,10 @@
                 </svg>
              </span>
              <span class="rh_ultra_meta_box">
-             <span class="figure"> 
-                  @if (!empty($relatedRooms))
-                        @foreach ($relatedRooms as $value)  
-                           {{ $value->title }},
-                        @endforeach
-                  @endif
+               <span class="figure">
+                  @if(!empty($property->room->title))
+                     {{ $property->room->title }}
+                  @endif 
                </span>
              </span>
           </div>
@@ -33,13 +31,11 @@
                 </svg>
              </span>
              <span class="rh_ultra_meta_box">
-             <span class="figure">
-               @if (!empty($relatedBathrooms))
-                     @foreach ($relatedBathrooms as $value)  
-                        {{ $value->title }},
-                     @endforeach
-               @endif
-             </span>
+               <span class="figure">
+                  @if(!empty($property->bathroom->title))
+                     {{ $property->bathroom->title }}
+                  @endif 
+               </span>
              </span>
           </div>
        </div>
@@ -56,11 +52,11 @@
                 </svg>
              </span>
              <span class="rh_ultra_meta_box">
-             <span class="figure">
-               @if(!empty($property->year_build))
-                  {{ $property->year_build }}
-               @endif 
-             </span>
+               <span class="figure">
+                  @if(!empty($property->year_build))
+                     {{ $property->year_build }}
+                  @endif 
+               </span>
              </span>
           </div>
        </div>

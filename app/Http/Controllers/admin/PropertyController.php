@@ -16,6 +16,7 @@ use App\Models\Builder;
 use App\Models\Room;
 use App\Models\Bathroom;
 use App\Models\PropertyApplication;
+use App\Models\PropertyDocument;
 use App\Models\View;
 use App\Models\PropertyType;
 use App\Models\SaleType;
@@ -95,7 +96,7 @@ class PropertyController extends Controller {
             $property->bathroom_id = $request->bathroom;  
             $property->related_properties = (!empty($request->related_properties)) ? implode(',',$request->related_properties) : '';
             $property->related_amenities = (!empty($request->related_amenities)) ? implode(',',$request->related_amenities) : '';
-            $property->related_facings = (!empty($request->related_facings)) ? implode(',',$request->related_facings) : '';
+            $property->related_facings = (!empty($request->related_facings)) ? implode(',',$request->related_facings) : '';            
             $property->builder_id = $request->builder;           
             $property->save();
 
@@ -132,6 +133,30 @@ class PropertyController extends Controller {
                 $image->save($destPath);
             }
         }
+
+        // if (!empty($request->document_array)) {
+        //     foreach ($request->document_array as $temp_document_id) {
+        //         $tempDocumentInfo = TempImage::find($temp_document_id);
+        //         $extArray = explode('.',$tempDocumentInfo->name);
+        //         $ext = last($extArray);
+
+        //         $propertyDocument = new PropertyDocument();
+        //         $propertyDocument->property_id = $property->id;
+        //         $propertyDocument->image = "NULL";
+        //         $propertyDocument->save();
+
+        //         $documentName = $property->id.'-'.$property->title.'-'.time().'.'.$ext;
+        //         $propertyDocument->image = $documentName;
+        //         $propertyDocument->save();
+
+        //         //Large Image
+        //         $sourcePath = public_path().'/temp/'.$tempDocumentInfo->name;
+        //         $destPath = public_path().'/uploads/property/documents/'.$documentName;
+        //         $manager = new ImageManager(new Driver());
+        //         $image = $manager->read($sourcePath);
+        //         $image->save($destPath);
+        //     }
+        // }
 
         $request->session()->flash('success','Property added successfully');
 
