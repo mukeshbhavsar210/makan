@@ -1,5 +1,3 @@
-
-
 <section
 	class="elementor-section elementor-top-section elementor-element elementor-element-41045321 elementor-section-boxed elementor-section-height-default elementor-section-height-default"
 	data-id="41045321" data-element_type="section">
@@ -29,8 +27,6 @@
 		</div>
 	</div>
 </section>
-
-
 
 <section class="elementor-section elementor-top-section elementor-element elementor-element-6596597 elementor-section-boxed elementor-section-height-default elementor-section-height-default"
 	data-id="6596597" data-element_type="section">

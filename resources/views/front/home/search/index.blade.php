@@ -1,63 +1,74 @@
-<section class="elementor-section elementor-top-section elementor-element elementor-element-34a596a4 elementor-section-full_width elementor-section-content-middle elementor-section-height-default elementor-section-height-default"
-    data-id="34a596a4" data-element_type="section">
-    
-    <div class="elementor-container elementor-column-gap-no">
-        <div class="elementor-column elementor-col-50 elementor-top-column elementor-element elementor-element-a5a4982"
-            data-id="a5a4982" data-element_type="column">
-            <div class="elementor-widget-wrap elementor-element-populated">
-                <div class="elementor-element elementor-element-6e86bdd3 elementor-widget elementor-widget-heading"
-                    data-id="6e86bdd3" data-element_type="widget" data-widget_type="heading.default">
-                    <div class="elementor-widget-container">
-                        <h2 class="elementor-heading-title elementor-size-default">Find Your Sweet Home</h2>
-                    </div>
-                </div>
-            </div>
+<section class="searchHome">
+    <h1>Properties to buy in Bengaluru</h1>
+    <nav>
+        <div class="nav nav-tabs" >
+            <a href="{{ route('front.home') }}" class="nav-link active">Buy</a>
+            <a href="{{ route('front.rent') }}" class="nav-link">Rent</a>
         </div>
-        <div class="elementor-column elementor-col-50 elementor-top-column elementor-element elementor-element-72d94fcb"
-            data-id="72d94fcb" data-element_type="column"
-            data-settings="{&quot;background_background&quot;:&quot;classic&quot;}">
-            <div class="elementor-widget-wrap elementor-element-populated">
-                <section class="elementor-section elementor-inner-section elementor-element elementor-element-1015d33d elementor-section-full_width elementor-section-content-middle elementor-section-height-default elementor-section-height-default">
-                    <div class="elementor-container elementor-column-gap-default">
-                        <div class="elementor-column elementor-col-100 elementor-inner-column elementor-element elementor-element-4717a41a">
-                            <div class="elementor-widget-wrap elementor-element-populated">
-                                <div class="elementor-element elementor-element-64aef43d elementor-widget__width-auto elementor-widget elementor-widget-heading">
-                                    <div class="elementor-widget-container">
-                                        <h2 class="elementor-heading-title elementor-size-default">Need Help To Choose Your Property</h2>
-                                    </div>
-                                </div>
-                                <div class="elementor-element elementor-element-73c6c4fc elementor-widget__width-auto elementor-tablet_extra-align-center elementor-widget elementor-widget-button">
-                                    <div class="elementor-widget-container">
-                                        <div class="elementor-button-wrapper">
-                                            <a class="elementor-button elementor-button-link elementor-size-sm" href="#">
-                                                <span class="elementor-button-content-wrapper">
-                                                    <span class="elementor-button-text">Let Us Call You!</span>
-                                                </span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </div>
-        </div>
+    </nav>
+
+    <div class="shadow p-4">
+        <form action="{{ route('properties') }}" >            
+            <ul class="rhea-ultra-tabs-list">
+                @if ($categories)                               
+                    @foreach ($categories as $value)
+                        <li class="rhea-ultra-tab">
+                            <label class="rh-ultra-search-field-label tab-for-rent">
+                                <input type="radio" name="category" value="{{ $value->id }}" {{ request('category') == $value->id ? 'checked' : '' }} >
+                                <span class="rhea-ultra-tab-name">{{ $value->name }}</span>                                            
+                            </label>
+                        </li>
+                    @endforeach                            
+                @endif
+            </ul>        
+
+            {{-- <select name="category" id="category" >
+            <option value="">All</option>
+            @if ($categories)
+                @foreach ($categories as $value)
+                    <option {{ (Request::get('category') == $value->id) ? 'selected' : '' }} value="{{ $value->id }}">{{ $value->name }}</option>
+                @endforeach
+            @endif
+            </select> --}}
+        
+            <select name="city" id="city" >
+                <option value="">City</option>
+                @if ($cities)
+                    @foreach ($cities as $value)
+                        <option {{ (Request::get('city') == $value->id) ? 'selected' : '' }} value="{{ $value->id }}" class="form-control">{{ $value->name }}</option>
+                    @endforeach
+                @endif
+            </select>
+        
+            <select name="type" id="type" >
+                <option value="">Types</option>
+                @if ($types)
+                    @foreach ($types as $value)
+                        <option {{ (Request::get('type') == $value->id) ? 'selected' : '' }} value="{{ $value->id }}">{{ $value->name }}</option>
+                    @endforeach
+                @endif
+            </select>
+        
+            <select name="bathroom" id="bathroom" >
+                <option value="">bathroom</option>
+                @if ($bathrooms)
+                    @foreach ($bathrooms as $value)
+                        <option {{ (Request::get('bathroom') == $value->id) ? 'selected' : '' }} value="{{ $value->id }}">{{ $value->title }}</option>
+                    @endforeach
+                @endif
+            </select>
+            
+            <select name="room" id="room" >
+                <option value="">Rooms</option>
+                @if ($rooms)
+                    @foreach ($rooms as $value)
+                        <option {{ (Request::get('room') == $value->id) ? 'selected' : '' }} value="{{ $value->id }}">{{ $value->title }}</option>
+                    @endforeach
+                @endif
+            </select>
+            <button class="btn btn-primary" type="submit">Search</button>                
+        </form>
     </div>
 </section>
 
-<section  class="elementor-section elementor-top-section elementor-element elementor-element-2367b4d8 elementor-section-boxed elementor-section-height-default elementor-section-height-default">
-    <div class="elementor-container elementor-column-gap-no">
-        <div class="elementor-column elementor-col-100 elementor-top-column elementor-element elementor-element-3a850d80"        >
-            <div class="elementor-widget-wrap elementor-element-populated">
-                <div class="elementor-element elementor-element-7aa80cab elementor-widget elementor-widget-rhea-ultra-search-form-widget">
-                    <div class="elementor-widget-container" >
-                        <div class="rhea_ultra_search_form_wrapper rhea-search-form-1" style="display: block;" >
-                            @include('front.home.search.searchLogic')
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+

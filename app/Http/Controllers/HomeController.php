@@ -9,19 +9,18 @@ use App\Models\Property;
 use App\Models\City;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Mail\JobNotificationEmail;
 use App\Models\Area;
 use App\Models\Builder;
 use Illuminate\Support\Facades\Mail;
 use App\Models\JobApplication;
 use App\Models\PropertyType;
 use App\Models\Room;
+use App\Models\SavedJob;
 use App\Models\SavedProperty;
 use App\Models\User;
 use App\Models\View;
 
-class HomeController extends Controller
-{
+class HomeController extends Controller {
     public function index(Request $request){
         $bathrooms = Bathroom::where('status',1)->orderBy('title','ASC')->get();
         $amenities = Amenity::where('status',1)->orderBy('title','ASC')->take(8)->get();
@@ -96,7 +95,8 @@ class HomeController extends Controller
         }
 
         $properties = $properties->paginate(10);
-        
+
+       
         $data = [
             'categories' => $categories,
             'cities' => $cities,
@@ -109,7 +109,7 @@ class HomeController extends Controller
             'featuredJobs' => $featuredJobs,
             'latestJobs' => $latestJobs,
             'newCategories' => $newCategories,
-            'amenities' => $amenities, 
+            'amenities' => $amenities,                
         ];
 
         // $data['priceMax'] = (intval($request->get('price_max')) == 0 ? 1000 : $request->get('price_max'));
@@ -119,16 +119,21 @@ class HomeController extends Controller
     }
 
 
-    //this method will show Jobs page
-    public function properties(Request $request){
+
+    public function properties(Request $request) {
+        $categories = Category::get();
         $cities = City::where('status',1)->get();
         $areas = Area::where('status',1)->get();
         $rooms = Room::where('status',1)->get();
         $bathrooms = Bathroom::where('status',1)->get();
-        $types = PropertyType::where('status',1)->get();
-        $categories = Category::where('status',1)->get();
+        $types = PropertyType::where('status',1)->get();        
         $properties = Property::where('status',1);
         $jobTypes = Builder::where('status',1)->get();
+
+        //Filter using category
+        if(!empty($request->category)){
+            $properties = $properties->where('category_id',$request->category);
+        }
 
         //Filter using keyword
         if(!empty($request->keyword)){
@@ -141,37 +146,38 @@ class HomeController extends Controller
         //Filter using location
         // if(!empty($request->location)){
         //     $property = $property->where('location',$request->location);            
-        // }
+        // }       
 
-        //Filter using city
         if(!empty($request->city)){            
             $properties = $properties->where('city_id',$request->city);
+        }        
+
+        //Filter using property types
+        if (!empty($request->type) && is_array($request->type)) {
+            $properties = $properties->whereIn('property_type_id', $request->type);
         }
 
         //Filter using area
-        if(!empty($request->area)){            
-            $properties = $properties->where('area_id',$request->area);
+        if (!empty($request->area) && is_array($request->area)) {            
+            $properties = $properties->whereIn('area_id', $request->area);
         }
-
-        //Filter using city
-        if(!empty($request->type)){            
-            $properties = $properties->where('property_type_id',$request->type);
+        
+        //Filter using area selected
+        $areas = Area::query();
+        if ($request->has('city') && !empty($request->city)) {
+            $areas->where('city_id', $request->city);
         }
+        $areas = $areas->get();
 
         //Filter using Room
-        if(!empty($request->room)){            
-            $properties = $properties->where('room_id',$request->room);
+        if (!empty($request->room) && is_array($request->room)) {
+            $properties = $properties->whereIn('room_id', $request->room);
         }
 
         //Filter using Bathrooms
-        if(!empty($request->bathroom)){            
-            $properties = $properties->where('bathroom_id',$request->bathroom);
-        }
-
-        //Filter using category
-        if(!empty($request->category)){
-            $properties = $properties->where('category_id',$request->category);
-        }
+        if (!empty($request->bathroom) && is_array($request->bathroom)) {
+            $properties = $properties->whereIn('bathroom_id', $request->bathroom);
+        }        
 
         //Filter using job_type
         $jobTypeArray = [];
@@ -180,7 +186,7 @@ class HomeController extends Controller
             $properties = $properties->whereIn('related_rooms',$jobTypeArray);
         }
 
-        //$properties = $properties->with('room','bathroom','category','city');
+        $properties = $properties->with('room','bathroom','category','city','area');
 
         // Price slider
         if($request->get('price_max') != '' && $request->get('price_min') != '') {
@@ -211,8 +217,8 @@ class HomeController extends Controller
             'properties' => $properties,   
         ];
 
-        // $data['priceMax'] = (intval($request->get('price_max')) == 0 ? 1000 : $request->get('price_max'));
-        // $data['priceMin'] = intval($request->get('price_min'));                 
+         $data['priceMax'] = (intval($request->get('price_max')) == 0 ? 1000 : $request->get('price_max'));
+         $data['priceMin'] = intval($request->get('price_min'));                 
     
         return view('front.propertyMap.index', $data);
     }
@@ -365,7 +371,6 @@ class HomeController extends Controller
 
         if($count > 0) {
             session()->flash('error', 'You already saved this property.');
-
             return response()->json([
                 'status' => false
             ]);

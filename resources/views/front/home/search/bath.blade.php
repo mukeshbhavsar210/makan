@@ -5,8 +5,7 @@
             id="select-bathrooms-7aa80cab"
             class="rhea_multi_select_picker show-tick"
             data-size="5.5">
-            <option value="any" selected="selected">All
-                Baths</option>
+            <option value="any" selected="selected">All Baths</option>
             <option value="1">1</option>
             <option value="2">2</option>
             <option value="3">3</option>

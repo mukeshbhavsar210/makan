@@ -16,13 +16,16 @@ use Intervention\Image\ImageManager;
 class CategoryController extends Controller
 {
     public function create(Request $request){
-        $categories = Category::latest();
+        $categories = Category::latest('id')->with('menu');
 
         if(!empty($request->get('keyword'))){
             $categories = $categories->where('name', 'like', '%'.$request->get('keyword').'%');
         }
 
         $categories = $categories->paginate(10);
+
+        dd($categories);
+
         return view('admin.category.list', compact('categories'));
     }
 

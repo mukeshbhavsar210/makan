@@ -1,4 +1,9 @@
 $(document).ready(function(){
+    
+    setTimeout(function() {
+        $('.alert').fadeOut('fast');
+    }, 1500);        
+    
     $('.slider-for').slick({
         slidesToShow: 1,
         slidesToScroll: 1,
