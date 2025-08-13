@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 04, 2025 at 08:44 AM
--- Server version: 10.4.24-MariaDB
--- PHP Version: 8.2.0
+-- Generation Time: Aug 13, 2025 at 04:10 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -29,8 +29,8 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `ages` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `slug` varchar(255) NOT NULL,
   `status` int(11) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -44,7 +44,8 @@ CREATE TABLE `ages` (
 
 CREATE TABLE `amenities` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `icon` varchar(255) DEFAULT NULL,
   `status` int(11) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -54,12 +55,11 @@ CREATE TABLE `amenities` (
 -- Dumping data for table `amenities`
 --
 
-INSERT INTO `amenities` (`id`, `name`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'Swimming Pool', 1, '2023-12-25 00:29:49', '2023-12-25 00:29:49'),
-(2, 'Gym', 1, '2023-12-25 00:29:49', '2023-12-25 00:29:49'),
-(3, 'Garden', 1, '2023-12-25 00:29:50', '2023-12-25 00:29:50'),
-(4, 'Security', 1, '2023-12-25 00:29:50', '2023-12-25 00:29:50'),
-(5, 'Studio', 1, '2023-12-25 00:29:50', '2023-12-25 00:29:50');
+INSERT INTO `amenities` (`id`, `title`, `icon`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Swimming Pool', 'icon', 1, '2023-12-25 00:29:49', '2025-01-07 01:23:02'),
+(7, 'Garden', 'icon', 1, '2025-01-07 01:34:02', '2025-01-07 01:34:02'),
+(8, 'Security', 'icon', 1, '2025-01-07 01:36:52', '2025-01-07 01:36:52'),
+(11, 'Gym', 'gym', 1, '2025-01-10 23:26:52', '2025-01-10 23:26:52');
 
 -- --------------------------------------------------------
 
@@ -69,8 +69,8 @@ INSERT INTO `amenities` (`id`, `name`, `status`, `created_at`, `updated_at`) VAL
 
 CREATE TABLE `areas` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `slug` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `name` varchar(255) NOT NULL,
+  `slug` varchar(255) DEFAULT NULL,
   `city_id` bigint(20) UNSIGNED DEFAULT NULL,
   `status` int(11) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -84,8 +84,11 @@ CREATE TABLE `areas` (
 INSERT INTO `areas` (`id`, `name`, `slug`, `city_id`, `status`, `created_at`, `updated_at`) VALUES
 (1, 'Chandkheda', 'chandkheda', 1, 1, '2024-12-30 06:14:19', '2024-12-30 06:14:19'),
 (2, 'Electronic City', 'electronic-city', 2, 1, '2024-12-30 06:14:44', '2024-12-30 06:14:44'),
-(4, 'Gota', 'gota', 1, 1, '2025-01-04 00:36:44', '2025-01-04 00:36:44'),
-(6, 'Nikol', 'nikol', 1, 1, '2025-01-04 00:45:34', '2025-01-04 00:45:34');
+(11, 'Bopal', 'bopal', 1, 1, '2025-01-07 04:46:24', '2025-01-07 04:46:24'),
+(12, 'HSR Layout', 'hsr-layout', 2, 1, '2025-01-07 04:46:34', '2025-01-07 04:46:34'),
+(13, 'BTM Layout', 'btm-layout', 2, 1, '2025-01-07 04:46:49', '2025-01-07 04:46:49'),
+(15, 'Bapunagar', 'bapunagar', 1, 1, '2025-01-08 07:01:48', '2025-01-08 07:01:48'),
+(17, 'Bannergatta', 'bannergatta', 2, 1, '2025-01-27 06:28:39', '2025-01-27 06:28:39');
 
 -- --------------------------------------------------------
 
@@ -95,7 +98,7 @@ INSERT INTO `areas` (`id`, `name`, `slug`, `city_id`, `status`, `created_at`, `u
 
 CREATE TABLE `bathrooms` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title` varchar(255) NOT NULL,
   `status` int(11) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -105,9 +108,10 @@ CREATE TABLE `bathrooms` (
 -- Dumping data for table `bathrooms`
 --
 
-INSERT INTO `bathrooms` (`id`, `name`, `status`, `created_at`, `updated_at`) VALUES
-(1, '2', 1, '2024-12-31 09:14:46', '2024-12-31 09:14:46'),
-(2, '3', 1, '2024-12-31 09:14:57', '2024-12-31 09:14:57');
+INSERT INTO `bathrooms` (`id`, `title`, `status`, `created_at`, `updated_at`) VALUES
+(1, '1 Bath', 1, '2024-12-31 09:14:46', '2024-12-31 09:14:46'),
+(2, '2 Baths', 1, '2024-12-31 09:14:57', '2024-12-31 09:14:57'),
+(3, '3 Baths', 1, '2024-12-31 09:14:57', '2024-12-31 09:14:57');
 
 -- --------------------------------------------------------
 
@@ -117,15 +121,15 @@ INSERT INTO `bathrooms` (`id`, `name`, `status`, `created_at`, `updated_at`) VAL
 
 CREATE TABLE `builders` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `landline` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `mobile` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `whatsapp` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `logo` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `photo` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `year_estd` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `address` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `name` varchar(255) NOT NULL,
+  `related_properties` longtext DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `landline` varchar(255) DEFAULT NULL,
+  `mobile` varchar(255) DEFAULT NULL,
+  `whatsapp` varchar(255) DEFAULT NULL,
+  `logo` varchar(255) DEFAULT NULL,
+  `year_estd` varchar(255) DEFAULT NULL,
+  `address` text DEFAULT NULL,
   `property_id` bigint(20) UNSIGNED DEFAULT NULL,
   `status` int(11) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -136,11 +140,10 @@ CREATE TABLE `builders` (
 -- Dumping data for table `builders`
 --
 
-INSERT INTO `builders` (`id`, `name`, `email`, `landline`, `mobile`, `whatsapp`, `logo`, `photo`, `year_estd`, `address`, `property_id`, `status`, `created_at`, `updated_at`) VALUES
-(29, 'Dhruv Bhavsar', 'dhruvbhavsar210@gmail.com', '12457899', '09978835005', NULL, '29.JPG', NULL, '1985', 'Keerthi Royal Palms, Keerthi Royal Palms, Keerthi Royal Palms, Keerthi Royal Palms,', 17, 1, '2025-01-04 02:02:08', '2025-01-04 02:02:08'),
-(31, 'Dhruv Bhavsar', 'dhruvbhavsar210@gmail.com', '12457899', '09916235005', '99788251478', '31.JPG', NULL, '1995', 'Keerthi Royal Palms, Keerthi Royal Palms, Keerthi Royal Palms, Keerthi Royal Palms,', 17, 1, '2025-01-04 02:03:54', '2025-01-04 02:03:54'),
-(32, 'Mukesh Bhavsar', 'mukeshbhavsar210@gmail.com', '11111', '09978835005', '99788251478', '32Mukesh Bhavsar.JPG', NULL, NULL, 'Keerthi Royal Palms,', 17, 1, '2025-01-04 02:05:00', '2025-01-04 02:05:00'),
-(33, 'Mukesh Bhavsar', 'mukeshbhavsar210@gmail.com', '12457899', '09978835005', '99788251478', '33_Mukesh Bhavsar.JPG', NULL, '1985', 'Keerthi Royal Palms,', 17, 1, '2025-01-04 02:05:57', '2025-01-04 02:05:57');
+INSERT INTO `builders` (`id`, `name`, `related_properties`, `email`, `landline`, `mobile`, `whatsapp`, `logo`, `year_estd`, `address`, `property_id`, `status`, `created_at`, `updated_at`) VALUES
+(34, 'Keerthi Estate', '46,44', 'info@keerthiestate.com', '079-15478598', '9978835115', '9987754875', '34_Keerthi Estate.JPG', '1985', 'Hyderabad', NULL, 1, '2025-01-04 03:58:23', '2025-01-04 03:58:23'),
+(41, 'Sanghani Infrastructure', '46,44', 'mukeshbhavsar210@gmail.com', '9978812345', '09978835005', '99788251478', '41_Sanghani Infrastructure.png', '1975', 'Keerthi Royal Palms,', NULL, 1, '2025-01-08 07:26:20', '2025-01-08 07:26:20'),
+(42, 'Dobariya & Company', '46,44', 'info@dhavala.com', '089-1234567', '9978812345', '9978812345', NULL, '1990', 'Vejalpur', NULL, 1, '2025-01-10 23:28:06', '2025-01-10 23:28:06');
 
 -- --------------------------------------------------------
 
@@ -150,8 +153,8 @@ INSERT INTO `builders` (`id`, `name`, `email`, `landline`, `mobile`, `whatsapp`,
 
 CREATE TABLE `buysell` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `slug` varchar(255) NOT NULL,
   `status` int(11) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -165,8 +168,7 @@ CREATE TABLE `buysell` (
 
 CREATE TABLE `categories` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `name` varchar(255) NOT NULL,
   `status` int(11) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -176,9 +178,9 @@ CREATE TABLE `categories` (
 -- Dumping data for table `categories`
 --
 
-INSERT INTO `categories` (`id`, `name`, `image`, `status`, `created_at`, `updated_at`) VALUES
-(21, 'For Rent', '21.JPG', 1, '2025-01-01 05:48:27', '2025-01-01 05:48:27'),
-(26, 'Mukesh Bhavsar', '26.jpg', 1, '2025-01-04 01:53:26', '2025-01-04 01:53:26');
+INSERT INTO `categories` (`id`, `name`, `status`, `created_at`, `updated_at`) VALUES
+(21, 'Buy', 1, '2025-01-01 05:48:27', '2025-01-01 05:48:27'),
+(27, 'Rent', 1, '2025-01-04 04:59:56', '2025-01-04 04:59:56');
 
 -- --------------------------------------------------------
 
@@ -188,8 +190,8 @@ INSERT INTO `categories` (`id`, `name`, `image`, `status`, `created_at`, `update
 
 CREATE TABLE `cities` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `slug` varchar(255) NOT NULL,
   `status` int(11) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -201,9 +203,7 @@ CREATE TABLE `cities` (
 
 INSERT INTO `cities` (`id`, `name`, `slug`, `status`, `created_at`, `updated_at`) VALUES
 (1, 'Ahmedabad', 'ahmedabad', 1, '2024-12-30 06:13:43', '2024-12-30 06:13:43'),
-(2, 'Banglore', 'banglore', 1, '2024-12-30 06:13:43', '2024-12-30 06:13:43'),
-(3, 'Hyderabad', 'hyderabad', 1, '2025-01-01 06:08:45', '2025-01-01 06:08:45'),
-(4, 'Delhi', 'delhi', 1, '2025-01-01 06:09:37', '2025-01-01 06:09:37');
+(2, 'Banglore', 'banglore', 1, '2024-12-30 06:13:43', '2024-12-30 06:13:43');
 
 -- --------------------------------------------------------
 
@@ -213,12 +213,41 @@ INSERT INTO `cities` (`id`, `name`, `slug`, `status`, `created_at`, `updated_at`
 
 CREATE TABLE `construction_status` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `slug` varchar(255) NOT NULL,
   `status` int(11) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `contacts`
+--
+
+CREATE TABLE `contacts` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `phone` varchar(10) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `message` text NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `contacts`
+--
+
+INSERT INTO `contacts` (`id`, `name`, `phone`, `email`, `message`, `created_at`, `updated_at`) VALUES
+(1, 'Mukesh Bhavsar', '', 'mukeshbhavsar210@gmail.com', 'This is my first message', '2025-01-06 23:47:52', '2025-01-06 23:47:52'),
+(2, 'Dhruv Bhavsar', '', 'dhruvbhavsar210@gmail.com', 'This is message from Dhruv', '2025-01-06 23:48:54', '2025-01-06 23:48:54'),
+(3, 'Mukesh Bhavsar', '9978835005', 'mukeshbhavsar210@gmail.com', 'This is my second message', '2025-01-06 23:52:53', '2025-01-06 23:52:53'),
+(4, 'Priyanka', '9538135005', 'priyanka@gmail.com', 'This is my messge', '2025-01-07 00:04:58', '2025-01-07 00:04:58'),
+(5, 'Mukesh Bhavsar2', '9978835001', 'mukeshbhavsar210@gmail.com', 'dfsfdsfdsfsdfsdf', '2025-01-07 00:06:02', '2025-01-07 00:06:02'),
+(6, 'Sona Bhavsar', '9978835005', 'mukeshbhavsar210@gmail.com', 'This is Sona Bhavar', '2025-01-07 00:22:26', '2025-01-07 00:22:26'),
+(7, 'Mukesh Bhavsar', '9978835005', 'mukeshbhavsar210@gmail.com', 'New Message', '2025-01-07 00:41:45', '2025-01-07 00:41:45');
 
 -- --------------------------------------------------------
 
@@ -228,11 +257,11 @@ CREATE TABLE `construction_status` (
 
 CREATE TABLE `failed_jobs` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `uuid` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `connection` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `queue` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `exception` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `uuid` varchar(255) NOT NULL,
+  `connection` text NOT NULL,
+  `queue` text NOT NULL,
+  `payload` longtext NOT NULL,
+  `exception` longtext NOT NULL,
   `failed_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -261,7 +290,7 @@ CREATE TABLE `job_applications` (
 
 CREATE TABLE `job_types` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) NOT NULL,
   `status` int(11) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -283,8 +312,8 @@ INSERT INTO `job_types` (`id`, `name`, `status`, `created_at`, `updated_at`) VAL
 
 CREATE TABLE `listings` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `slug` varchar(255) NOT NULL,
   `status` int(11) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -298,7 +327,7 @@ CREATE TABLE `listings` (
 
 CREATE TABLE `migrations` (
   `id` int(10) UNSIGNED NOT NULL,
-  `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `migration` varchar(255) NOT NULL,
   `batch` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -347,7 +376,9 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (38, '2025_01_01_084641_create_property_images_table', 30),
 (39, '2025_01_01_084728_create_temp_images_table', 31),
 (40, '2025_01_02_044951_create_developers_table', 32),
-(41, '2025_01_02_121843_alter_properties_table', 33);
+(41, '2025_01_02_121843_alter_properties_table', 33),
+(42, '2025_01_07_050956_create_contacts_table', 34),
+(43, '2025_01_17_073955_create_property_documents_table', 35);
 
 -- --------------------------------------------------------
 
@@ -356,8 +387,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 --
 
 CREATE TABLE `password_reset_tokens` (
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `token` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `token` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -376,11 +407,11 @@ INSERT INTO `password_reset_tokens` (`email`, `token`, `created_at`) VALUES
 
 CREATE TABLE `personal_access_tokens` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `tokenable_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tokenable_type` varchar(255) NOT NULL,
   `tokenable_id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `token` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `abilities` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `name` varchar(255) NOT NULL,
+  `token` varchar(64) NOT NULL,
+  `abilities` text DEFAULT NULL,
   `last_used_at` timestamp NULL DEFAULT NULL,
   `expires_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -395,8 +426,8 @@ CREATE TABLE `personal_access_tokens` (
 
 CREATE TABLE `properties` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `slug` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `title` varchar(255) NOT NULL,
+  `slug` varchar(255) DEFAULT NULL,
   `user_id` bigint(20) UNSIGNED DEFAULT NULL,
   `category_id` bigint(20) UNSIGNED DEFAULT NULL,
   `room_id` bigint(20) UNSIGNED DEFAULT NULL,
@@ -408,28 +439,36 @@ CREATE TABLE `properties` (
   `view_id` bigint(20) UNSIGNED DEFAULT NULL,
   `price` double(10,2) DEFAULT NULL,
   `compare_price` double(10,2) DEFAULT NULL,
-  `description` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `keywords` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `amenities` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
-  `location` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `size` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `description` text DEFAULT NULL,
+  `keywords` text DEFAULT NULL,
+  `location` varchar(255) DEFAULT NULL,
+  `size` varchar(255) DEFAULT NULL,
   `rera` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
-  `year_build` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `total_area` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `year_build` varchar(100) DEFAULT NULL,
+  `total_area` varchar(50) DEFAULT NULL,
   `related_properties` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `related_amenities` longtext DEFAULT NULL,
+  `related_facings` longtext DEFAULT NULL,
+  `related_documents` longtext NOT NULL,
+  `possession_date` date DEFAULT NULL,
+  `handover_status` enum('Under Construction','Ready to Move') NOT NULL DEFAULT 'Under Construction',
   `status` int(11) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `bathroom_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `is_featured` enum('Yes','No') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'No'
+  `is_featured` enum('Yes','No') NOT NULL DEFAULT 'No'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `properties`
 --
 
-INSERT INTO `properties` (`id`, `title`, `slug`, `user_id`, `category_id`, `room_id`, `city_id`, `area_id`, `builder_id`, `sale_type_id`, `property_type_id`, `view_id`, `price`, `compare_price`, `description`, `keywords`, `amenities`, `location`, `size`, `rera`, `year_build`, `total_area`, `related_properties`, `status`, `created_at`, `updated_at`, `bathroom_id`, `is_featured`) VALUES
-(17, 'Keerthi Royal Palms', 'keerthi-royal-palms', 3, 21, 1, 2, 2, 33, 1, 1, 1, 9800000.00, NULL, 'asdfasfdfsd', '3 BHK Apartment', '3', 'Banglore', NULL, NULL, '1987', '124567', '15', 1, '2025-01-03 00:02:05', '2025-01-03 00:02:05', NULL, 'No');
+INSERT INTO `properties` (`id`, `title`, `slug`, `user_id`, `category_id`, `room_id`, `city_id`, `area_id`, `builder_id`, `sale_type_id`, `property_type_id`, `view_id`, `price`, `compare_price`, `description`, `keywords`, `location`, `size`, `rera`, `year_build`, `total_area`, `related_properties`, `related_amenities`, `related_facings`, `related_documents`, `possession_date`, `handover_status`, `status`, `created_at`, `updated_at`, `bathroom_id`, `is_featured`) VALUES
+(44, 'Shlok Heights', 'shlok-heights', 3, 21, 4, 1, 1, 41, 1, 2, NULL, 9800000.00, 8500000.00, 'Shlok Heights', '3 BHK Apartment Mukesh', 'Mansarovar Road', '1000', NULL, NULL, NULL, '', '', NULL, '', '2027-08-31', 'Ready to Move', 1, '2025-01-06 05:12:07', '2025-01-08 06:19:22', 2, 'Yes'),
+(50, 'Shayamal Row House', 'shayamal-row-house', 3, 27, 2, 2, 2, 42, 2, 1, NULL, 9000000.00, 8800000.00, 'Details', '3 BHK Apartment', 'Vejlpur', '1800', '123', '2024', '20000', '', '1,7,8,11', '1', '', NULL, 'Under Construction', 1, '2025-01-10 23:30:34', '2025-01-16 23:49:13', 2, 'Yes'),
+(51, 'Samarthya Status', 'samarthya_status', 3, 27, 1, 1, 11, 34, NULL, 2, NULL, 9800000.00, 8500000.00, 'Shlok Heights', '3 BHK Apartment', 'Ahmedabad', '1000', NULL, NULL, NULL, '', '', NULL, '', NULL, 'Under Construction', 1, '2025-01-06 05:12:07', '2025-01-08 06:19:22', 1, 'Yes'),
+(52, 'Manavnagar', 'samarthya_status', 3, 21, 1, 1, 15, 34, NULL, 2, NULL, 9800000.00, 8500000.00, 'Shlok Heights', '3 BHK Apartment', 'Ahmedabad', '1000', NULL, NULL, NULL, '', '', NULL, '', NULL, 'Under Construction', 1, '2025-01-06 05:12:07', '2025-01-08 06:19:22', 1, 'Yes'),
+(53, 'Swastik Marvella', 'swastik_marvella', 3, 21, 1, 1, 1, 34, NULL, 3, NULL, 9800000.00, 8500000.00, 'Swastik Marvella', '3 BHK Apartment', 'Mansarovar Road', '1000', NULL, NULL, NULL, '', '', NULL, '', NULL, 'Under Construction', 1, '2025-01-06 05:12:07', '2025-01-08 06:19:22', 1, 'Yes');
 
 -- --------------------------------------------------------
 
@@ -450,17 +489,73 @@ CREATE TABLE `property_applications` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `property_documents`
+--
+
+CREATE TABLE `property_documents` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `property_id` bigint(20) UNSIGNED NOT NULL,
+  `document` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `property_images`
 --
 
 CREATE TABLE `property_images` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `property_id` bigint(20) UNSIGNED NOT NULL,
-  `image` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `image` varchar(255) NOT NULL,
   `sort_order` int(11) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `property_images`
+--
+
+INSERT INTO `property_images` (`id`, `property_id`, `image`, `sort_order`, `created_at`, `updated_at`) VALUES
+(53, 44, '44-Shlok Heights-1736337438.JPG', NULL, '2025-01-08 06:27:18', '2025-01-08 06:27:18'),
+(64, 44, '44-Shlok Heights-1736337445.JPG', NULL, '2025-01-08 06:27:25', '2025-01-08 06:27:25'),
+(71, 44, '44-Shlok Heights-1736338424.JPG', NULL, '2025-01-08 06:43:44', '2025-01-08 06:43:44'),
+(72, 44, '44-Shlok Heights-1736338426.jpg', NULL, '2025-01-08 06:43:46', '2025-01-08 06:43:46'),
+(80, 50, '50-Shayamal Row House-1736571634.jpg', NULL, '2025-01-10 23:30:34', '2025-01-10 23:30:34'),
+(81, 50, '50-Shayamal Row House-1736571635.jpg', NULL, '2025-01-10 23:30:35', '2025-01-10 23:30:35'),
+(82, 50, '50-Shayamal Row House-1736571636.jpg', NULL, '2025-01-10 23:30:35', '2025-01-10 23:30:36'),
+(83, 50, '50-Shayamal Row House-1736571636.jpg', NULL, '2025-01-10 23:30:36', '2025-01-10 23:30:36'),
+(84, 50, '50-Shayamal Row House-1736574384.JPG', NULL, '2025-01-11 00:16:24', '2025-01-11 00:16:24'),
+(85, 50, '50-Shayamal Row House-1736574385.JPG', NULL, '2025-01-11 00:16:25', '2025-01-11 00:16:25'),
+(86, 50, '50-Shayamal Row House-1736574387.JPG', NULL, '2025-01-11 00:16:27', '2025-01-11 00:16:27'),
+(87, 50, '50-Shayamal Row House-1736574389.JPG', NULL, '2025-01-11 00:16:29', '2025-01-11 00:16:29'),
+(88, 50, '50-Shayamal Row House-1736574459.JPG', NULL, '2025-01-11 00:17:39', '2025-01-11 00:17:39'),
+(89, 50, '50-Shayamal Row House-1736574460.JPG', NULL, '2025-01-11 00:17:40', '2025-01-11 00:17:40'),
+(90, 50, '50-Shayamal Row House-1736574462.JPG', NULL, '2025-01-11 00:17:42', '2025-01-11 00:17:42'),
+(91, 50, '50-Shayamal Row House-1736574464.JPG', NULL, '2025-01-11 00:17:44', '2025-01-11 00:17:44'),
+(92, 50, '50-Shayamal Row House-1736574465.JPG', NULL, '2025-01-11 00:17:45', '2025-01-11 00:17:45'),
+(93, 50, '50-Shayamal Row House-1736574466.JPG', NULL, '2025-01-11 00:17:46', '2025-01-11 00:17:46'),
+(94, 50, '50-Shayamal Row House-1736574468.JPG', NULL, '2025-01-11 00:17:48', '2025-01-11 00:17:48'),
+(95, 50, '50-Shayamal Row House-1736574469.JPG', NULL, '2025-01-11 00:17:49', '2025-01-11 00:17:49'),
+(96, 50, '50-Shayamal Row House-1737091154.JPG', NULL, '2025-01-16 23:49:14', '2025-01-16 23:49:14'),
+(97, 50, '50-Shayamal Row House-1737091155.JPG', NULL, '2025-01-16 23:49:15', '2025-01-16 23:49:15'),
+(98, 50, '50-Shayamal Row House-1737091157.JPG', NULL, '2025-01-16 23:49:17', '2025-01-16 23:49:17'),
+(99, 50, '50-Shayamal Row House-1737091158.JPG', NULL, '2025-01-16 23:49:18', '2025-01-16 23:49:18'),
+(100, 50, '50-Shayamal Row House-1737091160.JPG', NULL, '2025-01-16 23:49:20', '2025-01-16 23:49:20'),
+(101, 50, '50-Shayamal Row House-1737091161.JPG', NULL, '2025-01-16 23:49:21', '2025-01-16 23:49:21'),
+(102, 50, '50-Shayamal Row House-1737091163.JPG', NULL, '2025-01-16 23:49:23', '2025-01-16 23:49:23'),
+(103, 50, '50-Shayamal Row House-1737091164.JPG', NULL, '2025-01-16 23:49:24', '2025-01-16 23:49:24'),
+(104, 50, '50-Shayamal Row House-1737091167.JPG', NULL, '2025-01-16 23:49:27', '2025-01-16 23:49:27'),
+(105, 50, '50-Shayamal Row House-1737091168.JPG', NULL, '2025-01-16 23:49:28', '2025-01-16 23:49:28'),
+(106, 50, '50-Shayamal Row House-1737091169.JPG', NULL, '2025-01-16 23:49:29', '2025-01-16 23:49:29'),
+(107, 50, '50-Shayamal Row House-1737091171.JPG', NULL, '2025-01-16 23:49:31', '2025-01-16 23:49:31'),
+(108, 50, '50-Shayamal Row House-1737091173.JPG', NULL, '2025-01-16 23:49:33', '2025-01-16 23:49:33'),
+(109, 50, '50-Shayamal Row House-1737091174.JPG', NULL, '2025-01-16 23:49:34', '2025-01-16 23:49:34'),
+(110, 50, '50-Shayamal Row House-1737091175.JPG', NULL, '2025-01-16 23:49:35', '2025-01-16 23:49:35'),
+(111, 50, '50-Shayamal Row House-1737091176.JPG', NULL, '2025-01-16 23:49:36', '2025-01-16 23:49:36');
 
 -- --------------------------------------------------------
 
@@ -470,8 +565,7 @@ CREATE TABLE `property_images` (
 
 CREATE TABLE `property_types` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) NOT NULL,
   `status` int(11) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -481,9 +575,10 @@ CREATE TABLE `property_types` (
 -- Dumping data for table `property_types`
 --
 
-INSERT INTO `property_types` (`id`, `name`, `slug`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'Villa', 'villa', 1, '2024-12-31 08:56:55', '2024-12-31 08:56:55'),
-(2, 'Apartment', 'apartment', 1, '2024-12-31 09:20:05', '2024-12-31 09:20:05');
+INSERT INTO `property_types` (`id`, `name`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Villa', 1, '2024-12-31 08:56:55', '2024-12-31 08:56:55'),
+(2, 'Flat', 1, '2024-12-31 09:20:05', '2024-12-31 09:20:05'),
+(3, 'Individual Home', 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -493,7 +588,7 @@ INSERT INTO `property_types` (`id`, `name`, `slug`, `status`, `created_at`, `upd
 
 CREATE TABLE `rooms` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title` varchar(255) NOT NULL,
   `status` int(11) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -503,10 +598,13 @@ CREATE TABLE `rooms` (
 -- Dumping data for table `rooms`
 --
 
-INSERT INTO `rooms` (`id`, `name`, `status`, `created_at`, `updated_at`) VALUES
-(1, '2', 1, '2024-12-29 17:55:12', '2024-12-29 17:55:12'),
-(2, '3', 1, '2024-12-29 17:55:31', '2024-12-29 17:55:31'),
-(3, '4', 1, '2024-12-29 17:55:43', '2024-12-29 17:55:43');
+INSERT INTO `rooms` (`id`, `title`, `status`, `created_at`, `updated_at`) VALUES
+(1, '1 RK', 1, '2024-12-29 17:55:12', '2024-12-29 17:55:12'),
+(2, '1 BHK', 1, '2024-12-29 17:55:31', '2024-12-29 17:55:31'),
+(3, '2 BHK', 1, '2024-12-29 17:55:43', '2024-12-29 17:55:43'),
+(4, '3 BHK', 1, '2024-12-29 17:55:43', '2024-12-29 17:55:43'),
+(5, '4 BHK', 1, '2024-12-29 17:55:43', '2024-12-29 17:55:43'),
+(6, '5 BHK', 1, '2024-12-29 17:55:43', '2024-12-29 17:55:43');
 
 -- --------------------------------------------------------
 
@@ -516,8 +614,8 @@ INSERT INTO `rooms` (`id`, `name`, `status`, `created_at`, `updated_at`) VALUES
 
 CREATE TABLE `sale_types` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Sell',
-  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) NOT NULL DEFAULT 'Sell',
+  `slug` varchar(255) NOT NULL,
   `status` int(11) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -528,31 +626,8 @@ CREATE TABLE `sale_types` (
 --
 
 INSERT INTO `sale_types` (`id`, `name`, `slug`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'Sell', 'sell', 1, '2024-12-31 08:57:22', '2024-12-31 08:57:22'),
-(2, 'Rent', 'rent', 1, '2024-12-31 09:09:33', '2024-12-31 09:09:33');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `saved_jobs`
---
-
-CREATE TABLE `saved_jobs` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `property_id` bigint(20) UNSIGNED NOT NULL,
-  `user_id` bigint(20) UNSIGNED NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `saved_jobs`
---
-
-INSERT INTO `saved_jobs` (`id`, `property_id`, `user_id`, `created_at`, `updated_at`) VALUES
-(17, 3, 4, '2024-12-28 05:51:55', '2024-12-28 05:51:55'),
-(18, 1, 4, '2024-12-28 06:03:15', '2024-12-28 06:03:15'),
-(19, 2, 4, '2024-12-30 05:14:38', '2024-12-30 05:14:38');
+(1, 'New Booking', 'new_booking', 1, '2024-12-31 08:57:22', '2024-12-31 08:57:22'),
+(2, 'Resale', 'resale', 1, '2024-12-31 09:09:33', '2024-12-31 09:09:33');
 
 -- --------------------------------------------------------
 
@@ -568,6 +643,14 @@ CREATE TABLE `saved_properties` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `saved_properties`
+--
+
+INSERT INTO `saved_properties` (`id`, `property_id`, `user_id`, `created_at`, `updated_at`) VALUES
+(33, 50, 4, '2025-01-17 01:55:45', '2025-01-17 01:55:45'),
+(34, 44, 3, '2025-01-27 06:31:10', '2025-01-27 06:31:10');
+
 -- --------------------------------------------------------
 
 --
@@ -576,7 +659,7 @@ CREATE TABLE `saved_properties` (
 
 CREATE TABLE `temp_images` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -634,7 +717,140 @@ INSERT INTO `temp_images` (`id`, `name`, `created_at`, `updated_at`) VALUES
 (46, '1735976027.JPG', '2025-01-04 02:03:47', '2025-01-04 02:03:47'),
 (47, '1735976032.JPG', '2025-01-04 02:03:52', '2025-01-04 02:03:52'),
 (48, '1735976094.JPG', '2025-01-04 02:04:54', '2025-01-04 02:04:54'),
-(49, '1735976149.JPG', '2025-01-04 02:05:49', '2025-01-04 02:05:49');
+(49, '1735976149.JPG', '2025-01-04 02:05:49', '2025-01-04 02:05:49'),
+(50, '1735982845.JPG', '2025-01-04 03:57:25', '2025-01-04 03:57:25'),
+(51, '1735982866.JPG', '2025-01-04 03:57:46', '2025-01-04 03:57:46'),
+(52, '1735983303.JPG', '2025-01-04 04:05:03', '2025-01-04 04:05:03'),
+(53, '1735995462.JPG', '2025-01-04 07:27:42', '2025-01-04 07:27:42'),
+(54, '1735995717.JPG', '2025-01-04 07:31:57', '2025-01-04 07:31:57'),
+(55, '1735998566.JPG', '2025-01-04 08:19:26', '2025-01-04 08:19:26'),
+(56, '1735998629.JPG', '2025-01-04 08:20:29', '2025-01-04 08:20:29'),
+(57, '1735999281.JPG', '2025-01-04 08:31:21', '2025-01-04 08:31:21'),
+(58, '1736072753.jpg', '2025-01-05 04:55:53', '2025-01-05 04:55:53'),
+(59, '1736072915.jpg', '2025-01-05 04:58:35', '2025-01-05 04:58:35'),
+(60, '1736072982.jpg', '2025-01-05 04:59:42', '2025-01-05 04:59:42'),
+(61, '1736073029.jpg', '2025-01-05 05:00:29', '2025-01-05 05:00:29'),
+(62, '1736073109.jpg', '2025-01-05 05:01:49', '2025-01-05 05:01:49'),
+(63, '1736073234.jpg', '2025-01-05 05:03:54', '2025-01-05 05:03:54'),
+(64, '1736073303.jpg', '2025-01-05 05:05:03', '2025-01-05 05:05:03'),
+(65, '1736073575.jpg', '2025-01-05 05:09:35', '2025-01-05 05:09:35'),
+(66, '1736073575.jpg', '2025-01-05 05:09:35', '2025-01-05 05:09:35'),
+(67, '1736073576.jpg', '2025-01-05 05:09:36', '2025-01-05 05:09:36'),
+(68, '1736073576.jpg', '2025-01-05 05:09:36', '2025-01-05 05:09:36'),
+(69, '1736073685.jpg', '2025-01-05 05:11:25', '2025-01-05 05:11:25'),
+(70, '1736073685.jpg', '2025-01-05 05:11:25', '2025-01-05 05:11:25'),
+(71, '1736073686.jpg', '2025-01-05 05:11:26', '2025-01-05 05:11:26'),
+(72, '1736073686.jpg', '2025-01-05 05:11:26', '2025-01-05 05:11:26'),
+(73, '1736073994.jpg', '2025-01-05 05:16:34', '2025-01-05 05:16:34'),
+(74, '1736074035.jpg', '2025-01-05 05:17:15', '2025-01-05 05:17:15'),
+(75, '1736074124.jpg', '2025-01-05 05:18:44', '2025-01-05 05:18:44'),
+(76, '1736074188.jpg', '2025-01-05 05:19:48', '2025-01-05 05:19:48'),
+(77, '1736146707.jpg', '2025-01-06 01:28:27', '2025-01-06 01:28:27'),
+(78, '1736146710.jpg', '2025-01-06 01:28:30', '2025-01-06 01:28:30'),
+(79, '1736146710.jpg', '2025-01-06 01:28:30', '2025-01-06 01:28:30'),
+(80, '1736147283.JPG', '2025-01-06 01:38:03', '2025-01-06 01:38:03'),
+(81, '1736147286.JPG', '2025-01-06 01:38:06', '2025-01-06 01:38:06'),
+(82, '1736147288.JPG', '2025-01-06 01:38:08', '2025-01-06 01:38:08'),
+(83, '1736147290.JPG', '2025-01-06 01:38:10', '2025-01-06 01:38:10'),
+(84, '1736147400.JPG', '2025-01-06 01:40:00', '2025-01-06 01:40:00'),
+(85, '1736147451.JPG', '2025-01-06 01:40:51', '2025-01-06 01:40:51'),
+(86, '1736147508.JPG', '2025-01-06 01:41:48', '2025-01-06 01:41:48'),
+(87, '1736147623.JPG', '2025-01-06 01:43:43', '2025-01-06 01:43:43'),
+(88, '1736147696.JPG', '2025-01-06 01:44:56', '2025-01-06 01:44:56'),
+(89, '1736147698.JPG', '2025-01-06 01:44:58', '2025-01-06 01:44:58'),
+(90, '1736147701.JPG', '2025-01-06 01:45:01', '2025-01-06 01:45:01'),
+(91, '1736147703.JPG', '2025-01-06 01:45:03', '2025-01-06 01:45:03'),
+(92, '1736147749.JPG', '2025-01-06 01:45:49', '2025-01-06 01:45:49'),
+(93, '1736147752.JPG', '2025-01-06 01:45:52', '2025-01-06 01:45:52'),
+(94, '1736147832.JPG', '2025-01-06 01:47:12', '2025-01-06 01:47:12'),
+(95, '1736147899.JPG', '2025-01-06 01:48:19', '2025-01-06 01:48:19'),
+(96, '1736147972.JPG', '2025-01-06 01:49:32', '2025-01-06 01:49:32'),
+(97, '1736147973.JPG', '2025-01-06 01:49:33', '2025-01-06 01:49:33'),
+(98, '1736148112.JPG', '2025-01-06 01:51:52', '2025-01-06 01:51:52'),
+(99, '1736148145.JPG', '2025-01-06 01:52:25', '2025-01-06 01:52:25'),
+(100, '1736148262.JPG', '2025-01-06 01:54:22', '2025-01-06 01:54:22'),
+(101, '1736148263.JPG', '2025-01-06 01:54:23', '2025-01-06 01:54:23'),
+(102, '1736148540.JPG', '2025-01-06 01:59:00', '2025-01-06 01:59:00'),
+(103, '1736148540.JPG', '2025-01-06 01:59:00', '2025-01-06 01:59:00'),
+(104, '1736148541.JPG', '2025-01-06 01:59:01', '2025-01-06 01:59:01'),
+(105, '1736148567.JPG', '2025-01-06 01:59:27', '2025-01-06 01:59:27'),
+(106, '1736148571.JPG', '2025-01-06 01:59:31', '2025-01-06 01:59:31'),
+(107, '1736148698.JPG', '2025-01-06 02:01:38', '2025-01-06 02:01:38'),
+(108, '1736148700.JPG', '2025-01-06 02:01:40', '2025-01-06 02:01:40'),
+(109, '1736148859.JPG', '2025-01-06 02:04:19', '2025-01-06 02:04:19'),
+(110, '1736148860.JPG', '2025-01-06 02:04:20', '2025-01-06 02:04:20'),
+(111, '1736149305.JPG', '2025-01-06 02:11:45', '2025-01-06 02:11:45'),
+(112, '1736149307.JPG', '2025-01-06 02:11:47', '2025-01-06 02:11:47'),
+(113, '1736149471.JPG', '2025-01-06 02:14:31', '2025-01-06 02:14:31'),
+(114, '1736149472.JPG', '2025-01-06 02:14:32', '2025-01-06 02:14:32'),
+(115, '1736149473.JPG', '2025-01-06 02:14:33', '2025-01-06 02:14:33'),
+(116, '1736149473.JPG', '2025-01-06 02:14:33', '2025-01-06 02:14:33'),
+(117, '1736150446.JPG', '2025-01-06 02:30:46', '2025-01-06 02:30:46'),
+(118, '1736150446.JPG', '2025-01-06 02:30:46', '2025-01-06 02:30:46'),
+(119, '1736150447.JPG', '2025-01-06 02:30:47', '2025-01-06 02:30:47'),
+(120, '1736150448.JPG', '2025-01-06 02:30:48', '2025-01-06 02:30:48'),
+(121, '1736150682.jpg', '2025-01-06 02:34:42', '2025-01-06 02:34:42'),
+(122, '1736150682.jpg', '2025-01-06 02:34:42', '2025-01-06 02:34:42'),
+(123, '1736150683.jpg', '2025-01-06 02:34:43', '2025-01-06 02:34:43'),
+(124, '1736150683.jpg', '2025-01-06 02:34:43', '2025-01-06 02:34:43'),
+(125, '1736150689.jpg', '2025-01-06 02:34:49', '2025-01-06 02:34:49'),
+(126, '1736150691.jpg', '2025-01-06 02:34:51', '2025-01-06 02:34:51'),
+(127, '1736152662.jpg', '2025-01-06 03:07:42', '2025-01-06 03:07:42'),
+(128, '1736152663.jpg', '2025-01-06 03:07:43', '2025-01-06 03:07:43'),
+(129, '1736152664.jpg', '2025-01-06 03:07:44', '2025-01-06 03:07:44'),
+(130, '1736160120.JPG', '2025-01-06 05:12:00', '2025-01-06 05:12:00'),
+(131, '1736160123.JPG', '2025-01-06 05:12:03', '2025-01-06 05:12:03'),
+(132, '1736160124.JPG', '2025-01-06 05:12:04', '2025-01-06 05:12:04'),
+(133, '1736160124.JPG', '2025-01-06 05:12:04', '2025-01-06 05:12:04'),
+(134, '1736162090.JPG', '2025-01-06 05:44:50', '2025-01-06 05:44:50'),
+(135, '1736162091.JPG', '2025-01-06 05:44:51', '2025-01-06 05:44:51'),
+(136, '1736162092.JPG', '2025-01-06 05:44:52', '2025-01-06 05:44:52'),
+(137, '1736162092.JPG', '2025-01-06 05:44:52', '2025-01-06 05:44:52'),
+(138, '1736162247.JPG', '2025-01-06 05:47:27', '2025-01-06 05:47:27'),
+(139, '1736162249.JPG', '2025-01-06 05:47:29', '2025-01-06 05:47:29'),
+(140, '1736162251.JPG', '2025-01-06 05:47:31', '2025-01-06 05:47:31'),
+(141, '1736163956.JPG', '2025-01-06 06:15:56', '2025-01-06 06:15:56'),
+(142, '1736163958.JPG', '2025-01-06 06:15:58', '2025-01-06 06:15:58'),
+(143, '1736167782.png', '2025-01-06 07:19:42', '2025-01-06 07:19:42'),
+(144, '1736168006.jpg', '2025-01-06 07:23:26', '2025-01-06 07:23:26'),
+(145, '1736168006.jpg', '2025-01-06 07:23:26', '2025-01-06 07:23:26'),
+(146, '1736168446.jpg', '2025-01-06 07:30:46', '2025-01-06 07:30:46'),
+(147, '1736233064.jpg', '2025-01-07 01:27:44', '2025-01-07 01:27:44'),
+(148, '1736340330.png', '2025-01-08 07:15:30', '2025-01-08 07:15:30'),
+(149, '1736340975.png', '2025-01-08 07:26:15', '2025-01-08 07:26:15'),
+(150, '1736571483.png', '2025-01-10 23:28:03', '2025-01-10 23:28:03'),
+(151, '1736571600.jpg', '2025-01-10 23:30:00', '2025-01-10 23:30:00'),
+(152, '1736571601.jpg', '2025-01-10 23:30:01', '2025-01-10 23:30:01'),
+(153, '1736571602.jpg', '2025-01-10 23:30:02', '2025-01-10 23:30:02'),
+(154, '1736571602.jpg', '2025-01-10 23:30:02', '2025-01-10 23:30:02'),
+(155, '1737099020.jpg', '2025-01-17 02:00:20', '2025-01-17 02:00:20'),
+(156, '1737099023.jpg', '2025-01-17 02:00:23', '2025-01-17 02:00:23'),
+(157, '1737099057.jpg', '2025-01-17 02:00:57', '2025-01-17 02:00:57'),
+(158, '1737099057.jpg', '2025-01-17 02:00:57', '2025-01-17 02:00:57'),
+(159, '1737099078.jpg', '2025-01-17 02:01:18', '2025-01-17 02:01:18'),
+(160, '1737099078.jpg', '2025-01-17 02:01:18', '2025-01-17 02:01:18'),
+(161, '1737099296.jpg', '2025-01-17 02:04:56', '2025-01-17 02:04:56'),
+(162, '1737099296.jpg', '2025-01-17 02:04:56', '2025-01-17 02:04:56'),
+(163, '1737099300.png', '2025-01-17 02:05:00', '2025-01-17 02:05:00'),
+(164, '1737099387.jpg', '2025-01-17 02:06:27', '2025-01-17 02:06:27'),
+(165, '1737099388.jpg', '2025-01-17 02:06:28', '2025-01-17 02:06:28'),
+(166, '1737099391.png', '2025-01-17 02:06:31', '2025-01-17 02:06:31'),
+(167, '1737099391.png', '2025-01-17 02:06:31', '2025-01-17 02:06:31'),
+(168, '1737100092.jpg', '2025-01-17 02:18:12', '2025-01-17 02:18:12'),
+(169, '1737100244.jpg', '2025-01-17 02:20:44', '2025-01-17 02:20:44'),
+(170, '1737100245.pdf', '2025-01-17 02:20:45', '2025-01-17 02:20:45'),
+(171, '1737100420.jpg', '2025-01-17 02:23:40', '2025-01-17 02:23:40'),
+(172, '1737100489.pdf', '2025-01-17 02:24:49', '2025-01-17 02:24:49'),
+(173, '1737100494.jpg', '2025-01-17 02:24:54', '2025-01-17 02:24:54'),
+(174, '1737100590.jpg', '2025-01-17 02:26:30', '2025-01-17 02:26:30'),
+(175, '1737100597.pdf', '2025-01-17 02:26:37', '2025-01-17 02:26:37'),
+(176, '1737100664.pdf', '2025-01-17 02:27:44', '2025-01-17 02:27:44'),
+(177, '1737100719.pdf', '2025-01-17 02:28:39', '2025-01-17 02:28:39'),
+(178, '1737100724.jpg', '2025-01-17 02:28:44', '2025-01-17 02:28:44'),
+(179, '1737100796.pdf', '2025-01-17 02:29:56', '2025-01-17 02:29:56'),
+(180, '1737100938.pdf', '2025-01-17 02:32:18', '2025-01-17 02:32:18'),
+(181, '1737101095.jpg', '2025-01-17 02:34:55', '2025-01-17 02:34:55'),
+(182, '1737979225.jpg', '2025-01-27 06:30:25', '2025-01-27 06:30:25');
 
 -- --------------------------------------------------------
 
@@ -644,15 +860,15 @@ INSERT INTO `temp_images` (`id`, `name`, `created_at`, `updated_at`) VALUES
 
 CREATE TABLE `users` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
-  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `mobile` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `role` enum('admin','user') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'user',
+  `password` varchar(255) NOT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `mobile` varchar(255) DEFAULT NULL,
+  `role` enum('admin','user','builder') NOT NULL DEFAULT 'user',
   `status` int(11) NOT NULL DEFAULT 1,
-  `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `remember_token` varchar(100) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -662,8 +878,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `image`, `mobile`, `role`, `status`, `remember_token`, `created_at`, `updated_at`) VALUES
-(3, 'Dhruv Bhavsar', 'dhruvbhavsar210@gmail.com', NULL, '$2y$12$Iy5Wh1TVAkCYAvaefrR71OEKD4QDjhnnWBxknqjwnioSSM6sAJMnO', NULL, NULL, 'admin', 1, NULL, '2024-12-28 05:49:21', '2024-12-28 05:49:21'),
-(4, 'Gaurav', 'gaurav@gmail.com', NULL, '$2y$12$1SpADjHEpzBJ2OTXEQkwd.GNrM1Hrn.vGo7NyPsqXiaYBGTZwj3.C', NULL, '9978812345', 'user', 1, NULL, '2024-12-28 05:51:32', '2024-12-28 06:10:04');
+(3, 'Dhruv Bhavsar', 'dhruvbhavsar210@gmail.com', NULL, '$2y$12$Iy5Wh1TVAkCYAvaefrR71OEKD4QDjhnnWBxknqjwnioSSM6sAJMnO', '3-1736572345.png', NULL, 'admin', 1, NULL, '2024-12-28 05:49:21', '2025-01-10 23:42:25'),
+(4, 'Gaurav', 'gaurav@gmail.com', NULL, '$2y$12$1SpADjHEpzBJ2OTXEQkwd.GNrM1Hrn.vGo7NyPsqXiaYBGTZwj3.C', '4-1736168601.png', '9978812345', 'builder', 1, NULL, '2024-12-28 05:51:32', '2025-01-06 07:33:21');
 
 -- --------------------------------------------------------
 
@@ -673,8 +889,7 @@ INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `im
 
 CREATE TABLE `views` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title` varchar(255) NOT NULL,
   `status` int(11) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -684,8 +899,11 @@ CREATE TABLE `views` (
 -- Dumping data for table `views`
 --
 
-INSERT INTO `views` (`id`, `name`, `slug`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'North', 'north', 1, '2024-12-31 08:57:55', '2024-12-31 08:57:55');
+INSERT INTO `views` (`id`, `title`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'North Facings', 1, '2024-12-31 08:57:55', '2024-12-31 08:57:55'),
+(2, 'South Facing', 1, NULL, NULL),
+(3, 'East Facing', 1, NULL, NULL),
+(4, 'West Facing', 1, NULL, NULL);
 
 --
 -- Indexes for dumped tables
@@ -745,6 +963,12 @@ ALTER TABLE `cities`
 -- Indexes for table `construction_status`
 --
 ALTER TABLE `construction_status`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `contacts`
+--
+ALTER TABLE `contacts`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -821,11 +1045,18 @@ ALTER TABLE `property_applications`
   ADD KEY `property_applications_posted_id_foreign` (`posted_id`);
 
 --
+-- Indexes for table `property_documents`
+--
+ALTER TABLE `property_documents`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `property_documents_property_id_foreign` (`property_id`);
+
+--
 -- Indexes for table `property_images`
 --
 ALTER TABLE `property_images`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `property_images_property_id_foreign` (`property_id`);
+  ADD KEY `product_images_product_id_foreign` (`property_id`) USING BTREE;
 
 --
 -- Indexes for table `property_types`
@@ -844,14 +1075,6 @@ ALTER TABLE `rooms`
 --
 ALTER TABLE `sale_types`
   ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `saved_jobs`
---
-ALTER TABLE `saved_jobs`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `saved_jobs_user_id_foreign` (`user_id`),
-  ADD KEY `saved_properties_job_id_foreign` (`property_id`) USING BTREE;
 
 --
 -- Indexes for table `saved_properties`
@@ -894,25 +1117,25 @@ ALTER TABLE `ages`
 -- AUTO_INCREMENT for table `amenities`
 --
 ALTER TABLE `amenities`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `areas`
 --
 ALTER TABLE `areas`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `bathrooms`
 --
 ALTER TABLE `bathrooms`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `builders`
 --
 ALTER TABLE `builders`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
 -- AUTO_INCREMENT for table `buysell`
@@ -924,19 +1147,25 @@ ALTER TABLE `buysell`
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `cities`
 --
 ALTER TABLE `cities`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `construction_status`
 --
 ALTER TABLE `construction_status`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `contacts`
+--
+ALTER TABLE `contacts`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -966,7 +1195,7 @@ ALTER TABLE `listings`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
@@ -978,7 +1207,7 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `properties`
 --
 ALTER TABLE `properties`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 
 --
 -- AUTO_INCREMENT for table `property_applications`
@@ -987,22 +1216,28 @@ ALTER TABLE `property_applications`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
+-- AUTO_INCREMENT for table `property_documents`
+--
+ALTER TABLE `property_documents`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `property_images`
 --
 ALTER TABLE `property_images`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=112;
 
 --
 -- AUTO_INCREMENT for table `property_types`
 --
 ALTER TABLE `property_types`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `rooms`
 --
 ALTER TABLE `rooms`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `sale_types`
@@ -1011,22 +1246,16 @@ ALTER TABLE `sale_types`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `saved_jobs`
---
-ALTER TABLE `saved_jobs`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
-
---
 -- AUTO_INCREMENT for table `saved_properties`
 --
 ALTER TABLE `saved_properties`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT for table `temp_images`
 --
 ALTER TABLE `temp_images`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=183;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -1038,7 +1267,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `views`
 --
 ALTER TABLE `views`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Constraints for dumped tables
@@ -1087,6 +1316,12 @@ ALTER TABLE `property_applications`
   ADD CONSTRAINT `property_applications_posted_id_foreign` FOREIGN KEY (`posted_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `property_applications_property_id_foreign` FOREIGN KEY (`property_id`) REFERENCES `properties` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `property_applications_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `property_documents`
+--
+ALTER TABLE `property_documents`
+  ADD CONSTRAINT `property_documents_property_id_foreign` FOREIGN KEY (`property_id`) REFERENCES `properties` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `property_images`

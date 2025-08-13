@@ -2,19 +2,29 @@
 
 @section('main')
 
-<form action="{{ route('properties') }}">                                                       
-    <div class="container-fluid">
-        <span>Areas</span>
-        @foreach ($areas as $value)
-            <label>
-                <input type="checkbox" name="area[]" value="{{ $value->id }}"
-                    {{ is_array(request('area')) && in_array($value->id, request('area')) ? 'checked' : '' }}>
-                {{ $value->name }}
-            </label>
-        @endforeach
+<form action="{{ route('properties') }}"> 
+    <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" id="areasDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            Areas
+        </button>
+        <ul class="dropdown-menu p-2" aria-labelledby="areasDropdown" style="min-width: 200px;">
+            @foreach ($areas as $value)
+                <li>
+                    <label class="dropdown-item custom-checkbox-label {{ is_array(request('areas')) && in_array($value->id, request('areas')) ? 'active' : '' }}">
+                        <input type="checkbox" name="areas[]" value="{{ $value->id }}"
+                            data-label="{{ $value->name }}"
+                            {{ is_array(request('areas')) && in_array($value->id, request('areas')) ? 'checked' : '' }}>
+                        <span class="checkmark"></span>
+                        {{ $value->name }}
+                    </label>
+                </li>
+            @endforeach
+        </ul>
+    </div>
 
+    <div class="container-fluid">
         <div class="filters">
-           <div class="dropdown">
+            <div class="dropdown">
                 <button class="btn btn-primary dropdown-toggle" type="button" id="typeDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                     Property Type
                 </button>
@@ -51,9 +61,35 @@
                     @endforeach
                 </ul>
             </div>
+
+            <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" id="bathroomDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    Bathrooms
+                </button>
+                <ul class="dropdown-menu p-2" aria-labelledby="bathroomDropdown" style="min-width: 200px;">
+                    @foreach ($bathrooms as $value)
+                        <li>
+                            <label class="dropdown-item custom-checkbox-label {{ is_array(request('bathroom')) && in_array($value->id, request('bathroom')) ? 'active' : '' }}">
+                                <input type="checkbox" name="bathroom[]" value="{{ $value->id }}"
+                                    data-label="{{ $value->title }}"
+                                    {{ is_array(request('bathroom')) && in_array($value->id, request('bathroom')) ? 'checked' : '' }}>
+                                <span class="checkmark"></span>
+                                {{ $value->title }}
+                            </label>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>            
+
+            <select name="sort" id="sort" class="form-control">
+                <option value="1" {{ (Request::get('sort') == '1') ? 'selected' : '' }}>Latest</option>
+                <option value="0" {{ (Request::get('sort') == '0') ? 'selected' : '' }}>Oldest</option>
+            </select>
+
             <div class="col">
                 <input type="text" class="js-range-slider" name="my_range" value="" />
             </div>
+
             <div class="col">
                 <div style="display: none">
                     <select name="city" id="city" >
@@ -66,24 +102,8 @@
                     </select>
                 </div>
             </div>
-            <div class="col">
-                <span>Bathrooms</span>
-                @if ($bathrooms)
-                    @foreach ($bathrooms as $value)
-                        <label>
-                            <input type="checkbox" 
-                                name="bathroom[]" 
-                                value="{{ $value->id }}"
-                                {{ is_array(request('bathroom')) && in_array($value->id, request('bathroom')) ? 'checked' : '' }}>
-                            {{ $value->title }}
-                        </label>
-                    @endforeach
-                @endif
-            </div>
         </div>
-    </div>
-    
-    <button class="rhea_search_form_button" type="submit"><span>Search</span></button>
+    </div>    
 </form>     
 
 <div class="body-details">
@@ -91,65 +111,95 @@
         <div class="col-md-8 col-12">
             @if ($properties->isNotEmpty())
                 @foreach ($properties as $value)                                     
-                    <div class="propery-listings">
-                        <div class="row">
-                            <div class="col-md-4">
-                                @php
-                                    $propertyImage = $value->property_images->first();
-                                @endphp
-                                
-                                @if (!empty($propertyImage->image))
-                                    <a href="{{ route('propertyDetails', $value->id) }}" >
-                                        <img loading="lazy" decoding="async" alt="" class="thumb" src="{{ asset('uploads/property/small/'.$propertyImage->image) }}" >
-                                    </a>
-                                @endif
+                    <div class="propery-listings">                        
+                        <div class="picture">
+                            @php
+                                $propertyImage = $value->property_images->first();
+                            @endphp
+                            
+                            @if (!empty($propertyImage->image))
+                                <a href="{{ route('propertyDetails', $value->id) }}" >
+                                    <img alt="" class="thumb" src="{{ asset('uploads/property/small/'.$propertyImage->image) }}" >
+                                </a>
+                            @endif
+                        </div>
+                        
+                        <div class="details">
+                            <div class="first-group">
+                                <div class="left">
+                                    <h3 class="title">{{ $value->title }}</h3>
+                                    <p>{{ $value->room->title }} {{ $value->propertyType->name }} in {{ $value->area->name }}.</p>
+                                </div>
+                                <div class="right">
+                                    @if ($value->category->name == 'Rent')
+                                        <span class="rh-ultra-featured">{{ $value->category->name }}</span>
+                                    @else
+                                        <span class="rh-ultra-hot">{{ $value->category->name }}</span>
+                                    @endif
+                                </div>                                                                                                 
                             </div>
 
-                            <div class="col-md-8">
-                                <div class="property-details">
-                                    <div class="first-group">
-                                        <h3 class="title">{{ $value->title }}</h3>
-                                        <p>{{ $value->room->title }} {{ $value->propertyType->name }} in {{ $value->area->name }}.</p>
-                                    </div>
+                            <div class="second-group">
+                                <p class="small-text">{{ $value->room->title }} {{ $value->propertyType->name }}</p>
+                                <p>Rs.{{ $value->price }}/-</p>
+                            </div>
 
-                                    <div class="second-group">
-                                        <p>{{ $value->room->title }} {{ $value->propertyType->name }}</p>
-                                        <p>Rs.{{ $value->price }}/-</p>
-                                    </div>
-                                    
-                                    <div class="developer">
-                                        <a href="#" class="btn btn-primary">Contact</a>
-                                        {{--
-                                        Build: {{ $value->year_build }}
-                                        <p class="added-date"><span class="added-title">Added:</span> {{ \Carbon\Carbon::parse($value->created_at)->format('d M, Y') }}</p> --}}                                    
-                                    </div>
-                                    
-                                    <p>Sizes: {{ $value->size }}</p>
-                                    {{ $value->bathroom->title }}
-                                    
-                                    
-                                    {{-- {{ Str::words(strip_tags($value->description), $words=10, '...') }} --}}
+                            <div class="third-group">
+                                <p>Sizes: {{ $value->size }} sq.yd. {{ $value->handover_status }} Possession: {{ \Carbon\Carbon::parse($value->possession_date)->format('M, Y') }}</p>
+                            </div>
                             
-                                        {{-- @if ($value->category->name == 'Rent')
-                                            <span class="rh-ultra-featured">{{ $value->category->name }}</span>
-                                        @else
-                                            <span class="rh-ultra-hot">{{ $value->category->name }}</span>
-                                        @endif --}}
+                            <div class="developer">
+                                <div class="branding">
+                                    <img alt="" class="logo" src="{{ asset('uploads/builder/'.$value->builder->logo) }}" >
+                                    <div class="name">
+                                        <p class="builder_name">{{ $value->builder->name }} </p>
+                                        <p>Developer</p>  
+                                    </div>                                  
+                                </div>
+                                <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#longModal_{{ $value->id }}" >Contact</a>  
+
+                                <div class="modal fade" id="longModal_{{ $value->id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-scrollable">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="longModalLabel">Contact Seller</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">                                            
+                                                <div class="modal-builder">
+                                                <h3>Contact Seller</h3>
+                                                    <div class="logo-details">
+                                                        <div class="logo">
+                                                            <img alt="" src="{{ asset('uploads/builder/'.$value->builder->logo) }}" >
+                                                        </div>
+                                                        <div class="details-modal">
+                                                            <h4>{{ $value->builder->name }}</h4>
+                                                            <p>Developer</p>
+                                                            <p>+91-{{ $value->builder->mobile }}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                Please share your contact
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-primary">Get Contact Details</button>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </div>                    
                     </div>      
                 @endforeach
                     {{ $properties->withQueryString()->links() }}
                 @else
                     <div>Property not found</div>
                 @endif                                                                          
-                    </div>
-                </div>
             </div>
+            <div class="col-md-4 col-12">Right</div>
         </div>
     </div>
-</div>
 @endsection
 
 @section('customJs')
@@ -283,7 +333,6 @@ function updateDropdownLabel(dropdownId, inputSelector, defaultText) {
         button.text(names.join(', '));
     }
 }
-
 $('.custom-checkbox-label input').on('change', function () {
     if ($(this).is(':checked')) {
         $(this).closest('.custom-checkbox-label').addClass('active');
@@ -293,10 +342,30 @@ $('.custom-checkbox-label input').on('change', function () {
 
     updateDropdownLabel('#typeDropdown', 'input[name="type[]"]', 'Property Type');
     updateDropdownLabel('#roomDropdown', 'input[name="room[]"]', 'Rooms');
+    updateDropdownLabel('#bathroomDropdown', 'input[name="bathroom[]"]', 'Bathrooms');
+    updateDropdownLabel('#areasDropdown', 'input[name="areas[]"]', 'Areas');
 });
 
-// Initialize both dropdown labels on page load
+// Initialize all dropdown labels on page load
 updateDropdownLabel('#typeDropdown', 'input[name="type[]"]', 'Property Type');
 updateDropdownLabel('#roomDropdown', 'input[name="room[]"]', 'Rooms');
+updateDropdownLabel('#bathroomDropdown', 'input[name="bathroom[]"]', 'Bathrooms');
+updateDropdownLabel('#areasDropdown', 'input[name="areas[]"]', 'Areas');
+
+function updateDropdownLabel(dropdownId, checkboxSelector, defaultLabel) {
+    let selectedLabels = [];
+    $(checkboxSelector + ':checked').each(function () {
+        selectedLabels.push($(this).data('label'));
+    });
+
+    if (selectedLabels.length > 0) {
+        $(dropdownId).text(selectedLabels.join(', '));
+    } else {
+        $(dropdownId).text(defaultLabel);
+    }
+}
+
+
+
 </script>
 @endsection
