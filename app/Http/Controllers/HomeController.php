@@ -15,110 +15,65 @@ use Illuminate\Support\Facades\Mail;
 use App\Models\JobApplication;
 use App\Models\PropertyType;
 use App\Models\Room;
-use App\Models\SavedJob;
 use App\Models\SavedProperty;
 use App\Models\User;
 use App\Models\View;
 
 class HomeController extends Controller {
     public function index(Request $request){
-        $bathrooms = Bathroom::where('status',1)->orderBy('title','ASC')->get();
-        $amenities = Amenity::where('status',1)->orderBy('title','ASC')->take(8)->get();
         $categories = Category::where('status',1)->orderBy('name','ASC')->take(8)->get();
+        $cities = City::where('status',1)->get();
+        $areas = Area::where('status',1)->get();        
         $newCategories = Category::where('status',1)->orderBy('name','ASC')->get();
         $featuredJobs = Property::where('status',1)->orderBy('created_at','DESC')->take(6)->get();
         //$featuredJobs = Property::where('status',1)->orderBy('created_at','DESC')->with('jobType')->where('isFeatured','Yes')->take(6)->get();
         $latestJobs = Property::where('status',1)->orderBy('created_at','DESC')->with('amenityType')->take(6)->get();
-        $cities = City::where('status',1)->get();
-        $rooms = Room::where('status',1)->get();
-        $bathrooms = Bathroom::where('status',1)->get();
         $types = PropertyType::where('status',1)->get();
-        $categories = Category::where('status',1)->get();
         $properties = Property::where('status',1);
-        $jobTypes = Builder::where('status',1)->get();
+        $jobTypes = Builder::where('status',1)->get();        
 
         //Filter using keyword
-        if(!empty($request->keyword)){
-            $properties = $properties->where(function($query) use ($request){
-                $query->orWhere('title','like','%'.$request->keyword.'%');
-                $query->orWhere('keywords','like','%'.$request->keyword.'%');
-            });
-        }      
-
+        // if(!empty($request->keyword)){
+        //     $properties = $properties->where(function($query) use ($request){
+        //         $query->orWhere('title','like','%'.$request->keyword.'%');
+        //         $query->orWhere('keywords','like','%'.$request->keyword.'%');
+        //         $query->orWhere('location','like','%'.$request->keyword.'%');
+        //     });
+        // }  
+        
         //Filter using city
         if(!empty($request->city)){            
             $properties = $properties->where('city_id',$request->city);
         }
 
-        //Filter using city
-        if(!empty($request->type)){            
-            $properties = $properties->where('property_type_id',$request->type);
-        }
-
-        //Filter using Room
-        if(!empty($request->room)){            
-            $properties = $properties->where('room_id',$request->room);
-        }
-
-        //Filter using Bathrooms
-        if(!empty($request->bathroom)){            
-            $properties = $properties->where('bathroom_id',$request->bathroom);
-        }
-
-        //Filter using category
-        if(!empty($request->category)){
-            $properties = $properties->where('category_id',$request->category);
-        }
-
-        //Filter using job_type
-        $jobTypeArray = [];
-        if(!empty($request->jobType)){
-            $jobTypeArray = explode(',',$request->jobType);
-            $properties = $properties->whereIn('related_rooms',$jobTypeArray);
-        }
-
-        //$properties = $properties->with('room','bathroom','category','city');
-
-        // Price slider
-        if($request->get('price_max') != '' && $request->get('price_min') != '') {
-            if($request->get('price_max') == 100000){
-                $properties = $properties->whereBetween('price',[intval($request->get('price_min')),1000000]);
-            } else {
-                $properties = $properties->whereBetween('price',[intval($request->get('price_min')),intval($request->get('price_max'))]);
-            }
-        }
-
-        if($request->sort == '0'){
-            $properties = $properties->orderBy('created_at','ASC');
-        } else {
-            $properties = $properties->orderBy('created_at','DESC');
-        }
+         //Filter using area
+        if (!empty($request->area) && is_array($request->area)) {            
+            $properties = $properties->whereIn('area_id', $request->area);
+        }        
 
         $properties = $properties->paginate(10);
 
-       
         $data = [
             'categories' => $categories,
             'cities' => $cities,
+            'areas' => $areas,
             'types' => $types,
-            'rooms' => $rooms,
-            'bathrooms' => $bathrooms,            
             'jobTypes' => $jobTypes,
-            'jobTypeArray' => $jobTypeArray,
             'properties' => $properties,  
             'featuredJobs' => $featuredJobs,
             'latestJobs' => $latestJobs,
             'newCategories' => $newCategories,
-            'amenities' => $amenities,                
         ];
-
-        // $data['priceMax'] = (intval($request->get('price_max')) == 0 ? 1000 : $request->get('price_max'));
-        // $data['priceMin'] = intval($request->get('price_min'));  
 
         return view('front.home.index', $data);
     }
 
 
+    public function getAreas($city_id) {
+        $areas = Area::where('city_id', $city_id)->get();
+        return response()->json($areas);
+    }
+    
 
     public function properties(Request $request) {
         $categories = Category::get();
@@ -136,10 +91,15 @@ class HomeController extends Controller {
         }
 
         //Filter using keyword
-        if(!empty($request->keyword)){
-            $properties = $properties->where(function($query) use ($request){
-                $query->orWhere('title','like','%'.$request->keyword.'%');
-                $query->orWhere('keywords','like','%'.$request->keyword.'%');
+        if (!empty($request->keyword)) {
+            $properties = $properties->where(function($query) use ($request) {
+                $query->orWhere('title', 'like', '%'.$request->keyword.'%')
+                    ->orWhere('keywords', 'like', '%'.$request->keyword.'%')
+                    ->orWhere('location', 'like', '%'.$request->keyword.'%')
+                    ->orWhere('description', 'like', '%'.$request->keyword.'%')
+                    ->orWhereHas('builder', function($q) use ($request) {
+                        $q->where('name', 'like', '%'.$request->keyword.'%');
+                    });                    
             });
         }
 
@@ -184,9 +144,7 @@ class HomeController extends Controller {
         if(!empty($request->jobType)){
             $jobTypeArray = explode(',',$request->jobType);
             $properties = $properties->whereIn('related_rooms',$jobTypeArray);
-        }
-
-        $properties = $properties->with('room','bathroom','category','city','area');
+        }        
 
         // Price slider
         if($request->get('price_max') != '' && $request->get('price_min') != '') {

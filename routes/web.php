@@ -37,6 +37,7 @@ use Illuminate\Support\Str;
 
 Route::get("/",[HomeController::class, 'index'])->name('front.home');
 Route::get("/buy",[HomeController::class, 'index'])->name('front.rent');
+Route::get('/get-areas/{city_id}', [HomeController::class, 'getAreas']);
 Route::get("/properties",[HomeController::class, 'properties'])->name('properties');
 Route::get("/details/{id}",[HomeController::class, 'propertyDetails'])->name('propertyDetails');
 Route::post("/apply-property",[HomeController::class, 'applyProperty'])->name('applyProperty');

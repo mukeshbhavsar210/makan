@@ -2,16 +2,56 @@
 
 @section('main')
 
-<div class="rh-custom-search-form-gutter clearfix"></div>
-<div class="rh-home-content">
-	<div class="elementor elementor-130">
-		@include('front.home.search.index')
-		
-        <div class="carousalHome">
-            <div><img src="https://ultra-realhomes.b-cdn.net/wp-content/uploads/2020/06/Beautiful-House.jpg" /></div>
-            <div><img src="https://ultra-realhomes.b-cdn.net/wp-content/uploads/2020/06/bathroom-02.jpg" /></div>
+<div class="container">
+    <section class="searchHome">
+        <h1>Properties to buy</h1>
+        <nav>
+            <div class="nav nav-tabs" >
+                <a href="{{ route('front.home') }}" class="nav-link active">Buy</a>
+                <a href="{{ route('front.rent') }}" class="nav-link">Rent</a>
+            </div>
+        </nav>
+
+        <div class="shadow p-4">
+            <form action="{{ route('properties') }}" >            
+                <ul>
+                    @if ($categories)                               
+                        @foreach ($categories as $value)
+                            <li>
+                                <label>
+                                    <input type="radio" name="category" value="{{ $value->id }}"
+                                        {{ request('category') == $value->id || (!request('category') && $loop->first) ? 'checked' : '' }}>
+                                    {{ $value->name }}
+                                </label>
+                            </li>
+                        @endforeach                            
+                    @endif
+                </ul>
+
+                <select name="city" id="city">
+                    <option value="">City</option>
+                    @foreach ($cities as $city)
+                        <option value="{{ $city->id }}" {{ Request::get('city') == $city->id ? 'selected' : '' }}>
+                            {{ $city->name }}
+                        </option>
+                    @endforeach
+                </select>           
+
+                <select name="areas" id="areas">
+                    <option value="">Areas</option>
+                </select>
+
+                <div>
+                    <input value="{{ Request::get('keyword') }}" type="text" name="keyword" id="keyword" placeholder="Search for locality, landmark, project or builder" class="form-control">
+                </div>
+
+                <button class="btn btn-primary" type="submit">Search</button>                
+            </form>
         </div>
-        
+    </section>
+</div>
+
+	
   {{-- 
 		@include('front.home.properties')
 		
@@ -90,8 +130,6 @@
         </div>
 		
         @include('front.home.discoverPropeties')		 --}}
-	</div>
-</div>
 
 @endsection
 @section('customJs')
@@ -119,5 +157,5 @@
                 window.location.href = "{{ url()->current() }}";
             }
         });
-    }
+    }   
 </script>
