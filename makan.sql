@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 13, 2025 at 04:10 PM
+-- Generation Time: Aug 14, 2025 at 09:40 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -465,10 +465,14 @@ CREATE TABLE `properties` (
 
 INSERT INTO `properties` (`id`, `title`, `slug`, `user_id`, `category_id`, `room_id`, `city_id`, `area_id`, `builder_id`, `sale_type_id`, `property_type_id`, `view_id`, `price`, `compare_price`, `description`, `keywords`, `location`, `size`, `rera`, `year_build`, `total_area`, `related_properties`, `related_amenities`, `related_facings`, `related_documents`, `possession_date`, `handover_status`, `status`, `created_at`, `updated_at`, `bathroom_id`, `is_featured`) VALUES
 (44, 'Shlok Heights', 'shlok-heights', 3, 21, 4, 1, 1, 41, 1, 2, NULL, 9800000.00, 8500000.00, 'Shlok Heights', '3 BHK Apartment Mukesh', 'Mansarovar Road', '1000', NULL, NULL, NULL, '', '', NULL, '', '2027-08-31', 'Ready to Move', 1, '2025-01-06 05:12:07', '2025-01-08 06:19:22', 2, 'Yes'),
-(50, 'Shayamal Row House', 'shayamal-row-house', 3, 27, 2, 2, 2, 42, 2, 1, NULL, 9000000.00, 8800000.00, 'Details', '3 BHK Apartment', 'Vejlpur', '1800', '123', '2024', '20000', '', '1,7,8,11', '1', '', NULL, 'Under Construction', 1, '2025-01-10 23:30:34', '2025-01-16 23:49:13', 2, 'Yes'),
+(50, 'Global Techie Town', 'global-techie-town', 3, 27, 2, 2, 2, 42, 2, 2, NULL, 9000000.00, 8800000.00, 'Details', '3 BHK Apartment', 'Electronic City', '1800', '123', '2024', '20000', '', '1,7,8,11', '1', '', '2027-08-31', 'Under Construction', 1, '2025-01-10 23:30:34', '2025-01-16 23:49:13', 2, 'Yes'),
 (51, 'Samarthya Status', 'samarthya_status', 3, 27, 1, 1, 11, 34, NULL, 2, NULL, 9800000.00, 8500000.00, 'Shlok Heights', '3 BHK Apartment', 'Ahmedabad', '1000', NULL, NULL, NULL, '', '', NULL, '', NULL, 'Under Construction', 1, '2025-01-06 05:12:07', '2025-01-08 06:19:22', 1, 'Yes'),
-(52, 'Manavnagar', 'samarthya_status', 3, 21, 1, 1, 15, 34, NULL, 2, NULL, 9800000.00, 8500000.00, 'Shlok Heights', '3 BHK Apartment', 'Ahmedabad', '1000', NULL, NULL, NULL, '', '', NULL, '', NULL, 'Under Construction', 1, '2025-01-06 05:12:07', '2025-01-08 06:19:22', 1, 'Yes'),
-(53, 'Swastik Marvella', 'swastik_marvella', 3, 21, 1, 1, 1, 34, NULL, 3, NULL, 9800000.00, 8500000.00, 'Swastik Marvella', '3 BHK Apartment', 'Mansarovar Road', '1000', NULL, NULL, NULL, '', '', NULL, '', NULL, 'Under Construction', 1, '2025-01-06 05:12:07', '2025-01-08 06:19:22', 1, 'Yes');
+(52, 'Manavnagar', 'samarthya_status', 3, 21, 1, 1, 11, 34, NULL, 2, NULL, 9800000.00, 8500000.00, 'Shlok Heights', '3 BHK Apartment', 'Ahmedabad', '1000', NULL, NULL, NULL, '', '', NULL, '', NULL, 'Under Construction', 1, '2025-01-06 05:12:07', '2025-01-08 06:19:22', 1, 'Yes'),
+(53, 'Swastik Marvella', 'swastik_marvella', 3, 21, 1, 1, 1, 34, NULL, 3, NULL, 9800000.00, 8500000.00, 'Swastik Marvella', '3 BHK Apartment', 'IOC Road', '1000', NULL, NULL, NULL, '', '', NULL, '', NULL, 'Under Construction', 1, '2025-01-06 05:12:07', '2025-01-08 06:19:22', 1, 'Yes'),
+(54, 'Saijpur Bogha', 'saigpur-bogha', 3, 21, 4, 1, 15, 34, NULL, 2, NULL, 9800000.00, 8500000.00, 'Shlok Heights', '3 BHK Apartment', 'Ahmedabad', '1000', NULL, NULL, NULL, '', '', NULL, '', NULL, 'Under Construction', 1, '2025-01-06 05:12:07', '2025-01-08 06:19:22', 1, 'Yes'),
+(55, 'Sattva', 'sattva', 3, 21, 4, 2, 12, 34, NULL, 2, NULL, 9800000.00, 8500000.00, 'Shlok Heights', '3 BHK Apartment', 'Ahmedabad', '1000', NULL, NULL, NULL, '', '', NULL, '', NULL, 'Under Construction', 1, '2025-01-06 05:12:07', '2025-01-08 06:19:22', 1, 'Yes'),
+(56, 'Brigade', 'brigade', 3, 21, 4, 2, 2, 34, NULL, 2, NULL, 9800000.00, 8500000.00, 'Shlok Heights', '3 BHK Apartment', 'Ahmedabad', '1000', NULL, NULL, NULL, '', '', NULL, '', NULL, 'Under Construction', 1, '2025-01-06 05:12:07', '2025-01-08 06:19:22', 1, 'Yes'),
+(57, 'Navami Funique', 'navami_funique', 3, 21, 4, 2, 2, 42, NULL, 2, NULL, 9800000.00, 8500000.00, 'Shlok Heights', '3 BHK Apartment', 'Ahmedabad', '1000', NULL, NULL, NULL, '', '', NULL, '', NULL, 'Under Construction', 1, '2025-01-06 05:12:07', '2025-01-08 06:19:22', 1, 'Yes');
 
 -- --------------------------------------------------------
 
@@ -1207,7 +1211,7 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `properties`
 --
 ALTER TABLE `properties`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
 
 --
 -- AUTO_INCREMENT for table `property_applications`

@@ -4,21 +4,18 @@
 
 <div class="container">
     <section class="searchHome">
-        <h1>Properties to buy</h1>
-        <nav>
-            <div class="nav nav-tabs" >
-                <a href="{{ route('front.home') }}" class="nav-link active">Buy</a>
-                <a href="{{ route('front.rent') }}" class="nav-link">Rent</a>
-            </div>
-        </nav>
-
-        <div class="shadow p-4">
+        <div class="mainTitle">
+            <h1>Trusted place to find a home</h1>
+            <p>9K+ listings added daily and 64K+ total verified</p>
+        </div>
+       
+        <div class="search-engine">
             <form action="{{ route('properties') }}" >            
-                <ul>
+                <ul class="rentBuy">
                     @if ($categories)                               
                         @foreach ($categories as $value)
                             <li>
-                                <label>
+                                <label class="{{ request('category') == $value->id || (!request('category') && $loop->first) ? 'activeTab' : '' }}">
                                     <input type="radio" name="category" value="{{ $value->id }}"
                                         {{ request('category') == $value->id || (!request('category') && $loop->first) ? 'checked' : '' }}>
                                     {{ $value->name }}
@@ -28,24 +25,30 @@
                     @endif
                 </ul>
 
-                <select name="city" id="city">
-                    <option value="">City</option>
-                    @foreach ($cities as $city)
-                        <option value="{{ $city->id }}" {{ Request::get('city') == $city->id ? 'selected' : '' }}>
-                            {{ $city->name }}
-                        </option>
-                    @endforeach
-                </select>           
+                <div class="search-controls">
+                    <div class="flex-search">
+                        <select name="city" id="city" class="city">
+                            <option value="">Select City</option>
+                            @foreach ($cities as $city)
+                                <option value="{{ $city->id }}" {{ Request::get('city') == $city->id ? 'selected' : '' }}>
+                                    {{ $city->name }}
+                                </option>
+                            @endforeach
+                        </select>           
 
-                <select name="areas" id="areas">
-                    <option value="">Areas</option>
-                </select>
+                        <div id="search-container" style="display:none;">
+                            <input value="{{ Request::get('keyword') }}" type="text" name="keyword" id="keyword" placeholder="Search for locality, landmark, project or builder" class="form-control">
 
-                <div>
-                    <input value="{{ Request::get('keyword') }}" type="text" name="keyword" id="keyword" placeholder="Search for locality, landmark, project or builder" class="form-control">
-                </div>
+                            <ul id="areas" class="areas-list" style="display:none;">
+                                <li>Popular search in </li>
+                            </ul>
+                        </div>
+                    </div>
 
-                <button class="btn btn-primary" type="submit">Search</button>                
+                    <div class="right-btn">
+                        <button class="btn btn-primary" type="submit">Search</button>      
+                    </div>
+                </div>          
             </form>
         </div>
     </section>

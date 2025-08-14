@@ -3,35 +3,25 @@
 /* Fonts */
 /* Bootstrap Styles */
 :root {
-  --bs-white: #fff;
-  --bs-gray: #6c757d;
-  --bs-secondary: #6c757d;
-  --bs-success: #198754;
-  --bs-info: #0dcaf0;
-  --bs-warning: #ffc107;
-  --bs-danger: #dc3545;
-  --bs-light: #f8f9fa;
-  --bs-dark: #212529;
-  --bs-secondary-rgb: 108, 117, 125;
-  --bs-success-rgb: 25, 135, 84;
-  --bs-info-rgb: 13, 202, 240;
-  --bs-warning-rgb: 255, 193, 7;
-  --bs-danger-rgb: 220, 53, 69;
-  --bs-light-rgb: 248, 249, 250;
-  --bs-dark-rgb: 33, 37, 41;
-  --bs-white-rgb: 255, 255, 255;
-  --bs-black-rgb: 0, 0, 0;
-  --bs-body-color-rgb: 33, 37, 41;
-  --bs-body-bg-rgb: 255, 255, 255;
-  --bs-font-sans-serif: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  --bs-font-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  --bs-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
-  --bs-body-font-family: var(--bs-font-sans-serif);
-  --bs-body-font-size: 13px;
-  --bs-body-font-weight: 400;
-  --bs-body-line-height: 1.5;
-  --bs-body-color: #212529;
-  --bs-body-bg: #fff;
+  --white: #fff;
+  --gray: #6c757d;
+  --primary: #36c991;
+  --secondary: #6c757d;
+  --success: #198754;
+  --info: #0dcaf0;
+  --warning: #ffc107;
+  --danger: #dc3545;
+  --light: #f8f9fa;
+  --dark: #212529;  
+  --font-sans-serif: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
+  --body-font-family: var(--font-sans-serif);
+  --body-font-size: 13px;
+  --body-font-weight: 400;
+  --body-line-height: 1.5;
+  --body-color: #212529;
+  --body-bg: #fff;
 }
 *, *::before, *::after {
   box-sizing: border-box;
@@ -39,11 +29,11 @@
 body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
-  font-size: var(--bs-body-font-size);
-  font-weight: var(--bs-body-font-weight);
-  line-height: var(--bs-body-line-height);
-  color: var(--bs-body-color);
-  text-align: var(--bs-body-text-align);
+  font-size: var(--body-font-size);
+  font-weight: var(--body-font-weight);
+  line-height: var(--body-line-height);
+  color: var(--body-color);
+  text-align: var(--body-text-align);
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
@@ -89,9 +79,50 @@ p {
 .filters { display: flex; justify-content: space-between;}
 .filters div { margin-right: 8px;}
 
+.navbar-brand img { width: 175px;}
+
 .body-details { background-color: #f4f4f4;}
 
-.propery-listings { border-radius: 15px; padding:10px; margin:10px; background-color: var(--bs-body-bg); cursor: pointer; display: flex; justify-content: space-between;}
+.buyCover { background-image: url('../images/homeCover.webp'); background-size: cover; background-repeat: no-repeat;}
+.sellCover { background-image: url('../images/rentCover.webp') !important; }
+.navbar { background-image: linear-gradient( rgba(0,0,0,0.45),rgba(0,0,0,0.25),transparent );}
+
+.searchHome { margin:95px 0 30px 0;}
+.searchHome .mainTitle { text-align: center; color: var(--white); }
+.searchHome .mainTitle h1 { font-size: 32px; font-weight: bold; text-shadow: 1px 1px 1px rgba(0,0,0,0.51);}
+
+.rentBuy { display: flex; padding: 10px 20px 0 20px; list-style-type: none;}
+.rentBuy li {  color: var(--white); margin-right: 30px;}
+.rentBuy label { position: relative; display: inline-block; padding: 5px 0; cursor: pointer; text-transform: uppercase; font-weight: bold; font-size: 13px; transition: all 0.2s ease-in-out; color: rgba(255,255,255,0.7); }
+.rentBuy label.activeTab { color: var(--white);}
+.rentBuy label.activeTab::after { content: ""; border-bottom: 2px #fff solid; position: absolute; bottom:0; left:0; width: 100%;  }
+.rentBuy input[type="radio"] { display: none; }
+
+.search-engine { background: rgba(0,0,0,0.5); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border-radius: 15px 15px 41px 41px; width: 68%; margin: 50px auto 0 auto;}
+.search-engine .search-controls { background-color: var(--white); border-radius: 100px; position: relative; height: 61px; }
+.search-engine .search-controls .right-btn { position: absolute; right:0; top:0; padding:10px; }
+.search-engine .search-controls .right-btn .btn { padding: 10px 30px !important; }
+.search-engine .search-controls .city { width: 83%; background: none; border: none; padding: 20px 50px 20px 20px; border-right:1px #ccc solid;}
+.search-engine .active { display: flex; width: 84%;}
+.search-engine .active .city { width: 20% !important; }
+.search-engine .active #search-container { width: 80% !important; display: block !important;}
+.search-engine .active #search-container .form-control {  background: none; padding: 17px; border: none; }
+.search-engine .active #search-container .form-control:focus { box-shadow: none;}
+.search-engine .search-controls .smallSearch { width: 15% !important; }
+.search-engine .areas { position: absolute; width: 65%; margin-top:5px; border-radius: 5px; border: none; padding: 10px; background-color: var(--white); }
+.search-engine .areas-list { position: absolute; overflow-y: auto; height: 220px; width: 65%; margin-top: 5px; border-radius: 5px; border: none;  background-color: var(--white); padding: 0; list-style-type: none; box-shadow: rgba(0, 0, 0, 0.25) 0px 0px 4px;}
+.search-engine .areas-list .area-item { width: 100%; padding: 7px 20px; display: flex; margin: 0; text-decoration: none;}
+.search-engine .areas-list .area-item .icon { width: 30px; margin-right: 5px;  margin-top: 5px;}
+.search-engine .areas-list .area-item .text { text-decoration: none; color: #000; }
+.search-engine .areas-list .area-item .text p { margin: 0; padding: 0; line-height: 20px;}
+.search-engine .areas-list .area-item .text .link { font-size: 13px; }
+.search-engine .areas-list .area-item .text .locality { font-size: 10px; text-transform: uppercase; color: #666;}
+.search-engine .areas-list .area-item:hover { background-color: rgba(94,35,220,.08); }
+
+.btn { border-radius: 100px !important; border: none !important; font-weight: bold;}
+.btn-primary { background-color: var(--primary) !important}
+
+.propery-listings { border-radius: 15px; padding:10px; margin:10px; background-color: var(--body-bg); cursor: pointer; display: flex; justify-content: space-between;}
 .propery-listings:hover { box-shadow: 3px 3px 3px #e5e5e5;}
 .propery-listings .picture { width: 30%;}
 .propery-listings .picture .thumb { border-radius: 7px; width: 100%; height: 100%; }

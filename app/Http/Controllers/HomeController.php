@@ -99,9 +99,14 @@ class HomeController extends Controller {
                     ->orWhere('description', 'like', '%'.$request->keyword.'%')
                     ->orWhereHas('builder', function($q) use ($request) {
                         $q->where('name', 'like', '%'.$request->keyword.'%');
-                    });                    
+                    });
+                    // ->orWhereHas('saleType', function($q) use ($request) {
+                    //     $q->where('name', 'like', '%'.$request->keyword.'%');
+                    // });
             });
         }
+
+
 
         //Filter using location
         // if(!empty($request->location)){
@@ -128,6 +133,12 @@ class HomeController extends Controller {
             $areas->where('city_id', $request->city);
         }
         $areas = $areas->get();
+
+
+        // Filter by area
+        if ($request->filled('area')) {
+            $properties->where('area_id', $request->area);
+        }
 
         //Filter using Room
         if (!empty($request->room) && is_array($request->room)) {
