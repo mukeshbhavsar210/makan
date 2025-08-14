@@ -203,7 +203,7 @@
             </div>
         @endif   
 
-       @include('front.propertyDetails.form')
+       @include('front.home.details.form')
     
     {{-- @include('front.propertyDetails.similarProperty')       --}}
  

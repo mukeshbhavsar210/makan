@@ -36,7 +36,6 @@ use Illuminate\Support\Str;
 // Route::get("/contact/{id}",[ContactController::class, 'details'])->name('contact.details');;
 
 Route::get("/",[HomeController::class, 'index'])->name('front.home');
-Route::get("/rent",[HomeController::class, 'index'])->name('front.rent');
 Route::get('/get-areas/{city_id}', [HomeController::class, 'getAreas']);
 Route::get("/properties",[HomeController::class, 'properties'])->name('properties');
 Route::get("/details/{id}",[HomeController::class, 'propertyDetails'])->name('propertyDetails');

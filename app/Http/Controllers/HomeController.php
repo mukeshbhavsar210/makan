@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Models\JobApplication;
 use App\Models\PropertyType;
 use App\Models\Room;
+use App\Models\SaleType;
 use App\Models\SavedProperty;
 use App\Models\User;
 use App\Models\View;
@@ -75,15 +76,16 @@ class HomeController extends Controller {
     }
     
 
+    
     public function properties(Request $request) {
         $categories = Category::get();
         $cities = City::where('status',1)->get();
         $areas = Area::where('status',1)->get();
         $rooms = Room::where('status',1)->get();
         $bathrooms = Bathroom::where('status',1)->get();
-        $types = PropertyType::where('status',1)->get();        
+        $saletypes = SaleType::where('status',1)->get();
+        $propertyTypes = PropertyType::where('status',1)->get();        
         $properties = Property::where('status',1);
-        $jobTypes = Builder::where('status',1)->get();
 
         //Filter using category
         if(!empty($request->category)){
@@ -100,77 +102,81 @@ class HomeController extends Controller {
                     ->orWhereHas('builder', function($q) use ($request) {
                         $q->where('name', 'like', '%'.$request->keyword.'%');
                     });
-                    // ->orWhereHas('saleType', function($q) use ($request) {
-                    //     $q->where('name', 'like', '%'.$request->keyword.'%');
-                    // });
             });
         }
 
-
-
-        //Filter using location
-        // if(!empty($request->location)){
-        //     $property = $property->where('location',$request->location);            
-        // }       
-
-        if(!empty($request->city)){            
-            $properties = $properties->where('city_id',$request->city);
-        }        
-
-        //Filter using property types
+         //Filter using property types working
         if (!empty($request->type) && is_array($request->type)) {
             $properties = $properties->whereIn('property_type_id', $request->type);
         }
 
-        //Filter using area
-        if (!empty($request->area) && is_array($request->area)) {            
-            $properties = $properties->whereIn('area_id', $request->area);
-        }
-        
-        //Filter using area selected
-        $areas = Area::query();
-        if ($request->has('city') && !empty($request->city)) {
-            $areas->where('city_id', $request->city);
-        }
-        $areas = $areas->get();
-
-
-        // Filter by area
+        // Filter by area working
         if ($request->filled('area')) {
             $properties->where('area_id', $request->area);
         }
 
-        //Filter using Room
+        //Filter using Room Working
         if (!empty($request->room) && is_array($request->room)) {
             $properties = $properties->whereIn('room_id', $request->room);
         }
 
-        //Filter using Bathrooms
+        //Filter using Bathrooms working
         if (!empty($request->bathroom) && is_array($request->bathroom)) {
             $properties = $properties->whereIn('bathroom_id', $request->bathroom);
-        }        
+        } 
 
-        //Filter using job_type
-        $jobTypeArray = [];
-        if(!empty($request->jobType)){
-            $jobTypeArray = explode(',',$request->jobType);
-            $properties = $properties->whereIn('related_rooms',$jobTypeArray);
-        }        
+        //Filter using Sale Types
+        if (!empty($request->saletype) && is_array($request->saletype)) {
+            $properties = $properties->whereIn('saletype_id', $request->saletype);
+        }
+        
+        //Filter using Status
+        // if (!empty($request->status) && is_array($request->status)) {
+        //     $properties = $properties->whereIn('status', $request->status);
+        // }
 
-        // Price slider
+        // Price slider working
         if($request->get('price_max') != '' && $request->get('price_min') != '') {
-            if($request->get('price_max') == 100000){
+            if($request->get('price_max') == 100000000){
                 $properties = $properties->whereBetween('price',[intval($request->get('price_min')),1000000]);
             } else {
                 $properties = $properties->whereBetween('price',[intval($request->get('price_min')),intval($request->get('price_max'))]);
             }
         }
 
-        if($request->sort == '0'){
-            $properties = $properties->orderBy('created_at','ASC');
-        } else {
-            $properties = $properties->orderBy('created_at','DESC');
-        }
+        //Filter using job_type
+        // $jobTypeArray = [];
+        // if(!empty($request->jobType)){
+        //     $jobTypeArray = explode(',',$request->jobType);
+        //     $properties = $properties->whereIn('related_rooms',$jobTypeArray);
+        // }  
+
+        // if($request->sort == '0'){
+        //     $properties = $properties->orderBy('created_at','ASC');
+        // } else {
+        //     $properties = $properties->orderBy('created_at','DESC');
+        // }
+
+        //Filter using location
+        // if(!empty($request->location)){
+        //     $property = $property->where('location',$request->location);            
+        // }       
+
+        // if(!empty($request->city)){            
+        //     $properties = $properties->where('city_id',$request->city);
+        // }               
+
+        //Filter using area
+        // if (!empty($request->area) && is_array($request->area)) {            
+        //     $properties = $properties->whereIn('area_id', $request->area);
+        // }
+        
+        //Filter using area selected
+        // $areas = Area::query();
+        // if ($request->has('city') && !empty($request->city)) {
+        //     $areas->where('city_id', $request->city);
+        // }
+        // $areas = $areas->get();
 
         $properties = $properties->paginate(10);
         
@@ -178,18 +184,17 @@ class HomeController extends Controller {
             'categories' => $categories,
             'cities' => $cities,
             'areas' => $areas,
-            'types' => $types,
+            'propertyTypes' => $propertyTypes,
             'rooms' => $rooms,
-            'bathrooms' => $bathrooms,            
-            'jobTypes' => $jobTypes,
-            'jobTypeArray' => $jobTypeArray,
+            'bathrooms' => $bathrooms,
+            'saletypes' => $saletypes,
             'properties' => $properties,   
         ];
 
          $data['priceMax'] = (intval($request->get('price_max')) == 0 ? 1000 : $request->get('price_max'));
          $data['priceMin'] = intval($request->get('price_min'));                 
     
-        return view('front.propertyMap.index', $data);
+        return view('front.home.listings', $data);
     }
 
 
@@ -244,7 +249,7 @@ class HomeController extends Controller {
         $data['applications'] = $applications;
         $data['count'] = $count;        
 
-        return view('front.propertyDetails.index',$data);       
+        return view('front.home.details.index',$data);       
     }
 
 

@@ -11,9 +11,9 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
 <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
-<body class="buyCover">
+<body >
 	
-<header >
+<header>
 	<nav class="navbar navbar-expand-lg shadow py-3">
 		<div class="container">
 			<a class="navbar-brand" href="{{ route('front.home') }}"><img src="{{ asset('front-assets/images/logo.png') }}" /></a>
@@ -24,14 +24,40 @@
 				<a class="btn btn-primary" href="" type="submit">Post a Job</a>
 			</div>
 
+			{{-- <form action="{{ route('properties') }}" > 
+				<div class="dropdown">
+					<button class="btn btn-primary dropdown-toggle" type="button" id="areasDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+						Areas
+					</button>
+					<ul class="dropdown-menu p-2" aria-labelledby="areasDropdown" style="min-width: 200px;">
+						@foreach ($areas as $value)
+							<li>
+								<label class="dropdown-item custom-checkbox-label {{ is_array(request('areas')) && in_array($value->id, request('areas')) ? 'active' : '' }}">
+									<input type="checkbox" name="areas[]" value="{{ $value->id }}"
+										data-label="{{ $value->name }}"
+										{{ is_array(request('areas')) && in_array($value->id, request('areas')) ? 'checked' : '' }}>
+									<span class="checkmark"></span>
+									{{ $value->name }}
+								</label>
+							</li>
+						@endforeach
+					</ul>
+				</div>
+			</form> --}}
+
 			@if (Auth::check())
-				<a href="{{ route('profile.index')}}" class="nav-link text-dark">My Account</a>
+				<a href="{{ route('profile.index')}}" class="btn btn-primary">My Account</a>
 			@else
 				{{-- <a href="{{ route('account.login')}}" data-bs-toggle="modal" data-bs-target="#exampleModal" class="nav-link text-dark">Login/Register</a> --}}
-				<a href="{{ route('account.login')}}" data-bs-toggle="modal" data-bs-target="#exampleModal" class="nav-link text-dark">Login</a>						
+				<a href="{{ route('account.login')}}" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-primary">Login</a>						
 			@endif
-								
-			<!-- Modal -->
+	</nav>
+</header>	
+
+@yield('main')
+
+<footer>
+	<!-- Modal -->
 			<div class="modal fade bd-example-modal-lg" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 				<div class="modal-dialog modal-lg">
 					<div class="modal-content">
@@ -124,17 +150,12 @@
 				<button type="button" class="btn btn-primary">Save changes</button>
 			</div>
 		</div>
-	</nav>
-</header>	
-
-@yield('main')
-
-<footer></footer>
+</footer>
 
 <script src="{{ asset('front-assets/js/jquery-3.6.0.min.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
-<script src="{{ asset('front-assets/js/custom.js') }}"></script>
 <script src="{{ asset('front-assets/js/ion.rangeSlider.min.js') }}"></script>
+<script src="{{ asset('front-assets/js/custom.js') }}"></script>
 <script src="{{ asset('front-assets/js/slick.min.js') }}"></script>
 
 <script type="text/javascript">

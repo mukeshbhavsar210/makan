@@ -193,7 +193,7 @@ $('#city').on('change', function () {
 $('.rentBuy input[type="radio"]').on('change', function() {
     $('.rentBuy label').removeClass('activeTab');
     $(this).closest('label').addClass('activeTab');
-    $('body').toggleClass('sellCover');
+    $('.searchHome').toggleClass('sellCover');
 
     // Get label text
     // let labelText = $(this).closest('label').text().trim().toLowerCase();
@@ -203,6 +203,81 @@ $('.rentBuy input[type="radio"]').on('change', function() {
     // } else if (labelText === 'rent') {
     //     window.location.href = '/rent';
     // }
+});
+
+
+
+
+$(document).ready(function () {
+   let priceLabels = ["0", "50L", "1Cr", "2Cr", "3Cr", "4Cr", "5Cr+"];
+    let priceValues = [0, 5000000, 10000000, 20000000, 30000000, 40000000, 50000000];
+
+    let fromIndex = 0;
+    let toIndex = 6;
+
+    let minVal = parseInt($("#price_min").val());
+    let maxVal = parseInt($("#price_max").val());
+
+    if (!isNaN(minVal)) {
+        let idx = priceValues.indexOf(minVal);
+        if (idx !== -1) fromIndex = idx;
+    }
+    if (!isNaN(maxVal)) {
+        let idx = priceValues.indexOf(maxVal);
+        if (idx !== -1) toIndex = idx;
+    }
+
+    let slider = $("#priceRange").ionRangeSlider({
+        type: "double",
+        values: priceLabels,
+        from: fromIndex,
+        to: toIndex,
+        grid: true,
+        skin: "round",
+        onFinish: function (data) {
+            $("#price_min").val(priceValues[data.from]);
+            $("#price_max").val(priceValues[data.to]);
+        }
+    }).data("ionRangeSlider");
+
+    // Reset Button Click
+    $("#resetPriceRange").on("click", function () {
+        // Reset hidden inputs
+        $("#price_min").val("");
+        $("#price_max").val("");
+
+        // Reset slider visually
+        slider.update({
+            from: 0,
+            to: priceLabels.length - 1
+        });
+        $("#filterForm").submit();
+    });
+
+
+
+    function toggleActiveClass(name, buttonId) {
+        let anyChecked = $(`input[name="${name}[]"]:checked`).length > 0;
+        $(`#${buttonId}`).toggleClass('activeFilter', anyChecked);
+    }
+
+    // List of filter groups and their button IDs
+    let filters = [
+        { name: 'bathroom', buttonId: 'bathroomDropdown' },
+        { name: 'room', buttonId: 'roomDropdown' },
+        { name: 'type', buttonId: 'typeDropdown' }
+    ];
+
+    // Attach change listener to all checkboxes in these groups
+    filters.forEach(f => {
+        $(document).on('change', `input[name="${f.name}[]"]`, function () {
+            toggleActiveClass(f.name, f.buttonId);
+        });
+
+        // Run once on page load to set initial state
+        toggleActiveClass(f.name, f.buttonId);
+    });
+
 });
 
 
