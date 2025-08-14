@@ -3,16 +3,17 @@
 /* Fonts */
 /* Bootstrap Styles */
 :root {
-  --white: #fff;
-  --gray: #6c757d;
-  --primary: #36c991;
+  --primary: #0d6efd;
   --secondary: #6c757d;
+  --white: #fff;
+  --dark: #212529;
+  --gray: #6c757d;  
   --success: #198754;
   --info: #0dcaf0;
   --warning: #ffc107;
   --danger: #dc3545;
   --light: #f8f9fa;
-  --dark: #212529;  
+    
   --font-sans-serif: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --font-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   --gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
@@ -76,9 +77,16 @@ p {
   margin-bottom: 1rem;
 }
 
-.filters { display: flex; justify-content: space-between;}
+.filters { display: flex; justify-content: space-between; padding: 5px 0; background-color: var(--white); }
 .filters div { margin-right: 8px;}
+.filters .btnFilter { border: 1px solid rgb(204, 204, 204) !important; border-radius: 2px !important; color: rgb(108, 108, 108) !important; font-size: 14px !important; background-color: var(--white) !important; }
+.filters .btnFilter:hover { border: 1px solid #000 !important; color: #000 !important;}
+.filters .dropdown-menu { padding: 8px 15px; margin: 0; border-radius: 0 !important; }
+.filters .dropdown-menu li { margin: 10px 0; }
+.filters .dropdown-menu .dropdown-item { width: auto; font-size: 13px; border-radius: 100px; display: inline; border:1px #ccc solid;}
+.filters .dropdown-menu .dropdown-item.active, .dropdown-item:active { border-color: var(--primary); }
 
+.activeFilter::after { content: ""; height: 6px; width: 6px; border: none !important; background-color: var(--primary); border-radius: 100px; position: absolute; top:4px; left:1px; display: block !important;}
 .navbar-brand img { width: 175px;}
 
 .body-details { background-color: #f4f4f4;}
@@ -87,9 +95,15 @@ p {
 .sellCover { background-image: url('../images/rentCover.webp') !important; }
 .navbar { background-image: linear-gradient( rgba(0,0,0,0.45),rgba(0,0,0,0.25),transparent );}
 
-.searchHome { margin:95px 0 30px 0;}
+header { position: fixed; width: 100%; top:0; left: 0; z-index: 99; background-color: var(--white);}
+
+.custom-price { width: 500px;}
+
+.searchHome { padding:140px 0 80px 0; background-image: url('../images/homeCover.webp'); background-size: cover; background-repeat: no-repeat;}
 .searchHome .mainTitle { text-align: center; color: var(--white); }
 .searchHome .mainTitle h1 { font-size: 32px; font-weight: bold; text-shadow: 1px 1px 1px rgba(0,0,0,0.51);}
+
+.listing-page { margin-top: 80px;}
 
 .rentBuy { display: flex; padding: 10px 20px 0 20px; list-style-type: none;}
 .rentBuy li {  color: var(--white); margin-right: 30px;}
@@ -101,7 +115,7 @@ p {
 .search-engine { background: rgba(0,0,0,0.5); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border-radius: 15px 15px 41px 41px; width: 68%; margin: 50px auto 0 auto;}
 .search-engine .search-controls { background-color: var(--white); border-radius: 100px; position: relative; height: 61px; }
 .search-engine .search-controls .right-btn { position: absolute; right:0; top:0; padding:10px; }
-.search-engine .search-controls .right-btn .btn { padding: 10px 30px !important; }
+.search-engine .search-controls .right-btn .btn { padding: 10px 30px !important; border-radius: 100px !important; background-color: var(--primary) !important}
 .search-engine .search-controls .city { width: 83%; background: none; border: none; padding: 20px 50px 20px 20px; border-right:1px #ccc solid;}
 .search-engine .active { display: flex; width: 84%;}
 .search-engine .active .city { width: 20% !important; }
@@ -119,8 +133,8 @@ p {
 .search-engine .areas-list .area-item .text .locality { font-size: 10px; text-transform: uppercase; color: #666;}
 .search-engine .areas-list .area-item:hover { background-color: rgba(94,35,220,.08); }
 
-.btn { border-radius: 100px !important; border: none !important; font-weight: bold;}
-.btn-primary { background-color: var(--primary) !important}
+.btn { border: none !important; font-weight: bold;}
+.btn-primary { }
 
 .propery-listings { border-radius: 15px; padding:10px; margin:10px; background-color: var(--body-bg); cursor: pointer; display: flex; justify-content: space-between;}
 .propery-listings:hover { box-shadow: 3px 3px 3px #e5e5e5;}
@@ -166,21 +180,11 @@ p {
 .breadcrumb li a { font-size: 14px; color: #666; text-decoration: none;}
 .breadcrumb li a:hover { color: red;}
 
-.custom-checkbox-label {
-    position: relative;
-    padding-left: 30px;
-    cursor: pointer;
-    user-select: none;
-}
 
-.custom-checkbox-label input {
-    position: absolute;
-    opacity: 0;
-    cursor: pointer;
-}
-
+.custom-checkbox-label { position: relative; cursor: pointer; user-select: none; }
+.custom-checkbox-label input { position: absolute; opacity: 0; cursor: pointer; border: 1px red solid; }
 .custom-checkbox-label .checkmark {
-    position: absolute;
+    position: absolute; display: none;
     left: 8px;
     top: 50%;
     transform: translateY(-50%);
@@ -221,11 +225,4 @@ p {
     background-color: #e7f1ff;
 }
 
-#typeDropdown {
-    display: inline-block;
-    max-width: 150px;   /* Set your desired width */
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    vertical-align: middle;
-}
+#typeDropdown, #roomDropdown, #bathroomDropdown { display: inline-block; max-width: 120px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; vertical-align: middle; }
