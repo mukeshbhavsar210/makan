@@ -11,12 +11,12 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
 <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
-<body>
+<body class="buyCover">
 	
-<header>
-	<nav class="navbar navbar-expand-lg navbar-light bg-white shadow py-3">
-		<div class="container-fluid">
-			<a class="navbar-brand" href="{{ route('front.home') }}">Housing.com</a>
+<header >
+	<nav class="navbar navbar-expand-lg shadow py-3">
+		<div class="container">
+			<a class="navbar-brand" href="{{ route('front.home') }}"><img src="{{ asset('front-assets/images/logo.png') }}" /></a>
 			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
