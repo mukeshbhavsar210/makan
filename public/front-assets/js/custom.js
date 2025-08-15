@@ -234,6 +234,52 @@ $("#resetPriceRange").on("click", function () {
     $("#filterForm").submit();
 });
 
+
+//Size range
+let sizeLabels = ["0", "500", "1000", "1500", "2000", "3000", "4000", "5000+"];
+let sizeValues = [0, 500, 1000, 1500, 2000, 3000, 4000, 5000];
+
+let fromSizeIndex = 0;
+let toSizeIndex = sizeLabels.length - 1;
+
+let minSize = parseInt($("#size_min").val());
+let maxSize = parseInt($("#size_max").val());
+
+if (!isNaN(minSize)) {
+    let idx = sizeValues.indexOf(minSize);
+    if (idx !== -1) fromSizeIndex = idx;
+}
+if (!isNaN(maxSize)) {
+    let idx = sizeValues.indexOf(maxSize);
+    if (idx !== -1) toSizeIndex = idx;
+}
+
+let sizeSlider = $("#sizeRange").ionRangeSlider({
+    type: "double",
+    values: sizeLabels,
+    from: fromSizeIndex,
+    to: toSizeIndex,
+    grid: true,
+    skin: "round",
+    onFinish: function (data) {
+        $("#size_min").val(sizeValues[data.from]);
+        $("#size_max").val(sizeValues[data.to]);
+    }
+}).data("ionRangeSlider");
+
+// Reset Button Click
+$("#resetSizeRange").on("click", function () {
+    $("#size_min").val("");
+    $("#size_max").val("");
+
+    sizeSlider.update({
+        from: 0,
+        to: sizeLabels.length - 1
+    });
+    $("#sizeFilterForm").submit();
+});
+
+
 function toggleActiveClass(name, buttonId) {
     let anyChecked = $(`input[name="${name}[]"]:checked`).length > 0;
     $(`#${buttonId}`).toggleClass('activeFilter', anyChecked);
@@ -326,3 +372,9 @@ $(document).on('change', 'input[name="saletype"], input[name="construction"], in
 });
 
 
+$('#applyFilters, #resetFilters').on('click', function () {
+    var dropdown = bootstrap.Dropdown.getInstance($('#moreFiltersDropdown')[0]);
+    if (dropdown) {
+        dropdown.hide();
+    }
+});
