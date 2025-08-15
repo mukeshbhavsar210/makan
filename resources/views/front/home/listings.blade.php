@@ -26,7 +26,7 @@
         <div class="container-fluid">
             <div class="filters">
                 <div class="dropdown">
-                    <button class="btn btnFilter dropdown-toggle" type="button" id="typeDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <button class="btn control-btn btnFilter dropdown-toggle" type="button" id="typeDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                         Property Type
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="typeDropdown" >
@@ -44,7 +44,7 @@
                 </div>
 
                 <div class="dropdown">
-                    <button class="btn btnFilter dropdown-toggle" type="button" id="roomDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <button class="btn control-btn btnFilter dropdown-toggle" type="button" id="roomDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                         BHK Type
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="roomDropdown" >
@@ -63,7 +63,7 @@
                 </div>
 
                 <div class="dropdown">
-                    <button class="btn btnFilter dropdown-toggle" type="button" id="bathroomDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <button class="btn control-btn btnFilter dropdown-toggle" type="button" id="bathroomDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                         Bathrooms
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="bathroomDropdown" >
@@ -85,21 +85,97 @@
                     <button class="btn btnFilter dropdown-toggle" type="button" id="saletypeDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                         Sale Type
                     </button>
-                    <ul class="dropdown-menu" aria-labelledby="saletypeDropdown" >
+                    <ul class="dropdown-menu" aria-labelledby="saletypeDropdown">
                         @foreach ($saletypes as $value)
                             <li>
-                                <label class="dropdown-item custom-checkbox-label {{ is_array(request('saletype')) && in_array($value->id, request('saletype')) ? 'active' : '' }}">
-                                    <input type="checkbox" name="saletype[]" value="{{ $value->id }}" data-label="{{ $value->title }}"
-                                        {{ is_array(request('saletype')) && in_array($value->id, request('saletype')) ? 'checked' : '' }}>
+                                <label class="dropdown-item custom-radio-label {{ request('saletype') == $value->id ? 'active' : '' }}">
+                                    <input type="radio" name="saletype" value="{{ $value->id }}" data-label="{{ $value->title }}"
+                                        {{ request('saletype') == $value->id ? 'checked' : '' }}>
+                                    <span class="radiomark"></span>
+                                    {{ $value->title }}
+                                </label>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+
+                <div class="dropdown">
+                    <button class="btn btnFilter dropdown-toggle" type="button" id="constructionDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        Construction
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="constructionDropdown">
+                        @foreach ($constructions as $value)
+                            <li>
+                                <label class="dropdown-item custom-radio-label {{ request('construction') == $value->id ? 'active' : '' }}">
+                                    <input type="radio" name="construction" value="{{ $value->id }}" data-label="{{ $value->name }}"
+                                        {{ request('construction') == $value->id ? 'checked' : '' }}>
+                                    <span class="radiomark"></span>
+                                    {{ $value->title }}
+                                </label>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+
+                <div class="dropdown">
+                    <button class="btn control-btn btnFilter dropdown-toggle" type="button" id="facingDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        Facings
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="facingDropdown">
+                        @foreach ($facings as $value)
+                            <li>
+                                <label class="dropdown-item custom-checkbox-label {{ is_array(request('facing')) && in_array($value->id, request('facing')) ? 'active' : '' }}">
+                                    <input type="checkbox" name="facing[]" value="{{ $value->id }}" data-label="{{ $value->title }}"
+                                        {{ is_array(request('facing')) && in_array($value->id, request('facing')) ? 'checked' : '' }}>
                                     <span class="checkmark"></span>
                                     {{ $value->title }}
                                 </label>
                             </li>
                         @endforeach
                     </ul>
-                </div>   
-                
-                
+                </div>
+
+                <div class="dropdown">
+                    <button class="btn btnFilter dropdown-toggle" type="button" id="ageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        Age
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="ageDropdown">
+                        @foreach ($ages as $value)
+                            <li>
+                                <label class="dropdown-item custom-radio-label {{ request('age') == $value->id ? 'active' : '' }}">
+                                    <input type="radio" name="age" value="{{ $value->id }}" data-label="{{ $value->title }}"
+                                        {{ request('age') == $value->id ? 'checked' : '' }}>
+                                    <span class="radiomark"></span>
+                                    {{ $value->title }}
+                                </label>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+
+                <div class="dropdown">
+                    <button class="btn control-btn btnFilter dropdown-toggle" type="button" id="listedTypeDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        Listed Type
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="listedTypeDropdown">
+                        @foreach ($listedTypes as $value)
+                            <li>
+                                <label class="dropdown-item custom-checkbox-label {{ is_array(request('listed_type')) && in_array($value->id, request('listed_type')) ? 'active' : '' }}">
+                                    <input type="checkbox" name="listed_type[]" value="{{ $value->id }}" data-label="{{ $value->title }}"
+                                        {{ is_array(request('listed_type')) && in_array($value->id, request('listed_type')) ? 'checked' : '' }}>
+                                    <span class="checkmark"></span>
+                                    {{ $value->title }}
+                                </label>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+
+
+
+
+
+
 
 
                 <div class="col">
@@ -112,7 +188,6 @@
                                 <input type="hidden" name="price_min" id="price_min" value="{{ request('price_min') }}">
                                 <input type="hidden" name="price_max" id="price_max" value="{{ request('price_max') }}">
                                 <input type="text" id="priceRange" />
-
                                 <button type="submit" class="btn btn-primary">Filter</button>
                                 <button type="button" id="resetPriceRange" class="btn btn-secondary">Reset</button>
                             </form>
@@ -243,11 +318,7 @@
 @endsection
 
 @section('customJs')
-<script>   
-//    $("#type").change(function(){
-//        $("#searchForm").submit();
-//    });
-   
+<script>
 function updateDropdownLabel(dropdownId, inputSelector, defaultText) {
     var checked = $(inputSelector + ':checked');
     var button = $(dropdownId);
@@ -261,6 +332,7 @@ function updateDropdownLabel(dropdownId, inputSelector, defaultText) {
         button.text(names.join(', '));
     }
 }
+
 $('.custom-checkbox-label input').on('change', function () {
     if ($(this).is(':checked')) {
         $(this).closest('.custom-checkbox-label').addClass('active');
@@ -271,7 +343,8 @@ $('.custom-checkbox-label input').on('change', function () {
     updateDropdownLabel('#typeDropdown', 'input[name="type[]"]', 'Property Type');
     updateDropdownLabel('#roomDropdown', 'input[name="room[]"]', 'Rooms');
     updateDropdownLabel('#bathroomDropdown', 'input[name="bathroom[]"]', 'Bathrooms');
-    updateDropdownLabel('#saletypeDropdown', 'input[name="saletype[]"]', 'Saletypes');
+    updateDropdownLabel('#listedTypeDropdown', 'input[name="listed_type[]"]', 'Listed By');    
+    updateDropdownLabel('#facingDropdown', 'input[name="facing[]"]', 'Facings');
     updateDropdownLabel('#areasDropdown', 'input[name="areas[]"]', 'Areas');
 });
 
@@ -279,8 +352,10 @@ $('.custom-checkbox-label input').on('change', function () {
 updateDropdownLabel('#typeDropdown', 'input[name="type[]"]', 'Property Type');
 updateDropdownLabel('#roomDropdown', 'input[name="room[]"]', 'Rooms');
 updateDropdownLabel('#bathroomDropdown', 'input[name="bathroom[]"]', 'Bathrooms');
-updateDropdownLabel('#saletypeDropdown', 'input[name="saletype[]"]', 'Saletypes');
+updateDropdownLabel('#listedTypeDropdown', 'input[name="listed_type[]"]', 'Listed By');
+updateDropdownLabel('#facingDropdown', 'input[name="facing[]"]', 'Facings');
 updateDropdownLabel('#areasDropdown', 'input[name="areas[]"]', 'Areas');
+updateDropdownLabel('#saletypeDropdown', 'input[name="saletype"]', 'Sale Type');
 
 function updateDropdownLabel(dropdownId, checkboxSelector, defaultLabel) {
     let selectedLabels = [];
@@ -295,5 +370,21 @@ function updateDropdownLabel(dropdownId, checkboxSelector, defaultLabel) {
     }
 }
 
+
+
+$('.custom-radio-label input[name="saletype"]').on('change', function () {
+    var name = $(this).attr('name');
+
+    // Remove active from all radios in the group
+    $('input[name="' + name + '"]').closest('.custom-radio-label').removeClass('active');
+
+    // Add active to the selected one
+    if ($(this).is(':checked')) {
+        $(this).closest('.custom-radio-label').addClass('active');
+    }
+
+    // Update only the Sale Type dropdown label
+    updateDropdownLabel('#saletypeDropdown', 'input[name="saletype"]', 'Sale Type');
+});
 </script>
 @endsection

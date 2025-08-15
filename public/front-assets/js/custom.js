@@ -4,8 +4,6 @@ $(document).ready(function(){
         $('.alert').fadeOut('fast');
     }, 1500);        
     
-   
-
     $('.carousalHome').slick({
         dots: false,
         infinite: true,
@@ -113,7 +111,6 @@ $(document).ready(function(){
 
 //From home page
 let selectedCategory = $('input[name="category"]:checked').val(); // set default if checked
-
 // Handle category selection
 $('input[name="category"]').on('change', function () {
     selectedCategory = $(this).val();
@@ -183,113 +180,116 @@ $('#city').on('change', function () {
 });
 
 
-// $('.rentBuy input[type="radio"]').on('change', function() {
-//     $('.rentBuy label').removeClass('activeTab');
-//     $(this).closest('label').addClass('activeTab');
-//     $(this).closest('body').toggleClass('sellCover');
-// });
-
 
 $('.rentBuy input[type="radio"]').on('change', function() {
     $('.rentBuy label').removeClass('activeTab');
     $(this).closest('label').addClass('activeTab');
     $('.searchHome').toggleClass('sellCover');
-
-    // Get label text
-    // let labelText = $(this).closest('label').text().trim().toLowerCase();
-
-    // if (labelText === 'buy') {
-    //     window.location.href = '/';
-    // } else if (labelText === 'rent') {
-    //     window.location.href = '/rent';
-    // }
 });
 
 
+//Price Range
+let priceLabels = ["0", "50L", "1Cr", "2Cr", "3Cr", "4Cr", "5Cr+"];
+let priceValues = [0, 5000000, 10000000, 20000000, 30000000, 40000000, 50000000];
 
+let fromIndex = 0;
+let toIndex = 6;
 
-$(document).ready(function () {
-   let priceLabels = ["0", "50L", "1Cr", "2Cr", "3Cr", "4Cr", "5Cr+"];
-    let priceValues = [0, 5000000, 10000000, 20000000, 30000000, 40000000, 50000000];
+let minVal = parseInt($("#price_min").val());
+let maxVal = parseInt($("#price_max").val());
 
-    let fromIndex = 0;
-    let toIndex = 6;
+if (!isNaN(minVal)) {
+    let idx = priceValues.indexOf(minVal);
+    if (idx !== -1) fromIndex = idx;
+}
+if (!isNaN(maxVal)) {
+    let idx = priceValues.indexOf(maxVal);
+    if (idx !== -1) toIndex = idx;
+}
 
-    let minVal = parseInt($("#price_min").val());
-    let maxVal = parseInt($("#price_max").val());
-
-    if (!isNaN(minVal)) {
-        let idx = priceValues.indexOf(minVal);
-        if (idx !== -1) fromIndex = idx;
+let slider = $("#priceRange").ionRangeSlider({
+    type: "double",
+    values: priceLabels,
+    from: fromIndex,
+    to: toIndex,
+    grid: true,
+    skin: "round",
+    onFinish: function (data) {
+        $("#price_min").val(priceValues[data.from]);
+        $("#price_max").val(priceValues[data.to]);
     }
-    if (!isNaN(maxVal)) {
-        let idx = priceValues.indexOf(maxVal);
-        if (idx !== -1) toIndex = idx;
-    }
+}).data("ionRangeSlider");
 
-    let slider = $("#priceRange").ionRangeSlider({
-        type: "double",
-        values: priceLabels,
-        from: fromIndex,
-        to: toIndex,
-        grid: true,
-        skin: "round",
-        onFinish: function (data) {
-            $("#price_min").val(priceValues[data.from]);
-            $("#price_max").val(priceValues[data.to]);
-        }
-    }).data("ionRangeSlider");
+// Reset Button Click
+$("#resetPriceRange").on("click", function () {
+    // Reset hidden inputs
+    $("#price_min").val("");
+    $("#price_max").val("");
 
-    // Reset Button Click
-    $("#resetPriceRange").on("click", function () {
-        // Reset hidden inputs
-        $("#price_min").val("");
-        $("#price_max").val("");
-
-        // Reset slider visually
-        slider.update({
-            from: 0,
-            to: priceLabels.length - 1
-        });
-        $("#filterForm").submit();
+    // Reset slider visually
+    slider.update({
+        from: 0,
+        to: priceLabels.length - 1
     });
+    $("#filterForm").submit();
+});
+
+function toggleActiveClass(name, buttonId) {
+    let anyChecked = $(`input[name="${name}[]"]:checked`).length > 0;
+    $(`#${buttonId}`).toggleClass('activeFilter', anyChecked);
+}
 
 
 
-    function toggleActiveClass(name, buttonId) {
-        let anyChecked = $(`input[name="${name}[]"]:checked`).length > 0;
-        $(`#${buttonId}`).toggleClass('activeFilter', anyChecked);
-    }
+// List of filter groups and their button IDs
+let filters = [
+    { name: 'bathroom', buttonId: 'bathroomDropdown' },
+    { name: 'room', buttonId: 'roomDropdown' },
+    { name: 'type', buttonId: 'typeDropdown' }
+];
 
-    // List of filter groups and their button IDs
-    let filters = [
-        { name: 'bathroom', buttonId: 'bathroomDropdown' },
-        { name: 'room', buttonId: 'roomDropdown' },
-        { name: 'type', buttonId: 'typeDropdown' }
-    ];
-
-    // Attach change listener to all checkboxes in these groups
-    filters.forEach(f => {
-        $(document).on('change', `input[name="${f.name}[]"]`, function () {
-            toggleActiveClass(f.name, f.buttonId);
-        });
-
-        // Run once on page load to set initial state
+// Attach change listener to all checkboxes in these groups
+filters.forEach(f => {
+    $(document).on('change', `input[name="${f.name}[]"]`, function () {
         toggleActiveClass(f.name, f.buttonId);
     });
 
+    // Run once on page load to set initial state
+    toggleActiveClass(f.name, f.buttonId);
 });
 
-
-
-$(document).on('change', 'input[name="type[]"], input[name="room[]"], input[name="bathroom[]"], input[name="areas[]"]', function () {
+//Main filters
+$(document).on('change', 'input[name="saletype"], input[name="construction"], input[name="age"], input[name="type[]"], input[name="room[]"], input[name="bathroom[]"], input[name="listed_type[]"], input[name="areas[]"], input[name="facing[]"]', function () {
     let params = new URLSearchParams(window.location.search);
 
     // Clear old params
+    params.delete('saletype');
+    params.delete('construction');
+    params.delete('age');
     params.delete('type[]');
     params.delete('room[]');
     params.delete('bathroom[]');
+    params.delete('listed_type[]');    
     params.delete('areas[]');
+    params.delete('facing[]');
+
+    // Add Sale Type value (single radio)
+    let saleTypeChecked = $('input[name="saletype"]:checked');
+    if (saleTypeChecked.length) {
+        params.set('saletype', saleTypeChecked.val());
+    }
+
+    // Add Construction value (single radio)
+    let constructionChecked = $('input[name="construction"]:checked');
+    if (constructionChecked.length) {
+        params.set('construction', constructionChecked.val());
+    }
+
+    // Add age value (single radio)
+    let ageChecked = $('input[name="age"]:checked');
+    if (ageChecked.length) {
+        params.set('age', ageChecked.val());
+    }
 
     // Add Property Type values
     $('input[name="type[]"]:checked').each(function () {
@@ -306,12 +306,23 @@ $(document).on('change', 'input[name="type[]"], input[name="room[]"], input[name
         params.append('bathroom[]', $(this).val());
     });
 
+    // Add Listed Types values
+    $('input[name="listed_type[]"]:checked').each(function () {
+        params.append('listed_type[]', $(this).val());
+    });
+
     // Add Areas values
     $('input[name="areas[]"]:checked').each(function () {
         params.append('areas[]', $(this).val());
     });
 
+    // Add Facings values (multi-select)
+    $('input[name="facing[]"]:checked').each(function () {
+        params.append('facing[]', $(this).val());
+    });
+
     // Reload page with updated params
     window.location.href = window.location.pathname + '?' + params.toString();
 });
+
 

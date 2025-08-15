@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 14, 2025 at 09:40 AM
+-- Generation Time: Aug 15, 2025 at 02:02 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -29,12 +29,21 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `ages` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `slug` varchar(255) NOT NULL,
+  `title` varchar(255) NOT NULL,
   `status` int(11) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `ages`
+--
+
+INSERT INTO `ages` (`id`, `title`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Less than 1 year', 1, '2025-08-15 11:26:26', '2025-08-15 11:26:26'),
+(2, 'Less than 3 years', 1, '2025-08-15 11:26:26', '2025-08-15 11:26:26'),
+(3, 'Less than 5 years', 1, '2025-08-15 11:26:26', '2025-08-15 11:26:26'),
+(4, 'More than 5 years', 1, '2025-08-15 11:26:26', '2025-08-15 11:26:26');
 
 -- --------------------------------------------------------
 
@@ -56,10 +65,12 @@ CREATE TABLE `amenities` (
 --
 
 INSERT INTO `amenities` (`id`, `title`, `icon`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'Swimming Pool', 'icon', 1, '2023-12-25 00:29:49', '2025-01-07 01:23:02'),
-(7, 'Garden', 'icon', 1, '2025-01-07 01:34:02', '2025-01-07 01:34:02'),
-(8, 'Security', 'icon', 1, '2025-01-07 01:36:52', '2025-01-07 01:36:52'),
-(11, 'Gym', 'gym', 1, '2025-01-10 23:26:52', '2025-01-10 23:26:52');
+(1, 'Gated Community', 'icon', 1, '2023-12-25 00:29:49', '2025-01-07 01:23:02'),
+(2, 'Lift', 'icon', 1, '2025-01-07 01:34:02', '2025-01-07 01:34:02'),
+(3, 'Swimming Pool', 'icon', 1, '2025-01-07 01:36:52', '2025-01-07 01:36:52'),
+(4, 'Gym', 'gym', 1, '2025-01-10 23:26:52', '2025-01-10 23:26:52'),
+(5, 'Parking', 'gym', 1, '2025-01-10 23:26:52', '2025-01-10 23:26:52'),
+(6, 'Gas Pipeline', 'gym', 1, '2025-01-10 23:26:52', '2025-01-10 23:26:52');
 
 -- --------------------------------------------------------
 
@@ -143,7 +154,7 @@ CREATE TABLE `builders` (
 INSERT INTO `builders` (`id`, `name`, `related_properties`, `email`, `landline`, `mobile`, `whatsapp`, `logo`, `year_estd`, `address`, `property_id`, `status`, `created_at`, `updated_at`) VALUES
 (34, 'Keerthi Estate', '46,44', 'info@keerthiestate.com', '079-15478598', '9978835115', '9987754875', '34_Keerthi Estate.JPG', '1985', 'Hyderabad', NULL, 1, '2025-01-04 03:58:23', '2025-01-04 03:58:23'),
 (41, 'Sanghani Infrastructure', '46,44', 'mukeshbhavsar210@gmail.com', '9978812345', '09978835005', '99788251478', '41_Sanghani Infrastructure.png', '1975', 'Keerthi Royal Palms,', NULL, 1, '2025-01-08 07:26:20', '2025-01-08 07:26:20'),
-(42, 'Dobariya & Company', '46,44', 'info@dhavala.com', '089-1234567', '9978812345', '9978812345', NULL, '1990', 'Vejalpur', NULL, 1, '2025-01-10 23:28:06', '2025-01-10 23:28:06');
+(42, 'Dobariya & Company', '46,44', 'info@dobariya.com', '089-1234567', '9978812345', '9978812345', NULL, '1990', 'Vejalpur', NULL, 1, '2025-01-10 23:28:06', '2025-08-14 05:23:53');
 
 -- --------------------------------------------------------
 
@@ -208,17 +219,24 @@ INSERT INTO `cities` (`id`, `name`, `slug`, `status`, `created_at`, `updated_at`
 -- --------------------------------------------------------
 
 --
--- Table structure for table `construction_status`
+-- Table structure for table `constructions`
 --
 
-CREATE TABLE `construction_status` (
+CREATE TABLE `constructions` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `slug` varchar(255) NOT NULL,
+  `title` varchar(255) NOT NULL,
   `status` int(11) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `constructions`
+--
+
+INSERT INTO `constructions` (`id`, `title`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Ready to move', 1, '2025-08-15 10:49:09', '2025-08-15 10:49:09'),
+(2, 'Under construction', 1, '2025-08-15 10:49:09', '2025-08-15 10:49:09');
 
 -- --------------------------------------------------------
 
@@ -307,6 +325,29 @@ INSERT INTO `job_types` (`id`, `name`, `status`, `created_at`, `updated_at`) VAL
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `listed_types`
+--
+
+CREATE TABLE `listed_types` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `status` int(11) NOT NULL DEFAULT 1,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `listed_types`
+--
+
+INSERT INTO `listed_types` (`id`, `title`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Agent', 1, '2025-08-15 11:51:54', '2025-08-15 11:51:54'),
+(2, 'Owner', 1, '2025-08-15 11:51:54', '2025-08-15 11:51:54'),
+(3, 'Developer', 1, '2025-08-15 11:51:54', '2025-08-15 11:51:54');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `listings`
 --
 
@@ -378,7 +419,13 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (40, '2025_01_02_044951_create_developers_table', 32),
 (41, '2025_01_02_121843_alter_properties_table', 33),
 (42, '2025_01_07_050956_create_contacts_table', 34),
-(43, '2025_01_17_073955_create_property_documents_table', 35);
+(43, '2025_01_17_073955_create_property_documents_table', 35),
+(44, '2025_08_15_104747_create_constructions_table', 36),
+(45, '2025_08_15_105152_add_construction_id_to_properties_table', 37),
+(46, '2025_08_15_112907_add_age_id_to_properties_table', 38),
+(47, '2025_08_15_114233_add_amenity_id_to_properties_table', 39),
+(48, '2025_08_15_115103_create_listed_types_table', 40),
+(49, '2025_08_15_115424_add_listed_type_id_to_properties_table', 41);
 
 -- --------------------------------------------------------
 
@@ -456,23 +503,27 @@ CREATE TABLE `properties` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `bathroom_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `is_featured` enum('Yes','No') NOT NULL DEFAULT 'No'
+  `is_featured` enum('Yes','No') NOT NULL DEFAULT 'No',
+  `construction_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `age_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `amenity_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `listed_type_id` bigint(20) UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `properties`
 --
 
-INSERT INTO `properties` (`id`, `title`, `slug`, `user_id`, `category_id`, `room_id`, `city_id`, `area_id`, `builder_id`, `sale_type_id`, `property_type_id`, `view_id`, `price`, `compare_price`, `description`, `keywords`, `location`, `size`, `rera`, `year_build`, `total_area`, `related_properties`, `related_amenities`, `related_facings`, `related_documents`, `possession_date`, `handover_status`, `status`, `created_at`, `updated_at`, `bathroom_id`, `is_featured`) VALUES
-(44, 'Shlok Heights', 'shlok-heights', 3, 21, 4, 1, 1, 41, 1, 2, NULL, 9800000.00, 8500000.00, 'Shlok Heights', '3 BHK Apartment Mukesh', 'Mansarovar Road', '1000', NULL, NULL, NULL, '', '', NULL, '', '2027-08-31', 'Ready to Move', 1, '2025-01-06 05:12:07', '2025-01-08 06:19:22', 2, 'Yes'),
-(50, 'Global Techie Town', 'global-techie-town', 3, 27, 2, 2, 2, 42, 2, 2, NULL, 9000000.00, 8800000.00, 'Details', '3 BHK Apartment', 'Electronic City', '1800', '123', '2024', '20000', '', '1,7,8,11', '1', '', '2027-08-31', 'Under Construction', 1, '2025-01-10 23:30:34', '2025-01-16 23:49:13', 2, 'Yes'),
-(51, 'Samarthya Status', 'samarthya_status', 3, 27, 1, 1, 11, 34, NULL, 2, NULL, 9800000.00, 8500000.00, 'Shlok Heights', '3 BHK Apartment', 'Ahmedabad', '1000', NULL, NULL, NULL, '', '', NULL, '', NULL, 'Under Construction', 1, '2025-01-06 05:12:07', '2025-01-08 06:19:22', 1, 'Yes'),
-(52, 'Manavnagar', 'samarthya_status', 3, 21, 1, 1, 11, 34, NULL, 2, NULL, 9800000.00, 8500000.00, 'Shlok Heights', '3 BHK Apartment', 'Ahmedabad', '1000', NULL, NULL, NULL, '', '', NULL, '', NULL, 'Under Construction', 1, '2025-01-06 05:12:07', '2025-01-08 06:19:22', 1, 'Yes'),
-(53, 'Swastik Marvella', 'swastik_marvella', 3, 21, 1, 1, 1, 34, NULL, 3, NULL, 9800000.00, 8500000.00, 'Swastik Marvella', '3 BHK Apartment', 'IOC Road', '1000', NULL, NULL, NULL, '', '', NULL, '', NULL, 'Under Construction', 1, '2025-01-06 05:12:07', '2025-01-08 06:19:22', 1, 'Yes'),
-(54, 'Saijpur Bogha', 'saigpur-bogha', 3, 21, 4, 1, 15, 34, NULL, 2, NULL, 9800000.00, 8500000.00, 'Shlok Heights', '3 BHK Apartment', 'Ahmedabad', '1000', NULL, NULL, NULL, '', '', NULL, '', NULL, 'Under Construction', 1, '2025-01-06 05:12:07', '2025-01-08 06:19:22', 1, 'Yes'),
-(55, 'Sattva', 'sattva', 3, 21, 4, 2, 12, 34, NULL, 2, NULL, 9800000.00, 8500000.00, 'Shlok Heights', '3 BHK Apartment', 'Ahmedabad', '1000', NULL, NULL, NULL, '', '', NULL, '', NULL, 'Under Construction', 1, '2025-01-06 05:12:07', '2025-01-08 06:19:22', 1, 'Yes'),
-(56, 'Brigade', 'brigade', 3, 21, 4, 2, 2, 34, NULL, 2, NULL, 9800000.00, 8500000.00, 'Shlok Heights', '3 BHK Apartment', 'Ahmedabad', '1000', NULL, NULL, NULL, '', '', NULL, '', NULL, 'Under Construction', 1, '2025-01-06 05:12:07', '2025-01-08 06:19:22', 1, 'Yes'),
-(57, 'Navami Funique', 'navami_funique', 3, 21, 4, 2, 2, 42, NULL, 2, NULL, 9800000.00, 8500000.00, 'Shlok Heights', '3 BHK Apartment', 'Ahmedabad', '1000', NULL, NULL, NULL, '', '', NULL, '', NULL, 'Under Construction', 1, '2025-01-06 05:12:07', '2025-01-08 06:19:22', 1, 'Yes');
+INSERT INTO `properties` (`id`, `title`, `slug`, `user_id`, `category_id`, `room_id`, `city_id`, `area_id`, `builder_id`, `sale_type_id`, `property_type_id`, `view_id`, `price`, `compare_price`, `description`, `keywords`, `location`, `size`, `rera`, `year_build`, `total_area`, `related_properties`, `related_amenities`, `related_facings`, `related_documents`, `possession_date`, `handover_status`, `status`, `created_at`, `updated_at`, `bathroom_id`, `is_featured`, `construction_id`, `age_id`, `amenity_id`, `listed_type_id`) VALUES
+(44, 'Shlok Heights', 'shlok-heights', 3, 21, 4, 1, 1, 41, 1, 2, 2, 4500000.00, 450000.00, 'Shlok Heights', '3 BHK Apartment Mukesh', 'Mansarovar Road', '1000', NULL, NULL, NULL, '', '', NULL, '', '2027-08-31', 'Ready to Move', 1, '2025-01-06 05:12:07', '2025-01-08 06:19:22', 2, 'Yes', 1, 1, NULL, 3),
+(50, 'Global Techie Town', 'global-techie-town', 3, 27, 2, 2, 2, 42, 2, 2, NULL, 9000000.00, 8800000.00, 'Details', '3 BHK Apartment', 'Electronic City', '1800', '123', '2024', '20000', '', '1,7,8,11', '1', '', '2027-08-31', 'Under Construction', 1, '2025-01-10 23:30:34', '2025-01-16 23:49:13', 2, 'Yes', NULL, NULL, NULL, NULL),
+(51, 'Samarthya Status', 'samarthya_status', 3, 27, 1, 1, 11, 34, NULL, 2, NULL, 5500000.00, 5000000.00, 'Shlok Heights', '3 BHK Apartment', 'Ahmedabad', '1000', NULL, NULL, NULL, '', '', NULL, '', NULL, 'Under Construction', 1, '2025-01-06 05:12:07', '2025-01-08 06:19:22', 1, 'Yes', NULL, NULL, NULL, NULL),
+(52, 'Manavnagar', 'samarthya_status', 3, 21, 1, 1, 11, 34, NULL, 2, NULL, 9800000.00, 8500000.00, 'Shlok Heights', '3 BHK Apartment', 'Ahmedabad', '1000', NULL, NULL, NULL, '', '', NULL, '', NULL, 'Under Construction', 1, '2025-01-06 05:12:07', '2025-01-08 06:19:22', 1, 'Yes', NULL, NULL, NULL, NULL),
+(53, 'Swastik Marvella', 'swastik_marvella', 3, 21, 3, 1, 1, 34, 2, 3, 1, 11000000.00, 8500000.00, 'Swastik Marvella', '3 BHK Apartment', 'IOC Road', '1000', NULL, NULL, NULL, '', '', NULL, '', NULL, 'Under Construction', 1, '2025-01-06 05:12:07', '2025-01-08 06:19:22', 3, 'Yes', 2, 4, NULL, 1),
+(54, 'Saijpur Bogha', 'saigpur-bogha', 3, 21, 4, 1, 1, 34, NULL, 2, NULL, 9800000.00, 8500000.00, 'Shlok Heights', '3 BHK Apartment', 'Ahmedabad', '1000', NULL, NULL, NULL, '', '', NULL, '', NULL, 'Under Construction', 1, '2025-01-06 05:12:07', '2025-01-08 06:19:22', 1, 'Yes', 1, NULL, NULL, NULL),
+(55, 'Sattva', 'sattva', 3, 21, 4, 2, 12, 34, NULL, 2, NULL, 9800000.00, 8500000.00, 'Shlok Heights', '3 BHK Apartment', 'Ahmedabad', '1000', NULL, NULL, NULL, '', '', NULL, '', NULL, 'Under Construction', 1, '2025-01-06 05:12:07', '2025-01-08 06:19:22', 1, 'Yes', NULL, NULL, NULL, NULL),
+(56, 'Brigade', 'brigade', 3, 21, 4, 2, 2, 34, NULL, 2, NULL, 9800000.00, 8500000.00, 'Shlok Heights', '3 BHK Apartment', 'Ahmedabad', '1000', NULL, NULL, NULL, '', '', NULL, '', NULL, 'Under Construction', 1, '2025-01-06 05:12:07', '2025-01-08 06:19:22', 1, 'Yes', NULL, NULL, NULL, NULL),
+(57, 'Navami Funique', 'navami_funique', 3, 21, 4, 2, 2, 42, NULL, 2, NULL, 9800000.00, 8500000.00, 'Shlok Heights', '3 BHK Apartment', 'Ahmedabad', '1000', NULL, NULL, NULL, '', '', NULL, '', NULL, 'Under Construction', 1, '2025-01-06 05:12:07', '2025-01-08 06:19:22', 1, 'Yes', NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -618,8 +669,7 @@ INSERT INTO `rooms` (`id`, `title`, `status`, `created_at`, `updated_at`) VALUES
 
 CREATE TABLE `sale_types` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) NOT NULL DEFAULT 'Sell',
-  `slug` varchar(255) NOT NULL,
+  `title` varchar(255) NOT NULL DEFAULT 'Sell',
   `status` int(11) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -629,9 +679,9 @@ CREATE TABLE `sale_types` (
 -- Dumping data for table `sale_types`
 --
 
-INSERT INTO `sale_types` (`id`, `name`, `slug`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'New Booking', 'new_booking', 1, '2024-12-31 08:57:22', '2024-12-31 08:57:22'),
-(2, 'Resale', 'resale', 1, '2024-12-31 09:09:33', '2024-12-31 09:09:33');
+INSERT INTO `sale_types` (`id`, `title`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'New Booking', 1, '2024-12-31 08:57:22', '2024-12-31 08:57:22'),
+(2, 'Resale', 1, '2024-12-31 09:09:33', '2024-12-31 09:09:33');
 
 -- --------------------------------------------------------
 
@@ -854,7 +904,9 @@ INSERT INTO `temp_images` (`id`, `name`, `created_at`, `updated_at`) VALUES
 (179, '1737100796.pdf', '2025-01-17 02:29:56', '2025-01-17 02:29:56'),
 (180, '1737100938.pdf', '2025-01-17 02:32:18', '2025-01-17 02:32:18'),
 (181, '1737101095.jpg', '2025-01-17 02:34:55', '2025-01-17 02:34:55'),
-(182, '1737979225.jpg', '2025-01-27 06:30:25', '2025-01-27 06:30:25');
+(182, '1737979225.jpg', '2025-01-27 06:30:25', '2025-01-27 06:30:25'),
+(183, '1755168994.png', '2025-08-14 05:26:34', '2025-08-14 05:26:34'),
+(184, '1755169007.png', '2025-08-14 05:26:47', '2025-08-14 05:26:47');
 
 -- --------------------------------------------------------
 
@@ -904,10 +956,14 @@ CREATE TABLE `views` (
 --
 
 INSERT INTO `views` (`id`, `title`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'North Facings', 1, '2024-12-31 08:57:55', '2024-12-31 08:57:55'),
-(2, 'South Facing', 1, NULL, NULL),
-(3, 'East Facing', 1, NULL, NULL),
-(4, 'West Facing', 1, NULL, NULL);
+(1, 'North', 1, '2024-12-31 08:57:55', '2024-12-31 08:57:55'),
+(2, 'East', 1, NULL, NULL),
+(3, 'West', 1, NULL, NULL),
+(4, 'South', 1, NULL, NULL),
+(5, 'North - East', 1, NULL, NULL),
+(6, 'North - West', 1, NULL, NULL),
+(7, 'South - East', 1, NULL, NULL),
+(8, 'South - West', 1, NULL, NULL);
 
 --
 -- Indexes for dumped tables
@@ -964,9 +1020,9 @@ ALTER TABLE `cities`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `construction_status`
+-- Indexes for table `constructions`
 --
-ALTER TABLE `construction_status`
+ALTER TABLE `constructions`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -995,6 +1051,12 @@ ALTER TABLE `job_applications`
 -- Indexes for table `job_types`
 --
 ALTER TABLE `job_types`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `listed_types`
+--
+ALTER TABLE `listed_types`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -1037,7 +1099,11 @@ ALTER TABLE `properties`
   ADD KEY `properties_room_id_foreign` (`room_id`) USING BTREE,
   ADD KEY `properties_bathroom_id_foreign` (`bathroom_id`) USING BTREE,
   ADD KEY `properties_view_id_foreign` (`view_id`) USING BTREE,
-  ADD KEY `properties_builder_id_foreign` (`builder_id`) USING BTREE;
+  ADD KEY `properties_builder_id_foreign` (`builder_id`) USING BTREE,
+  ADD KEY `properties_construction_id_foreign` (`construction_id`),
+  ADD KEY `properties_age_id_foreign` (`age_id`),
+  ADD KEY `properties_amenity_id_foreign` (`amenity_id`),
+  ADD KEY `properties_listed_type_id_foreign` (`listed_type_id`);
 
 --
 -- Indexes for table `property_applications`
@@ -1115,13 +1181,13 @@ ALTER TABLE `views`
 -- AUTO_INCREMENT for table `ages`
 --
 ALTER TABLE `ages`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `amenities`
 --
 ALTER TABLE `amenities`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `areas`
@@ -1160,10 +1226,10 @@ ALTER TABLE `cities`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
--- AUTO_INCREMENT for table `construction_status`
+-- AUTO_INCREMENT for table `constructions`
 --
-ALTER TABLE `construction_status`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+ALTER TABLE `constructions`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `contacts`
@@ -1190,6 +1256,12 @@ ALTER TABLE `job_types`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
+-- AUTO_INCREMENT for table `listed_types`
+--
+ALTER TABLE `listed_types`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT for table `listings`
 --
 ALTER TABLE `listings`
@@ -1199,7 +1271,7 @@ ALTER TABLE `listings`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
@@ -1259,7 +1331,7 @@ ALTER TABLE `saved_properties`
 -- AUTO_INCREMENT for table `temp_images`
 --
 ALTER TABLE `temp_images`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=183;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=185;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -1271,7 +1343,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `views`
 --
 ALTER TABLE `views`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- Constraints for dumped tables
@@ -1302,13 +1374,17 @@ ALTER TABLE `job_applications`
 -- Constraints for table `properties`
 --
 ALTER TABLE `properties`
+  ADD CONSTRAINT `properties_age_id_foreign` FOREIGN KEY (`age_id`) REFERENCES `ages` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `properties_amenity_id_foreign` FOREIGN KEY (`amenity_id`) REFERENCES `amenities` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `properties_area_id_foreign` FOREIGN KEY (`area_id`) REFERENCES `areas` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `properties_bath_id_foreign` FOREIGN KEY (`bathroom_id`) REFERENCES `bathrooms` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `properties_bhk_type_id_foreign` FOREIGN KEY (`room_id`) REFERENCES `rooms` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `properties_category_id_foreign` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `properties_city_id_foreign` FOREIGN KEY (`city_id`) REFERENCES `cities` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `properties_construction_id_foreign` FOREIGN KEY (`construction_id`) REFERENCES `constructions` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `properties_developer_id_foreign` FOREIGN KEY (`builder_id`) REFERENCES `builders` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `properties_facing_id_foreign` FOREIGN KEY (`view_id`) REFERENCES `views` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `properties_listed_type_id_foreign` FOREIGN KEY (`listed_type_id`) REFERENCES `listed_types` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `properties_property_type_id_foreign` FOREIGN KEY (`property_type_id`) REFERENCES `property_types` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `properties_sale_type_id_foreign` FOREIGN KEY (`sale_type_id`) REFERENCES `sale_types` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `properties_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;

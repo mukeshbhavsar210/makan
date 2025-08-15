@@ -225,4 +225,4 @@ header { position: fixed; width: 100%; top:0; left: 0; z-index: 99; background-c
     background-color: #e7f1ff;
 }
 
-#typeDropdown, #roomDropdown, #bathroomDropdown { display: inline-block; max-width: 120px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; vertical-align: middle; }
+.control-btn { display: inline-block; max-width: 120px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; vertical-align: middle; }
