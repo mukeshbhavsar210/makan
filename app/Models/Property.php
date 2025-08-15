@@ -5,8 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Property extends Model
-{
+class Property extends Model {
     use HasFactory;
 
     public function property_images(){
@@ -33,10 +32,13 @@ class Property extends Model
         return $this->belongsTo(Builder::class);
     }
 
+    public function construction(){
+        return $this->belongsTo(Construction::class);
+    }
+
     public function amenityType(){
         return $this->belongsTo(Amenity::class);
     }
-
     
     public function saleType(){
         return $this->belongsTo(SaleType::class);

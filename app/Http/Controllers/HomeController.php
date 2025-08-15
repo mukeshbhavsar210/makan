@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Age;
 use App\Models\Amenity;
 use App\Models\Bathroom;
 use App\Models\Category;
@@ -11,8 +12,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Area;
 use App\Models\Builder;
+use App\Models\Construction;
 use Illuminate\Support\Facades\Mail;
 use App\Models\JobApplication;
+use App\Models\ListedType;
 use App\Models\PropertyType;
 use App\Models\Room;
 use App\Models\SaleType;
@@ -83,13 +86,22 @@ class HomeController extends Controller {
         $areas = Area::where('status',1)->get();
         $rooms = Room::where('status',1)->get();
         $bathrooms = Bathroom::where('status',1)->get();
+        $listedTypes = ListedType::where('status',1)->get();
         $saletypes = SaleType::where('status',1)->get();
+        $constructions = Construction::where('status',1)->get();
+        $facings = View::where('status',1)->get();
+        $ages = Age::where('status',1)->get();
         $propertyTypes = PropertyType::where('status',1)->get();        
         $properties = Property::where('status',1);
 
         //Filter using category
         if(!empty($request->category)){
             $properties = $properties->where('category_id',$request->category);
+        }
+
+        // Filter by area working
+        if ($request->filled('area')) {
+            $properties->where('area_id', $request->area);
         }
 
         //Filter using keyword
@@ -108,12 +120,7 @@ class HomeController extends Controller {
          //Filter using property types working
         if (!empty($request->type) && is_array($request->type)) {
             $properties = $properties->whereIn('property_type_id', $request->type);
-        }
-
-        // Filter by area working
-        if ($request->filled('area')) {
-            $properties->where('area_id', $request->area);
-        }
+        }        
 
         //Filter using Room Working
         if (!empty($request->room) && is_array($request->room)) {
@@ -125,15 +132,42 @@ class HomeController extends Controller {
             $properties = $properties->whereIn('bathroom_id', $request->bathroom);
         } 
 
+        //Filter using Listed Types working
+        if (!empty($request->listed_type) && is_array($request->listed_type)) {
+            $properties = $properties->whereIn('listed_type_id', $request->listed_type);
+        } 
+
+        //Filter using Facing working
+        if (!empty($request->facing) && is_array($request->facing)) {
+            $properties = $properties->whereIn('view_id', $request->facing);
+        } 
+
         //Filter using Sale Types
-        if (!empty($request->saletype) && is_array($request->saletype)) {
-            $properties = $properties->whereIn('saletype_id', $request->saletype);
+        if (!empty($request->saletype)) {
+            if (is_array($request->saletype)) {
+                $properties = $properties->whereIn('sale_type_id', $request->saletype);
+            } else {
+                $properties = $properties->where('sale_type_id', $request->saletype);
+            }
         }
-        
-        //Filter using Status
-        // if (!empty($request->status) && is_array($request->status)) {
-        //     $properties = $properties->whereIn('status', $request->status);
-        // }
+
+        //Filter using Constructions
+        if (!empty($request->construction)) {
+            if (is_array($request->construction)) {
+                $properties = $properties->whereIn('construction_id', $request->construction);
+            } else {
+                $properties = $properties->where('construction_id', $request->construction);
+            }
+        }
+
+        //Filter using Property Age
+        if (!empty($request->age)) {
+            if (is_array($request->age)) {
+                $properties = $properties->whereIn('age_id', $request->age);
+            } else {
+                $properties = $properties->where('age_id', $request->age);
+            }
+        }
 
         // Price slider working
         if($request->get('price_max') != '' && $request->get('price_min') != '') {
@@ -143,6 +177,11 @@ class HomeController extends Controller {
                 $properties = $properties->whereBetween('price',[intval($request->get('price_min')),intval($request->get('price_max'))]);
             }
         }
+
+        //Filter using Status
+        // if (!empty($request->status) && is_array($request->status)) {
+        //     $properties = $properties->whereIn('status', $request->status);
+        // }
 
         //Filter using job_type
         // $jobTypeArray = [];
@@ -187,7 +226,11 @@ class HomeController extends Controller {
             'propertyTypes' => $propertyTypes,
             'rooms' => $rooms,
             'bathrooms' => $bathrooms,
+            'listedTypes' => $listedTypes,
             'saletypes' => $saletypes,
+            'constructions' => $constructions,
+            'ages' => $ages,
+            'facings' => $facings,
             'properties' => $properties,   
         ];
 
