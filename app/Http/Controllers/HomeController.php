@@ -178,6 +178,15 @@ class HomeController extends Controller {
             }
         }
 
+        // Size range working
+        if($request->get('size_max') != '' && $request->get('size_min') != '') {
+            if($request->get('size_max') == 1000){
+                $properties = $properties->whereBetween('size',[intval($request->get('size_min')),1000]);
+            } else {
+                $properties = $properties->whereBetween('size',[intval($request->get('size_min')),intval($request->get('size_max'))]);
+            }
+        }
+
         //Filter using Status
         // if (!empty($request->status) && is_array($request->status)) {
         //     $properties = $properties->whereIn('status', $request->status);
