@@ -378,3 +378,15 @@ $('#applyFilters, #resetFilters').on('click', function () {
         dropdown.hide();
     }
 });
+
+//Toggle main header 
+$("#toggleHeader").on("click", function() {
+    $(".control-header").toggleClass("expanded"); 
+    $(".overlay").fadeToggle(400);
+});
+
+$(document).on("click", "#showAllAreas", function() {
+    $("#areas li.hidden").removeClass("hidden"); // show all
+    $("#areas_top li.hidden").removeClass("hidden"); // show all
+    $(this).parent().remove(); 
+});
