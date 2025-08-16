@@ -121,6 +121,7 @@ $('input[name="category"]').on('change', function () {
 $('#city').on('change', function () { 
     let cityID = $(this).val();
     let areasContainer = $('#areas');
+    let areasTopContainer = $('#areas_top');
     let searchInput = $('#keyword');
 
     // Add or remove .active class on city select
@@ -132,6 +133,7 @@ $('#city').on('change', function () {
 
     // Clear old list
     areasContainer.empty().hide();
+    areasTopContainer.empty().hide();
 
     if (cityID && selectedCategory) {
         $.ajax({
@@ -164,6 +166,7 @@ $('#city').on('change', function () {
                             </li>`;
                 });
                 areasContainer.html(html).show();
+                areasTopContainer.html(html).show();
 
                 // Click to select area
                 $('.area-item').on('click', function () {
@@ -305,10 +308,10 @@ filters.forEach(f => {
 });
 
 //Main filters
-$(document).on('change', 'input[name="saletype"], input[name="construction"], input[name="age"], input[name="type[]"], input[name="room[]"], input[name="bathroom[]"], input[name="listed_type[]"], input[name="areas[]"], input[name="facing[]"]', function () {
+$(document).on('change', 'input[name="saletype"], input[name="construction"], input[name="age"], input[name="type[]"], input[name="room[]"], input[name="bathroom[]"], input[name="listed_type[]"], input[name="area[]"], input[name="facing[]"]', function () {
     let params = new URLSearchParams(window.location.search);
 
-    // Clear old params
+    // Clear old params (so unchecked values don’t remain in URL)
     params.delete('saletype');
     params.delete('construction');
     params.delete('age');
@@ -316,60 +319,54 @@ $(document).on('change', 'input[name="saletype"], input[name="construction"], in
     params.delete('room[]');
     params.delete('bathroom[]');
     params.delete('listed_type[]');    
-    params.delete('areas[]');
+    params.delete('area[]');
     params.delete('facing[]');
 
-    // Add Sale Type value (single radio)
+    // ✅ Single-select fields
     let saleTypeChecked = $('input[name="saletype"]:checked');
-    if (saleTypeChecked.length) {
-        params.set('saletype', saleTypeChecked.val());
-    }
+    if (saleTypeChecked.length) params.set('saletype', saleTypeChecked.val());
 
-    // Add Construction value (single radio)
     let constructionChecked = $('input[name="construction"]:checked');
-    if (constructionChecked.length) {
-        params.set('construction', constructionChecked.val());
-    }
+    if (constructionChecked.length) params.set('construction', constructionChecked.val());
 
-    // Add age value (single radio)
     let ageChecked = $('input[name="age"]:checked');
-    if (ageChecked.length) {
-        params.set('age', ageChecked.val());
-    }
+    if (ageChecked.length) params.set('age', ageChecked.val());
 
-    // Add Property Type values
+    // ✅ Multi-select fields
     $('input[name="type[]"]:checked').each(function () {
         params.append('type[]', $(this).val());
     });
 
-    // Add BHK Type values
     $('input[name="room[]"]:checked').each(function () {
         params.append('room[]', $(this).val());
     });
 
-    // Add Bathrooms values
     $('input[name="bathroom[]"]:checked').each(function () {
         params.append('bathroom[]', $(this).val());
     });
 
-    // Add Listed Types values
     $('input[name="listed_type[]"]:checked').each(function () {
         params.append('listed_type[]', $(this).val());
     });
 
-    // Add Areas values
-    $('input[name="areas[]"]:checked').each(function () {
-        params.append('areas[]', $(this).val());
+    // ✅ FIXED: Area checkboxes (multi-select)
+    $('input[name="area[]"]:checked').each(function () {
+        params.append('area[]', $(this).val());
     });
 
-    // Add Facings values (multi-select)
     $('input[name="facing[]"]:checked').each(function () {
         params.append('facing[]', $(this).val());
     });
 
-    // Reload page with updated params
+    // ... rest same
+
+    // ✅ show loader before page reload
+    $("#pageLoader").fadeIn(200);
+
+    // Reload with new query string
     window.location.href = window.location.pathname + '?' + params.toString();
 });
+
 
 
 $('#applyFilters, #resetFilters').on('click', function () {
@@ -380,13 +377,44 @@ $('#applyFilters, #resetFilters').on('click', function () {
 });
 
 //Toggle main header 
-$("#toggleHeader").on("click", function() {
+$(".toggleControl").on("click", function() {
     $(".control-header").toggleClass("expanded"); 
     $(".overlay").fadeToggle(400);
 });
 
-$(document).on("click", "#showAllAreas", function() {
-    $("#areas li.hidden").removeClass("hidden"); // show all
-    $("#areas_top li.hidden").removeClass("hidden"); // show all
-    $(this).parent().remove(); 
+
+$(document).on("click", "#showAllAreas", function (e) {
+    $(".areas-list").toggleClass("expanded-scroll"); 
+    e.preventDefault();
+    $(".hidden-areas").slideToggle();
+
+    // Toggle button text/icon
+    if ($(".hidden-areas").is(":visible")) {
+        $(this).html('Hide <svg width="15px" height="15px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 12H18" stroke="#0d6efd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>');
+    } else {
+        $(this).html('Add <svg width="15px" height="15px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 12H18M12 6V18" stroke="#0d6efd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>');
+    }
+});
+
+// Remove selected area on X click
+$(document).on("click", ".remove-area", function (e) {
+    e.preventDefault();
+    let areaId = $(this).data("id");
+
+    let params = new URLSearchParams(window.location.search);
+    let selectedAreas = params.getAll("area[]");
+
+    // Remove clicked area
+    selectedAreas = selectedAreas.filter(id => id != areaId);
+
+    // Clear existing areas in params
+    params.delete("area[]");
+
+    // Re-append remaining areas
+    selectedAreas.forEach(id => {
+        params.append("area[]", id);
+    });
+
+    // Refresh page with updated query
+    window.location.href = window.location.pathname + "?" + params.toString();
 });

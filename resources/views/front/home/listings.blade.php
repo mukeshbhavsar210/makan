@@ -2,15 +2,18 @@
 
 @section('hideHeader') @endsection
 
+<div id="pageLoader" class="page-loader">
+    <img src="{{ asset('front-assets/images/loader.gif') }}" />    
+</div>
+
 <header class="control-header">
     <div class="strip">
         <a class="navbar-brand" href="{{ route('front.home') }}"><img src="{{ asset('front-assets/images/logo.png') }}" /></a>
-        <a id="toggleHeader">
+        <a class="toggleHeader toggleControl">
             @if($categoryWord)
                 {{ $categoryWord }} 
             @endif
-            in {{ $city->name }}
-
+            in {{ $citySelected->name }}
             <span class="down-arrow">
                 <?xml version="1.0" encoding="utf-8"?>
                 <svg width="15px" height="15px" viewBox="0 0 1024 1024" class="icon"  version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M903.232 256l56.768 50.432L512 768 64 306.432 120.768 256 512 659.072z" fill="#ffffff" /></svg>
@@ -28,34 +31,98 @@
             </span>                
         </a>  
 
-        <form action="{{ route('properties') }}" >            
-            <div class="search">
-                <ul id="areas_top" class="areas-list">
+        <form action="{{ route('properties') }}" >                            
+            <div class="search-strip">
+                <ul id="areas_top" >
                     @if(Request::get('city'))
                         @php
                             $areas = \App\Models\Area::where('city_id', Request::get('city'))->get();
-                            $selectedArea = Request::get('area');
+                            $selectedAreas = (array) Request::get('area'); // multiple areas allowed
                         @endphp
 
-                        @foreach($areas as $area)
-                            <li class="{{ $selectedArea == $area->id ? 'active' : 'hidden' }}"><a href="?city={{ Request::get('city') }}&area={{ $area->id }}" >
-                                    {{ $area->name }}
-                                </a>
-                            </li>
-                        @endforeach
+                        @php
+                            // First area to display (either first selected or default first area)
+                            $firstAreaId = $selectedAreas ? $selectedAreas[0] : ($areas[0]->id ?? null);
+                        @endphp
 
-                        @if($selectedArea)
-                            <a href="javascript:void(0);" id="showAllAreas" class="show-all">Add 
-                                <?xml version="1.0" encoding="utf-8"?>
-                                <svg width="15px" height="15px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M6 12H18M12 6V18" stroke="#0d6efd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                            </a>
+                        {{-- Show only the first area --}}
+                        @if($firstAreaId)
+                            @php $firstArea = $areas->firstWhere('id', $firstAreaId); @endphp
+                            @if($firstArea)
+                                <li class="active">
+                                    <label class="custom-checkbox-label">
+                                        <input type="checkbox" name="area[]" value="{{ $firstArea->id }}" checked>
+                                        {{ $firstArea->name }}
+                                        <a href="javascript:void(0);" class="remove-area" data-id="{{ $firstArea->id }}">
+                                            <svg width="22px" height="22px" viewBox="0 0 1024 1024" fill="#ffffff" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M512 897.6c-108 0-209.6-42.4-285.6-118.4-76-76-118.4-177.6-118.4-285.6 0-108 42.4-209.6 118.4-285.6 76-76 177.6-118.4 285.6-118.4 108 0 209.6 42.4 285.6 118.4 157.6 157.6 157.6 413.6 0 571.2-76 76-177.6 118.4-285.6 118.4z m0-760c-95.2 0-184.8 36.8-252 104-67.2 67.2-104 156.8-104 252s36.8 184.8 104 252c67.2 67.2 156.8 104 252 104 95.2 0 184.8-36.8 252-104 139.2-139.2 139.2-364.8 0-504-67.2-67.2-156.8-104-252-104z"/>
+                                                <path d="M707.872 329.392L348.096 689.16l-31.68-31.68 359.776-359.768z"/>
+                                                <path d="M328 340.8l32-31.2 348 348-32 32z"/>
+                                            </svg>
+                                        </a>
+                                    </label>
+                                </li>
+                            @endif
                         @endif
+
+                    {{-- Add More Areas button if multiple selected --}}
+                        @if($areas->count() > 1)
+                        <li>
+                            <a href="javascript:void(0);" id="showAllAreas" class="show-all">
+                                Add +
+                            </a>
+                        </li>
                     @endif
+                        
+                    
+                @endif
+            </ul>
+
+            {{-- Hidden Areas (only extra selected areas beyond the first) --}}
+                @if(count($selectedAreas) > 1)
+                    <div class="hidden-areas-added">
+                        <ul class="added">
+                            @foreach($selectedAreas as $index => $areaId)
+                                @if($index > 0) {{-- Skip first area --}}
+                                    @php $area = $areas->firstWhere('id', $areaId); @endphp
+                                    @if($area)
+                                        <li class="active">
+                                            <label class="custom-checkbox-label">
+                                                <input type="checkbox" name="area[]" value="{{ $area->id }}" checked>
+                                                {{ $area->name }}
+                                                <a href="javascript:void(0);" class="remove-area" data-id="{{ $area->id }}">
+                                                    <svg width="22px" height="22px" viewBox="0 0 1024 1024" fill="#ffffff" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M512 897.6c-108 0-209.6-42.4-285.6-118.4-76-76-118.4-177.6-118.4-285.6 0-108 42.4-209.6 118.4-285.6 76-76 177.6-118.4 285.6-118.4 108 0 209.6 42.4 285.6 118.4 157.6 157.6 157.6 413.6 0 571.2-76 76-177.6 118.4-285.6 118.4z m0-760c-95.2 0-184.8-36.8-252 104-67.2 67.2-104 156.8-104 252s36.8 184.8 104 252c67.2 67.2 156.8 104 252 104 95.2 0 184.8-36.8 252-104 139.2-139.2 139.2-364.8 0-504-67.2-67.2-156.8-104-252-104z"/>
+                                                        <path d="M707.872 329.392L348.096 689.16l-31.68-31.68 359.776-359.768z"/>
+                                                        <path d="M328 340.8l32-31.2 348 348-32 32z"/>
+                                                    </svg>
+                                                </a>
+                                            </label>
+                                        </li>
+                                    @endif
+                                @endif
+                            @endforeach
+                        </ul>  
+                        
+                        
+                    </div>                     
+                @endif
+
+                {{-- Hidden Areas --}}                                
+                <ul class="hidden-areas" style="display: none" >
+                    @foreach($areas as $index => $area)
+                        @if(!in_array($area->id, $selectedAreas) && !(!$selectedAreas && $index == 0))
+                            <li>
+                                <label class="custom-checkbox-label">
+                                    <input type="checkbox" name="area[]" value="{{ $area->id }}">
+                                    {{ $area->name }}
+                                </label>
+                            </li>
+                        @endif
+                    @endforeach  
                 </ul>
             </div>
-        </form>
+        </form>               
     </div>
 
     <div class="inner-header">
@@ -81,43 +148,69 @@
                         <div class="left">
                             <select name="city" id="city" class="city">
                                 <option value="">Select City</option>
-                                @foreach ($cities as $city)
-                                    <option value="{{ $city->id }}" {{ Request::get('city') == $city->id ? 'selected' : '' }}>
-                                        {{ $city->name }}
+                                @foreach ($cities as $c)
+                                    <option value="{{ $c->id }}" {{ Request::get('city') == $c->id ? 'selected' : '' }}>
+                                        {{ $c->name }}
                                     </option>
                                 @endforeach
                             </select>    
+
+                            
+                            
+                            
                         </div>
                         <div class="right">
-                            <ul id="areas" class="areas-list">
-                                @if(Request::get('city'))
-                                    @php
-                                        $areas = \App\Models\Area::where('city_id', Request::get('city'))->get();
-                                        $selectedAreas = (array) Request::get('area'); // multiple areas allowed
-                                    @endphp
+                            <div class="areas-list">
+                                <ul id="areas" >
+                                    @if(Request::get('city'))
+                                        @php
+                                            $areas = \App\Models\Area::where('city_id', Request::get('city'))->get();
+                                            $selectedAreas = (array) Request::get('area'); // multiple areas allowed
+                                        @endphp
 
-                                    @foreach($areas as $area)
-                                        <li class="{{ in_array($area->id, $selectedAreas) ? 'active' : (count($selectedAreas) ? 'hidden' : '') }}">
-                                            <label class="custom-checkbox-label">
-                                                <input type="checkbox" name="area[]" value="{{ $area->id }}"
-                                                    {{ in_array($area->id, $selectedAreas) ? 'checked' : '' }}>
-                                                {{ $area->name }}
-                                            </label>
-                                        </li>
-                                    @endforeach
+                                        {{-- Show selected areas with remove (X) --}}
+                                        @foreach($areas as $index => $area)
+                                            @if(in_array($area->id, $selectedAreas) || (!$selectedAreas && $index == 0))
+                                                <li class="active">
+                                                    <label class="custom-checkbox-label">
+                                                        <input type="checkbox" name="area[]" value="{{ $area->id }}" checked>
+                                                        {{ $area->name }}
+                                                        <a href="javascript:void(0);" class="remove-area" data-id="{{ $area->id }}">
+                                                            <?xml version="1.0" encoding="utf-8"?>
+                                                            <svg width="22px" height="22px" viewBox="0 0 1024 1024" fill="#ffffff" class="icon"  version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M512 897.6c-108 0-209.6-42.4-285.6-118.4-76-76-118.4-177.6-118.4-285.6 0-108 42.4-209.6 118.4-285.6 76-76 177.6-118.4 285.6-118.4 108 0 209.6 42.4 285.6 118.4 157.6 157.6 157.6 413.6 0 571.2-76 76-177.6 118.4-285.6 118.4z m0-760c-95.2 0-184.8 36.8-252 104-67.2 67.2-104 156.8-104 252s36.8 184.8 104 252c67.2 67.2 156.8 104 252 104 95.2 0 184.8-36.8 252-104 139.2-139.2 139.2-364.8 0-504-67.2-67.2-156.8-104-252-104z" fill="" /><path d="M707.872 329.392L348.096 689.16l-31.68-31.68 359.776-359.768z" fill="" /><path d="M328 340.8l32-31.2 348 348-32 32z" fill="" /></svg>
+                                                        </a>
+                                                    </label>
+                                                </li>
+                                            @endif
+                                        @endforeach
 
-                                    @if(count($selectedAreas))
-                                        <li>
-                                            <a href="javascript:void(0);" id="showAllAreas" class="show-all">
-                                                Add 
-                                                <svg width="15px" height="15px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M6 12H18M12 6V18" stroke="#0d6efd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                                </svg>
-                                            </a>
-                                        </li>
+                                        {{-- Add More Button --}}
+                                        @if($areas->count() > 1)
+                                            <li>
+                                                <a href="javascript:void(0);" id="showAllAreas" class="show-all">
+                                                    Add 
+                                                    <svg width="15px" height="15px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M6 12H18M12 6V18" stroke="#0d6efd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    </svg>
+                                                </a>
+                                            </li>
+                                        @endif
                                     @endif
-                                @endif
-                            </ul>
+                                </ul>
+                                {{-- Hidden Areas --}}                                
+                                <ul class="hidden-areas" style="display:none;">
+                                    @foreach($areas as $index => $area)
+                                        @if(!in_array($area->id, $selectedAreas) && !(!$selectedAreas && $index == 0))
+                                            <li>
+                                                <label class="custom-checkbox-label">
+                                                    <input type="checkbox" name="area[]" value="{{ $area->id }}">
+                                                    {{ $area->name }}
+                                                </label>
+                                            </li>
+                                        @endif
+                                    @endforeach  
+                                </ul>
+                            </div>
                         </div>
                     </div>
 
@@ -134,7 +227,7 @@
 
 @section('main')
 
-<div class="listing-page"> 
+<div class="listing-page">
     <form action="{{ route('properties') }}" > 
         <div class="container-fluid">
             <div class="filters">
@@ -175,24 +268,6 @@
                     </ul>
                 </div>
 
-                <div class="dropdown">
-                    <button class="btn control-btn btnFilter dropdown-toggle" type="button" id="bathroomDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                        Bathrooms
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="bathroomDropdown" >
-                        @foreach ($bathrooms as $value)
-                            <li>
-                                <label class="dropdown-item custom-checkbox-label {{ is_array(request('bathroom')) && in_array($value->id, request('bathroom')) ? 'active' : '' }}">
-                                    <input type="checkbox" name="bathroom[]" value="{{ $value->id }}" data-label="{{ $value->title }}"
-                                        {{ is_array(request('bathroom')) && in_array($value->id, request('bathroom')) ? 'checked' : '' }}>
-                                    <span class="checkmark"></span>
-                                    {{ $value->title }}
-                                </label>
-                            </li>
-                        @endforeach
-                    </ul>
-                </div> 
-                
                 <div class="col">
                     <div class="dropdown">
                         <button class="btn btnFilter btn-secondary dropdown-toggle" type="button" id="priceDropdown" data-bs-toggle="dropdown" aria-expanded="false">
@@ -387,11 +462,11 @@
 </div>
 
 <div class="body-details">
-    <div class="container-fluid">
+    <div class="container-fluid">        
         <ul class="breadcrumb">
             <li><a href="{{ route('front.home') }}">Home</a></li>                
-            @if($city)
-                <li><a href="{{ url('/properties?city='.$city->id) }}">{{ $city->name }}</a></li>
+            @if($citySelected)
+                <li><a href="{{ url('/properties?city='.$citySelected->id) }}">{{ $citySelected->name }}</a></li>
             @endif
 
             @if($area)
