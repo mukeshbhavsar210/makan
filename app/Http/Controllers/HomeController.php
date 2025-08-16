@@ -97,8 +97,11 @@ class HomeController extends Controller {
         $cityId = $request->get('city');
         $areaId = $request->get('area');
         $roomIds = $request->get('room', []); // this will be an array of IDs
-        $room = null;
 
+        $citySelected = $request->filled('city') ? \App\Models\City::find($request->city) : null;
+        $areaSelected = $request->filled('area') ? \App\Models\Area::find($request->area) : null;
+
+        $room = null;
         if (!empty($roomIds)) {
             $room = Room::find((int) $roomIds[0]); // take only the first selected room
         }
@@ -137,10 +140,27 @@ class HomeController extends Controller {
             $properties = $properties->where('city_id',$request->city);
         }  
 
-        // Filter by area working
         if ($request->filled('area')) {
-            $properties->where('area_id', $request->area);
+            if (is_array($request->area)) {
+                // Multiple areas (property listing page)
+                $properties->whereIn('area_id', $request->area);
+            } else {
+                // Single area (home page)
+                $properties->where('area_id', $request->area);
+            }
         }
+
+        // $city = null;
+        // if ($request->filled('city')) {
+        //     $city = \App\Models\City::find($request->city);
+        // }
+
+        //Filter using area selected
+        // $areas = Area::query();
+        // if ($request->has('city') && !empty($request->city)) {
+        //     $areas->where('city_id', $request->city);
+        // }
+        // $areas = $areas->get();
 
         //Filter using keyword
         if (!empty($request->keyword)) {
@@ -223,7 +243,7 @@ class HomeController extends Controller {
             } else {
                 $properties = $properties->whereBetween('size',[intval($request->get('size_min')),intval($request->get('size_max'))]);
             }
-        }
+        }        
 
         //Filter using Status
         // if (!empty($request->status) && is_array($request->status)) {
@@ -248,24 +268,10 @@ class HomeController extends Controller {
         //     $property = $property->where('location',$request->location);            
         // }       
 
-                     
-
-        //Filter using area
-        if (!empty($request->area) && is_array($request->area)) {            
-            $properties = $properties->whereIn('area_id', $request->area);
-        }
         
-        //Filter using area selected
-        $areas = Area::query();
-        if ($request->has('city') && !empty($request->city)) {
-            $areas->where('city_id', $request->city);
-        }
-        $areas = $areas->get();
-
-        $properties = $properties->paginate(10);
-
-
+        
        
+        $properties = $properties->paginate(10);       
             
         $data = [
             'categories' => $categories,
@@ -281,7 +287,8 @@ class HomeController extends Controller {
             'facings' => $facings,
             'properties' => $properties,
             'categoryId' => $categoryId,
-            'city' => $city,
+            'citySelected' => $citySelected,
+            'areaSelected' => $areaSelected,
             'area' => $area,
             'categoryWord' => $categoryWord,
             'room' => $room
