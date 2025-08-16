@@ -37,6 +37,7 @@ body {
   text-align: var(--body-text-align);
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  overflow-x: hidden;
 }
 
 ul, li { list-style-type: none; padding:0; margin: 0;}
@@ -84,11 +85,12 @@ p {
 .filters .dropdown { margin-right: 8px;}
 .filters .btnFilter { border: 1px solid rgb(204, 204, 204) !important; border-radius: 2px !important; color: rgb(108, 108, 108) !important; font-size: 14px !important; background-color: var(--white) !important; }
 .filters .btnFilter:hover { border: 1px solid #000 !important; color: #000 !important;}
-.filters .dropdown-menu { padding: 8px 15px; margin: 0; border-radius: 0 !important; }
-.filters .dropdown-menu li { margin: 10px 0; }
+.filters .dropdown-menu { padding: 3px 13px 5px 13px; margin: 0; border-radius: 0 !important; }
+.filters .dropdown-menu li { margin: 9px 0; }
 .filters .dropdown-menu .dropdown-item { width: auto; font-size: 13px; border-radius: 100px; display: inline; border:1px #ccc solid;}
 .filters .dropdown-menu .dropdown-item.active, .dropdown-item:active { border-color: var(--primary); }
 .filters .moreFilters { padding:0 !important; }
+.filters .custom-radio-label input { display: none;}
 
 .wrapper-filters { display: flex; justify-content: space-between; height: 300px;}
 .wrapper-filters .nav { width: 30%; height:100%;; list-style-type: none; padding: 0; margin: 0; box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 20px 0px;}
@@ -110,10 +112,71 @@ p {
 .more-filter-checkbox .custom-checkbox-label { padding: 3px 12px 6px 12px; border: 1px #ccc solid; border-radius: 100px; font-size: 12px; margin-bottom: 7px; display: inline-block;}
 .more-filter-checkbox .custom-checkbox-label.active { background-color: var(--primary); color: var(--white); border-color: var(--primary);}
 
+.filters  .activeFilter { border: 1px var(--primary) solid !important; color: var(--primary) !important; }
 .activeFilter::after { content: ""; height: 6px; width: 6px; border: none !important; background-color: var(--primary); border-radius: 100px; position: absolute; top:4px; left:1px; display: block !important;}
 .navbar-brand img { width: 175px;}
 
-.body-details { background-color: #f4f4f4;}
+.body-details { background-color: #f4f4f4; padding:10px 0;}
+
+.hidden-property-type { display: none;}
+
+.toggle-btn.active {
+    background-color: #007bff;
+    color: white;
+}
+
+.header-inner {  z-index: 99; top:0; left:0; display: flex; justify-content: space-between;}
+.header-inner .toggle-btn { color: var(--white);}
+.big-header { height: 200px;}
+
+.control-header .inner-header { height: 45px; width: 100%; padding: 10px; overflow: hidden; background-color: var(--primary); color: white; transition: height 0.5s ease; display: none; }
+.control-header.expanded .inner-header { height: 200px; z-index: 99; width: 100%; position: fixed; display: block; }
+.control-header .strip { display: flex; height: 45px; background-color: var(--primary); transition: height 0.5s ease;}
+.control-header .strip .navbar-brand { padding: 10px;}
+.control-header .strip #toggleHeader { color: var(--white); text-decoration: none; font-size: 14px; background-color: var(--primary); border-radius: 0 0 10px 10px; cursor: pointer; z-index: 99; padding:10px 35px 10px 15px; margin: 0 10px; position: relative; }
+.control-header .strip #toggleHeader .up-arrow { display: none; position: absolute; right:0; top:0;}
+.control-header .strip .search { background-color: var(--white); padding: 6px; margin: 2px; height: 41px; width: 500px; }
+.control-header .strip .search .areas-list { display: flex; }
+.control-header .strip .search .areas-list li { margin-right: 10px;}
+.control-header.expanded .strip #toggleHeader .down-arrow { display: none; position: absolute; right:0; top:0;}
+.control-header.expanded .strip #toggleHeader .up-arrow { display: block; position: absolute; right:10px; top:13px;}
+.control-header.expanded .strip { position: absolute; top:200px; width: 100%; left:0; }
+.control-header .inner-header .search-swapie { margin: 0 auto; }
+.control-header .inner-header.expanded .search-swapie { display: block;}
+.control-header .inner-header.expanded #toggleHeader { padding: 13px;}
+.control-header .inner-header.expanded .strip .navbar-brand { margin: 10px 20px 10px 10px;}
+.control-header .search-engine { display: none;}
+.control-header .search-engine .search-controls .flex-search { display: flex; font-size: 14px; justify-content: space-between;}
+.control-header .search-engine .search-controls .flex-search .left { width: 135px;}
+.control-header .search-engine .search-controls .flex-search .left .city { width: 95% !important;}
+.control-header .search-engine .search-controls .flex-search .right { width: 80%;}
+.control-header.expanded .search-engine { display: block; width: 50%; margin: 0 auto;  height: 165px; background: none;}
+.control-header .search-engine .active .city { width: 25% !important;}
+.control-header .search-engine .areas-list { box-shadow: none; padding: 14px 10px; width: 55%; height: 125px; }
+.control-header .search-engine .areas-list li { margin-right: 8px; margin-bottom: 10px; float: left; }
+.control-header .search-engine .areas-list li label, .control-header .search-engine .areas-list li a { padding: 5px 10px; border: 1px var(--primary) solid; border-radius: 100px; color: var(--primary); text-decoration: none; display: inline-block; font-weight: normal;  }
+
+.control-header .search-engine .areas-list li.active { width: auto !important; display: block; }
+.control-header .search-engine .areas-list li.active label, .control-header .search-engine .areas-list li label.active  {color: var(--white) !important; border-color: var(--primary); text-decoration: none; background-color: var(--primary); width: auto; }
+.control-header .search-engine .areas-list li .area-item { padding: 5px 10px; border: 1px #ccc solid; border-radius: 100px; margin-right: 5px;}
+.control-header .search-engine .areas-list li .area-item:hover { background-color: var(--primary); color: var(--white); border-color: var(--primary);}
+.control-header .search-engine .areas-list li .area-item:hover .link { color: var(--white); }
+.control-header .search-engine .areas-list li .icon, .control-header .search-engine .areas-list li .locality  { display: none;}
+
+.areas-list li.hidden {
+    display: none;
+}
+.areas-list li.active label {
+    font-weight: bold;
+    color: #007bff;
+}
+
+.areas-list a.active { width: auto; font-weight: normal !important; padding: 5px 10px; border: 1px #ccc solid; border-radius: 100px; background-color: var(--primary); color: var(--white) !important; border-color: var(--primary); text-decoration: none; }
+.areas-list li.hidden { display: none; }
+.areas-list a.active { font-weight: bold; color: #007bff;}
+.show-all { border-radius: 100px; border: 1px var(--primary) solid; padding:4px 10px 5px 10px;; text-decoration: none;  cursor: pointer;  }
+
+.control-header .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1; display: none; }
 
 .buyCover { background-image: url('../images/homeCover.webp'); background-size: cover; background-repeat: no-repeat;}
 .sellCover { background-image: url('../images/rentCover.webp') !important; }
@@ -127,7 +190,7 @@ header { position: fixed; width: 100%; top:0; left: 0; z-index: 99; background-c
 .searchHome .mainTitle { text-align: center; color: var(--white); }
 .searchHome .mainTitle h1 { font-size: 32px; font-weight: bold; text-shadow: 1px 1px 1px rgba(0,0,0,0.51);}
 
-.listing-page { margin-top: 80px;}
+.listing-page { margin-top: 50px;}
 
 .rentBuy { display: flex; padding: 10px 20px 0 20px; list-style-type: none;}
 .rentBuy li {  color: var(--white); margin-right: 30px;}
@@ -199,10 +262,11 @@ header { position: fixed; width: 100%; top:0; left: 0; z-index: 99; background-c
 .property-individuals .figures { text-align: center; }
 .property-individuals .figures p { text-align: center; padding: 10px; border-right: 1px red solid; }
 
-.breadcrumb { margin: 30px 0; font-size: 13px; }
-.breadcrumb li::after { content:"/"; margin: 0 8px; color: #ccc;}
-.breadcrumb li a { font-size: 14px; color: #666; text-decoration: none;}
-.breadcrumb li a:hover { color: red;}
+.breadcrumb { margin: 0 !important; font-size: 13px; padding: 0; }
+.breadcrumb li::after { content:"/"; margin: 0 6px; color: #ccc;}
+.breadcrumb li { font-size: 13px; }
+.breadcrumb li a { font-size: 13px; color: #666; text-decoration: none;}
+.breadcrumb li a:hover, .breadcrumb li.active { color: var(--primary); font-size: 13px;}
 
 
 .custom-checkbox-label { position: relative; cursor: pointer; user-select: none; }

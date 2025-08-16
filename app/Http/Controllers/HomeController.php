@@ -93,11 +93,49 @@ class HomeController extends Controller {
         $ages = Age::where('status',1)->get();
         $propertyTypes = PropertyType::where('status',1)->get();        
         $properties = Property::where('status',1);
+        $categoryId = $request->get('category');
+        $cityId = $request->get('city');
+        $areaId = $request->get('area');
+        $roomIds = $request->get('room', []); // this will be an array of IDs
+        $room = null;
+
+        if (!empty($roomIds)) {
+            $room = Room::find((int) $roomIds[0]); // take only the first selected room
+        }
+
+        $city = null;
+        $area = null;
+
+        if ($cityId) {
+            $city = City::find($cityId);
+        }
+
+        if ($areaId) {
+            $area = Area::find($areaId);
+        }
+
+        // Fetch city/area/category/room details for breadcrumb       
+        $room = !empty($request->room) ? Room::find($request->room[0]) : null;
+
+        $categoryWord = null;
+
+        if ($categoryId) {
+            $map = [
+                21 => 'Sale',
+                27 => 'Rent',
+            ];
+            $categoryWord = $map[$categoryId] ?? null;
+        }        
 
         //Filter using category
         if(!empty($request->category)){
             $properties = $properties->where('category_id',$request->category);
         }
+
+        //Filter using city
+        if(!empty($request->city)){            
+            $properties = $properties->where('city_id',$request->city);
+        }  
 
         // Filter by area working
         if ($request->filled('area')) {
@@ -210,24 +248,25 @@ class HomeController extends Controller {
         //     $property = $property->where('location',$request->location);            
         // }       
 
-        // if(!empty($request->city)){            
-        //     $properties = $properties->where('city_id',$request->city);
-        // }               
+                     
 
         //Filter using area
-        // if (!empty($request->area) && is_array($request->area)) {            
-        //     $properties = $properties->whereIn('area_id', $request->area);
-        // }
+        if (!empty($request->area) && is_array($request->area)) {            
+            $properties = $properties->whereIn('area_id', $request->area);
+        }
         
         //Filter using area selected
-        // $areas = Area::query();
-        // if ($request->has('city') && !empty($request->city)) {
-        //     $areas->where('city_id', $request->city);
-        // }
-        // $areas = $areas->get();
+        $areas = Area::query();
+        if ($request->has('city') && !empty($request->city)) {
+            $areas->where('city_id', $request->city);
+        }
+        $areas = $areas->get();
 
         $properties = $properties->paginate(10);
-        
+
+
+       
+            
         $data = [
             'categories' => $categories,
             'cities' => $cities,
@@ -240,12 +279,17 @@ class HomeController extends Controller {
             'constructions' => $constructions,
             'ages' => $ages,
             'facings' => $facings,
-            'properties' => $properties,   
+            'properties' => $properties,
+            'categoryId' => $categoryId,
+            'city' => $city,
+            'area' => $area,
+            'categoryWord' => $categoryWord,
+            'room' => $room
         ];
 
          $data['priceMax'] = (intval($request->get('price_max')) == 0 ? 1000 : $request->get('price_max'));
          $data['priceMin'] = intval($request->get('price_min'));                 
-    
+
         return view('front.home.listings', $data);
     }
 

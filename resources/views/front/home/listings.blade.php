@@ -1,31 +1,144 @@
 @extends('front.layouts.app')
 
+@section('hideHeader') @endsection
+
+<header class="control-header">
+    <div class="strip">
+        <a class="navbar-brand" href="{{ route('front.home') }}"><img src="{{ asset('front-assets/images/logo.png') }}" /></a>
+        <a id="toggleHeader">
+            @if($categoryWord)
+                {{ $categoryWord }} 
+            @endif
+            in {{ $city->name }}
+
+            <span class="down-arrow">
+                <?xml version="1.0" encoding="utf-8"?>
+                <svg width="15px" height="15px" viewBox="0 0 1024 1024" class="icon"  version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M903.232 256l56.768 50.432L512 768 64 306.432 120.768 256 512 659.072z" fill="#ffffff" /></svg>
+            </span>
+
+            <span class="up-arrow">
+                <?xml version="1.0" encoding="iso-8859-1"?>
+                <svg fill="#ffffff" height="15px" width="15px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+                    viewBox="0 0 512.01 512.01" xml:space="preserve"><g>
+                    <g><path d="M505.755,358.256L271.088,123.589c-8.341-8.341-21.824-8.341-30.165,0L6.256,358.256c-8.341,8.341-8.341,21.824,0,30.165
+                            s21.824,8.341,30.165,0l219.584-219.584l219.584,219.584c4.16,4.16,9.621,6.251,15.083,6.251c5.462,0,10.923-2.091,15.083-6.251
+                            C514.096,380.08,514.096,366.597,505.755,358.256z"/></g>
+                    </g>
+                </svg>
+            </span>                
+        </a>  
+
+        <form action="{{ route('properties') }}" >            
+            <div class="search">
+                <ul id="areas_top" class="areas-list">
+                    @if(Request::get('city'))
+                        @php
+                            $areas = \App\Models\Area::where('city_id', Request::get('city'))->get();
+                            $selectedArea = Request::get('area');
+                        @endphp
+
+                        @foreach($areas as $area)
+                            <li class="{{ $selectedArea == $area->id ? 'active' : 'hidden' }}"><a href="?city={{ Request::get('city') }}&area={{ $area->id }}" >
+                                    {{ $area->name }}
+                                </a>
+                            </li>
+                        @endforeach
+
+                        @if($selectedArea)
+                            <a href="javascript:void(0);" id="showAllAreas" class="show-all">Add 
+                                <?xml version="1.0" encoding="utf-8"?>
+                                <svg width="15px" height="15px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M6 12H18M12 6V18" stroke="#0d6efd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </a>
+                        @endif
+                    @endif
+                </ul>
+            </div>
+        </form>
+    </div>
+
+    <div class="inner-header">
+        <div class="search-engine">
+            <form action="{{ route('properties') }}" >            
+                <ul class="rentBuy">
+                    <li>I'm looking to</li>
+                    @if ($categories)                               
+                        @foreach ($categories as $value)                            
+                            <li>
+                                <label class="{{ request('category') == $value->id || (!request('category') && $loop->first) ? 'activeTab' : '' }}">
+                                    <input type="radio" name="category" value="{{ $value->id }}"
+                                        {{ request('category') == $value->id || (!request('category') && $loop->first) ? 'checked' : '' }}>
+                                    {{ $value->name }}
+                                </label>
+                            </li>
+                        @endforeach                            
+                    @endif
+                </ul>
+
+                <div class="search-controls">
+                    <div class="flex-search">
+                        <div class="left">
+                            <select name="city" id="city" class="city">
+                                <option value="">Select City</option>
+                                @foreach ($cities as $city)
+                                    <option value="{{ $city->id }}" {{ Request::get('city') == $city->id ? 'selected' : '' }}>
+                                        {{ $city->name }}
+                                    </option>
+                                @endforeach
+                            </select>    
+                        </div>
+                        <div class="right">
+                            <ul id="areas" class="areas-list">
+                                @if(Request::get('city'))
+                                    @php
+                                        $areas = \App\Models\Area::where('city_id', Request::get('city'))->get();
+                                        $selectedAreas = (array) Request::get('area'); // multiple areas allowed
+                                    @endphp
+
+                                    @foreach($areas as $area)
+                                        <li class="{{ in_array($area->id, $selectedAreas) ? 'active' : (count($selectedAreas) ? 'hidden' : '') }}">
+                                            <label class="custom-checkbox-label">
+                                                <input type="checkbox" name="area[]" value="{{ $area->id }}"
+                                                    {{ in_array($area->id, $selectedAreas) ? 'checked' : '' }}>
+                                                {{ $area->name }}
+                                            </label>
+                                        </li>
+                                    @endforeach
+
+                                    @if(count($selectedAreas))
+                                        <li>
+                                            <a href="javascript:void(0);" id="showAllAreas" class="show-all">
+                                                Add 
+                                                <svg width="15px" height="15px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M6 12H18M12 6V18" stroke="#0d6efd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                </svg>
+                                            </a>
+                                        </li>
+                                    @endif
+                                @endif
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="right-btn">
+                        <button class="btn btn-primary" type="submit">Search</button>      
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="overlay"></div>
+</header>
+
 @section('main')
 
-<div class="listing-page">
+<div class="listing-page"> 
     <form action="{{ route('properties') }}" > 
-        {{-- <div class="dropdown">
-            <button class="btn btn-primary dropdown-toggle" type="button" id="areasDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                Areas
-            </button>
-            <ul class="dropdown-menu p-2" aria-labelledby="areasDropdown" style="min-width: 200px;">
-                @foreach ($areas as $value)
-                    <li>
-                        <label class="dropdown-item custom-checkbox-label {{ is_array(request('areas')) && in_array($value->id, request('areas')) ? 'active' : '' }}">
-                            <input type="checkbox" name="areas[]" value="{{ $value->id }}"
-                                data-label="{{ $value->name }}"
-                                {{ is_array(request('areas')) && in_array($value->id, request('areas')) ? 'checked' : '' }}>
-                            <span class="checkmark"></span>
-                            {{ $value->name }}
-                        </label>
-                    </li>
-                @endforeach
-            </ul>
-        </div> --}}
-
         <div class="container-fluid">
             <div class="filters">
-                <div class="dropdown">
+                <div class="dropdown {{ request('category') == 27 ? 'hidden-property-type' : '' }}">
                     <button class="btn control-btn btnFilter dropdown-toggle" type="button" id="typeDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                         Property Type
                     </button>
@@ -132,7 +245,6 @@
                         @endforeach
                     </ul>
                 </div>
-
 
                 <div class="dropdown">
                     <button class="btn btnFilter btn-secondary dropdown-toggle" type="button" id="moreFiltersDropdown" data-bs-toggle="dropdown" aria-expanded="false">
@@ -275,6 +387,31 @@
 </div>
 
 <div class="body-details">
+    <div class="container-fluid">
+        <ul class="breadcrumb">
+            <li><a href="{{ route('front.home') }}">Home</a></li>                
+            @if($city)
+                <li><a href="{{ url('/properties?city='.$city->id) }}">{{ $city->name }}</a></li>
+            @endif
+
+            @if($area)
+                <li class="active" aria-current="page"> 
+                    @if($room)
+                        {{ $room->title }} 
+                    @endif
+                    Flat 
+                    @if($categoryWord)
+                        {{ $categoryWord }} 
+                    @endif
+                    in 
+                    @if($area)
+                        {{ $area->name }}
+                    @endif
+                </li>
+            @endif            
+        </ul>
+    </div>
+
     <div class="row">
         <div class="col-md-8 col-12">
             @if ($properties->isNotEmpty())
@@ -398,7 +535,7 @@ $('.custom-checkbox-label input').on('change', function () {
     }
 
     updateDropdownLabel('#typeDropdown', 'input[name="type[]"]', 'Property Type');
-    updateDropdownLabel('#roomDropdown', 'input[name="room[]"]', 'Rooms');
+    updateDropdownLabel('#roomDropdown', 'input[name="room[]"]', 'BHK Type');
     updateDropdownLabel('#bathroomDropdown', 'input[name="bathroom[]"]', 'Bathrooms');
     updateDropdownLabel('#listedTypeDropdown', 'input[name="listed_type[]"]', 'Listed By');    
     updateDropdownLabel('#facingDropdown', 'input[name="facing[]"]', 'Facings');
@@ -407,7 +544,7 @@ $('.custom-checkbox-label input').on('change', function () {
 
 // Initialize all dropdown labels on page load
 updateDropdownLabel('#typeDropdown', 'input[name="type[]"]', 'Property Type');
-updateDropdownLabel('#roomDropdown', 'input[name="room[]"]', 'Rooms');
+updateDropdownLabel('#roomDropdown', 'input[name="room[]"]', 'BHK Type');
 updateDropdownLabel('#bathroomDropdown', 'input[name="bathroom[]"]', 'Bathrooms');
 updateDropdownLabel('#listedTypeDropdown', 'input[name="listed_type[]"]', 'Listed By');
 updateDropdownLabel('#facingDropdown', 'input[name="facing[]"]', 'Facings');
