@@ -49,80 +49,278 @@
                         @if($firstAreaId)
                             @php $firstArea = $areas->firstWhere('id', $firstAreaId); @endphp
                             @if($firstArea)
-                                <li class="active">
+                                <li>
                                     <label class="custom-checkbox-label">
                                         <input type="checkbox" name="area[]" value="{{ $firstArea->id }}" checked>
                                         {{ $firstArea->name }}
                                         <a href="javascript:void(0);" class="remove-area" data-id="{{ $firstArea->id }}">
-                                            <svg width="22px" height="22px" viewBox="0 0 1024 1024" fill="#ffffff" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M512 897.6c-108 0-209.6-42.4-285.6-118.4-76-76-118.4-177.6-118.4-285.6 0-108 42.4-209.6 118.4-285.6 76-76 177.6-118.4 285.6-118.4 108 0 209.6 42.4 285.6 118.4 157.6 157.6 157.6 413.6 0 571.2-76 76-177.6 118.4-285.6 118.4z m0-760c-95.2 0-184.8 36.8-252 104-67.2 67.2-104 156.8-104 252s36.8 184.8 104 252c67.2 67.2 156.8 104 252 104 95.2 0 184.8-36.8 252-104 139.2-139.2 139.2-364.8 0-504-67.2-67.2-156.8-104-252-104z"/>
-                                                <path d="M707.872 329.392L348.096 689.16l-31.68-31.68 359.776-359.768z"/>
-                                                <path d="M328 340.8l32-31.2 348 348-32 32z"/>
-                                            </svg>
+                                            <svg fill="#ffffff" width="14px" height="14px" viewBox="-3.5 0 19 19" xmlns="http://www.w3.org/2000/svg" class="cf-icon-svg"><path d="M11.383 13.644A1.03 1.03 0 0 1 9.928 15.1L6 11.172 2.072 15.1a1.03 1.03 0 1 1-1.455-1.456l3.928-3.928L.617 5.79a1.03 1.03 0 1 1 1.455-1.456L6 8.261l3.928-3.928a1.03 1.03 0 0 1 1.455 1.456L7.455 9.716z"/></svg>
                                         </a>
                                     </label>
                                 </li>
                             @endif
                         @endif
 
-                    {{-- Add More Areas button if multiple selected --}}
-                        @if($areas->count() > 1)
-                        <li>
-                            <a href="javascript:void(0);" id="showAllAreas" class="show-all">
-                                Add +
-                            </a>
-                        </li>
-                    @endif
-                        
-                    
+                        @php
+                            // Ensure only unique area IDs are counted
+                            $selectedUnique = collect($selectedAreas)->unique();
+                            $allAdded = $selectedUnique->count() >= $areas->count();
+                        @endphp
+
+                        @if($areas->count() > 2)
+                            @if(!$allAdded)
+                                <li>
+                                    <a href="javascript:void(0);" id="showAllAreas" class="show-all"> 
+                                        Add 
+                                        <svg fill="#0d6efd" width="16px" height="16px" viewBox="-3 0 19 19" xmlns="http://www.w3.org/2000/svg" class="cf-icon-svg">
+                                            <path d="M12.711 9.182a1.03 1.03 0 0 1-1.03 1.03H7.53v4.152a1.03 1.03 0 0 1-2.058 0v-4.152H1.318a1.03 1.03 0 1 1 0-2.059h4.153V4.001a1.03 1.03 0 0 1 2.058 0v4.152h4.153a1.03 1.03 0 0 1 1.029 1.03z"/>
+                                        </svg>
+                                    </a>
+                                </li>
+                            @endif
+                        @endif                 
                 @endif
             </ul>
 
-            {{-- Hidden Areas (only extra selected areas beyond the first) --}}
-                @if(count($selectedAreas) > 1)
-                    <div class="hidden-areas-added">
-                        <ul class="added">
-                            @foreach($selectedAreas as $index => $areaId)
-                                @if($index > 0) {{-- Skip first area --}}
-                                    @php $area = $areas->firstWhere('id', $areaId); @endphp
-                                    @if($area)
-                                        <li class="active">
-                                            <label class="custom-checkbox-label">
-                                                <input type="checkbox" name="area[]" value="{{ $area->id }}" checked>
-                                                {{ $area->name }}
-                                                <a href="javascript:void(0);" class="remove-area" data-id="{{ $area->id }}">
-                                                    <svg width="22px" height="22px" viewBox="0 0 1024 1024" fill="#ffffff" xmlns="http://www.w3.org/2000/svg">
-                                                        <path d="M512 897.6c-108 0-209.6-42.4-285.6-118.4-76-76-118.4-177.6-118.4-285.6 0-108 42.4-209.6 118.4-285.6 76-76 177.6-118.4 285.6-118.4 108 0 209.6 42.4 285.6 118.4 157.6 157.6 157.6 413.6 0 571.2-76 76-177.6 118.4-285.6 118.4z m0-760c-95.2 0-184.8-36.8-252 104-67.2 67.2-104 156.8-104 252s36.8 184.8 104 252c67.2 67.2 156.8 104 252 104 95.2 0 184.8-36.8 252-104 139.2-139.2 139.2-364.8 0-504-67.2-67.2-156.8-104-252-104z"/>
-                                                        <path d="M707.872 329.392L348.096 689.16l-31.68-31.68 359.776-359.768z"/>
-                                                        <path d="M328 340.8l32-31.2 348 348-32 32z"/>
-                                                    </svg>
-                                                </a>
-                                            </label>
-                                        </li>
-                                    @endif
-                                @endif
-                            @endforeach
-                        </ul>  
-                        
-                        
-                    </div>                     
-                @endif
+                {{-- Hidden Areas (only extra selected areas beyond the first) --}}               
+                <div class="hidden-areas-added">
+                    @php $rendered = []; @endphp
 
-                {{-- Hidden Areas --}}                                
-                <ul class="hidden-areas" style="display: none" >
-                    @foreach($areas as $index => $area)
-                        @if(!in_array($area->id, $selectedAreas) && !(!$selectedAreas && $index == 0))
-                            <li>
-                                <label class="custom-checkbox-label">
-                                    <input type="checkbox" name="area[]" value="{{ $area->id }}">
-                                    {{ $area->name }}
-                                </label>
-                            </li>
-                        @endif
-                    @endforeach  
-                </ul>
+                    @php 
+                        $rendered = [];
+                        $selectedUnique = collect($selectedAreas)->unique();
+                    @endphp
+
+                    <ul class="added" style="{{ $selectedUnique->count() > 1 ? '' : 'display:none;' }}">
+                        @foreach($selectedAreas as $index => $areaId)
+                            @if($index > 0 && !in_array($areaId, $rendered))
+                                @php 
+                                    $area = $areas->firstWhere('id', $areaId); 
+                                    $rendered[] = $areaId;
+                                @endphp
+                                @if($area)
+                                    <li>
+                                        <label class="custom-checkbox-label">
+                                            <input type="checkbox" name="area[]" value="{{ $area->id }}" checked> 
+                                            {{ $area->name }}
+                                            <a href="javascript:void(0);" class="remove-area" data-id="{{ $area->id }}">
+                                                <svg fill="#ffffff" width="14px" height="14px" viewBox="-3.5 0 19 19" xmlns="http://www.w3.org/2000/svg" class="cf-icon-svg">
+                                                    <path d="M11.383 13.644A1.03 1.03 0 0 1 9.928 15.1L6 11.172 2.072 15.1a1.03 1.03 0 1 1-1.455-1.456l3.928-3.928L.617 5.79a1.03 1.03 0 1 1 1.455-1.456L6 8.261l3.928-3.928a1.03 1.03 0 0 1 1.455 1.456L7.455 9.716z"/>
+                                                </svg>
+                                            </a>
+                                        </label>
+                                    </li>
+                                @endif
+                            @endif
+                        @endforeach
+                    </ul>
+
+                    <ul class="hidden-areas" style="display: none" >
+                        @foreach($areas as $index => $area)
+                            @if(!in_array($area->id, $selectedAreas) && !(!$selectedAreas && $index == 0))
+                                <li>
+                                    <label class="custom-checkbox-label">
+                                        <input type="checkbox" name="area[]" value="{{ $area->id }}">
+                                        {{ $area->name }}
+                                        <svg fill="#0d6efd" width="16px" height="16px" viewBox="-3 0 19 19" xmlns="http://www.w3.org/2000/svg" class="cf-icon-svg"><path d="M12.711 9.182a1.03 1.03 0 0 1-1.03 1.03H7.53v4.152a1.03 1.03 0 0 1-2.058 0v-4.152H1.318a1.03 1.03 0 1 1 0-2.059h4.153V4.001a1.03 1.03 0 0 1 2.058 0v4.152h4.153a1.03 1.03 0 0 1 1.029 1.03z"></path></svg>
+                                    </label>
+                                </li>
+                            @endif
+                        @endforeach  
+                    </ul>
+                </div>                     
             </div>
-        </form>               
+        </form> 
+        
+        <a class="btn btn-primary" href="" type="submit">List Property Free</a>
+        <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#sideModal" aria-controls="sideModal">Login</button>
+
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="sideModal" aria-labelledby="sideModalLabel">
+        <div>
+            <div class="css-1d7igk2">
+                <div class="css-1a1kv9n">
+                    <div class="css-aknk">
+                        <div class="css-1r8j6uz">
+                            <div class="css-70qvj9">
+                                <img class="img css-1qf48we" decoding="async" fetchpriority="low" src="//c.housingcdn.com/demand/s/client/common/assets/tenant-avatar.cedc2f44.png">
+                                <div class="css-1qhmto6">
+                                    <div class="css-urapr9">Hello  👋🏻</div>
+                                    <div class="css-1c24lhr">Easy Contact with sellers</div>
+                                    <div class="css-1c24lhr">Personalized experience</div>
+                                </div>
+
+                                @if (Auth::check())
+                                    <a href="{{ route('profile.index')}}" class="btn btn-primary">My Account</a>
+                                @else
+                                    {{-- <a href="{{ route('account.login')}}" data-bs-toggle="modal" data-bs-target="#exampleModal" class="nav-link text-dark">Login/Register</a> --}}
+                                    <a href="{{ route('account.login')}}" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-primary">Login</a>
+                                @endif
+                            </div>
+                            </div>
+                            <div class="css-13uh3bk"></div>
+                            <div class="css-nf8lu8">
+                                <div class="css-1wdo9tm">My Activity</div>
+                                <div class="T_visibilityNudgeContainerStyle _l8idpf _e2cmky _l115vq _l01wug T_tilesContainerStyle _12gmglyw _ks15zi _cxftgi _9s1txw">
+                                    <div id="contactedProperties" class="_vy7ynd _e2ca9o _0h1h6o _l8tzce _fc1y6m _cs1nn1 _c81fwx _1y0kqslr T_visibilityNudgePillStyle t1erharo _g9mt1kf2 _raf011w6 _5z111l08 _3f1e1l _9jtlke _mkh2mm _ar1bp4 _9s1txw _7l1d6m _r31h6o _5jftgi _1ti04wu4 _bof91jbn _lzn0158e _261jsd T_TitleWrapper" style="--1u6u2i1: '\e98f'; --1txmub6: #4e4e4e; --sac6kx: #ffffff; --1yrc1ga: 1px solid #d4d4d4; --1yo8p3h: 1px solid #5d46db; --o7otvt: #5E23DC;">
+                                        <div data-visibility-nudge="true" data-profile-desktop-url="false" class="v1hscdnl _1yzv1y44 _p4221h6o _vy951h6o _18811txw _1fu01osq _mtkvexct _6w1e54 _9scj1k _fycs5v _ks15vq _g3dlk8 _c81fwx _h3j7go T_VisibilityNudgePillName" style="--ymicyk: 0px;">Contacted Properties</div><div class="v17f23e4 _git3bu _7l1ulh _g3dlk8 _5j19bv _e2exct _vy1vi7 _fc1h6o _0h1h6o _9s1txw _261oci T_VisibilityNudgeCountStyle" style="--1c7gtbt: rgba(153, 153, 153, 0.22);">00</div></div><div id="seenProperties" class="_2619j3 _70qisa T_activeTileStyle _1ti01994 _3f1r0o _mkh2mm T_coloredActiveTileStyle _vy7ynd _e2ca9o _0h1h6o _l8tzce _fc1y6m _cs1nn1 _c81fwx _1y0kqslr T_visibilityNudgePillStyle _19381yyf _1h8oqx4o _2zt8stnw _1hh41r5k _105419bv _89if1ssb _1sjyzr6s _3l8v1osq _1880mgnk _1ymp1do4 T_activePillNotchDesktopStyle t1erharo _g9mt1kf2 _raf011w6 _5z111l08 _9jtlke _ar1bp4 _9s1txw _7l1d6m _r31h6o _5jftgi _bof91jbn _lzn0158e T_TitleWrapper" style="--1u6u2i1: '\e97d'; --1txmub6: #4e4e4e; --sac6kx: #ffffff; --1yrc1ga: 1px solid #5d46db; --1yo8p3h: 1px solid #5d46db; --o7otvt: #5E23DC;"><div data-visibility-nudge="true" data-profile-desktop-url="false" class="v1hscdnl _1yzv1y44 _p4221h6o _vy951h6o _18811txw _1fu01osq _mtkvexct _6w1e54 _9scj1k _fycs5v _ks15vq _g3dlk8 _c81fwx _h3j7go T_VisibilityNudgePillName" style="--ymicyk: 0px;">Seen Properties</div><div class="v17f23e4 _git3bu _7l1ulh _g3dlk8 _5j19bv _e2exct _vy1vi7 _fc1h6o _0h1h6o _9s1txw _261oci T_VisibilityNudgeCountStyle" style="--1c7gtbt: rgba(94, 35, 220, 0.22);">00</div></div><div id="savedProperties" class="_vy7ynd _e2ca9o _0h1h6o _l8tzce _fc1y6m _cs1nn1 _c81fwx _1y0kqslr T_visibilityNudgePillStyle t1erharo _g9mt1kf2 _raf011w6 _5z111l08 _3f1e1l _9jtlke _mkh2mm _ar1bp4 _9s1txw _7l1d6m _r31h6o _5jftgi _1ti04wu4 _bof91jbn _lzn0158e _261jsd T_TitleWrapper" style="--1u6u2i1: '\e97e'; --1txmub6: #4e4e4e; --sac6kx: #ffffff; --1yrc1ga: 1px solid #d4d4d4; --1yo8p3h: 1px solid #5d46db; --o7otvt: #5E23DC;"><div data-visibility-nudge="true" data-profile-desktop-url="false" class="v1hscdnl _1yzv1y44 _p4221h6o _vy951h6o _18811txw _1fu01osq _mtkvexct _6w1e54 _9scj1k _fycs5v _ks15vq _g3dlk8 _c81fwx _h3j7go T_VisibilityNudgePillName" style="--ymicyk: 0px;">Saved Properties</div><div class="v17f23e4 _git3bu _7l1ulh _g3dlk8 _5j19bv _e2exct _vy1vi7 _fc1h6o _0h1h6o _9s1txw _261oci T_VisibilityNudgeCountStyle" style="--1c7gtbt: rgba(153, 153, 153, 0.22);">00</div></div><div id="recentSearches" class="_vy7ynd _e2ca9o _0h1h6o _l8tzce _fc1y6m _cs1nn1 _c81fwx _1y0kqslr T_visibilityNudgePillStyle t1erharo _g9mt1kf2 _raf011w6 _5z111l08 _3f1e1l _9jtlke _mkh2mm _ar1bp4 _9s1txw _7l1d6m _r31h6o _5jftgi _1ti04wu4 _bof91jbn _lzn0158e _261jsd T_TitleWrapper" style="--1u6u2i1: '\e97c'; --1txmub6: #4e4e4e; --sac6kx: #ffffff; --1yrc1ga: 1px solid #d4d4d4; --1yo8p3h: 1px solid #5d46db; --o7otvt: #5E23DC;"><div data-visibility-nudge="true" data-profile-desktop-url="false" class="v1hscdnl _1yzv1y44 _p4221h6o _vy951h6o _18811txw _1fu01osq _mtkvexct _6w1e54 _9scj1k _fycs5v _ks15vq _g3dlk8 _c81fwx _h3j7go T_VisibilityNudgePillName" style="--ymicyk: 0px;">Recent Searches</div><div class="v17f23e4 _git3bu _7l1ulh _g3dlk8 _5j19bv _e2exct _vy1vi7 _fc1h6o _0h1h6o _9s1txw _261oci T_VisibilityNudgeCountStyle" style="--1c7gtbt: rgba(153, 153, 153, 0.22);">01</div>
+                                    </div>
+                                </div>
+                            </div>
+                                        
+                            <div class="cmn-wrapper">
+                                <div class="css-1s390b6"><img class="img css-1ps6pnn" decoding="async" fetchpriority="low" src="//c.housingcdn.com/demand/s/client/common/assets/fallback.3b935c39.svg"><button data-testid="buttonId" class="_h31f4h _g314no _vy93m8 _r31h6o _2d1e1b _5jftgi _3fn7od _l8n7od _csbfng _c81fwx _7l1994 T_oldSearchBtnStyle T_btnStyle _j9qr11ef _1yfe11ef _xvuoe25i _1vt4glyw _1q73uea4 _9jtlke _26oii0 cta">Start new search</button>
+                                </div>
+
+                                <a class="T_containerStyle" href="/rent-sell-property?utm_medium=SRP&amp;utm_source=housing">
+                                    <div>
+
+                                    </div>
+                                    <img fetchpriority="low" class="_0p1eb7 T_imageTransitionEffectFullOpacity _jp1dfr T_imageStyle _vyz0at _e2nagk T_imageStyle img" decoding="async" src="//c.housingcdn.com/demand/s/client/common/assets/postProperty.3f9c046b.svg">
+                                    <div class="_9s1txw _cxftgi _ar1bp4 _fc1yb4 _e2ymf6 T_textContainerStyle">
+                                        <div class="_vyntd2 _e21vi7 _c8dlk8 _cs1nn1 _g3exct _r31e5h _7l1ulh T_headingStyle">Looking to sell / rent your property?</div><div class="_261pec _70i5yl _5j14y2 _c81fwx _csbfng _g3exct _r31h6o _7ls3je _e21ul9 _vymhvn _9s1txw _fc1h6o _0h1h6o T_ctaStyle">Post property for FREE</div>
+                                    </div>
+                                </a>
+                            </div>
+
+                            <div class="css-1vom6bc">
+                                <div class="css-7o2ihh">Zero Brokerage Properties</div>
+                                <div class="css-pk8tdi">
+                                    <div class="css-17pf2g"></div>
+                                </div>
+                            </div>
+
+                            <div class="css-1vom6bc">
+                                <div class="css-1lw7yxt">My Transactions</div>
+                                <div class="css-pk8tdi">
+                                    <div class="css-17pf2g"></div>
+                                </div>
+                            </div>
+
+                            <div class="css-1vom6bc">
+                                <div class="css-cbbif3">My Reviews<span class="css-kr4tkc">New</span></div>
+                                <div class="css-pk8tdi">
+                                    <div class="css-17pf2g"></div>
+                                </div>
+                            </div>
+
+                            <div class="css-13uh3bk"></div>
+                            
+                            <div class="css-1vom6bc">
+                                <div class="css-vaa0za">Quick Links</div>
+                                <div class="css-pk8tdi">
+                                    <a class="css-ck7fsc" href="/"><div class="css-ttlyn2">Home</div></a>
+                                    <a class="css-er4el4" href="/rent-sell-property"><div class="css-ttlyn2">Post Properties</div></a>
+                                    <a class="css-pgc563" href="/news"><div class="css-ttlyn2">News</div></a>
+                                    <a class="css-1iox6fb" href="https://new.housing.com/research-reports"><div class="css-ttlyn2">Research</div></a>
+                                    <a class="css-t7j3h0" href="/transaction/locality/72ac53e7566c9f8bff3b"><span class="css-1dvtchi">New</span><div class="css-ttlyn2">Registry Records</div></a>
+                                    <a class="css-15muufz" href="/edge/pay-rent?utm_medium=dweb_hook&amp;utm_source=profile_page_quick_links"><div class="css-ttlyn2">Pay on Credit</div></a>
+                                    <a class="css-2w2ijs" href="/edge/protection-plans?source=profile_page_quick_links"><span class="css-1dvtchi">New</span><div class="css-ttlyn2">Housing Protect</div></a>
+                                </div>
+                            </div>
+
+                        <div class="css-1vom6bc"><div class="css-k01lej">Residential Packages</div>
+                        <div class="css-pk8tdi">
+                            <a class="css-1kc5kd3" href="/partners/developer?utm_source=home_page&amp;utm_medium=side_menu">
+                                <div class="css-ttlyn2">For Developers</div>
+                            </a>
+                            <a class="css-3vb0yq" href="/partners/broker?utm_source=home_page&amp;utm_medium=side_menu">
+                                <div class="css-ttlyn2">For Brokers</div>
+                            </a>
+                            <a class="css-nksu7s" href="https://seller.housing.com/owner-packages?profile=owner&amp;utm_medium=SRP&amp;utm_source=housing">
+                                <div class="css-ttlyn2">For Owners</div>
+                            </a>
+                            <a class="css-dsrw81" href="/premium?source=profile_page_quick_links">
+                                <div class="css-ttlyn2">Housing Premium</div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="css-1vom6bc">
+                        <div class="css-1jkwbr8">Housing Edge</div>
+                        <div class="css-pk8tdi">
+                            <a class="css-1t9tylx" href="https://housing.com/edge/pay-rent">
+                                <div class="css-ttlyn2">Pay on Credit</div>
+                            </a>
+                            <a class="css-dsrw81" href="/premium-exclusive?source=profile_page_housing_edge">
+                                <div class="css-ttlyn2">Housing Premium</div>
+                            </a>
+                            <a class="css-topaay" href="https://housing.com/home-loans">
+                                <div class="css-ttlyn2">Home Loans</div>
+                            </a>
+                            <a class="css-2w2ijs" href="https://housing.com/edge/protection-plans?source=profile_page_housing_edge">
+                                <span class="css-1dvtchi">New</span>
+                                <div class="css-ttlyn2">Housing Protect</div>
+                            </a>
+                            <a class="css-1q2mcd3" href="/edge/rent-receipt-generator">
+                                <div class="css-ttlyn2">Rent Receipt Generator</div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="css-1vom6bc">
+                        <div class="css-f1x2u0">Services</div>
+                        <div class="css-pk8tdi">
+                            <a class="css-1gwpeio" href="/buy-real-estate-ahmedabad">
+                                <div class="css-ttlyn2">Buy Properties</div>
+                            </a>
+                            <a class="css-er4el4" href="/rent/property-for-rent-in-ahmedabad">
+                                <div class="css-ttlyn2">Rent Properties</div></a>
+                            <a class="css-ouxaop" href="/paying-guests/pgs-in-ahmedabad">
+                                <div class="css-ttlyn2">PG/Co-Living</div>
+                            </a>
+                            <a class="css-v07chn" href="/home-loans">
+                                <div class="css-ttlyn2">Apply for Home Loan</div>
+                            </a>
+                            <a class="css-ajvez3" href="/home-loans-emi-calculator">
+                                <div class="css-ttlyn2">EMI Calculator</div>
+                            </a>
+                            <a class="css-1gwpeio" href="/edge/free-rent-value-calculator">
+                                <div class="css-ttlyn2">Property Value</div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="css-1vom6bc">
+                        <div class="css-mhayl">Unsubscribe Alerts</div>
+                        <div class="css-pk8tdi">
+                            <div class="css-17pf2g"></div>
+                        </div>
+                    </div>
+                    <div class="css-1vom6bc">
+                        <div class="css-ltwsm3">Housing Advice</div>
+                        <div class="css-pk8tdi">
+                            <a class="css-1cf3l1h" href="/buying-guide">
+                                <div class="css-ttlyn2">Buying Guide</div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="css-1vom6bc">
+                        <div class="css-ty8ubi">Report a Fraud</div>
+                        <div class="css-pk8tdi">
+                            <div class="css-17pf2g"></div>
+                        </div>
+                    </div>
+                    <div class="css-x4croi">
+                        <div class="css-1502bnp"> Visit Help Center</div>
+                            <div class="css-yibggk"><div class="css-13ewv5y"><div class="css-1b3xa19">Download Housing App</div><div class="css-1qwz5j2"><span class="css-0"><img class="css-p6vbf2" decoding="async" fetchpriority="low" src="//c.housingcdn.com/demand/s/client/common/assets/app-store.10009972.png"></span><span class="css-0"><img class="css-p6vbf2" decoding="async" fetchpriority="low" src="//c.housingcdn.com/demand/s/client/common/assets/google-play.2c209e8c.png"></span>
+                            </div>
+                        </div>
+                        <img class="img css-fkxcmo" decoding="async" fetchpriority="low" src="//c.housingcdn.com/demand/s/client/common/assets/qr-code.f143ed3a.png">
+                        </div>
+                    </div>
+                    <div class="css-1oj4dvm">
+                        <div>Follow on</div>
+                        <div class="css-13t3iqc">
+                            <a class="css-160t0en" href="http://www.facebook.com/housing.co.in"></a>
+                            <a class="css-1pf53ps" href="https://instagram.com/housingindia/"></a>
+                            <a class="css-1t11qa7" href="https://www.linkedin.com/company/housing-com/"></a>
+                            <a class="css-a3gf5b" href="https://twitter.com/housing"></a>
+                            <a class="css-1165oc6" href="https://www.youtube.com/user/HousingY"></a>
+                        </div>
+                    </div>
+                </div>
+                        <div id="renderItemRoot"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="inner-header">
@@ -154,10 +352,6 @@
                                     </option>
                                 @endforeach
                             </select>    
-
-                            
-                            
-                            
                         </div>
                         <div class="right">
                             <div class="areas-list">
@@ -176,8 +370,7 @@
                                                         <input type="checkbox" name="area[]" value="{{ $area->id }}" checked>
                                                         {{ $area->name }}
                                                         <a href="javascript:void(0);" class="remove-area" data-id="{{ $area->id }}">
-                                                            <?xml version="1.0" encoding="utf-8"?>
-                                                            <svg width="22px" height="22px" viewBox="0 0 1024 1024" fill="#ffffff" class="icon"  version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M512 897.6c-108 0-209.6-42.4-285.6-118.4-76-76-118.4-177.6-118.4-285.6 0-108 42.4-209.6 118.4-285.6 76-76 177.6-118.4 285.6-118.4 108 0 209.6 42.4 285.6 118.4 157.6 157.6 157.6 413.6 0 571.2-76 76-177.6 118.4-285.6 118.4z m0-760c-95.2 0-184.8 36.8-252 104-67.2 67.2-104 156.8-104 252s36.8 184.8 104 252c67.2 67.2 156.8 104 252 104 95.2 0 184.8-36.8 252-104 139.2-139.2 139.2-364.8 0-504-67.2-67.2-156.8-104-252-104z" fill="" /><path d="M707.872 329.392L348.096 689.16l-31.68-31.68 359.776-359.768z" fill="" /><path d="M328 340.8l32-31.2 348 348-32 32z" fill="" /></svg>
+                                                            <svg fill="#ffffff" width="16px" height="16px" viewBox="-3.5 0 19 19" xmlns="http://www.w3.org/2000/svg" class="cf-icon-svg"><path d="M11.383 13.644A1.03 1.03 0 0 1 9.928 15.1L6 11.172 2.072 15.1a1.03 1.03 0 1 1-1.455-1.456l3.928-3.928L.617 5.79a1.03 1.03 0 1 1 1.455-1.456L6 8.261l3.928-3.928a1.03 1.03 0 0 1 1.455 1.456L7.455 9.716z"/></svg>
                                                         </a>
                                                     </label>
                                                 </li>
@@ -189,9 +382,7 @@
                                             <li>
                                                 <a href="javascript:void(0);" id="showAllAreas" class="show-all">
                                                     Add 
-                                                    <svg width="15px" height="15px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path d="M6 12H18M12 6V18" stroke="#0d6efd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                                    </svg>
+                                                    <svg fill="#0d6efd" width="16px" height="16px" viewBox="-3 0 19 19" xmlns="http://www.w3.org/2000/svg" class="cf-icon-svg"><path d="M12.711 9.182a1.03 1.03 0 0 1-1.03 1.03H7.53v4.152a1.03 1.03 0 0 1-2.058 0v-4.152H1.318a1.03 1.03 0 1 1 0-2.059h4.153V4.001a1.03 1.03 0 0 1 2.058 0v4.152h4.153a1.03 1.03 0 0 1 1.029 1.03z"/></svg>
                                                 </a>
                                             </li>
                                         @endif

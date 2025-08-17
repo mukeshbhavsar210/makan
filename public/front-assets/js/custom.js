@@ -418,3 +418,14 @@ $(document).on("click", ".remove-area", function (e) {
     // Refresh page with updated query
     window.location.href = window.location.pathname + "?" + params.toString();
 });
+
+
+$(document).ready(function () {
+    $("#resetFiltersBtn").on("click", function () {
+        // Uncheck all checkboxes
+        $('input[name="area[]"]').prop("checked", false);
+
+        // Optionally, submit the form to refresh filters
+        // $("#filterForm").submit();
+    });
+});
