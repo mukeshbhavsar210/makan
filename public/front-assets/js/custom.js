@@ -122,6 +122,7 @@ $('#city').on('change', function () {
     let cityID = $(this).val();
     let areasContainer = $('#areas');
     let areasTopContainer = $('#areas_top');
+    let areasBtmContainer = $('#areas_btm');
     let searchInput = $('#keyword');
 
     // Add or remove .active class on city select
@@ -134,6 +135,7 @@ $('#city').on('change', function () {
     // Clear old list
     areasContainer.empty().hide();
     areasTopContainer.empty().hide();
+    areasBtmContainer.empty().hide();
 
     if (cityID && selectedCategory) {
         $.ajax({
@@ -167,9 +169,56 @@ $('#city').on('change', function () {
                 });
                 areasContainer.html(html).show();
                 areasTopContainer.html(html).show();
+                areasBtmContainer.html(html).show();
 
                 // Click to select area
                 $('.area-item').on('click', function () {
+                    let areaID = $(this).data('id');
+                    let params = new URLSearchParams(window.location.search);
+                    params.set('category', selectedCategory);
+                    params.set('city', cityID);
+                    params.set('area', areaID);
+                    window.location.href = '/properties?' + params.toString();
+                });
+            }
+        });
+    }
+});
+
+
+
+
+$('#city_inner').on('change', function () { 
+    let cityID = $(this).val();
+    let areasBtmContainer = $('#areas_dynamic');
+
+    $('#area_old').addClass('hide_old_area');
+
+    $(".listing-areas-btm").show();
+
+    // Add or remove .active class on city select
+    if (cityID) {
+        $('.flex-search').addClass('active');
+    } else {
+        $('.flex-search').removeClass('active');
+    }
+
+    // Clear old list
+    areasBtmContainer.empty().hide();
+
+    if (cityID && selectedCategory) {
+        $.ajax({
+            url: '/get-areas/' + cityID,
+            type: 'GET',
+            success: function (data) {
+                let html = '';
+                data.forEach(function (area) {
+                    html += `<li><a href="#" class="custom-checkbox-label" data-id="${area.id}">${area.name}</a></li>`;
+                });
+                areasBtmContainer.html(html).show();
+
+                // Click to select area
+                $('.custom-checkbox-label').on('click', function () {
                     let areaID = $(this).data('id');
                     let params = new URLSearchParams(window.location.search);
                     params.set('category', selectedCategory);
@@ -382,19 +431,53 @@ $(".toggleControl").on("click", function() {
     $(".overlay").fadeToggle(400);
 });
 
-
-$(document).on("click", "#showAllAreas", function (e) {
-    $(".areas-list").toggleClass("expanded-scroll"); 
+$(document).on("click", "#showAllAreasTop", function (e) {
     e.preventDefault();
-    $(".hidden-areas").slideToggle();
 
-    // Toggle button text/icon
-    if ($(".hidden-areas").is(":visible")) {
-        $(this).html('Hide <svg width="15px" height="15px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 12H18" stroke="#0d6efd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>');
-    } else {
-        $(this).html('Add <svg width="15px" height="15px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 12H18M12 6V18" stroke="#0d6efd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>');
-    }
+    // count how many areas are inside
+    let areaCount = $(".listing-areas-top .area-item").length;    
+
+    $(".listing-areas-top").slideToggle(300, () => {
+        if ($(".listing-areas-top").is(":visible")) {
+            $("#showAllAreasTop").html(
+                '<svg width="15px" height="15px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 12H18" stroke="#0d6efd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Hide'
+            );
+        } else {
+            if (areaCount > 1) {
+                $("#showAllAreasTop").html(
+                    `<svg width="15px" height="15px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 12H18M12 6V18" stroke="#0d6efd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> +${areaCount - 1} more`
+                );
+            } else {
+                $("#showAllAreasTop").html(
+                    '<svg width="15px" height="15px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 12H18M12 6V18" stroke="#0d6efd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Add'
+                );
+            }
+        }
+    });
 });
+
+
+
+
+$(document).on("click", "#showAllAreasBtm", function (e) {
+    e.preventDefault();
+
+    $(".hidden-areas-added-btm").toggleClass("show-areas-btm");
+
+    $(".listing-areas-btm").slideToggle(300, () => {
+        if ($(".listing-areas-btm").is(":visible")) {
+            $("#showAllAreasBtm").html(
+                'Hide <svg width="15px" height="15px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 12H18" stroke="#0d6efd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+            );
+        } else {
+            $("#showAllAreasBtm").html(
+                'Add <svg width="15px" height="15px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 12H18M12 6V18" stroke="#0d6efd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+            );
+        }
+    });
+});
+
+
 
 // Remove selected area on X click
 $(document).on("click", ".remove-area", function (e) {

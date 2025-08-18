@@ -268,9 +268,7 @@ class HomeController extends Controller {
         //     $property = $property->where('location',$request->location);            
         // }       
 
-        
-        
-       
+               
         $properties = $properties->paginate(10);       
             
         $data = [
@@ -291,7 +289,7 @@ class HomeController extends Controller {
             'areaSelected' => $areaSelected,
             'area' => $area,
             'categoryWord' => $categoryWord,
-            'room' => $room
+            'room' => $room,
         ];
 
          $data['priceMax'] = (intval($request->get('price_max')) == 0 ? 1000 : $request->get('price_max'));
