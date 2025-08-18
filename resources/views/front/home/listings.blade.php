@@ -13,7 +13,9 @@
             @if($categoryWord)
                 {{ $categoryWord }} 
             @endif
-            in {{ $citySelected->name }}
+            @if($citySelected)
+                in {{ $citySelected->name }}
+            @endif
             <span class="down-arrow">
                 <?xml version="1.0" encoding="utf-8"?>
                 <svg width="15px" height="15px" viewBox="0 0 1024 1024" class="icon"  version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M903.232 256l56.768 50.432L512 768 64 306.432 120.768 256 512 659.072z" fill="#ffffff" /></svg>
@@ -40,239 +42,7 @@
 
 @section('main')
 
-<div class="listing-page">
-    <form action="{{ route('properties') }}" > 
-        <div class="container-fluid">
-            <div class="filters">
-                <div class="dropdown {{ request('category') == 27 ? 'hidden-property-type' : '' }}">
-                    <button class="btn control-btn btnFilter dropdown-toggle" type="button" id="typeDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                        Property Type
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="typeDropdown" >
-                        @foreach ($propertyTypes as $value)
-                            <li>
-                                <label class="dropdown-item custom-checkbox-label {{ is_array(request('type')) && in_array($value->id, request('type')) ? 'active' : '' }}">
-                                    <input type="checkbox" name="type[]" value="{{ $value->id }}" data-label="{{ $value->name }}"
-                                        {{ is_array(request('type')) && in_array($value->id, request('type')) ? 'checked' : '' }}>
-                                    <span class="checkmark"></span>
-                                    {{ $value->name }}
-                                </label>
-                            </li>
-                        @endforeach
-                    </ul>
-                </div>
-
-                <div class="dropdown">
-                    <button class="btn control-btn btnFilter dropdown-toggle" type="button" id="roomDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                        BHK Type
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="roomDropdown" >
-                        @foreach ($rooms as $value)
-                            <li>
-                                <label class="dropdown-item custom-checkbox-label {{ is_array(request('room')) && in_array($value->id, request('room')) ? 'active' : '' }}">
-                                    <input type="checkbox" name="room[]" value="{{ $value->id }}"
-                                        data-label="{{ $value->title }}"
-                                        {{ is_array(request('room')) && in_array($value->id, request('room')) ? 'checked' : '' }}>
-                                    <span class="checkmark"></span>
-                                    {{ $value->title }}
-                                </label>
-                            </li>
-                        @endforeach
-                    </ul>
-                </div>
-
-                <div class="col">
-                    <div class="dropdown">
-                        <button class="btn btnFilter btn-secondary dropdown-toggle" type="button" id="priceDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                            Price Range
-                        </button>
-                        <ul class="dropdown-menu custom-price" aria-labelledby="priceDropdown">
-                            <form id="filterForm" method="GET" action="{{ route('properties.index') }}">
-                                <input type="hidden" name="price_min" id="price_min" value="{{ request('price_min') }}">
-                                <input type="hidden" name="price_max" id="price_max" value="{{ request('price_max') }}">
-                                <input type="text" id="priceRange" />
-                                <button type="submit" class="btn btn-primary">Filter</button>
-                                <button type="button" id="resetPriceRange" class="btn btn-secondary">Reset</button>
-                            </form>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="dropdown">
-                    <button class="btn btnFilter dropdown-toggle" type="button" id="saletypeDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                        Sale Type
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="saletypeDropdown">
-                        @foreach ($saletypes as $value)
-                            <li>
-                                <label class="dropdown-item custom-radio-label {{ request('saletype') == $value->id ? 'active' : '' }}">
-                                    <input type="radio" name="saletype" value="{{ $value->id }}" data-label="{{ $value->title }}"
-                                        {{ request('saletype') == $value->id ? 'checked' : '' }}>
-                                    <span class="radiomark"></span>
-                                    {{ $value->title }}
-                                </label>
-                            </li>
-                        @endforeach
-                    </ul>
-                </div>
-
-                <div class="dropdown">
-                    <button class="btn btnFilter dropdown-toggle" type="button" id="constructionDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                        Construction
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="constructionDropdown">
-                        @foreach ($constructions as $value)
-                            <li>
-                                <label class="dropdown-item custom-radio-label {{ request('construction') == $value->id ? 'active' : '' }}">
-                                    <input type="radio" name="construction" value="{{ $value->id }}" data-label="{{ $value->name }}"
-                                        {{ request('construction') == $value->id ? 'checked' : '' }}>
-                                    <span class="radiomark"></span>
-                                    {{ $value->title }}
-                                </label>
-                            </li>
-                        @endforeach
-                    </ul>
-                </div>
-
-                <div class="dropdown">
-                    <button class="btn btnFilter btn-secondary dropdown-toggle" type="button" id="moreFiltersDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                        More Filters
-                    </button>
-                    <div class="dropdown-menu moreFilters" aria-labelledby="moreFiltersDropdown" style="min-width: 500px;">
-                        <div class="wrapper-filters">
-                            <ul class="nav flex-column nav-pills" id="more-filters-tab" role="tablist" aria-orientation="vertical">
-                                <li><a href="#" class="nav-link active" id="tab-listedby" data-bs-toggle="pill" data-bs-target="#listedby-content" role="tab">Listed By</a></li>
-                                <li><a href="#" class="nav-link" id="tab-size" data-bs-toggle="pill" data-bs-target="#size-content" type="button" role="tab">Built-up Area</a></li>
-                                <li><a href="#" class="nav-link" id="tab-amenities" data-bs-toggle="pill" data-bs-target="#amenities-content" type="button" role="tab">Amenities</a></li>
-                                <li><a href="#" class="nav-link" id="tab-age" data-bs-toggle="pill" data-bs-target="#age-content" type="button" role="tab">Age of Property</a></li>                                
-                                <li><a href="#" class="nav-link" id="tab-facing" data-bs-toggle="pill" data-bs-target="#facing-content" type="button" role="tab">Facing</a></li>                                
-                                <li><a href="#" class="nav-link" id="tab-bathrooms" data-bs-toggle="pill" data-bs-target="#bathroom-content" type="button" role="tab">Bathrooms</a></li>                                    
-                            </ul>
-                        
-                            <div class="tab-content" id="more-filters-tabContent">
-                                <!-- Listed By -->
-                                <div class="tab-pane fade show active" id="listedby-content" role="tabpanel">
-                                    <div class="more-filter-checkbox">
-                                        <h6>Listed By</h6>
-                                        @foreach ($listedTypes as $value)
-                                            <label class="custom-checkbox-label {{ is_array(request('listed_type')) && in_array($value->id, request('listed_type')) ? 'active' : '' }}">
-                                                <input type="checkbox" name="listed_type[]" value="{{ $value->id }}" data-label="{{ $value->title }}"
-                                                    {{ is_array(request('listed_type')) && in_array($value->id, request('listed_type')) ? 'checked' : '' }}>
-                                                <span class="checkmark"></span>
-                                                {{ $value->title }}
-                                            </label>
-                                        @endforeach
-                                    </div>
-                                </div>
-
-                                <!-- Size -->
-                                <div class="tab-pane fade" id="size-content" role="tabpanel">
-                                    <div class="more-filter-checkbox">
-                                        <h6>Built-up Area in sq.ft.</h6>
-                                        <form id="sizeFilterForm" method="GET" action="{{ route('properties.index') }}">
-                                            <input type="hidden" name="size_min" id="size_min" value="{{ request('size_min') }}">
-                                            <input type="hidden" name="size_max" id="size_max" value="{{ request('size_max') }}">
-                                            <input type="text" id="sizeRange" />
-                                            <button type="submit" class="btn btn-primary">Filter</button>
-                                            <button type="button" id="resetSizeRange" class="btn btn-secondary">Reset</button>
-                                        </form>
-                                    </div>
-                                </div>
-
-                                <!-- Sale type -->
-                                <div class="tab-pane fade" id="amenities-content" role="tabpanel">
-                                    <div class="more-filter-checkbox">
-                                        <h6>Amenities</h6>
-                                    </div>
-                                </div>
-
-                                <!-- Property Age -->
-                                <div class="tab-pane fade" id="age-content" role="tabpanel">
-                                    <div class="age-checkbox">
-                                        <h6>Property Age</h6>
-                                        <div class="loop-radio">
-                                            @foreach ($ages as $value)
-                                                <div class="individual">
-                                                    <label class="custom-radio-label {{ request('age') == $value->id ? 'active' : '' }}">
-                                                        <input class="hidden" type="radio" name="age" value="{{ $value->id }}" data-label="{{ $value->title }}"
-                                                            {{ request('age') == $value->id ? 'checked' : '' }}>
-                                                        <span class="radiomark"></span>
-                                                        {{ $value->title }}
-                                                    </label>
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Facing -->
-                                <div class="tab-pane fade" id="facing-content" role="tabpanel">
-                                    Facings
-                                    <div class="more-filter-checkbox">
-                                        @foreach ($facings as $value)                                            
-                                            <label class="custom-checkbox-label {{ is_array(request('facing')) && in_array($value->id, request('facing')) ? 'active' : '' }}">
-                                                <input type="checkbox" name="facing[]" value="{{ $value->id }}" data-label="{{ $value->title }}"
-                                                    {{ is_array(request('facing')) && in_array($value->id, request('facing')) ? 'checked' : '' }}>
-                                                <span class="checkmark"></span>
-                                                {{ $value->title }}
-                                            </label>                                            
-                                        @endforeach
-                                    </div>
-                                </div>
-                                
-                                <!-- Bathrooms -->
-                                <div class="tab-pane fade" id="bathroom-content" role="tabpanel">
-                                    <div class="more-filter-checkbox">
-                                        <h6>Bathrooms</h6>
-                                        @foreach ($bathrooms as $value)
-                                            <label class="custom-checkbox-label {{ is_array(request('bathroom')) && in_array($value->id, request('bathroom')) ? 'active' : '' }}">
-                                                <input type="checkbox" name="bathroom[]" value="{{ $value->id }}" data-label="{{ $value->title }}"
-                                                    {{ is_array(request('bathroom')) && in_array($value->id, request('bathroom')) ? 'checked' : '' }}>
-                                                <span class="checkmark"></span>
-                                                {{ $value->title }}
-                                            </label>
-                                        @endforeach
-
-                                        {{-- @foreach ($bathrooms as $bathroom)
-                                            <label class="custom-checkbox-label">
-                                                <input class="form-check-input" type="checkbox" name="bathroom[]" value="{{ $bathroom->id }}">
-                                                <span class="checkmark"></span>
-                                                {{ $bathroom->title }}
-                                            </label>
-                                        @endforeach --}}
-                                    </div>
-                                </div>
-
-                                <div class="mt-3 text-end">
-                                    <button class="btn btn-primary" id="applyFilters">Apply</button>
-                                    <button class="btn btn-secondary" id="resetFilters">Reset</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>                
-
-                <select name="sort" id="sort" class="form-control">
-                    <option value="1" {{ (Request::get('sort') == '1') ? 'selected' : '' }}>Latest</option>
-                    <option value="0" {{ (Request::get('sort') == '0') ? 'selected' : '' }}>Oldest</option>
-                </select>
-
-                <div class="col">
-                    <div style="display: none">
-                        <select name="city" id="city" >
-                            <option value="">City</option>
-                            @if ($cities)
-                                @foreach ($cities as $value)
-                                    <option {{ (Request::get('city') == $value->id) ? 'selected' : '' }} value="{{ $value->id }}">{{ $value->name }}</option>
-                                @endforeach
-                            @endif
-                        </select>
-                    </div>
-                </div>
-            </div>
-        </div>    
-    </form>     
-</div>
+@include('front.home.filters')
 
 <div class="body-details">
     <div class="row">
@@ -280,7 +50,10 @@
             @include('front.home.breadcrumb')
 
             @if ($properties->isNotEmpty())
-                @foreach ($properties as $value)                                     
+                @foreach ($properties as $value)      
+                
+                
+                
                     <div class="propery-listings">                        
                         <div class="picture">
                             @php
@@ -303,6 +76,38 @@
                                     <p>{{ $value->room->title }} {{ $value->propertyType->name }} in {{ $value->area->name }}.</p>
                                 </div>
                                 <div class="right">
+                                    {{-- @if(Auth::check())
+                                        @if(in_array($value->id, $savedPropertyIds))
+                                            <span class="add-to-favorite">
+                                                <span class="add-to-favorite" >
+                                                    <svg width="24" height="24" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--noto" preserveAspectRatio="xMidYMid meet">
+                                                    <path d="M93.99 8.97c-21.91 0-29.96 22.39-29.96 22.39s-7.94-22.39-30-22.39c-16.58 0-35.48 13.14-28.5 43.01c6.98 29.87 58.56 67.08 58.56 67.08s51.39-37.21 58.38-67.08c6.98-29.87-10.56-43.01-28.48-43.01z" fill="#f44336"></path>
+                                                    <g fill="#c33">
+                                                        <path d="M30.65 11.2c17.2 0 25.74 18.49 28.5 25.98c.39 1.07 1.88 1.1 2.33.06L64 31.35C60.45 20.01 50.69 8.97 34.03 8.97c-6.9 0-14.19 2.28-19.86 7.09c5.01-3.29 10.88-4.86 16.48-4.86z"></path>
+                                                        <path d="M93.99 8.97c-5.29 0-10.11 1.15-13.87 3.47c2.64-1.02 5.91-1.24 9.15-1.24c16.21 0 30.72 12.29 24.17 40.7c-5.62 24.39-38.46 53.98-48.49 65.27c-.64.72-.86 1.88-.86 1.88s51.39-37.21 58.38-67.08c6.98-29.86-10.53-43-28.48-43z"></path>
+                                                    </g>
+                                                        <path d="M17.04 24.82c3.75-4.68 10.45-8.55 16.13-4.09c3.07 2.41 1.73 7.35-1.02 9.43c-4 3.04-7.48 4.87-9.92 9.63c-1.46 2.86-2.34 5.99-2.79 9.18c-.18 1.26-1.83 1.57-2.45.46c-4.22-7.48-5.42-17.78.05-24.61z" fill="#ff8a80"></path>
+                                                        <path d="M77.16 34.66c-1.76 0-3-1.7-2.36-3.34c1.19-3.02 2.73-5.94 4.58-8.54c2.74-3.84 7.95-6.08 11.25-3.75c3.38 2.38 2.94 7.14.57 9.44c-5.09 4.93-11.51 6.19-14.04 6.19z" fill="#ff8a80"></path>
+                                                    </svg>
+                                                </span>
+                                            </span>
+                                        @else
+                                            <a href="javascript:void(0)" onclick="saveProperty({{ $value->id }})" class="favorite add-to-favorite user_not_logged_in" data-propertyid="{{ $value->id }}"  title="Add to favorites">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                                    <path class="rh-ultra-light" d="M2.7 12.8C1.6 11.7 1 10.3 1 8.7s0.6-3 1.7-4.1C3.8 3.6 5.2 3 6.8 3c1.5 0 3 0.6 4.1 1.7 0.1 0.1 0.5 0.5 1.2 0.5 0.4 0 0.9-0.2 1.2-0.6 1.1-1.1 2.5-1.7 4-1.7s3 0.6 4.1 1.7C22.4 5.8 23 7.2 23 8.7s-0.6 3-1.7 4.1L12 21.6 2.7 12.8z"></path>
+                                                    <path class="rh-ultra-dark" d="M17.3 4c1.3 0 2.5 0.5 3.4 1.4C21.5 6.3 22 7.5 22 8.7c0 1.3-0.5 2.4-1.4 3.3L12 20.2l-8.6-8.2C2.5 11.2 2 10 2 8.7c0-1.3 0.5-2.5 1.4-3.4C4.3 4.5 5.5 4 6.7 4 8 4 9.2 4.5 10.1 5.4 10.3 5.6 11 6.2 12 6.2c0.7 0 1.4-0.3 1.9-0.8C14.8 4.5 16 4 17.3 4M17.3 2c-1.7 0-3.5 0.7-4.8 2 -0.2 0.2-0.3 0.2-0.5 0.2 -0.3 0-0.5-0.2-0.5-0.2 -1.3-1.3-3-2-4.8-2S3.3 2.7 2 4c-2.6 2.6-2.6 6.9 0 9.5L12 23l10-9.5c2.6-2.6 2.6-6.9 0-9.5C20.7 2.7 19 2 17.3 2L17.3 2z"></path>
+                                                </svg>
+                                            </a>
+                                        @endif
+                                    @else
+                                        <a href="http://127.0.0.1:8000/account/login" data-bs-toggle="modal" data-bs-target="#exampleModal" >
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                                <path class="rh-ultra-light" d="M2.7 12.8C1.6 11.7 1 10.3 1 8.7s0.6-3 1.7-4.1C3.8 3.6 5.2 3 6.8 3c1.5 0 3 0.6 4.1 1.7 0.1 0.1 0.5 0.5 1.2 0.5 0.4 0 0.9-0.2 1.2-0.6 1.1-1.1 2.5-1.7 4-1.7s3 0.6 4.1 1.7C22.4 5.8 23 7.2 23 8.7s-0.6 3-1.7 4.1L12 21.6 2.7 12.8z"></path>
+                                                <path class="rh-ultra-dark" d="M17.3 4c1.3 0 2.5 0.5 3.4 1.4C21.5 6.3 22 7.5 22 8.7c0 1.3-0.5 2.4-1.4 3.3L12 20.2l-8.6-8.2C2.5 11.2 2 10 2 8.7c0-1.3 0.5-2.5 1.4-3.4C4.3 4.5 5.5 4 6.7 4 8 4 9.2 4.5 10.1 5.4 10.3 5.6 11 6.2 12 6.2c0.7 0 1.4-0.3 1.9-0.8C14.8 4.5 16 4 17.3 4M17.3 2c-1.7 0-3.5 0.7-4.8 2 -0.2 0.2-0.3 0.2-0.5 0.2 -0.3 0-0.5-0.2-0.5-0.2 -1.3-1.3-3-2-4.8-2S3.3 2.7 2 4c-2.6 2.6-2.6 6.9 0 9.5L12 23l10-9.5c2.6-2.6 2.6-6.9 0-9.5C20.7 2.7 19 2 17.3 2L17.3 2z"></path>
+                                            </svg>
+                                        </a>
+                                    @endif --}}
+
                                     @if ($value->category->name == 'Rent')
                                         <span class="rh-ultra-featured">{{ $value->category->name }}</span>
                                     @else
@@ -328,7 +133,12 @@
                                         <p>Developer</p>  
                                     </div>                                  
                                 </div>
-                                <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#longModal_{{ $value->id }}" >Contact</a>  
+
+                               @if(Auth::check())
+                                    <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#longModal_{{ $value->id }}">Contact</a>  
+                                @else
+                                    <a href="http://127.0.0.1:8000/account/login" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-primary">Contact</a>                                    
+                                @endif                                                                
 
                                 <div class="modal fade" id="longModal_{{ $value->id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                     <div class="modal-dialog modal-dialog-scrollable">
@@ -377,6 +187,32 @@
 @endsection
 
 @section('customJs')
+
+<script type="text/javascript">
+    function applyProperty(id){
+        $.ajax({
+            url: '{{ route("applyProperty") }}',
+            type: 'post',
+            data: {id:id},
+            dataType: 'json',
+            success: function(response){
+                window.location.href = "{{ url()->current() }}";
+            }
+        });
+    }
+
+    function saveProperty(id){
+        $.ajax({
+            url: '{{ route("saveProperty") }}',
+            type: 'post',
+            data: {id:id},
+            dataType: 'json',
+            success: function(response){
+                window.location.href = "{{ url()->current() }}";
+            }
+        });
+    }
+</script>
 
 <script>
 function updateDropdownLabel(dropdownId, inputSelector, defaultText) {

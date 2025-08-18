@@ -19,6 +19,44 @@
 .nav-sidebar li { padding: 4px 0 1px 0;}
 .nav-sidebar li .nav-link { padding:8px;}
 
+
+.user-avatar {
+    position: relative;
+    margin-left: -15px; /* overlap effect */
+    cursor: pointer;
+}
+.user-avatar:first-child {
+    margin-left: 0;
+}
+.user-avatar img {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transition: transform 0.2s;
+}
+.user-avatar:hover img {
+    transform: scale(1.1);
+    z-index: 10;
+}
+.user-details {
+    display: none;
+    position: absolute;
+    top: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #fff;
+    padding: 10px 12px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    white-space: nowrap;
+    z-index: 999;
+}
+.user-avatar:hover .user-details {
+    display: block;
+}
+
 .w-4 {
   width: 1rem;
 }

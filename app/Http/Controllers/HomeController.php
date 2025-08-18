@@ -16,6 +16,7 @@ use App\Models\Construction;
 use Illuminate\Support\Facades\Mail;
 use App\Models\JobApplication;
 use App\Models\ListedType;
+use App\Models\PropertyApplication;
 use App\Models\PropertyType;
 use App\Models\Room;
 use App\Models\SaleType;
@@ -269,6 +270,13 @@ class HomeController extends Controller {
         // }       
 
                
+        $savedPropertyIds = [];
+        if (Auth::check()) {
+            $savedPropertyIds = SavedProperty::where('user_id', Auth::id())
+                ->pluck('property_id')
+                ->toArray();
+        }
+       
         $properties = $properties->paginate(10);       
             
         $data = [
@@ -290,6 +298,7 @@ class HomeController extends Controller {
             'area' => $area,
             'categoryWord' => $categoryWord,
             'room' => $room,
+            'savedPropertyIds' => $savedPropertyIds
         ];
 
          $data['priceMax'] = (intval($request->get('price_max')) == 0 ? 1000 : $request->get('price_max'));
@@ -311,16 +320,24 @@ class HomeController extends Controller {
             abort(404);
         }
 
-        $count = 0;
+        $saveCount = 0;
         if(Auth::user()){
-            $count = SavedProperty::where([
+            $saveCount = SavedProperty::where([
+                'user_id' => Auth::user()->id,
+                'property_id' => $id,
+            ])->count();
+        }
+
+        $interestedCount = 0;
+        if(Auth::user()){
+            $interestedCount = PropertyApplication::where([
                 'user_id' => Auth::user()->id,
                 'property_id' => $id,
             ])->count();
         }
 
         //Fetch applicants
-        $applications = JobApplication::where('property_id',$id)->with('user')->get();
+        $applications = PropertyApplication::where('property_id',$id)->with('user')->get();
 
         //Related properties
         $relatedProperties = [];
@@ -348,7 +365,8 @@ class HomeController extends Controller {
         $data['relatedFacings'] = $relatedFacings;
         $data['properties'] = $properties;
         $data['applications'] = $applications;
-        $data['count'] = $count;        
+        $data['saveCount'] = $saveCount; 
+        $data['interestedCount'] = $interestedCount; 
 
         return view('front.home.details.index',$data);       
     }
@@ -370,10 +388,10 @@ class HomeController extends Controller {
         }
 
         //User can not apply on posted own job
-        $employer_id = $property->user_id;
+        $posted_id = $property->user_id;
         $message = 'You can not apply on your job.';
 
-        if($employer_id == Auth::user()->id){
+        if($posted_id == Auth::user()->id){
             session()->flash('error',$message);
             return response()->json([
                 'status' => false,
@@ -396,15 +414,15 @@ class HomeController extends Controller {
             ]);
         }
 
-        $application = New JobApplication();
+        $application = New PropertyApplication();
         $application->property_id = $id;
         $application->user_id = Auth::user()->id;
-        $application->employer_id = $employer_id;
+        $application->posted_id = $posted_id;
         $application->applied_date = now();
         $application->save();
 
         //Send Notification Email to Employer
-        $employer = User::where('id',$employer_id)->first();
+        $employer = User::where('id',$posted_id)->first();
         // $mailData = [
         //     'employer' => $employer,
         //     'user' => Auth::user(),
