@@ -164,6 +164,8 @@ class AccountController extends Controller
         return view('front.layouts.app');
     }
 
+
+
     public function authenticate(Request $request){
         $validator = Validator::make($request->all(),[
             'email' => 'required|email',
@@ -172,7 +174,7 @@ class AccountController extends Controller
 
         if ($validator->passes()) {
             if(Auth::attempt([ 'email' => $request->email, 'password' => $request->password ])){
-                return redirect()->route('properties.index');
+                return redirect()->route('front.home');
             } else {
                 return redirect()->route('account.login')->with('error','Either Email/Password Incorrect');
             }
@@ -190,7 +192,7 @@ class AccountController extends Controller
 
     public function logout(){
         Auth::logout();
-        return redirect()->route('home');
+        return redirect()->route('front.home');
     }
 
     public function updatePassword(Request $request){

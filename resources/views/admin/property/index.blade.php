@@ -45,16 +45,13 @@
                         <tr>
                             <th scope="col">Image</th>
                             <th scope="col">Project Name</th>
-                            <th scope="col">Developer</th>
-                            <th scope="col">Posted</th>
                             <th scope="col">Interested</th>
-                            <th scope="col">Showing</th>
-                            <th scope="col">Status</th>
+                            <th scope="col">Saved</th>
+                            <th scope="col">Posted</th>
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
-                    <tbody>
-                       
+                    <tbody>                       
                         @if ($properties->isNotEmpty())
                             @foreach($properties as $value)
                             @php
@@ -63,16 +60,56 @@
                             <tr>
                                 <td>{{ $value->id }}</td>
                                 <td>
-                                    @if (!empty($PropertyImage->image))
-                                        <img src="{{ asset('uploads/property/small/'.$PropertyImage->image) }}" class="img-thumbnail" width="50" >
+                                    <a href="{{ route('propertyDetails', $value->id) }}" target="_blank">
+                                        @if (!empty($PropertyImage->image))
+                                            <img src="{{ asset('uploads/property/small/'.$PropertyImage->image) }}" width="100" >
                                         @else
-                                        <img src="{{ asset('admin-assets/img/default-150x150.png') }}" alt="" class="img-thumbnail" width="50"  />
-                                    @endif
+                                            <img src="{{ asset('admin-assets/img/default-150x150.png') }}" alt="" width="100"  />
+                                        @endif
+                                    </a>
+                                    <h5>{{ $value->title }}</h5>
+                                    {{ $value->builder->name ?? '' }}
+                                </td>                                
+                                <td>{{ $value->applications->count() }} Interested</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        @foreach($value->applications as $application)
+                                            <div class="user-avatar" title="{{ $application->user->name }}">
+                                                <img src="{{ asset('profile_pic/thumb/' . $application->user->image) }}" 
+                                                    alt="{{ $application->user->name }}" 
+                                                    class="rounded-circle">
+
+                                                <!-- Hover Card -->
+                                                <div class="user-details">
+                                                    <strong>{{ $application->user->name }}</strong><br>
+                                                    {{ $application->user->role }}<br>
+                                                    <a href="mailto:{{ $application->user->email }}">{{ $application->user->email }}</a><br>
+                                                    <a href="tel:{{ $application->user->mobile }}">{{ $application->user->mobile }}</a>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
                                 </td>
-                                <td>{{ $value->title }}</td>
-                                        <td>{{ $value->builder_id }}</td>
-                                        <td>{{ \Carbon\Carbon::parse($value->created_at)->format('M, Y') }}</td>
-                                        <td>0 Applications</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                    @foreach($value->applications as $application)
+                                        <div class="user-avatar" title="{{ $application->user->name }}">
+                                            <img src="{{ asset('profile_pic/thumb/' . $application->user->image) }}" 
+                                                alt="{{ $application->user->name }}" 
+                                                class="rounded-circle">
+
+                                            <!-- Hover Card -->
+                                            <div class="user-details">
+                                                <strong>{{ $application->user->name }}</strong><br>
+                                                {{ $application->user->role }}<br>
+                                                <a href="mailto:{{ $application->user->email }}">{{ $application->user->email }}</a><br>
+                                                <a href="tel:{{ $application->user->mobile }}">{{ $application->user->mobile }}</a>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                    </div>
+                                </td>
+                                <td>{{ \Carbon\Carbon::parse($value->created_at)->format('M, Y') }}</td>                                        
                                 <td>
                                     @if ($value->status == 1)
                                         <svg class="text-success-500 h-6 w-6 text-success" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
@@ -82,10 +119,7 @@
                                         <svg class="text-danger h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                         </svg>
-                                    @endif
-                                </td>
-                                <td>
-                                    <a href="{{ route('propertyDetails', $value->id) }}" target="_blank"> <i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    @endif                                    
                                     <a href="{{ route('properties.edit', $value->id) }}">
                                         <svg class="filament-link-icon w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                             <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>

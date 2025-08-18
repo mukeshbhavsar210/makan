@@ -31,7 +31,7 @@ class PropertyController extends Controller {
 
     public function index(){
         $properties = Property::where('user_id', Auth::user()->id)->with('saleType')->orderBy('created_at','DESC')->paginate(10);        
-        return view('admin.property.list', [
+        return view('admin.property.index', [
             'properties' => $properties
         ]);
     }
@@ -209,7 +209,7 @@ class PropertyController extends Controller {
 
         $data = [];
         $categories = Category::orderBy('name','ASC')->get();
-        $saleTypes = SaleType::orderBy('name','ASC')->get();  
+        $saleTypes = SaleType::orderBy('title','ASC')->get();  
         $cities = City::orderBy('name','ASC')->get();
         $areas = Area::orderBy('name','ASC')->get();        
         $builders = Builder::orderBy('name','ASC')->get();
@@ -489,21 +489,10 @@ class PropertyController extends Controller {
 
 
 
-    public function savedProperties(Request $request){
-        $savedProperties = SavedProperty::where([
-            'user_id' => Auth::user()->id
-        ])->with(['property','property.saleType','property.applications'])->orderBy('created_at','DESC')->paginate(10);
-
-        return view('admin.property.saved-jobs',[
-            'savedProperties' => $savedProperties,
-        ]);
-    }
+    
 
     public function removeSavedProperty(Request $request) {
-        $savedJob = SavedJob::where([
-                                'id' => $request->id,
-                                'user_id' => Auth::user()->id]
-                            )->first();
+        $savedJob = SavedProperty::where(['id' => $request->id,'user_id' => Auth::user()->id])->first();
 
         if($savedJob == null) {
             session()->flash('error','Property not found');
@@ -512,7 +501,7 @@ class PropertyController extends Controller {
             ]);
         }
 
-        SavedJob::find($request->id)->delete();
+        SavedProperty::find($request->id)->delete();
         session()->flash('success','Property removed successfully.');
 
         return response()->json([
@@ -523,33 +512,50 @@ class PropertyController extends Controller {
     //Remove Property
     public function removeProperty(Request $request) {
         $PropertyApplication = PropertyApplication::where([
-                                'id' => $request->id,
-                                'property_id' => Auth::user()->id]
-                            )->first();
+            'id' => $request->id,
+            'user_id' => Auth::id() // ensure it belongs to logged-in user
+        ])->first();
 
-        if($PropertyApplication == null) {
+        if ($PropertyApplication == null) {
             session()->flash('error','Property interest not found');
             return response()->json([
                 'status' => false,
             ]);
         }
-        PropertyApplication::find($request->id)->delete();
-        session()->flash('success','Property interested removed successfully.');
+        
+        $PropertyApplication->delete();
+
+        session()->flash('success','Property interest removed successfully.');
         return response()->json([
             'status' => true,
         ]);
     }
 
 
-    //Property Interested
-    public function myPropertyApplications(){
-        $propertyApplications = PropertyApplication::where('user_id',Auth::user()->id)
-                            ->with(['property','property.saleType','property.applications'])
-                            ->orderBy('created_at','DESC')
-                            ->paginate(10);
 
-        return view('admin.property.myPropertyApplications',[
-            'propertyApplications' => $propertyApplications,
+  
+
+    //Saved
+    public function savedProperties(Request $request){
+        $saved = SavedProperty::where(['user_id' => Auth::user()->id])
+                                ->with(['property','property.saleType','property.applications'])
+                                ->orderBy('created_at','DESC')->paginate(10);
+
+        return view('admin.property.saved',[
+            'saved' => $saved,
+        ]);
+    }
+
+
+    //Interested
+    public function interested(Request $request){
+        $interested = PropertyApplication::where('user_id',Auth::user()->id)
+                    ->with(['property','property.saleType','property.applications'])
+                    ->orderBy('created_at','DESC')
+                    ->paginate(10);
+
+        return view('admin.property.interested',[
+            'interested' => $interested,
         ]);
     }
 }

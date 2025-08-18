@@ -146,10 +146,9 @@ Route::group(['prefix' => 'account'], function(){
         Route::get('/get-bathrooms',[PropertyController::class,'similar_bathrooms'])->name('property.bathrooms');
         Route::get('/get-facings',[PropertyController::class,'similar_facings'])->name('property.facings');
         Route::get("/savedProperties",[PropertyController::class, 'savedProperties'])->name('property.savedProperties');
-        Route::post("/removeSavedProperty",[PropertyController::class, 'removeSavedProperty'])->name('account.removeSavedJob');
+        Route::post("/removeSavedProperty",[PropertyController::class, 'removeSavedProperty'])->name('account.removeSavedProperty');
         Route::post("/removePropertyInterested",[PropertyController::class, 'removeProperty'])->name('account.removeProperties');
-        Route::get("/myPropertyInterested",[PropertyController::class, 'myPropertyApplications'])->name('account.myPropertyApplications');
-
+        Route::get("/interested",[PropertyController::class, 'interested'])->name('account.myPropertyApplications');
         Route::post("/updatePassword",[AccountController::class, 'updatePassword'])->name('account.updatePassword');
 
         //Setting Route

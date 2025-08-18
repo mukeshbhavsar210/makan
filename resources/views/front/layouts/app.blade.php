@@ -152,7 +152,7 @@
 <script src="{{ asset('front-assets/js/slick.min.js') }}"></script>
 
 <script type="text/javascript">
-    $('.textarea').trumbowyg();
+    //$('.textarea').trumbowyg();
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

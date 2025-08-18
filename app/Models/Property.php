@@ -47,9 +47,19 @@ class Property extends Model {
     public function category(){
         return $this->belongsTo(Category::class);
     }
-    public function city(){
-        return $this->belongsTo(City::class);
+
+    // public function city(){
+    //     return $this->belongsTo(City::class);
+    // }
+
+    public function city() {
+        return $this->belongsTo(\App\Models\City::class, 'city_id'); 
     }
+
+    public function property_images_new() {
+        return $this->hasMany(\App\Models\PropertyImage::class, 'property_id');
+    }
+
     public function area(){
         return $this->belongsTo(Area::class);
     }
@@ -59,6 +69,14 @@ class Property extends Model {
     }
 
     public function applications(){
-        return $this->hasMany(JobApplication::class);
+        return $this->hasMany(PropertyApplication::class);
+    }
+
+    public function savedProprty(){
+        return $this->hasMany(SavedProperty::class);
+    }
+
+    public function builderName() {
+        return $this->hasMany(\App\Models\Builder::class, 'builder_id');
     }
 }
