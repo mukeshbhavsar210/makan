@@ -14,6 +14,9 @@
                                         {{ is_array(request('type')) && in_array($value->id, request('type')) ? 'checked' : '' }}>
                                     <span class="checkmark"></span>
                                     {{ $value->name }}
+                                    <svg fill="#ffffff" width="14px" height="14px" viewBox="-3.5 0 19 19" xmlns="http://www.w3.org/2000/svg" class="cf-icon-svg">
+                                        <path d="M11.383 13.644A1.03 1.03 0 0 1 9.928 15.1L6 11.172 2.072 15.1a1.03 1.03 0 1 1-1.455-1.456l3.928-3.928L.617 5.79a1.03 1.03 0 1 1 1.455-1.456L6 8.261l3.928-3.928a1.03 1.03 0 0 1 1.455 1.456L7.455 9.716z"></path>
+                                    </svg>
                                 </label>
                             </li>
                         @endforeach
@@ -33,6 +36,9 @@
                                         {{ is_array(request('room')) && in_array($value->id, request('room')) ? 'checked' : '' }}>
                                     <span class="checkmark"></span>
                                     {{ $value->title }}
+                                    <svg fill="#ffffff" width="14px" height="14px" viewBox="-3.5 0 19 19" xmlns="http://www.w3.org/2000/svg" class="cf-icon-svg">
+                                        <path d="M11.383 13.644A1.03 1.03 0 0 1 9.928 15.1L6 11.172 2.072 15.1a1.03 1.03 0 1 1-1.455-1.456l3.928-3.928L.617 5.79a1.03 1.03 0 1 1 1.455-1.456L6 8.261l3.928-3.928a1.03 1.03 0 0 1 1.455 1.456L7.455 9.716z"></path>
+                                    </svg>
                                 </label>
                             </li>
                         @endforeach
@@ -67,7 +73,7 @@
                                     <input type="radio" name="saletype" value="{{ $value->id }}" data-label="{{ $value->title }}"
                                         {{ request('saletype') == $value->id ? 'checked' : '' }}>
                                     <span class="radiomark"></span>
-                                    {{ $value->title }}
+                                    {{ $value->title }}                                    
                                 </label>
                             </li>
                         @endforeach
@@ -118,6 +124,9 @@
                                                     {{ is_array(request('listed_type')) && in_array($value->id, request('listed_type')) ? 'checked' : '' }}>
                                                 <span class="checkmark"></span>
                                                 {{ $value->title }}
+                                                <svg fill="#ffffff" width="14px" height="14px" viewBox="-3.5 0 19 19" xmlns="http://www.w3.org/2000/svg" class="cf-icon-svg">
+                                                    <path d="M11.383 13.644A1.03 1.03 0 0 1 9.928 15.1L6 11.172 2.072 15.1a1.03 1.03 0 1 1-1.455-1.456l3.928-3.928L.617 5.79a1.03 1.03 0 1 1 1.455-1.456L6 8.261l3.928-3.928a1.03 1.03 0 0 1 1.455 1.456L7.455 9.716z"></path>
+                                                </svg>  
                                             </label>
                                         @endforeach
                                     </div>
@@ -140,7 +149,36 @@
                                 <!-- Sale type -->
                                 <div class="tab-pane fade" id="amenities-content" role="tabpanel">
                                     <div class="more-filter-checkbox">
-                                        <h6>Amenities</h6>
+                                        <h6>Amenities</h6> 
+                                        
+                                        {{-- @foreach ($amenities as $amenity)
+                                            <label class="custom-checkbox-label {{ is_array(request('amenities')) && in_array($amenity->id, request('amenities')) ? 'active' : '' }}">
+                                                <input class="hidden" type="checkbox" 
+                                                    name="amenities[]" 
+                                                    value="{{ $amenity->id }}" 
+                                                    data-label="{{ $amenity->title }}"
+                                                    {{ is_array(request('amenities')) && in_array($amenity->id, request('amenities')) ? 'checked' : '' }}>
+                                                <span class="radiomark"></span>
+                                                {{ $amenity->title }}
+                                                <svg fill="#ffffff" width="14px" height="14px" viewBox="-3.5 0 19 19" xmlns="http://www.w3.org/2000/svg" class="cf-icon-svg">
+                                                    <path d="M11.383 13.644A1.03 1.03 0 0 1 9.928 15.1L6 11.172 2.072 15.1a1.03 1.03 0 1 1-1.455-1.456l3.928-3.928L.617 5.79a1.03 1.03 0 1 1 1.455-1.456L6 8.261l3.928-3.928a1.03 1.03 0 0 1 1.455 1.456L7.455 9.716z"></path>
+                                                </svg>
+                                            </label>
+                                        @endforeach --}}
+
+                                        @foreach ($properties as $property)
+                                            @foreach ($property->amenities as $amenity)
+                                                <label class="custom-checkbox-label {{ is_array(request('amenities')) && in_array($amenity->id, request('amenities')) ? 'active' : '' }}">
+                                                    <input class="hidden" type="checkbox" name="amenities[]" value="{{ $amenity->id }}" data-label="{{ $amenity->title }}"
+                                                        {{ is_array(request('amenities')) && in_array($amenity->id, request('amenities')) ? 'checked' : '' }}>
+                                                    <span class="radiomark"></span>
+                                                    {{ $amenity->title }}
+                                                    <svg fill="#ffffff" width="14px" height="14px" viewBox="-3.5 0 19 19" xmlns="http://www.w3.org/2000/svg" class="cf-icon-svg">
+                                                        <path d="M11.383 13.644A1.03 1.03 0 0 1 9.928 15.1L6 11.172 2.072 15.1a1.03 1.03 0 1 1-1.455-1.456l3.928-3.928L.617 5.79a1.03 1.03 0 1 1 1.455-1.456L6 8.261l3.928-3.928a1.03 1.03 0 0 1 1.455 1.456L7.455 9.716z"></path>
+                                                    </svg>
+                                                </label>                                                    
+                                            @endforeach
+                                        @endforeach                                        
                                     </div>
                                 </div>
 
@@ -156,6 +194,9 @@
                                                             {{ request('age') == $value->id ? 'checked' : '' }}>
                                                         <span class="radiomark"></span>
                                                         {{ $value->title }}
+                                                        <svg fill="#ffffff" width="14px" height="14px" viewBox="-3.5 0 19 19" xmlns="http://www.w3.org/2000/svg" class="cf-icon-svg">
+                                                            <path d="M11.383 13.644A1.03 1.03 0 0 1 9.928 15.1L6 11.172 2.072 15.1a1.03 1.03 0 1 1-1.455-1.456l3.928-3.928L.617 5.79a1.03 1.03 0 1 1 1.455-1.456L6 8.261l3.928-3.928a1.03 1.03 0 0 1 1.455 1.456L7.455 9.716z"></path>
+                                                        </svg>
                                                     </label>
                                                 </div>
                                             @endforeach
@@ -165,7 +206,7 @@
 
                                 <!-- Facing -->
                                 <div class="tab-pane fade" id="facing-content" role="tabpanel">
-                                    Facings
+                                    <h6>Facings</h6>
                                     <div class="more-filter-checkbox">
                                         @foreach ($facings as $value)                                            
                                             <label class="custom-checkbox-label {{ is_array(request('facing')) && in_array($value->id, request('facing')) ? 'active' : '' }}">
@@ -173,6 +214,9 @@
                                                     {{ is_array(request('facing')) && in_array($value->id, request('facing')) ? 'checked' : '' }}>
                                                 <span class="checkmark"></span>
                                                 {{ $value->title }}
+                                                <svg fill="#ffffff" width="14px" height="14px" viewBox="-3.5 0 19 19" xmlns="http://www.w3.org/2000/svg" class="cf-icon-svg">
+                                                    <path d="M11.383 13.644A1.03 1.03 0 0 1 9.928 15.1L6 11.172 2.072 15.1a1.03 1.03 0 1 1-1.455-1.456l3.928-3.928L.617 5.79a1.03 1.03 0 1 1 1.455-1.456L6 8.261l3.928-3.928a1.03 1.03 0 0 1 1.455 1.456L7.455 9.716z"></path>
+                                                </svg>
                                             </label>                                            
                                         @endforeach
                                     </div>
@@ -188,23 +232,18 @@
                                                     {{ is_array(request('bathroom')) && in_array($value->id, request('bathroom')) ? 'checked' : '' }}>
                                                 <span class="checkmark"></span>
                                                 {{ $value->title }}
+                                                <svg fill="#ffffff" width="14px" height="14px" viewBox="-3.5 0 19 19" xmlns="http://www.w3.org/2000/svg" class="cf-icon-svg">
+                                                    <path d="M11.383 13.644A1.03 1.03 0 0 1 9.928 15.1L6 11.172 2.072 15.1a1.03 1.03 0 1 1-1.455-1.456l3.928-3.928L.617 5.79a1.03 1.03 0 1 1 1.455-1.456L6 8.261l3.928-3.928a1.03 1.03 0 0 1 1.455 1.456L7.455 9.716z"></path>
+                                                </svg>
                                             </label>
                                         @endforeach
-
-                                        {{-- @foreach ($bathrooms as $bathroom)
-                                            <label class="custom-checkbox-label">
-                                                <input class="form-check-input" type="checkbox" name="bathroom[]" value="{{ $bathroom->id }}">
-                                                <span class="checkmark"></span>
-                                                {{ $bathroom->title }}
-                                            </label>
-                                        @endforeach --}}
                                     </div>
                                 </div>
 
-                                <div class="mt-3 text-end">
+                                {{-- <div class="mt-3 text-end">
                                     <button class="btn btn-primary" id="applyFilters">Apply</button>
                                     <button class="btn btn-secondary" id="resetFilters">Reset</button>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                     </div>

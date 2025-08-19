@@ -51,28 +51,29 @@
 
             @if ($properties->isNotEmpty())
                 @foreach ($properties as $value)      
-                
-                
-                
                     <div class="propery-listings">                        
                         <div class="picture">
-                            @php
-                                $propertyImage = $value->property_images->first();
-                            @endphp
-                                                        
-                            <a href="{{ route('propertyDetails', $value->id) }}" >
-                                @if (!empty($propertyImage->image))
-                                    <img alt="" class="thumb" src="{{ asset('uploads/property/small/'.$propertyImage->image) }}" >
-                                @else
-                                    <img class="thumb" src="{{ asset('front-assets/images/building.svg') }}" />
-                                @endif
-                            </a>
+                            <div class="listing-gallery">
+                                @foreach ($properties as $value)
+                                    @if ($value->property_images && $value->property_images->count())
+                                        @foreach ($value->property_images as $propertyImage)
+                                            <img src="{{ asset('uploads/property/large/'.$propertyImage->image) }}" alt="Image">
+                                        @endforeach
+                                    @endif
+                                @endforeach
+                            </div>
                         </div>
                         
                         <div class="details">
                             <div class="first-group">
                                 <div class="left">
-                                    <h3 class="title">{{ $value->title }}</h3>
+                                    <a href="{{ route('propertyDetails', $value->id) }}" >
+                                        <h3 class="title">{{ $value->title }}
+                                            <div class="rera" style="{{ empty($value->rera) ? 'display:none;' : '' }}">
+                                                <img class="icon" src="{{ asset('front-assets/images/tick.svg') }}" /> RERA
+                                            </div>
+                                        </h3>                                    
+                                    </a>
                                     <p>{{ $value->room->title }} {{ $value->propertyType->name }} in {{ $value->area->name }}.</p>
                                 </div>
                                 <div class="right">
@@ -118,7 +119,7 @@
 
                             <div class="second-group">
                                 <p class="small-text">{{ $value->room->title }} {{ $value->propertyType->name }}</p>
-                                <p>Rs.{{ $value->price }}/-</p>
+                                <p class="price">Rs.{{ $value->price }}/-</p>
                             </div>
 
                             <div class="third-group">
@@ -129,8 +130,8 @@
                                 <div class="branding">
                                     <img alt="" class="logo" src="{{ asset('uploads/builder/'.$value->builder->logo) }}" >
                                     <div class="name">
-                                        <p class="builder_name">{{ $value->builder->name }} </p>
-                                        <p>Developer</p>  
+                                        <p class="builder_name">{{ $value->builder->name }}</p>
+                                        <p>{{ $value->user->role }}</p>  
                                     </div>                                  
                                 </div>
 

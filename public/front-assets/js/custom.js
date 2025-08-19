@@ -28,6 +28,20 @@ $(document).ready(function(){
         arrows: false
       });
 
+      $('.listing-gallery').slick({
+        dots: true,
+        infinite: true,
+        speed: 2000,
+        fade: true,
+        autoplay: true,
+        slidesToScroll: 1,
+        autoplaySpeed: 3000,
+        cssEase: 'linear',
+        arrows: true,
+        prevArrow:'<i class="icon-left-arrow right-arrow arrow"><</i>',
+        nextArrow:'<i class="icon-right-arrow left-arrow arrow">></i>',
+      });
+
 
     $('.discoverProducts').slick({
         autoplay: true,
@@ -106,6 +120,26 @@ $(document).ready(function(){
         }] 
     });
    
+
+    $("#resetFiltersBtn").on("click", function () {
+        // Uncheck all checkboxes
+        $('input[name="area[]"]').prop("checked", false);
+
+        // Optionally, submit the form to refresh filters
+        // $("#filterForm").submit();
+    });
+
+     // Prevent dropdown from closing on tab click
+    $('.dropdown-menu').on('click', function (e) {
+        e.stopPropagation();
+    });
+
+    // Also keep it open when switching tabs
+    $('#more-filters-tab a').on('click', function (e) {
+        e.preventDefault();
+        $(this).tab('show');
+    });
+
 });
 
 
@@ -502,13 +536,3 @@ $(document).on("click", ".remove-area", function (e) {
     window.location.href = window.location.pathname + "?" + params.toString();
 });
 
-
-$(document).ready(function () {
-    $("#resetFiltersBtn").on("click", function () {
-        // Uncheck all checkboxes
-        $('input[name="area[]"]').prop("checked", false);
-
-        // Optionally, submit the form to refresh filters
-        // $("#filterForm").submit();
-    });
-});

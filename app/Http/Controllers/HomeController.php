@@ -83,6 +83,8 @@ class HomeController extends Controller {
     
     public function properties(Request $request) {
         $categories = Category::get();
+        $properties = Property::with('amenities')->with('property_images')->where('status',1);
+        $propertyTypes = PropertyType::where('status',1)->get();     
         $cities = City::where('status',1)->get();
         $areas = Area::where('status',1)->get();
         $rooms = Room::where('status',1)->get();
@@ -91,9 +93,7 @@ class HomeController extends Controller {
         $saletypes = SaleType::where('status',1)->get();
         $constructions = Construction::where('status',1)->get();
         $facings = View::where('status',1)->get();
-        $ages = Age::where('status',1)->get();
-        $propertyTypes = PropertyType::where('status',1)->get();        
-        $properties = Property::where('status',1);
+        $ages = Age::where('status',1)->get();                           
         $categoryId = $request->get('category');
         $cityId = $request->get('city');
         $areaId = $request->get('area');
@@ -191,6 +191,20 @@ class HomeController extends Controller {
             $properties = $properties->whereIn('bathroom_id', $request->bathroom);
         } 
 
+        //Filter using Amenities
+        $properties = $properties->with('amenities')->where('status', 1);
+
+        if (!empty($request->amenities)) {
+            $amenities = is_array($request->amenities) 
+                ? $request->amenities 
+                : explode(',', $request->amenities);
+
+            $properties = $properties->whereHas('amenities', function ($q) use ($amenities) {
+                $q->whereIn('amenities.id', $amenities);
+            });
+        }
+
+
         //Filter using Listed Types working
         if (!empty($request->listed_type) && is_array($request->listed_type)) {
             $properties = $properties->whereIn('listed_type_id', $request->listed_type);
@@ -276,10 +290,14 @@ class HomeController extends Controller {
                 ->pluck('property_id')
                 ->toArray();
         }
-       
+
+        $data['priceMax'] = (intval($request->get('price_max')) == 0 ? 1000 : $request->get('price_max'));
+        $data['priceMin'] = intval($request->get('price_min'));     
+        
         $properties = $properties->paginate(10);       
             
         $data = [
+            'properties' => $properties,            
             'categories' => $categories,
             'cities' => $cities,
             'areas' => $areas,
@@ -291,18 +309,14 @@ class HomeController extends Controller {
             'constructions' => $constructions,
             'ages' => $ages,
             'facings' => $facings,
-            'properties' => $properties,
             'categoryId' => $categoryId,
             'citySelected' => $citySelected,
             'areaSelected' => $areaSelected,
             'area' => $area,
             'categoryWord' => $categoryWord,
             'room' => $room,
-            'savedPropertyIds' => $savedPropertyIds
-        ];
-
-         $data['priceMax'] = (intval($request->get('price_max')) == 0 ? 1000 : $request->get('price_max'));
-         $data['priceMin'] = intval($request->get('price_min'));                 
+            'savedPropertyIds' => $savedPropertyIds,            
+        ];        
 
         return view('front.home.listings', $data);
     }
@@ -389,7 +403,7 @@ class HomeController extends Controller {
 
         //User can not apply on posted own job
         $posted_id = $property->user_id;
-        $message = 'You can not apply on your job.';
+        $message = 'You can not apply on your posted property.';
 
         if($posted_id == Auth::user()->id){
             session()->flash('error',$message);
@@ -406,7 +420,7 @@ class HomeController extends Controller {
         ])->count();
 
         if($jobApplicationCount > 0){
-            $message = 'You already applied on this job.';
+            $message = 'You already applied on this property.';
             session()->flash('success', $message);
             return response()->json([
                 'status' => true,
@@ -431,7 +445,7 @@ class HomeController extends Controller {
 
         //Mail::to($employer->email)->send(new JobNotificationEmail($mailData));
 
-        $message = 'You have successfully applied.';
+        $message = 'You have showing interest in Property.';
         session()->flash('success', $message);
         return response()->json([
             'status' => true,
