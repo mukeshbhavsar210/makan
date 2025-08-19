@@ -19,16 +19,12 @@
                     @if($firstArea)
                         <li>
                             <label class="custom-checkbox-label">
-                                <input type="checkbox" name="area[]" value="{{ $firstArea->id }}" checked>
-                                {{ $firstArea->name }}
-                                <a href="javascript:void(0);" class="remove-area" data-id="{{ $firstArea->id }}">
-                                    <svg fill="#ffffff" width="14px" height="14px" viewBox="-3.5 0 19 19" xmlns="http://www.w3.org/2000/svg" class="cf-icon-svg"><path d="M11.383 13.644A1.03 1.03 0 0 1 9.928 15.1L6 11.172 2.072 15.1a1.03 1.03 0 1 1-1.455-1.456l3.928-3.928L.617 5.79a1.03 1.03 0 1 1 1.455-1.456L6 8.261l3.928-3.928a1.03 1.03 0 0 1 1.455 1.456L7.455 9.716z"/></svg>
-                                </a>
+                                <input type="checkbox" name="area" value="{{ $firstArea->id }}" checked>
+                                {{ $firstArea->name }}                                
                             </label>
                         </li>
                     @endif
                 @endif
-
                 @php
                     $selectedUnique = collect($selectedAreas)->unique();
                     $selectedCount = $selectedUnique->count();

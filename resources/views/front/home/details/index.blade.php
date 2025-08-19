@@ -11,6 +11,9 @@
     </ul>
 
     <div class="property-individuals">
+
+        @include('admin.layouts.message')  
+
         <div class="row">
             <div class="col-md-9 col-12">
                 <div class="first">
@@ -48,7 +51,8 @@
                         </a>                
                     @endif
                 </div>
-            </div>
+            </div>             
+
             <div class="col-md-3 col-12">
                 <div class="price">
                     <div class="right">
@@ -99,6 +103,8 @@
                 </div>
             </div>
         </div>   
+
+         
 
         <div class="media">
             <div class="row">
@@ -172,7 +178,7 @@
         @endif
     </p>
 </div>
-    @include('admin.layouts.message')             
+             
         
     @if (!empty($relatedAmenities))
         <h4>Amenities Details</h4>

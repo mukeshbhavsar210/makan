@@ -10,11 +10,7 @@ class Property extends Model {
 
     public function property_images(){
         return $this->hasMany(PropertyImage::class);
-    }
-
-    public function amenities(){
-        return $this->hasMany('App\Models\Amenity','id','amenities');
-    }
+    }    
 
     public function view(){
         return $this->belongsTo(View::class);
@@ -56,6 +52,10 @@ class Property extends Model {
         return $this->belongsTo(\App\Models\City::class, 'city_id'); 
     }
 
+    public function user() {
+        return $this->belongsTo(\App\Models\User::class, 'user_id'); 
+    }
+
     public function property_images_new() {
         return $this->hasMany(\App\Models\PropertyImage::class, 'property_id');
     }
@@ -79,4 +79,9 @@ class Property extends Model {
     public function builderName() {
         return $this->hasMany(\App\Models\Builder::class, 'builder_id');
     }
+
+    public function amenities() {
+        return $this->belongsToMany(Amenity::class, 'amenity_property');
+    }
+
 }
