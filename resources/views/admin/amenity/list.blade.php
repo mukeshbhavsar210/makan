@@ -5,7 +5,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-9">
-                <h1>Amenities</h1>
+                <h1>Amenities <span class="badge badge-primary">{{ $counts }}</span></h1>
             </div>      
             <div class="col-sm-3">
                 <button type="button" class="btn btn-primary float-lg-right" data-toggle="modal" data-target="#exampleModalRight">Add Amenity</button>
@@ -30,8 +30,8 @@
                         <form action="" method="post" id="amenityForm" name="amenityForm">
                             <div class="modal-body">                        
                                 <div class="form-group">
-                                    <label for="title">Name</label>
-                                    <input type="text" name="title" id="title" class="form-control" placeholder="title">
+                                    <label for="title">Amenities Name</label>
+                                    <input type="text" name="title" id="title" class="form-control" placeholder="Amenities Name">
                                     <p></p>
                                 </div>                                                      
                                 <div class="form-group">
@@ -50,41 +50,12 @@
                 </div>
             </div>
         
-        {{-- <form action="" method="post" id="amenityForm" name="amenityForm">
-
-            <div class="card">
-                <div class="card-body">
-                    <div class="row"> 
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="title">Name</label>
-                                <input type="text" name="title" id="title" class="form-control" placeholder="title">
-                                <p></p>
-                            </div>
-                        </div>     
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="icon">Icon</label>
-                                <input type="text" name="icon" id="icon" class="form-control" placeholder="Icon">
-                                <p></p>
-                            </div>
-                        </div>                
-                        <div class="col-md-3 my-4">
-                            <button type="submit" class="btn btn-primary">Create</button>      
-                        </div>                                                                                    
-                    </div>
-                </div>
-            </div>
-        </form> --}}
-
-
         <div class="card">
             <div class="card-body table-responsive p-0">
                 <table class="table table-hover text-nowrap">
                     <thead>
                         <tr>
                             <th>Title</th>
-                            <th>Icon</th>
                             <th width="100">Status</th>
                             <th width="100">Action</th>
                         </tr>
@@ -93,8 +64,7 @@
                         @if($amenities->isNotEmpty())
                             @foreach ($amenities as $value)
                                 <tr>
-                                    <td>{{ $value->title }}</td>
-                                    <td>{{ $value->icon }}</td>
+                                    <td>{{ $value->icon }} - {{ $value->title }}</td>                                    
                                     <td>
                                         @if($value->status == 1)
                                             <svg class="text-success-500 h-6 w-6 text-success" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
@@ -130,7 +100,7 @@
 @endsection
 @section('customJs')
 <script>
-            $("#amenityForm").submit(function(event){
+    $("#amenityForm").submit(function(event){
         event.preventDefault();
         var element = $(this);
         $("button[type=submit]").prop('disabled', true);
@@ -167,27 +137,27 @@
         })
     });
 
-            function deleteAmenity(id){
-        
-                var url = '{{ route("amenities.delete","ID") }}'
-                var newUrl = url.replace("ID",id)
-        
-                if(confirm("Are you sure you want to delete?")){
-                    $.ajax({
-                        url: newUrl,
-                        type: 'delete',
-                        data: {},
-                        dataType: 'json',
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        success: function(response){
-                            if(response["status"]){
-                                window.location.href="{{ route('amenities.index') }}"
-                            }
-                        }
-                    });
+    function deleteAmenity(id){
+
+        var url = '{{ route("amenities.delete","ID") }}'
+        var newUrl = url.replace("ID",id)
+
+        if(confirm("Are you sure you want to delete?")){
+            $.ajax({
+                url: newUrl,
+                type: 'delete',
+                data: {},
+                dataType: 'json',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response){
+                    if(response["status"]){
+                        window.location.href="{{ route('amenities.index') }}"
+                    }
                 }
-            }
-        </script>
-        @endsection
+            });
+        }
+    }
+</script>
+@endsection

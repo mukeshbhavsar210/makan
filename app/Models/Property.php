@@ -56,6 +56,10 @@ class Property extends Model {
         return $this->belongsTo(\App\Models\User::class, 'user_id'); 
     }
 
+    public function users(){
+        return $this->belongsTo(User::class);
+    }
+
     public function property_images_new() {
         return $this->hasMany(\App\Models\PropertyImage::class, 'property_id');
     }
@@ -82,6 +86,11 @@ class Property extends Model {
 
     public function amenities() {
         return $this->belongsToMany(Amenity::class, 'amenity_property');
+    }
+
+
+    public function builders() {
+        return $this->belongsTo(Builder::class, 'builder_id');
     }
 
 }

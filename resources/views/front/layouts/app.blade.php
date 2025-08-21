@@ -8,6 +8,8 @@
 <title>Housing.com</title>
 <link rel="stylesheet" type="text/css" href="{{ asset('front-assets/css/style.css') }}" />
 <link rel="stylesheet" type="text/css" href="{{ asset('front-assets/css/ion.rangeSlider.min.css') }}" />
+<link rel="stylesheet" type="text/css" href="{{ asset('front-assets/css/slick.css') }}" />
+<link rel="stylesheet" type="text/css" href="{{ asset('front-assets/css/slick-theme.css') }}" />
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
 <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
@@ -51,7 +53,7 @@
 					<a href="{{ route('profile.index')}}" class="btn btn-primary">My Account</a>
 				@else
 					{{-- <a href="{{ route('account.login')}}" data-bs-toggle="modal" data-bs-target="#exampleModal" class="nav-link text-dark">Login/Register</a> --}}
-					<a href="{{ route('account.login')}}" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-primary">Login</a>						
+					<a href="{{ route('account.login')}}" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-primary">Login</a>
 				@endif
 		</nav>
 	</header>	
@@ -142,7 +144,7 @@
 			</div>
 		</div>
 	</div>
-</div>
+	</div>
 </footer>
 
 <script src="{{ asset('front-assets/js/jquery-3.6.0.min.js') }}"></script>

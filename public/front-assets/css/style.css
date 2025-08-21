@@ -83,7 +83,7 @@ p {
 
 .filters { display: flex; justify-content: space-between; padding:5px 0 7px 0; background-color: var(--white); }
 .filters .dropdown { margin-right: 8px;}
-.filters .btnFilter { border: 1px solid rgb(204, 204, 204) !important; border-radius:2px !important; color: rgb(108, 108, 108) !important; font-size: 14px !important; background-color: var(--white) !important;  }
+.filters .btnFilter { border: 1px solid rgb(204, 204, 204) !important; border-radius:2px !important; color: rgb(108, 108, 108) !important; font-size: 14px !important; background-color: var(--white) !important; font-weight: normal !important;  }
 .filters .btnFilter:hover, .dropdown-toggle.show { border-color: var(--primary) !important; color: var(--primary) !important;}
 .filters .dropdown-menu { padding: 13px 13px 10px 13px; }
 .filters .dropdown-menu li { margin: 0 5px 11px 0;  }
@@ -146,7 +146,7 @@ p {
 .control-header .strip .search .areas-list { display: flex; }
 .control-header .strip .search .areas-list li { margin-right: 10px;}
 .control-header .strip .search .areas-list li a { background-color: var(--primary); color: var(--white); border-radius: 100px; padding: 5px 10px; text-decoration: none; font-size: 13px;}
-.control-header .strip .search-strip { background-color: var(--white); width: 600px; margin: 2px; border-radius: 4px; height: 41px;}
+.control-header .strip .search-strip { background-color: var(--white); width:575px; margin: 2px; border-radius: 4px; height: 41px;}
 
 .control-header .strip .search-strip #areas_top { padding: 6px 8px; margin: 0; display: flex; }
 .control-header .strip .search-strip #areas_top .search-icon { margin-right: 5px;}
@@ -339,13 +339,15 @@ header { position: fixed; width: 100%; top:0; left: 0; z-index: 99; background-c
 .search-engine .areas-list .area-item .text .locality { font-size: 10px; text-transform: uppercase; color: #666;}
 .search-engine .areas-list .area-item:hover { background-color: rgba(94,35,220,.08); }
 
-.btn { border: none !important; font-weight: bold !important; padding: 8px 20px !important; font-size: 14px !important; }
+.btn { border: none !important; font-weight: bold !important; font-size: 13px !important; }
 
 .propery-listings { border-radius: 15px; padding:10px; margin:10px; background-color: var(--body-bg); cursor: pointer; display: flex; justify-content: space-between;}
 .propery-listings:hover { box-shadow: 3px 3px 3px #e5e5e5;}
-.propery-listings .picture { width: 30%;}
+.propery-listings .picture { width: 240px; height: 240px; position: relative; }
+.propery-listings .picture .media-overlay { background: linear-gradient(180deg,transparent,rgba(0,0,0,.8)); height: 100%; width: 100%; z-index: 9; position: absolute; bottom:0; left:0;  border-radius:7px; cursor: zoom-in;}
 .propery-listings .picture .thumb { border-radius: 7px; width: 100%; height: 100%; }
-.propery-listings .details { padding:10px; width: 69%;}
+.propery-listings .details { padding:10px; width: 71%;}
+.propery-listings .details .product-link { color: var(--black); text-decoration: none;}
 .propery-listings .details .first-group { margin-bottom: 15px; display: flex; justify-content: space-between;}
 .propery-listings .details .first-group .left { width: 90%;}
 .propery-listings .details .first-group .left .title { font-size: 16px; margin: 0 0 5px 0; padding: 0; font-weight: bold; display: flex;}
@@ -363,6 +365,8 @@ header { position: fixed; width: 100%; top:0; left: 0; z-index: 99; background-c
 .propery-listings .details .developer .branding .builder_name { margin-top: 3px; font-size: 15px; }
 .propery-listings .details .developer .btn { margin-top: 5px;  }
 .propery-listings .details p { margin: 0;  font-size: 14px;}
+
+.listing-gallery .slick-slide { border-radius: 8px;}
 
 .modal-builder { margin-bottom: 10px;}
 .modal-builder h3 { font-size: 15px;}
@@ -590,3 +594,30 @@ header { position: fixed; width: 100%; top:0; left: 0; z-index: 99; background-c
   margin-right: 16px;
   color: #4e4e4e;
 }
+
+.center .slick-slide { height: 100% !important; }
+.modal-xl { max-width: 100% !important; height: 100vh !important; margin: 0 !important; background-color:#000 !important; border-radius: 0 !important;}
+.modal-xl .modal-content { background-color:#000 !important; color: var(--white); }
+
+.gallery-title { margin-bottom: 20px;}
+.gallery-title .title { display: flex; justify-content: space-between; }
+.gallery-title .title .title-h4 { display: flex; justify-content: space-between; }
+.gallery-title .title h4 { margin: 0; padding: 0;}
+.gallery-title .title .title-h4 .share-save { display: flex; margin-top: 5px; margin-left: 20px; }
+.gallery-title .title .title-h4 .share-save li { margin-right: 10px;}
+.gallery-title .title .title-h4 .share-save li a { color: var(--black); text-decoration: none; border: 1px #666 solid; padding: 5px 12px; border-radius: 5px; font-size: 12px; background-color: var(--white);}
+.gallery-title .title .title-h4 .share-save li a:hover { color: var(--white); background-color: var(--primary); border-color: var(--primary);}
+.gallery-title .right-gallery-pagination { display: flex; justify-content: space-between;}
+.gallery-title .right-gallery-pagination .slick-info { width: 115px;}
+.gallery-title .right-gallery-pagination .slick-info .text { float: right; text-align: right;}
+.gallery-title .right-gallery-pagination .slick-info .progress { clear: both; margin-top: 5px; height: 6px; position: relative; top: 5px;}
+
+.gallery-title .nav-tabs { margin-top: 10px; border-bottom: none; }
+.gallery-title .nav-tabs li .nav-link { text-decoration: none; border:1px #ccc solid; color: var(--white); border-radius: 100px; font-size: 13px; padding: 4px 12px 5px 12px; margin-right: 5px; }
+.gallery-title .nav-tabs li .nav-link:hover, .gallery-title .nav-tabs li .nav-link.active { background-color: var(--primary); border-color: var(--primary);}
+
+.contact-details-gallery { background-color: var(--white); padding: 20px; border-radius: 10px; }
+
+.tag { width: 500px; color: var(--black); margin: 0 10px; border-radius: 5px; opacity: 0.5; }
+.tag .img-fluid { height: auto; width: 100%;;}
+.tag.div-active { opacity: 1; }

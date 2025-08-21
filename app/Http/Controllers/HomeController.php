@@ -83,8 +83,7 @@ class HomeController extends Controller {
     
     public function properties(Request $request) {
         $categories = Category::get();
-        $properties = Property::with('amenities')->with('property_images')->where('status',1);
-        $propertyTypes = PropertyType::where('status',1)->get();     
+           
         $cities = City::where('status',1)->get();
         $areas = Area::where('status',1)->get();
         $rooms = Room::where('status',1)->get();
@@ -97,8 +96,9 @@ class HomeController extends Controller {
         $categoryId = $request->get('category');
         $cityId = $request->get('city');
         $areaId = $request->get('area');
-        $roomIds = $request->get('room', []); // this will be an array of IDs
-
+        $roomIds = $request->get('room', []);
+        $properties = Property::with('amenities')->with('property_images')->where('status',1);        
+        $propertyTypes = PropertyType::where('status',1)->get();          
         $citySelected = $request->filled('city') ? \App\Models\City::find($request->city) : null;
         $areaSelected = $request->filled('area') ? \App\Models\Area::find($request->area) : null;
 

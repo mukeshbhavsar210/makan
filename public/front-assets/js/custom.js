@@ -2,7 +2,95 @@ $(document).ready(function(){
     
     setTimeout(function() {
         $('.alert').fadeOut('fast');
-    }, 1500);        
+    }, 1500);   
+
+    $('.center').slick({
+        centerMode: true,
+        centerPadding: '260px',
+        slidesToShow: 1,
+        responsive: [
+            {
+            breakpoint: 768,
+            settings: {
+                arrows: false,
+                centerMode: true,
+                centerPadding: '140px',
+                slidesToShow: 1
+            }
+            },
+            {
+            breakpoint: 480,
+            settings: {
+                arrows: false,
+                centerMode: true,
+                centerPadding: '140px',
+                slidesToShow: 1
+            }
+            }
+        ]
+    });
+
+
+    $('.tagNav .nav-link').on('click', function(e){
+        e.preventDefault();
+
+        var target = $(this).data('target');
+        var $targetDiv = $('#' + target);
+
+        // Scroll container to the target div
+        $('.tag-container').animate({
+            scrollLeft: $targetDiv.position().left + $('.tag-container').scrollLeft()
+        }, 400);
+
+        // Navbar active state
+        $('.tagNav .nav-link').removeClass('active');
+        $(this).addClass('active');
+
+        // Div active state
+        $('.tag-container .tag').removeClass('div-active');
+        $targetDiv.addClass('div-active');
+    });
+
+
+
+    // Initialize each module independently (works even if multiple exist on the page)
+    $('.tag-module').each(function () {
+    const $module   = $(this);
+    const $nav      = $module.find('.tagNav').first();                       // scope to this module
+    const $links    = $nav.find('> li > .nav-link[data-target]');            // only count intended nav items
+    const total     = $links.length;
+
+    // Set total
+    $module.find('.counter-total').text(total);
+
+    // Determine current from the active link (fallback to 1)
+    let currentIdx = $links.index($links.filter('.active')) + 1;
+    if (currentIdx < 1) currentIdx = 1;
+
+    // Render initial state
+    $module.find('.counter-current').text(currentIdx);
+    $module.find('.slick-progress').css('width', (currentIdx / total * 100) + '%');
+
+    // Click handler (scoped)
+    $links.on('click', function (e) {
+        e.preventDefault();
+
+        // Active state on nav
+        $links.removeClass('active');
+        $(this).addClass('active');
+
+        // Update counter + progress
+        const index = $links.index(this) + 1;
+        $module.find('.counter-current').text(index);
+        $module.find('.slick-progress').css('width', (index / total * 100) + '%');
+    });
+    });
+
+
+    // Fix when modal opens
+    $('#big-modal').on('shown.bs.modal', function () {
+        $('.center').slick('setPosition');
+    });
     
     $('.carousalHome').slick({
         dots: false,
@@ -29,19 +117,16 @@ $(document).ready(function(){
       });
 
       $('.listing-gallery').slick({
-        dots: true,
-        infinite: true,
-        speed: 2000,
-        fade: true,
         autoplay: true,
-        slidesToScroll: 1,
         autoplaySpeed: 3000,
-        cssEase: 'linear',
+        dots: true,
         arrows: true,
-        prevArrow:'<i class="icon-left-arrow right-arrow arrow"><</i>',
-        nextArrow:'<i class="icon-right-arrow left-arrow arrow">></i>',
       });
 
+
+      
+
+   
 
     $('.discoverProducts').slick({
         autoplay: true,
