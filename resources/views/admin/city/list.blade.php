@@ -5,7 +5,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-9">
-                <h1>Cities</h1>
+                <h1>Cities <span class="badge badge-primary">{{ $counts }}</span></h1>
             </div> 
             <div class="col-sm-3">
                 <button type="button" class="btn btn-primary float-lg-right" data-toggle="modal" data-target="#exampleModalRight">Add City</button>
@@ -31,10 +31,10 @@
                                 <div class="modal-body">                        
                                     <div class="form-group">
                                         <label for="name">Name</label>
-                                        <input type="text" name="name" id="name" class="form-control" placeholder="name">
+                                        <input type="text" name="name" id="name" class="form-control" placeholder="City Name">
                                         <p></p>
                                     </div>                        
-                                    <div class="form-group">
+                                    <div class="form-group d-none">
                                         <label for="slug">Slug</label>
                                         <input type="text" readonly name="slug" id="slug" class="form-control" placeholder="">
                                         <p></p>
@@ -122,7 +122,7 @@
         var element = $(this);
         $("button[type=submit]").prop('disabled', true);
         $.ajax({
-            url: '{{ route("cities.store") }}',
+            url: '{{ route("cities.edit", ":id") }}',
             type: 'post',
             data: element.serializeArray(),
             dataType: 'json',

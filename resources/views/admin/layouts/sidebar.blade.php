@@ -22,13 +22,7 @@
                             <i class="nav-icon fas fa-file-alt"></i>
                             <p>Area</p>
                         </a>
-                    </li>                                  
-                    {{-- <li class="nav-item">
-                        <a href="{{ route('categories.create') }}" class="nav-link">
-                            <i class="nav-icon  fas fa-users"></i>
-                            <p>Category</p>
-                        </a>
-                    </li>                     --}}
+                    </li>  
                     <li class="nav-item">
                         <a href="{{ route('amenities.index') }}" class="nav-link {{ (\Request::route()->getName() == 'amenities.index') ? 'active' : '' }}">
                             <i class="nav-icon  fas fa-users"></i>
@@ -42,8 +36,6 @@
                         </a>
                     </li>
                 @endif
-
-              
                 <li class="nav-item">
                     <a href="{{ route('properties.index') }}" class="nav-link {{ (\Request::route()->getName() == 'properties.index') ? 'active' : '' }}">
                         <i class="nav-icon  fas fa-users"></i>
@@ -53,7 +45,7 @@
                 <li class="nav-item">
                     <a href="{{ route('account.myPropertyApplications') }}" class="nav-link {{ (\Request::route()->getName() == 'account.myPropertyApplications') ? 'active' : '' }}">
                         <i class="nav-icon  fas fa-users"></i>
-                        <p>Interested</p>
+                        <p>Interested Customers</p>
                     </a>
                 </li>
                 <li class="nav-item">

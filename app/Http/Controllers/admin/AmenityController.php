@@ -7,13 +7,14 @@ use App\Models\Amenity;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 
-class AmenityController extends Controller
-{
+class AmenityController extends Controller {
     public function index(){
         $amenities = Amenity::all();
+        $counts = Amenity::count(); 
 
         return view("admin.amenity.list", [
             "amenities"=> $amenities,
+            "counts"=> $counts,
         ]);
     }
 

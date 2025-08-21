@@ -9,16 +9,18 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Property;
 use App\Models\TempImage;
+use App\Models\User;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\Facades\Image;
 use Intervention\Image\ImageManager;
 
-class BuilderController extends Controller
-{
+class BuilderController extends Controller {
     public function index(Request $request){
-        $builders = Builder::latest();
+        $builders = Builder::with('properties')->latest();
         $addedProperty = Property::latest();        
         $properties = Property::orderBy('title','ASC')->get();
+        $counts = Builder::count();
+        $roles = User::select('role')->distinct()->pluck('role');
        
         if(!empty($request->get('keyword'))){
             $builders = $builders->where('name', 'like', '%'.$request->get('keyword').'%');
@@ -30,13 +32,28 @@ class BuilderController extends Controller
         //     $relatedProperties = Builder::whereIn('id',$propertyArray)->where('status',1)->get();
         // }
 
+
+        $propertiesByRole = [];
+            foreach ($roles as $role) {
+                $propertiesByRole[$role] = \App\Models\Property::with(['user', 'builder'])
+                    ->whereHas('user', function ($q) use ($role) {
+                        $q->where('role', $role);
+                    })
+                    ->get()
+                    ->groupBy('builder_id'); // 👈 group properties by builder
+            }
+
         $builders = $builders->paginate(10);
 
         $data['builders'] = $builders;
         $data['properties'] = $properties;
         $data['addedProperty'] = $addedProperty;
         $data['relatedProperties'] = $relatedProperties;
-
+        $data['counts'] = $counts;
+        $data['roles'] = $roles;
+        $data['propertiesByRole'] = $propertiesByRole;
+        
+    
         return view('admin.builder.list', $data);
     }
 

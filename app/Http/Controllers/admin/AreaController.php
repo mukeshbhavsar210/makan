@@ -4,19 +4,22 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str; 
 use App\Models\Area;
 use App\Models\City;
+use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 
-class AreaController extends Controller
-{
+class AreaController extends Controller {
     public function index(){
         $areas = Area::all();
-        $cities = City::all();
+        $cities = City::with('areas')->withCount('areas')->get();
+        $counts = Area::count();
 
         return view("admin.area.list", [
             "areas"=> $areas,
-            "cities"=> $cities,
+            "cities"=> $cities,   
+            "counts"=> $counts,             
         ]);
     }
 
@@ -52,39 +55,48 @@ class AreaController extends Controller
     //EDIT
     public function edit($areaId, Request $request){
         $area = Area::find($areaId);
+        $city = City::with('areas')->get();
+
         if (empty($area)) {
             return redirect()->route('cities.index');
         }
-        return view('admin.area.edit', compact('area'));
+        return view('admin.area.edit', [
+            "area"=> $area,
+            "city"=> $city,
+        ]);
     }
 
     //UPDATE
-    public function update($id, Request $request){
-        $area = Area::find($id);
+    public function update($id, Request $request) {
+        $area = Area::findOrFail($id);
+
         $validator = Validator::make($request->all(), [
-            'name' => 'required',            
+            'name'     => 'required|string|max:255',
+            'city_id'  => 'required|exists:cities,id', // ✅ validate city foreign key
+            'status'   => 'required|in:0,1',
         ]);
 
         if ($validator->passes()) {
-            $area->name = $request->name;
-            $area->slug = $request->slug;
-            $area->status = $request->status;             
+            $area->name    = $request->name;
+            $area->slug    = $request->slug ?? Str::slug($request->name); // fallback if slug empty
+            $area->status  = $request->status;
+            $area->city_id = $request->city_id; // ✅ assign city foreign key
             $area->save();
 
             $request->session()->flash('success', 'Area updated successfully');
 
             return response()->json([
-                'status' => true,
-                'message' => 'Area updated successfully'
+                'status'  => true,
+                'message' => 'Area updated successfully',
             ]);
-
         } else {
             return response()->json([
                 'status' => false,
-                'errors' => $validator->errors()
+                'errors' => $validator->errors(),
             ]);
         }
     }
+
 
     //DELETE 
     public function destroy($cityId, Request $request){

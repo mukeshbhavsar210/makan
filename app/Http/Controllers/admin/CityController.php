@@ -12,9 +12,11 @@ class CityController extends Controller
 {
     public function index(){
         $cities = City::all();
+        $counts = City::count();
 
         return view("admin.city.list", [
             "cities"=> $cities,
+            "counts"=> $counts,
         ]);
     }
 

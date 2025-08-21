@@ -92,6 +92,8 @@
 .alert .close { padding:7px 10px;}
 
 
+.img-responsive { width: 100%;}
+
 .form-group { margin-bottom: 10px; }
 .form-group label { font-size: 12px; font-weight: normal !important; margin-bottom: 5px; text-transform: uppercase; }
 .form-group .req { color:red; margin-left: 5px; font-weight: bold;}
@@ -157,3 +159,4 @@
 
 
 }
+
