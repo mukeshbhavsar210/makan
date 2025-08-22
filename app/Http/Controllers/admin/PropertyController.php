@@ -30,9 +30,12 @@ use Intervention\Image\Drivers\Gd\Driver;
 class PropertyController extends Controller {
 
     public function index(){
-        $properties = Property::where('user_id', Auth::user()->id)->with('saleType')->orderBy('created_at','DESC')->paginate(10);        
+        $properties = Property::where('user_id', auth()->id())->with('saleType')->orderBy('created_at','DESC')->paginate(10);        
+        $counts = Property::where('user_id', auth()->id())->count();
+
         return view('admin.property.index', [
-            'properties' => $properties
+            'properties' => $properties,
+            'counts' => $counts
         ]);
     }
 
@@ -47,7 +50,7 @@ class PropertyController extends Controller {
         $views = View::orderBy('title','ASC')->where('status',1)->get();    
         $categories = Category::orderBy('name','ASC')->where('status',1)->get();
         $propertyTypes = PropertyType::orderBy('name','ASC')->where('status',1)->get();
-        $saleTypes = SaleType::orderBy('name','ASC')->where('status',1)->get();        
+        $saleTypes = SaleType::orderBy('title','ASC')->where('status',1)->get();        
         $categories = Category::orderBy('name','ASC')->get();
 
         $data = [ 
@@ -541,8 +544,11 @@ class PropertyController extends Controller {
                                 ->with(['property','property.saleType','property.applications'])
                                 ->orderBy('created_at','DESC')->paginate(10);
 
+        $counts = SavedProperty::where('user_id', auth()->id())->count();
+
         return view('admin.property.saved',[
             'saved' => $saved,
+            'counts' => $counts,
         ]);
     }
 
@@ -554,8 +560,11 @@ class PropertyController extends Controller {
                     ->orderBy('created_at','DESC')
                     ->paginate(10);
 
+        $counts = PropertyApplication::where('user_id', auth()->id())->count();
+
         return view('admin.property.interested',[
             'interested' => $interested,
+            'counts' => $counts,
         ]);
     }
 }

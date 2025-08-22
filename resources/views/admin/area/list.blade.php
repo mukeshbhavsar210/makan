@@ -5,10 +5,10 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-9">
-                <h1>Areas <span class="badge badge-primary">{{ $counts }}</span></h1>
+                <h1>Areas <span class="badge rounded text-blue bg-blue-subtle">{{ $counts }}</span></h1>
             </div>   
             <div class="col-sm-3">
-                <button type="button" class="btn btn-primary float-lg-right" data-toggle="modal" data-target="#exampleModalRight">Add Area</button>
+                <button type="button" class="btn btn-primary btn-sm pull-right" data-bs-toggle="modal" data-bs-target="#addAreaModal">Add Area</button>                
             </div>         
         </div>
     </div>
@@ -18,19 +18,18 @@
     <div class="container-fluid">
         @include('admin.message')
 
-        <div class="modal fade drawer right-align" id="exampleModalRight" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade drawer right-align" id="addAreaModal" tabindex="-1" role="dialog" aria-labelledby="areaModal" aria-modal="true">
             <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Add City</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <form action="" method="post" id="areaForm" name="areaForm">
-                            <div class="modal-body">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h6 class="modal-title m-0" id="areaModal">Add Area</h6>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="" method="post" id="areaForm" name="areaForm">
+                        <div class="modal-body">
+                            <div class="modal-content">                                                            
                                 <div class="form-group">
-                                    <label for="name">City</label>
+                                    <label for="name">Select City</label>
                                     <select name="city" id="city" class="form-control">
                                         <option value="">Select a City</option>
                                         @if($cities->isNotEmpty())
@@ -42,85 +41,90 @@
                                     <p></p>                 
                                 </div>                         
                                 <div class="form-group">
-                                    <label for="name">Name</label>
-                                    <input type="text" name="name" id="name" class="form-control" placeholder="name">
+                                    <label for="name">Area Name</label>
+                                    <input type="text" name="name" id="name" class="form-control" placeholder="Area Name">
                                     <p></p>
                                 </div>                        
-                                <div class="form-group">
+                                <div class="form-group d-none">
                                     <label for="slug">Slug</label>
                                     <input type="text" readonly name="slug" id="slug" class="form-control" placeholder="">
                                     <p></p>
                                 </div>
-                            </div>                        
-                            <div class="modal-footer">                                
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Create</button>   
-                            </div>
-                        </form>
-                    </div>                   
+                            </div>                                                                                                            
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary btn-sm">Create Area</button>
+                        </div>
+                    </form>
                 </div>
-            </div>  
-            
-            <ul class="nav nav-tabs" id="cityTabs" role="tablist">
-                @foreach($cities as $index => $city)
-                    <li class="nav-item">
-                        <a class="nav-link {{ $index == 0 ? 'active' : '' }}" id="city-{{ $city->id }}-tab" data-toggle="tab" href="#city-{{ $city->id }}" role="tab">
-                            {{ $city->name }}
-                            <span class="badge badge-primary">{{ $city->areas_count }}</span>
-                        </a>
-                    </li>
-                @endforeach
-            </ul>
+            </div>
+        </div> 
 
-            <div class="tab-content border border-top-0" id="cityTabsContent">
-                @foreach($cities as $index => $city)
-                    <div class="tab-pane fade {{ $index == 0 ? 'show active' : '' }}" id="city-{{ $city->id }}" role="tabpanel" 
-                        aria-labelledby="city-{{ $city->id }}-tab">
-                       
-                        <table class="table table-hover text-nowrap">
-                            <thead>
-                                <tr>
-                                    <th>Area name</th>
-                                    <th width="100">Status</th>
-                                    <th width="100">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @if($areas->isNotEmpty())
-                                    @foreach($city->areas as $value)
-                                        <tr>
-                                            <td>{{ $value->name }}</td>
-                                            <td>
-                                                @if($value->status == 1)
-                                                    <svg class="text-success-500 h-6 w-6 text-success" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                                    </svg>
-                                                @else
-                                                <svg class="text-danger h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                                </svg>
+        <div class="row ">
+            <div class="col-12">
+                <div class="clearfix">
+                    <ul class="nav nav-tabs" id="cityTabs" role="tablist">
+                        @foreach($cities as $index => $city)
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link {{ $index == 0 ? 'active' : '' }}" id="city-{{ $city->id }}-tab" data-bs-toggle="tab" href="#city-{{ $city->id }}" role="tab" aria-selected="true">
+                                    {{ $city->name }}
+                                    <span class="badge rounded text-blue bg-blue-subtle ms-1">{{ $city->areas_count }}</span>
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <div class="card-body">
+                        <div class="tab-content" id="cityTabsContent">
+                            @foreach($cities as $index => $city)
+                                <div class="tab-pane fade {{ $index == 0 ? 'show active' : '' }}" id="city-{{ $city->id }}" role="tabpanel" 
+                                    aria-labelledby="city-{{ $city->id }}-tab">
+
+                                    <div class="table-responsive browser_users">
+                                        <table class="table">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th class="border-top-0">Area Name</th>
+                                                    <th class="border-top-0 text-end">Status</th>
+                                                    <th class="border-top-0 text-end">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @if($areas->isNotEmpty())
+                                                    @foreach($city->areas as $value)
+                                                        <tr>
+                                                            <td>{{ $value->name }}</td>
+                                                            <td class="text-end">   
+                                                                @if($value->status == 1)
+                                                                    <svg class="text-success-500 h-6 w-6 text-success" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                                    </svg>
+                                                                @else
+                                                                <svg class="text-danger h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                                </svg>
+                                                                @endif
+                                                            </td>
+                                                            <td class="text-end">   
+                                                                <a href="{{ route('areas.edit', $value->id ) }}"><i class="las la-pen text-secondary fs-18"></i></a>
+                                                                <a href="#" onclick="deleteArea({{ $value->id }})"><i class="las la-trash-alt text-secondary fs-18"></i></a>
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
                                                 @endif
-                                            </td>
-                                            <td>
-                                                <a href="{{ route('areas.edit', $value->id ) }}">
-                                                    <svg class="filament-link-icon w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                                        <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
-                                                    </svg>
-                                                </a>
-                                                <a href="#" onclick="deleteArea({{ $value->id }})" class="text-danger w-4 h-4 mr-1">
-                                                    <svg wire:loading.remove.delay="" wire:target="" class="filament-link-icon w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                                        <path	ath fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                                                    </svg>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                @endif
-                            </tbody>
-                        </table>
+                                            </tbody>
+                                        </table>                                              
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>   
                     </div>
-                @endforeach
-        </div>            
+                </div>
+            </div>                                                                                                   
+        </div>
 </section>
 
 @endsection

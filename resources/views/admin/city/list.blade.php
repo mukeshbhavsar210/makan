@@ -4,11 +4,11 @@
 <section class="content-header">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-sm-9">
-                <h1>Cities <span class="badge badge-primary">{{ $counts }}</span></h1>
+            <div class="col-sm-10 col-12">
+                <h1>Cities <span class="badge rounded text-blue bg-blue-subtle">{{ $counts }}</span></h1>
             </div> 
-            <div class="col-sm-3">
-                <button type="button" class="btn btn-primary float-lg-right" data-toggle="modal" data-target="#exampleModalRight">Add City</button>
+            <div class="col-sm-2 col-12">
+                <button type="button" class="btn btn-primary btn-sm pull-right" data-bs-toggle="modal" data-bs-target="#addCityModal">Add City</button>                
             </div>
         </div>
     </div>
@@ -18,37 +18,37 @@
     <div class="container-fluid">
         @include('admin.message')
 
-            <div class="modal fade drawer right-align" id="exampleModalRight" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Add City</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <form action="" method="post" id="cityForm" name="cityForm">
-                                <div class="modal-body">                        
-                                    <div class="form-group">
-                                        <label for="name">Name</label>
-                                        <input type="text" name="name" id="name" class="form-control" placeholder="City Name">
-                                        <p></p>
-                                    </div>                        
-                                    <div class="form-group d-none">
-                                        <label for="slug">Slug</label>
-                                        <input type="text" readonly name="slug" id="slug" class="form-control" placeholder="">
-                                        <p></p>
-                                    </div>
-                                </div>
-                            
-                                <div class="modal-footer">                                
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary">Create</button>   
-                                </div>
-                            </form>
-                        </div>                   
+        <div class="modal fade drawer right-align" id="addCityModal" tabindex="-1" role="dialog" aria-labelledby="areaModal" aria-modal="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h6 class="modal-title m-0" id="areaModal">Add City</h6>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
+                    <form action="" method="post" id="cityForm" name="cityForm">
+                        <div class="modal-body">
+                            <div class="modal-content">                                                            
+                                 <div class="form-group">
+                                    <label for="name">Name</label>
+                                    <input type="text" name="name" id="name" class="form-control" placeholder="City Name">
+                                    <p></p>
+                                </div>                        
+                                <div class="form-group">
+                                    <label for="slug">Slug</label>
+                                    <input type="text" readonly name="slug" id="slug" class="form-control" placeholder="">
+                                    <p></p>
+                                </div>
+                            </div>                                                                                                            
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary btn-sm">Create City</button>
+                        </div>
+                    </form>
                 </div>
+            </div>
+        </div> 
+
         <div class="card">
             <div class="card-body table-responsive p-0">
                 <table class="table table-hover text-nowrap">
