@@ -6,11 +6,9 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-9">
-                <h1>Builders <span class="badge badge-primary">{{ $counts }}</span></h1>
+                <h1>Developers <span class="badge rounded text-blue bg-blue-subtle">{{ $counts }}</span></h1>
             </div>
-            <div class="col-sm-3">
-                <button type="button" class="btn btn-primary float-lg-right" data-toggle="modal" data-target="#exampleModalRight">Add Builder</button>
-            </div>
+            
         </div>
     </div>
 </section>
@@ -249,7 +247,6 @@
                                         @endforelse
                                     </div>
                                 </tbody>
-
                             </tbody>
                         </table>
                     </div>

@@ -1,102 +1,152 @@
 <!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>Housing.com</title>
-		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-		<link rel="stylesheet" href="{{ asset('admin-assets/plugins/fontawesome-free/css/all.min.css') }}">
-		<!-- Theme style -->
-		<link rel="stylesheet" href="{{ asset('admin-assets/css/adminlte.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('admin-assets/plugins/dropzone/min/dropzone.min.css') }}">
-		<link rel="stylesheet" href="{{ asset('admin-assets/css/custom.css') }} ">
-        <link rel="stylesheet" href="{{ asset('admin-assets/plugins/summernote/summernote-bs4.min.css') }} ">
-        <link rel="stylesheet" href="{{ asset('admin-assets/plugins/select2/css/select2.min.css') }} ">
-        <link rel="stylesheet" href="{{ asset('admin-assets/css/datetimepicker.css') }} ">
+<html lang="en" dir="ltr" data-startbar="light" data-bs-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Housing.com</title>
+
+<link href="{{ asset('admin-assets/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css">
+<link href="{{ asset('admin-assets/css/icons.min.css') }}" rel="stylesheet" type="text/css">
+<link href="{{ asset('admin-assets/css/app.min.css') }}" rel="stylesheet" type="text/css">
+<link href="{{ asset('admin-assets/css/custom.css') }}" rel="stylesheet" type="text/css">
+<link href="{{ asset('admin-assets/plugins/summernote/summernote-bs4.min.css') }}" rel="stylesheet" type="text/css" >
+<link href="{{ asset('admin-assets/plugins/select2/css/select2.min.css') }}" rel="stylesheet" >
+<link href="{{ asset('admin-assets/css/datetimepicker.css') }}" rel="stylesheet" >
+<link href="{{ asset('admin-assets/plugins/dropzone/min/dropzone.min.css') }}" rel="stylesheet" >
+
+<meta name="csrf-token" content="{{ csrf_token() }}">
+</head>
+
+<body data-sidebar-size="collapsed">
+		<div class="topbar d-print-none">
+            <div class="container-xxl">
+                <nav class="topbar-custom d-flex justify-content-between nav-sticky" id="topbar-custom">    
+                    <ul class="topbar-item list-unstyled d-inline-flex align-items-center mb-0">                        
+                        <li>
+                            <button class="nav-link mobile-menu-btn nav-icon" id="togglemenu">
+                                <i class="iconoir-menu-scale"></i>
+                            </button>
+                        </li> 
+                        <li class="mx-3 welcome-text">
+                            <h3 class="mb-0 fw-bold text-truncate">Good Morning, {{ Auth::user()->name }}!</h3>
+                            <h6 class="mb-0 fw-normal text-muted text-truncate fs-14">Here's your overview this week.</h6>
+                        </li>                   
+                    </ul>
+
+                    <ul class="topbar-item list-unstyled d-inline-flex align-items-center mb-0">
+                        <li class="hide-phone app-search">
+                            <form role="search" action="#" method="get">
+                                <input type="search" name="search" class="form-control top-search mb-0" placeholder="Search here...">
+                                <button type="submit"><i class="iconoir-search"></i></button>
+                            </form>
+                        </li>                             
+                        <li class="topbar-item">
+                            <a class="nav-link nav-icon" href="javascript:void(0);" id="light-dark-mode">
+                                <i class="icofont-moon dark-mode"></i>
+                                <i class="icofont-sun light-mode"></i>
+                            </a>                    
+                        </li>                          
+                        <li class="dropdown topbar-item">
+                            <a class="nav-link dropdown-toggle arrow-none nav-icon" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                                <img src="{{ asset('profile_pic/thumb/'.Auth::user()->image) }}" alt="" class="thumb-lg rounded-circle">
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end py-0" style="">
+                                <div class="d-flex align-items-center dropdown-item py-2 bg-secondary-subtle">
+                                    <div class="flex-shrink-0">
+										{{ Auth::user()->name }} - {{ Auth::user()->role }}
+                                    </div>
+                                    <div class="flex-grow-1 ms-2 text-truncate align-self-center">
+                                        <h6 class="my-0 fw-medium text-dark fs-13"></h6>
+                                        <small class="text-muted mb-0"></small>
+                                    </div>
+                                </div>
+                                <div class="dropdown-divider mt-0"></div>
+								@if( Auth::user()->role == 'admin')
+									<a class="dropdown-item" href=""><i class="las la-user fs-18 me-1 align-text-bottom"></i> User</a>
+								@endif	
+                                <a class="dropdown-item" href=""><i class="las la-user fs-18 me-1 align-text-bottom"></i> Profile</a>
+                                <a class="dropdown-item" href=""><i class="las la-cog fs-18 me-1 align-text-bottom"></i> Settings</a>
+                                <div class="dropdown-divider mb-0"></div>
+                                <a class="dropdown-item text-danger" href="{{ route('account.logout') }}"><i class="las la-power-off fs-18 me-1 align-text-bottom"></i> Logout</a>
+                            </div>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
 		
-        <meta name="csrf-token" content="{{ csrf_token() }}">
-	</head>
-	<body class="hold-transition sidebar-mini">
-		<!-- Site wrapper -->
-		<div class="wrapper">
-			<!-- Navbar -->
-			<nav class="main-header navbar navbar-expand navbar-white navbar-light">
-				<!-- Right navbar links -->
-				<ul class="navbar-nav">
-					<li class="nav-item">
-					  	<a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
-					</li>
-				</ul>
-				<div class="navbar-nav pl-2">
-					<!-- <ol class="breadcrumb p-0 m-0 bg-white">
-						<li class="breadcrumb-item active">Dashboard</li>
-					</ol> -->
+        <div class="startbar d-print-none">
+            <div class="brand">
+                <a href="{{ route('front.home') }}" class="logo" target="_blank">
+                    <span>
+                        <img src="{{ asset('admin-assets/img/logo-small.png') }}" alt="logo-small" class="logo-sm">
+                    </span>
+                    <span class="">
+                        <img src="{{ asset('admin-assets/img/logo.png') }}" alt="logo-large" class="logo-lg logo-light">
+                        <img src="{{ asset('admin-assets/img/logo.png') }}" alt="logo-large" class="logo-lg logo-dark">
+                    </span>
+                </a>
+            </div>
+
+            <div class="startbar-menu">
+                <div class="startbar-collapse simplebar-scrollable-y" id="startbarCollapse" data-simplebar="init">
+                    <div class="simplebar-wrapper" style="margin: 0px -16px -16px;">
+                        <div class="simplebar-height-auto-observer-wrapper">
+                            <div class="simplebar-height-auto-observer"></div>
+                        </div>
+                        <div class="simplebar-mask">
+                            <div class="simplebar-offset" style="right: 0px; bottom: 0px;">
+                                <div class="simplebar-content-wrapper" tabindex="0" role="region" aria-label="scrollable content" style="height: 100%; overflow: hidden scroll;">
+                                    <div class="simplebar-content" >
+                                        <div class="d-flex align-items-start flex-column w-100">
+                                            @include('admin/layouts/sidebar')
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="simplebar-placeholder" style="width: 70px; height: 657px;"></div>
+                    </div>
+                    <div class="simplebar-track simplebar-horizontal" style="visibility: hidden;">
+                        <div class="simplebar-scrollbar" style="width: 0px; transform: translate3d(0px, 0px, 0px); display: none;">
+                        </div>
+                    </div>
+                    <div class="simplebar-track simplebar-vertical" style="visibility: visible;">
+                        <div class="simplebar-scrollbar" style="height: 413px; transform: translate3d(0px, 0px, 0px); display: block;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="startbar-overlay d-print-none"></div>
+			<div class="page-wrapper">
+            	<div class="page-content">
+                	<div class="container-xxl">
+                		@yield('content')
+					</div>
 				</div>
 
-				<ul class="navbar-nav ml-auto">
-					<li class="nav-item">
-						<a class="nav-link" data-widget="fullscreen" href="#" role="button">
-							<i class="fas fa-expand-arrows-alt"></i>
-						</a>
-					</li>
-					<li class="nav-item dropdown">
-						@if (Auth::user()->image != '')
-							<a class="nav-link p-0 pr-3" data-toggle="dropdown" href="#">
-								<img src="{{ asset('profile_pic/thumb/'.Auth::user()->image) }}" alt="avatar" class='img-circle elevation-2' width="40" height="40" alt="">
-							</a>
-						@else
-							<a class="nav-link p-0 pr-3" data-toggle="dropdown" href="#">
-								<img src="{{ asset('assets/images/avatar7.png') }}" alt="avatar" class='img-circle elevation-2' width="40" height="40" alt="">								
-							</a>
-						@endif
-						
-						<div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
-							<div class="dropdown-item">
-								<i class="fas fa-lock mr-2"></i> {{ Auth::user()->name }}
-							</div>
-							
-							<div class="dropdown-divider"></div>
-							<a href="{{ route('profile.index') }}" class="dropdown-item">
-								<i class="fas fa-lock mr-2"></i> Profile
-							</a>
-							
-							<div class="dropdown-divider"></div>
-							@if( Auth::user()->role == 'admin')
-								<a href="{{ route('users.index') }}" class="dropdown-item">
-									<i class="fas fa-users mr-2"></i> Users
-								</a>
-							@endif					
+				{{-- <footer class="footer text-center text-sm-start d-print-none">
+                    <div class="container-xxl">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card mb-0 rounded-bottom-0">
+                                    <div class="card-body">
+                                        <p class="text-muted mb-0"> © <script> document.write(new Date().getFullYear()) </script> Heaven Prints </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </footer> --}}
+			</div>		
 
-							<div class="dropdown-divider"></div>
-							<a href="{{ route('account.logout') }}" class="dropdown-item text-danger">
-								<i class="fas fa-sign-out-alt mr-2"></i> Logout
-							</a>
-						</div>
-					</li>
-				</ul>
-			</nav>
-			<!-- /.navbar -->
-
-            @include('admin/layouts/sidebar')
-
-			<!-- Content Wrapper. Contains page content -->
-			<div class="content-wrapper">
-                @yield('content')
-			</div>
-			<!-- /.content-wrapper -->
-			<footer class="main-footer">
-				<strong>Copyright &copy; 2014-2022 AmazingShop All rights reserved.
-			</footer>
-
-		</div>
-		<!-- ./wrapper -->
-		<!-- jQuery -->
 		<script src="{{ asset('admin-assets/plugins/jquery/jquery.min.js') }}"></script>
-		<!-- Bootstrap 4 -->
-		<script src="{{ asset('admin-assets/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>		
-		<!-- AdminLTE App -->
-		<script src="{{ asset('admin-assets/js/adminlte.min.js') }}"></script>
-        <script src="{{ asset('admin-assets/plugins/dropzone/min/dropzone.min.js') }}"></script>
+		<script src="{{ asset('admin-assets/js/bootstrap.min.js') }}"></script>
+		<script src="{{ asset('admin-assets/js/simplebar.js') }}"></script>
+		<script src="{{ asset('admin-assets/js/app.js') }}"></script>
+
+		<script src="{{ asset('admin-assets/plugins/dropzone/min/dropzone.min.js') }}"></script>
         <script src="{{ asset('admin-assets/plugins/summernote/summernote-bs4.min.js') }}"></script>
         <script src="{{ asset('admin-assets/plugins/select2/js/select2.min.js') }}"></script>
         <script src="{{ asset('admin-assets/js/datetimepicker.js') }}"></script>

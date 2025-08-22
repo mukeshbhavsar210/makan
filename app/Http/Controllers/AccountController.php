@@ -174,7 +174,7 @@ class AccountController extends Controller
 
         if ($validator->passes()) {
             if(Auth::attempt([ 'email' => $request->email, 'password' => $request->password ])){
-                return redirect()->route('front.home');
+                return redirect()->route('properties.index');
             } else {
                 return redirect()->route('account.login')->with('error','Either Email/Password Incorrect');
             }

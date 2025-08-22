@@ -8,7 +8,7 @@
                     <h1>Create Property</h1>
                 </div>
                 <div class="col-sm-6 text-right">
-                    <a href="{{ route('properties.index') }}" class="btn btn-primary">Back</a>
+                    <a href="{{ route('properties.index') }}" class="btn btn-primary btn-sm pull-right">Back</a>
                 </div>
             </div>
         </div>
