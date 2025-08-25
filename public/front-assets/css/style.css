@@ -355,9 +355,11 @@ header { position: fixed; width: 100%; top:0; left: 0; z-index: 99; background-c
 .propery-listings .details .first-group .left .title .rera .icon { height: 13px; }
 
 .propery-listings .details .first-group .right { width: 10%; text-align: right;}
-.propery-listings .details .second-group { margin-bottom: 10px; margin-top: 10px;}
-.propery-listings .details .second-group .price { font-weight: bold; }
-.propery-listings .details .second-group .small-text { font-size: 12px; color: #656565;}
+.propery-listings .details .second-group { margin-bottom: 10px; margin-top: 10px; display: flex; }
+.propery-listings .details .second-group .room-item { color: #656565; padding-right: 20px; margin-right: 20px; border-right:1px #ccc solid;}
+.propery-listings .details .second-group .room-item p { font-size: 12px; }
+.propery-listings .details .second-group .room-item .price { font-weight: bold; font-size: 14px;  }
+
 .propery-listings .details .third-group { margin-bottom: 20px; margin-top: 20px;}
 .propery-listings .details .developer { border-top: 1px #e5e5e5 solid; padding-top:10px; margin-bottom: 10px; display: flex; justify-content: space-between;}
 .propery-listings .details .developer .branding { width: 90%; display: flex; justify-content:left;}

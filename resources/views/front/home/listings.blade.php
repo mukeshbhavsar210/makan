@@ -74,21 +74,44 @@
                                                 <img class="icon" src="{{ asset('front-assets/images/tick.svg') }}" /> RERA
                                             </div>
                                         </h3>                                                                            
-                                        <p>{{ $value->room->title }} {{ $value->propertyType->name }} in {{ $value->area->name }}.</p>
+                                        <p>
+                                            @php
+                                                $roomsArray = json_decode($value->rooms, true) ?? [];
+                                                $titles = array_column($roomsArray, 'title');
+                                            @endphp
+
+                                            {{ implode(', ', $titles) }}
+
+                                            BHK  in {{ $value->area->name }}.</p>
                                     </div>
                                     <div class="right">
-                                        
-                                        @if ($value->category->name == 'Rent')
-                                            <span class="rh-ultra-featured">{{ $value->category->name }}</span>
+                                        @if ($value->category == 'Rent')
+                                            <span class="rh-ultra-featured">{{ $value->category }}</span>
                                         @else
-                                            <span class="rh-ultra-hot">{{ $value->category->name }}</span>
+                                            <span class="rh-ultra-hot">{{ $value->category }}</span>
                                         @endif
                                     </div>                                                                                                 
-                                </div>
+                                </div>  
 
                                 <div class="second-group">
-                                    <p class="small-text">{{ $value->room->title }} {{ $value->propertyType->name }}</p>
-                                    <p class="price">Rs.{{ $value->price }}/-</p>
+                                    @php                                       
+                                        $roomsArray = json_decode($value->rooms, true) ?? [];
+                                        $propertyTypes = json_decode($value->property_types, true) ?? [];
+                                    @endphp
+
+                                    @if(!empty($roomsArray))
+                                        @foreach($roomsArray as $room)
+                                            <div class="room-item">
+                                                <p>
+                                                    {{ $room['title'] ?? '' }} BHK
+                                                </p>
+
+                                                @if(!empty($room['price']))
+                                                    <p class="price">₹{{ number_format($room['price']) }}</p>
+                                                @endif
+                                            </div>
+                                        @endforeach
+                                    @endif
                                 </div>
 
                                 <div class="third-group">
@@ -207,7 +230,7 @@ $('.custom-checkbox-label input').on('change', function () {
         $(this).closest('.custom-checkbox-label').removeClass('active');
     }
 
-    updateDropdownLabel('#typeDropdown', 'input[name="type[]"]', 'Property Type');
+    updateDropdownLabel('#propertyTypeDropdown', 'input[name="property_type[]"]', 'Property Type');
     updateDropdownLabel('#roomDropdown', 'input[name="room[]"]', 'BHK Type');
     updateDropdownLabel('#bathroomDropdown', 'input[name="bathroom[]"]', 'Bathrooms');
     updateDropdownLabel('#listedTypeDropdown', 'input[name="listed_type[]"]', 'Listed By');    
@@ -216,13 +239,14 @@ $('.custom-checkbox-label input').on('change', function () {
 });
 
 // Initialize all dropdown labels on page load
-updateDropdownLabel('#typeDropdown', 'input[name="type[]"]', 'Property Type');
+updateDropdownLabel('#propertyTypeDropdown', 'input[name="property_type[]"]', 'Property Type');
 updateDropdownLabel('#roomDropdown', 'input[name="room[]"]', 'BHK Type');
 updateDropdownLabel('#bathroomDropdown', 'input[name="bathroom[]"]', 'Bathrooms');
 updateDropdownLabel('#listedTypeDropdown', 'input[name="listed_type[]"]', 'Listed By');
 updateDropdownLabel('#facingDropdown', 'input[name="facing[]"]', 'Facings');
 updateDropdownLabel('#areasDropdown', 'input[name="areas[]"]', 'Areas');
 updateDropdownLabel('#saletypeDropdown', 'input[name="saletype"]', 'Sale Type');
+updateDropdownLabel('#constructionDropdown', 'input[name="construction_type"]', 'Construction Type');
 
 function updateDropdownLabel(dropdownId, checkboxSelector, defaultLabel) {
     let selectedLabels = [];

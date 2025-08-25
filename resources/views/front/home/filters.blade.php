@@ -2,18 +2,35 @@
     <form action="{{ route('properties') }}" > 
         <div class="container-fluid">
             <div class="filters">
-                <div class="dropdown {{ request('category') == 27 ? 'hidden-property-type' : '' }}">
-                    <button class="btn control-btn btnFilter dropdown-toggle" type="button" id="typeDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <div class="dropdown">
+                    <button class="btn control-btn btnFilter dropdown-toggle" type="button" id="propertyTypeDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                         Property Type
                     </button>
-                    <ul class="dropdown-menu" aria-labelledby="typeDropdown" >
+                    <ul class="dropdown-menu" aria-labelledby="propertyTypeDropdown">
+                        @php
+                            $propertyTypes = [
+                                ['id' => 1, 'title' => 'Apartment'],
+                                ['id' => 2, 'title' => 'Plot'],
+                                ['id' => 3, 'title' => 'Studio'],
+                                ['id' => 4, 'title' => 'Apartment'],
+                                ['id' => 5, 'title' => 'Plot'],
+                                ['id' => 6, 'title' => 'Studio'],
+                                ['id' => 7, 'title' => 'Apartment'],
+                                ['id' => 8, 'title' => 'Plot'],
+                                ['id' => 9, 'title' => 'Studio'],
+                            ];
+                        @endphp
+
                         @foreach ($propertyTypes as $value)
                             <li>
-                                <label class="dropdown-item custom-checkbox-label {{ is_array(request('type')) && in_array($value->id, request('type')) ? 'active' : '' }}">
-                                    <input type="checkbox" name="type[]" value="{{ $value->id }}" data-label="{{ $value->name }}"
-                                        {{ is_array(request('type')) && in_array($value->id, request('type')) ? 'checked' : '' }}>
+                                <label class="dropdown-item custom-checkbox-label {{ is_array(request('property_type')) && in_array($value['id'], request('property_type')) ? 'active' : '' }}">
+                                    <input type="checkbox" 
+                                        name="property_type[]" 
+                                        value="{{ $value['id'] }}"
+                                        data-label="{{ $value['title'] }}"
+                                        {{ is_array(request('property_type')) && in_array($value['id'], request('property_type')) ? 'checked' : '' }}>
                                     <span class="checkmark"></span>
-                                    {{ $value->name }}
+                                    {{ $value['title'] }}
                                     <svg fill="#ffffff" width="14px" height="14px" viewBox="-3.5 0 19 19" xmlns="http://www.w3.org/2000/svg" class="cf-icon-svg">
                                         <path d="M11.383 13.644A1.03 1.03 0 0 1 9.928 15.1L6 11.172 2.072 15.1a1.03 1.03 0 1 1-1.455-1.456l3.928-3.928L.617 5.79a1.03 1.03 0 1 1 1.455-1.456L6 8.261l3.928-3.928a1.03 1.03 0 0 1 1.455 1.456L7.455 9.716z"></path>
                                     </svg>
@@ -28,14 +45,25 @@
                         BHK Type
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="roomDropdown" >
+                        @php
+                            $rooms = [
+                                ['id' => 1, 'title' => '1 RK', 'price' => ''],
+                                ['id' => 2, 'title' => '1 BHK', 'price' => ''],
+                                ['id' => 3, 'title' => '2 BHK', 'price' => '7500000'],
+                                ['id' => 4, 'title' => '3 BHK', 'price' => '9500000'],
+                                ['id' => 5, 'title' => '4 BHK', 'price' => ''],
+                                ['id' => 6, 'title' => '5 BHK', 'price' => '']
+                            ];
+                        @endphp
+
                         @foreach ($rooms as $value)
                             <li>
-                                <label class="dropdown-item custom-checkbox-label {{ is_array(request('room')) && in_array($value->id, request('room')) ? 'active' : '' }}">
-                                    <input type="checkbox" name="room[]" value="{{ $value->id }}"
-                                        data-label="{{ $value->title }}"
-                                        {{ is_array(request('room')) && in_array($value->id, request('room')) ? 'checked' : '' }}>
+                                <label class="dropdown-item custom-checkbox-label {{ is_array(request('room')) && in_array($value['id'], request('room')) ? 'active' : '' }}">
+                                    <input type="checkbox" name="room[]" value="{{ $value['id'] }}"
+                                        data-label="{{ $value['title'] }}"
+                                        {{ is_array(request('room')) && in_array($value['id'], request('room')) ? 'checked' : '' }}>
                                     <span class="checkmark"></span>
-                                    {{ $value->title }}
+                                    {{ $value['title'] }}
                                     <svg fill="#ffffff" width="14px" height="14px" viewBox="-3.5 0 19 19" xmlns="http://www.w3.org/2000/svg" class="cf-icon-svg">
                                         <path d="M11.383 13.644A1.03 1.03 0 0 1 9.928 15.1L6 11.172 2.072 15.1a1.03 1.03 0 1 1-1.455-1.456l3.928-3.928L.617 5.79a1.03 1.03 0 1 1 1.455-1.456L6 8.261l3.928-3.928a1.03 1.03 0 0 1 1.455 1.456L7.455 9.716z"></path>
                                     </svg>
@@ -61,19 +89,29 @@
                         </ul>
                     </div>
                 </div>
-
+               
                 <div class="dropdown">
                     <button class="btn btnFilter dropdown-toggle" type="button" id="saletypeDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                         Sale Type
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="saletypeDropdown">
+                        @php
+                            $saletypes = [
+                                ['id' => 'new', 'title' => 'New'],
+                                ['id' => 'resale', 'title' => 'Resale'],
+                            ];
+                        @endphp
+
                         @foreach ($saletypes as $value)
                             <li>
-                                <label class="dropdown-item custom-radio-label {{ request('saletype') == $value->id ? 'active' : '' }}">
-                                    <input type="radio" name="saletype" value="{{ $value->id }}" data-label="{{ $value->title }}"
-                                        {{ request('saletype') == $value->id ? 'checked' : '' }}>
+                                <label class="dropdown-item custom-radio-label {{ request('saletype') == $value['id'] ? 'active' : '' }}">
+                                    <input type="radio" 
+                                        name="saletype" 
+                                        value="{{ $value['id'] }}" 
+                                        data-label="{{ $value['title'] }}"
+                                        {{ request('saletype') == $value['id'] ? 'checked' : '' }}>
                                     <span class="radiomark"></span>
-                                    {{ $value->title }}                                    
+                                    {{ $value['title'] }}
                                 </label>
                             </li>
                         @endforeach
@@ -84,14 +122,24 @@
                     <button class="btn btnFilter dropdown-toggle" type="button" id="constructionDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                         Construction
                     </button>
-                    <ul class="dropdown-menu" aria-labelledby="constructionDropdown">
-                        @foreach ($constructions as $value)
+                    <ul class="dropdown-menu" aria-labelledby="constructionTypeDropdown">
+                        @php
+                            $constructionTypes = [
+                                ['id' => 'under', 'title' => 'Under Construction'],
+                                ['id' => 'ready', 'title' => 'Ready to Move'],
+                            ];
+                        @endphp
+
+                        @foreach ($constructionTypes as $value)
                             <li>
-                                <label class="dropdown-item custom-radio-label {{ request('construction') == $value->id ? 'active' : '' }}">
-                                    <input type="radio" name="construction" value="{{ $value->id }}" data-label="{{ $value->name }}"
-                                        {{ request('construction') == $value->id ? 'checked' : '' }}>
+                                <label class="dropdown-item custom-radio-label {{ request('construction') == $value['id'] ? 'active' : '' }}">
+                                    <input type="radio" 
+                                        name="construction" 
+                                        value="{{ $value['id'] }}" 
+                                        data-label="{{ $value['title'] }}"
+                                        {{ request('construction') == $value['id'] ? 'checked' : '' }}>
                                     <span class="radiomark"></span>
-                                    {{ $value->title }}
+                                    {{ $value['title'] }}
                                 </label>
                             </li>
                         @endforeach
@@ -118,7 +166,7 @@
                                 <div class="tab-pane fade show active" id="listedby-content" role="tabpanel">
                                     <div class="more-filter-checkbox">
                                         <h6>Listed By</h6>
-                                        @foreach ($listedTypes as $value)
+                                        {{-- @foreach ($listedTypes as $value)
                                             <label class="custom-checkbox-label {{ is_array(request('listed_type')) && in_array($value->id, request('listed_type')) ? 'active' : '' }}">
                                                 <input type="checkbox" name="listed_type[]" value="{{ $value->id }}" data-label="{{ $value->title }}"
                                                     {{ is_array(request('listed_type')) && in_array($value->id, request('listed_type')) ? 'checked' : '' }}>
@@ -128,7 +176,7 @@
                                                     <path d="M11.383 13.644A1.03 1.03 0 0 1 9.928 15.1L6 11.172 2.072 15.1a1.03 1.03 0 1 1-1.455-1.456l3.928-3.928L.617 5.79a1.03 1.03 0 1 1 1.455-1.456L6 8.261l3.928-3.928a1.03 1.03 0 0 1 1.455 1.456L7.455 9.716z"></path>
                                                 </svg>  
                                             </label>
-                                        @endforeach
+                                        @endforeach --}}
                                     </div>
                                 </div>
 
@@ -150,35 +198,28 @@
                                 <div class="tab-pane fade" id="amenities-content" role="tabpanel">
                                     <div class="more-filter-checkbox">
                                         <h6>Amenities</h6> 
-                                        
-                                        {{-- @foreach ($amenities as $amenity)
-                                            <label class="custom-checkbox-label {{ is_array(request('amenities')) && in_array($amenity->id, request('amenities')) ? 'active' : '' }}">
-                                                <input class="hidden" type="checkbox" 
-                                                    name="amenities[]" 
-                                                    value="{{ $amenity->id }}" 
-                                                    data-label="{{ $amenity->title }}"
-                                                    {{ is_array(request('amenities')) && in_array($amenity->id, request('amenities')) ? 'checked' : '' }}>
-                                                <span class="radiomark"></span>
-                                                {{ $amenity->title }}
+                                        @php
+                                            $amenities = [
+                                                ['id' => 1, 'title' => 'Gated Community'],
+                                                ['id' => 2, 'title' => 'Lift'],
+                                                ['id' => 3, 'title' => 'Swimming Pool'],
+                                                ['id' => 4, 'title' => 'Gym'],
+                                                ['id' => 5, 'title' => 'Security'],
+                                                ['id' => 6, 'title' => 'Parking'],
+                                                ['id' => 7, 'title' => 'Gas Pipeline'],
+                                            ];
+                                        @endphp
+
+                                        @foreach ($amenities as $value)
+                                            <label class="custom-checkbox-label {{ is_array(request('amenities')) && in_array($value['id'], request('amenities')) ? 'active' : '' }}">
+                                                <input class="hidden" type="checkbox" name="amenities[]" value="{{ $value['id'] }}" data-label="{{ $value['title'] }}"
+                                                    {{ is_array(request('amenities')) && in_array($value['id'], request('amenities')) ? 'checked' : '' }}><span class="radiomark"></span>
+                                                {{ $value['title'] }}
                                                 <svg fill="#ffffff" width="14px" height="14px" viewBox="-3.5 0 19 19" xmlns="http://www.w3.org/2000/svg" class="cf-icon-svg">
                                                     <path d="M11.383 13.644A1.03 1.03 0 0 1 9.928 15.1L6 11.172 2.072 15.1a1.03 1.03 0 1 1-1.455-1.456l3.928-3.928L.617 5.79a1.03 1.03 0 1 1 1.455-1.456L6 8.261l3.928-3.928a1.03 1.03 0 0 1 1.455 1.456L7.455 9.716z"></path>
                                                 </svg>
                                             </label>
-                                        @endforeach --}}
-
-                                        @foreach ($properties as $property)
-                                            @foreach ($property->amenities as $amenity)
-                                                <label class="custom-checkbox-label {{ is_array(request('amenities')) && in_array($amenity->id, request('amenities')) ? 'active' : '' }}">
-                                                    <input class="hidden" type="checkbox" name="amenities[]" value="{{ $amenity->id }}" data-label="{{ $amenity->title }}"
-                                                        {{ is_array(request('amenities')) && in_array($amenity->id, request('amenities')) ? 'checked' : '' }}>
-                                                    <span class="radiomark"></span>
-                                                    {{ $amenity->title }}
-                                                    <svg fill="#ffffff" width="14px" height="14px" viewBox="-3.5 0 19 19" xmlns="http://www.w3.org/2000/svg" class="cf-icon-svg">
-                                                        <path d="M11.383 13.644A1.03 1.03 0 0 1 9.928 15.1L6 11.172 2.072 15.1a1.03 1.03 0 1 1-1.455-1.456l3.928-3.928L.617 5.79a1.03 1.03 0 1 1 1.455-1.456L6 8.261l3.928-3.928a1.03 1.03 0 0 1 1.455 1.456L7.455 9.716z"></path>
-                                                    </svg>
-                                                </label>                                                    
-                                            @endforeach
-                                        @endforeach                                        
+                                        @endforeach
                                     </div>
                                 </div>
 
@@ -187,16 +228,25 @@
                                     <div class="age-checkbox">
                                         <h6>Property Age</h6>
                                         <div class="loop-radio">
+                                             @php
+                                                $ages = [
+                                                    ['id' => '1_year', 'title' => 'Less than 1 year'],
+                                                    ['id' => '3_years', 'title' => 'Less than 3 year'],
+                                                    ['id' => '5_years', 'title' => 'Less than 5 year'],
+                                                    ['id' => '6_years', 'title' => 'More than 5 year'],
+                                                ];
+                                            @endphp
+
                                             @foreach ($ages as $value)
                                                 <div class="individual">
-                                                    <label class="custom-radio-label {{ request('age') == $value->id ? 'active' : '' }}">
-                                                        <input class="hidden" type="radio" name="age" value="{{ $value->id }}" data-label="{{ $value->title }}"
-                                                            {{ request('age') == $value->id ? 'checked' : '' }}>
+                                                    <label class="custom-radio-label {{ request('age') == $value['id'] ? 'active' : '' }}">
+                                                        <input type="radio" 
+                                                            name="age" 
+                                                            value="{{ $value['id'] }}" 
+                                                            data-label="{{ $value['title'] }}"
+                                                            {{ request('age') == $value['id'] ? 'checked' : '' }}>
                                                         <span class="radiomark"></span>
-                                                        {{ $value->title }}
-                                                        <svg fill="#ffffff" width="14px" height="14px" viewBox="-3.5 0 19 19" xmlns="http://www.w3.org/2000/svg" class="cf-icon-svg">
-                                                            <path d="M11.383 13.644A1.03 1.03 0 0 1 9.928 15.1L6 11.172 2.072 15.1a1.03 1.03 0 1 1-1.455-1.456l3.928-3.928L.617 5.79a1.03 1.03 0 1 1 1.455-1.456L6 8.261l3.928-3.928a1.03 1.03 0 0 1 1.455 1.456L7.455 9.716z"></path>
-                                                        </svg>
+                                                        {{ $value['title'] }}
                                                     </label>
                                                 </div>
                                             @endforeach
@@ -208,16 +258,27 @@
                                 <div class="tab-pane fade" id="facing-content" role="tabpanel">
                                     <h6>Facings</h6>
                                     <div class="more-filter-checkbox">
-                                        @foreach ($facings as $value)                                            
-                                            <label class="custom-checkbox-label {{ is_array(request('facing')) && in_array($value->id, request('facing')) ? 'active' : '' }}">
-                                                <input type="checkbox" name="facing[]" value="{{ $value->id }}" data-label="{{ $value->title }}"
-                                                    {{ is_array(request('facing')) && in_array($value->id, request('facing')) ? 'checked' : '' }}>
-                                                <span class="checkmark"></span>
-                                                {{ $value->title }}
+                                        @php
+                                            $facings = [
+                                                ['id' => 1, 'title' => 'North'],
+                                                ['id' => 2, 'title' => 'East'],
+                                                ['id' => 3, 'title' => 'West'],
+                                                ['id' => 4, 'title' => 'South'],
+                                                ['id' => 5, 'title' => 'North-East'],
+                                                ['id' => 6, 'title' => 'North-West'],
+                                                ['id' => 7, 'title' => 'South-East'],
+                                                ['id' => 8, 'title' => 'South-West']
+                                            ];
+                                        @endphp
+
+                                        @foreach ($facings as $value)
+                                            <label class="custom-checkbox-label {{ is_array(request('facing')) && in_array($value['id'], request('facing')) ? 'active' : '' }}">
+                                                <input type="checkbox" name="facing[]" value="{{ $value['id'] }}" data-label="{{ $value['title'] }}"
+                                                    {{ is_array(request('facing')) && in_array($value['id'], request('facing')) ? 'checked' : '' }}><span class="checkmark"></span>{{ $value['title'] }}
                                                 <svg fill="#ffffff" width="14px" height="14px" viewBox="-3.5 0 19 19" xmlns="http://www.w3.org/2000/svg" class="cf-icon-svg">
                                                     <path d="M11.383 13.644A1.03 1.03 0 0 1 9.928 15.1L6 11.172 2.072 15.1a1.03 1.03 0 1 1-1.455-1.456l3.928-3.928L.617 5.79a1.03 1.03 0 1 1 1.455-1.456L6 8.261l3.928-3.928a1.03 1.03 0 0 1 1.455 1.456L7.455 9.716z"></path>
                                                 </svg>
-                                            </label>                                            
+                                            </label>
                                         @endforeach
                                     </div>
                                 </div>
@@ -226,12 +287,25 @@
                                 <div class="tab-pane fade" id="bathroom-content" role="tabpanel">
                                     <div class="more-filter-checkbox">
                                         <h6>Bathrooms</h6>
+                                        @php
+                                            $bathrooms = [
+                                                ['id' => 1, 'title' => '1 Bath'],
+                                                ['id' => 2, 'title' => '2 Baths'],
+                                                ['id' => 3, 'title' => '3 Baths'],
+                                                ['id' => 4, 'title' => '4 Baths'],
+                                                ['id' => 5, 'title' => '5 Baths'],
+                                            ];
+                                        @endphp
+
                                         @foreach ($bathrooms as $value)
-                                            <label class="custom-checkbox-label {{ is_array(request('bathroom')) && in_array($value->id, request('bathroom')) ? 'active' : '' }}">
-                                                <input type="checkbox" name="bathroom[]" value="{{ $value->id }}" data-label="{{ $value->title }}"
-                                                    {{ is_array(request('bathroom')) && in_array($value->id, request('bathroom')) ? 'checked' : '' }}>
+                                            <label class="custom-checkbox-label {{ is_array(request('bathroom')) && in_array($value['id'], request('bathroom')) ? 'active' : '' }}">
+                                                <input type="checkbox" 
+                                                    name="bathroom[]" 
+                                                    value="{{ $value['id'] }}" 
+                                                    data-label="{{ $value['title'] }}"
+                                                    {{ is_array(request('bathroom')) && in_array($value['id'], request('bathroom')) ? 'checked' : '' }}>
                                                 <span class="checkmark"></span>
-                                                {{ $value->title }}
+                                                {{ $value['title'] }}
                                                 <svg fill="#ffffff" width="14px" height="14px" viewBox="-3.5 0 19 19" xmlns="http://www.w3.org/2000/svg" class="cf-icon-svg">
                                                     <path d="M11.383 13.644A1.03 1.03 0 0 1 9.928 15.1L6 11.172 2.072 15.1a1.03 1.03 0 1 1-1.455-1.456l3.928-3.928L.617 5.79a1.03 1.03 0 1 1 1.455-1.456L6 8.261l3.928-3.928a1.03 1.03 0 0 1 1.455 1.456L7.455 9.716z"></path>
                                                 </svg>

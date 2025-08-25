@@ -10,19 +10,23 @@
         </div>
        
         <div class="search-engine">
-            <form action="{{ route('properties') }}" >            
+            <form action="{{ route('properties.index', request('category', 'Buy')) }}" method="GET">
                 <ul class="rentBuy">
-                    @if ($categories)                               
-                        @foreach ($categories as $value)
-                            <li>
-                                <label class="{{ request('category') == $value->id || (!request('category') && $loop->first) ? 'activeTab' : '' }}">
-                                    <input type="radio" name="category" value="{{ $value->id }}"
-                                        {{ request('category') == $value->id || (!request('category') && $loop->first) ? 'checked' : '' }}>
-                                    {{ $value->name }}
-                                </label>
-                            </li>
-                        @endforeach                            
-                    @endif
+                    @php
+                        $categories = ['Buy', 'Rent'];
+                    @endphp
+
+                    @foreach ($categories as $value)
+                        <li>
+                            <label class="{{ request('category') == $value || (!request('category') && $loop->first) ? 'activeTab' : '' }}">
+                                <input type="radio" 
+                                    name="category" 
+                                    value="{{ $value }}"
+                                    {{ request('category') == $value || (!request('category') && $loop->first) ? 'checked' : '' }}>
+                                {{ $value }}
+                            </label>
+                        </li>
+                    @endforeach
                 </ul>
 
                 <div class="search-controls">
@@ -37,7 +41,12 @@
                         </select>           
 
                         <div id="search-container" style="display:none;">
-                            <input value="{{ Request::get('keyword') }}" type="text" name="keyword" id="keyword" placeholder="Search for locality, landmark, project or builder" class="form-control">
+                            <input value="{{ Request::get('keyword') }}" 
+                                type="text" 
+                                name="keyword" 
+                                id="keyword" 
+                                placeholder="Search for locality, landmark, project or builder" 
+                                class="form-control">
 
                             <ul id="areas" class="areas-list" style="display:none;">
                                 <li>Popular search in </li>
