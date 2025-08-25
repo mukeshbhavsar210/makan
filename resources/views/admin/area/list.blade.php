@@ -77,19 +77,17 @@
                 </div>
                 
                 <div class="card">
-                    <div class="card-body">
+                    <div class="card-body table-responsive">
                         <div class="tab-content" id="cityTabsContent">
                             @foreach($cities as $index => $city)
-                                <div class="tab-pane fade {{ $index == 0 ? 'show active' : '' }}" id="city-{{ $city->id }}" role="tabpanel" 
-                                    aria-labelledby="city-{{ $city->id }}-tab">
-
+                                <div class="tab-pane fade {{ $index == 0 ? 'show active' : '' }}" id="city-{{ $city->id }}" role="tabpanel" aria-labelledby="city-{{ $city->id }}-tab">
                                     <div class="table-responsive browser_users">
-                                        <table class="table">
+                                        <table class="table mb-0">
                                             <thead class="table-light">
                                                 <tr>
                                                     <th class="border-top-0">Area Name</th>
-                                                    <th class="border-top-0 text-end">Status</th>
-                                                    <th class="border-top-0 text-end">Action</th>
+                                                    <th class="border-top-0">Status</th>
+                                                    <th class="border-top-0">Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -97,7 +95,7 @@
                                                     @foreach($city->areas as $value)
                                                         <tr>
                                                             <td>{{ $value->name }}</td>
-                                                            <td class="text-end">   
+                                                            <td>   
                                                                 @if($value->status == 1)
                                                                     <svg class="text-success-500 h-6 w-6 text-success" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
                                                                         <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -108,7 +106,7 @@
                                                                 </svg>
                                                                 @endif
                                                             </td>
-                                                            <td class="text-end">   
+                                                            <td>   
                                                                 <a href="{{ route('areas.edit', $value->id ) }}"><i class="las la-pen text-secondary fs-18"></i></a>
                                                                 <a href="#" onclick="deleteArea({{ $value->id }})"><i class="las la-trash-alt text-secondary fs-18"></i></a>
                                                             </td>

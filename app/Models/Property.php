@@ -24,10 +24,6 @@ class Property extends Model {
         return $this->belongsTo(Bathroom::class);
     }
 
-    public function builder(){
-        return $this->belongsTo(Builder::class);
-    }
-
     public function construction(){
         return $this->belongsTo(Construction::class);
     }
@@ -80,14 +76,17 @@ class Property extends Model {
         return $this->hasMany(SavedProperty::class);
     }
 
-    public function builderName() {
-        return $this->hasMany(\App\Models\Builder::class, 'builder_id');
-    }
-
     public function amenities() {
         return $this->belongsToMany(Amenity::class, 'amenity_property');
     }
 
+    public function builder(){
+        return $this->belongsTo(Builder::class);
+    }
+
+    public function builderName() {
+        return $this->hasMany(\App\Models\Builder::class, 'builder_id');
+    }
 
     public function builders() {
         return $this->belongsTo(Builder::class, 'builder_id');

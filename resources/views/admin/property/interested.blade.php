@@ -23,11 +23,10 @@
                         <thead class="table-light">
                             <tr>
                                 <th class="border-top-0">Property Name</th>
-                                <th class="border-top-0">Counts</th>
+                                <th class="border-top-0">Developer</th>
                                 <th class="border-top-0">Interested</th>
-                                <th class="border-top-0">Saved Date</th>                                
-                                <th class="border-top-0">Status</th>
-                                <th class="border-top-0">Action</th>
+                                <th class="border-top-0">Saved Date</th> 
+                                <th class="border-top-0">Delete</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -48,45 +47,46 @@
                                                 @endif
                                             </a>
                                             <div class="flex-grow-1 text-truncate"> 
-                                                <h5 class="m-0">{{ $value->property->title }}</h5>
+                                                <h5 class="m-0">{{ $value->property->title }} <span class="badge rounded text-blue bg-blue-subtle">{{ $value->property->applications->count() }}</span></h5>
                                                 <a href="{{ route('propertyDetails', $value->id) }}" target="_blank" class="font-12 mt-1 mb-1 text-muted text-decoration-underline">#{{ $value->id }}</a><br />
-                                                {{ $value->property->location }}, {{ $value->property->city->name ?? '' }}
+                                                {{ $value->property->area->name }}, {{ $value->property->city->name ?? '' }}
                                             </div>
                                         </div>
                                     </td>
-
-                                    <td>{{ $value->property->applications->count() }} </td>
+                                    <td>
+                                        <a href="">
+                                            <div class="user-avatar">
+                                                @if ($value->property->builder->logo)
+                                                    <img src="{{ asset('uploads/builder/' . $value->property->builder->logo) }}" height="80" width="80" class="rounded-circle">
+                                                    {{ $value->property->builder->name ?? '' }}
+                                                @else
+                                                    <img src="{{ asset('admin-assets/img/default-150x150.png') }}" alt="" height="80" class="me-2 align-self-center rounded"  />
+                                                @endif
+                                            </div>
+                                        </a>
+                                    </td>
                                     <td>
                                          <div class="d-flex align-items-center">
                                             @foreach($value->property->applications as $application)
                                                 <div class="user-avatar" title="{{ $application->user->name }}">
-                                                    <img src="{{ asset('profile_pic/thumb/' . $application->user->image) }}" 
-                                                        alt="{{ $application->user->name }}" 
-                                                        class="rounded-circle">
-
+                                                    @if ($application->user->image)
+                                                        <img src="{{ asset('profile_pic/thumb/' . $application->user->image) }}" alt="{{ $application->user->name }}" class="rounded-circle">
+                                                    @else
+                                                        <img src="{{ asset('admin-assets/img/user.png') }}" alt="" height="80" class="rounded-circle"  />
+                                                    @endif
+                                                    
                                                     <!-- Hover Card -->
                                                     <div class="user-details">
                                                         <strong>{{ $application->user->name }}</strong><br>
-                                                        {{ $application->user->role }}<br>
-                                                        <a href="mailto:{{ $application->user->email }}">{{ $application->user->email }}</a><br>
-                                                        <a href="tel:{{ $application->user->mobile }}">{{ $application->user->mobile }}</a>
+                                                        {{-- {{ $application->user->role }}<br> --}}
+                                                        E: <a href="mailto:{{ $application->user->email }}">{{ $application->user->email }}</a><br>
+                                                        M: <a href="tel:{{ $application->user->mobile }}">{{ $application->user->mobile }}</a>
                                                     </div>
                                                 </div>
                                             @endforeach
                                         </div>
                                     </td>
-                                    <td>{{ \Carbon\Carbon::parse($application->applied_date)->format('d M Y') }}</td>
-                                    <td>
-                                        @if ($value->property->status == 1)
-                                            <svg class="text-success-500 h-6 w-6 text-success" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                            </svg>
-                                        @else
-                                            <svg class="text-danger h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                            </svg>
-                                        @endif                                        
-                                    </td>
+                                    <td>{{ \Carbon\Carbon::parse($application->applied_date)->format('d M Y') }}</td>                                    
                                     <td>
                                         <a href="#" onclick="removeProperty({{ $value->id }})"><i class="las la-trash-alt text-secondary fs-18"></i></a>
                                     </td>

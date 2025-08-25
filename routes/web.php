@@ -19,25 +19,12 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
-
-// Route::get("/contact",[ContactController::class, 'index'])->name('contact.index');;
-// Route::post("/contact",[ContactController::class, 'store'])->name('contact.store');
-// Route::get("/contact/{id}",[ContactController::class, 'details'])->name('contact.details');;
-
 Route::get("/",[HomeController::class, 'index'])->name('front.home');
 Route::get('/get-areas/{city_id}', [HomeController::class, 'getAreas']);
-Route::get("/properties",[HomeController::class, 'properties'])->name('properties');
+
+Route::get('/properties/{category?}', [HomeController::class, 'properties'])->name('properties');
+
+//Route::get("/properties",[HomeController::class, 'properties'])->name('properties');
 Route::get("/details/{id}",[HomeController::class, 'propertyDetails'])->name('propertyDetails');
 Route::post("/apply-property",[HomeController::class, 'applyProperty'])->name('applyProperty');
 Route::post("/save-property",[HomeController::class, 'saveProperty'])->name('saveProperty');
@@ -46,6 +33,11 @@ Route::get("/forgot-password",[AccountController::class, 'forgotPassword'])->nam
 Route::post("/process-forgot-password",[AccountController::class, 'processForgotPassword'])->name('account.processForgotPassword');
 Route::get("/reset-password/{token}",[AccountController::class, 'resetPassword'])->name('account.resetPassword');
 Route::post("/process-reset-password",[AccountController::class, 'processResetPassword'])->name('account.processResetPassword');
+
+// Route::get("/contact",[ContactController::class, 'index'])->name('contact.index');;
+// Route::post("/contact",[ContactController::class, 'store'])->name('contact.store');
+// Route::get("/contact/{id}",[ContactController::class, 'details'])->name('contact.details');;
+
 
 //ADMIN ROLES
 Route::group(['prefix' => 'admin','middleware' => 'checkRole'], function(){

@@ -312,43 +312,51 @@ $('#city_inner').on('change', function () {
     let areasBtmContainer = $('#areas_dynamic');
 
     $('#area_old').addClass('hide_old_area');
-
     $(".listing-areas-btm").show();
 
-    // Add or remove .active class on city select
-    if (cityID) {
-        $('.flex-search').addClass('active');
-    } else {
-        $('.flex-search').removeClass('active');
-    }
+    // Toggle .active class
+    $('.flex-search').toggleClass('active', !!cityID);
 
     // Clear old list
     areasBtmContainer.empty().hide();
 
-    if (cityID && selectedCategory) {
+    if (cityID) {   // removed selectedCategory check
         $.ajax({
             url: '/get-areas/' + cityID,
             type: 'GET',
+            dataType: 'json',   // ensure JSON
             success: function (data) {
-                let html = '';
-                data.forEach(function (area) {
-                    html += `<li><a href="#" class="custom-checkbox-label" data-id="${area.id}">${area.name}</a></li>`;
-                });
-                areasBtmContainer.html(html).show();
+                if (Array.isArray(data) && data.length > 0) {
+                    let html = '';
+                    data.forEach(function (area) {
+                        html += `<li>
+                                    <a href="#" class="custom-checkbox-label" data-id="${area.id}">
+                                        ${area.name}
+                                    </a>
+                                 </li>`;
+                    });
+                    areasBtmContainer.html(html).show();
 
-                // Click to select area
-                $('.custom-checkbox-label').on('click', function () {
-                    let areaID = $(this).data('id');
-                    let params = new URLSearchParams(window.location.search);
-                    params.set('category', selectedCategory);
-                    params.set('city', cityID);
-                    params.set('area', areaID);
-                    window.location.href = '/properties?' + params.toString();
-                });
+                    // Click to select area
+                    $('.custom-checkbox-label').on('click', function (e) {
+                        e.preventDefault();
+                        let areaID = $(this).data('id');
+                        let params = new URLSearchParams(window.location.search);
+                        params.set('city', cityID);
+                        params.set('area', areaID);
+                        window.location.href = '/properties?' + params.toString();
+                    });
+                } else {
+                    areasBtmContainer.html('<li>No areas found</li>').show();
+                }
+            },
+            error: function () {
+                areasBtmContainer.html('<li>Error loading areas</li>').show();
             }
         });
     }
 });
+
 
 
 
@@ -462,7 +470,7 @@ function toggleActiveClass(name, buttonId) {
 let filters = [
     { name: 'bathroom', buttonId: 'bathroomDropdown' },
     { name: 'room', buttonId: 'roomDropdown' },
-    { name: 'type', buttonId: 'typeDropdown' }
+    { name: 'property_type', buttonId: 'propertyTypeDropdown' }
 ];
 
 // Attach change listener to all checkboxes in these groups
@@ -476,19 +484,20 @@ filters.forEach(f => {
 });
 
 //Main filters
-$(document).on('change', 'input[name="saletype"], input[name="construction"], input[name="age"], input[name="type[]"], input[name="room[]"], input[name="bathroom[]"], input[name="listed_type[]"], input[name="area[]"], input[name="facing[]"]', function () {
+$(document).on('change', 'input[name="saletype"], input[name="construction"], input[name="age"], input[name="property_type[]"], input[name="room[]"], input[name="bathroom[]"], input[name="listed_type[]"], input[name="area[]"], input[name="amenities[]"], input[name="facing[]"]', function () {
     let params = new URLSearchParams(window.location.search);
 
     // Clear old params (so unchecked values don’t remain in URL)
     params.delete('saletype');
     params.delete('construction');
     params.delete('age');
-    params.delete('type[]');
+    params.delete('property_type[]');
     params.delete('room[]');
     params.delete('bathroom[]');
     params.delete('listed_type[]');    
     params.delete('area[]');
     params.delete('facing[]');
+    params.delete('amenities[]');    
 
     // ✅ Single-select fields
     let saleTypeChecked = $('input[name="saletype"]:checked');
@@ -501,8 +510,8 @@ $(document).on('change', 'input[name="saletype"], input[name="construction"], in
     if (ageChecked.length) params.set('age', ageChecked.val());
 
     // ✅ Multi-select fields
-    $('input[name="type[]"]:checked').each(function () {
-        params.append('type[]', $(this).val());
+    $('input[name="property_type[]"]:checked').each(function () {
+        params.append('property_type[]', $(this).val());
     });
 
     $('input[name="room[]"]:checked').each(function () {
@@ -526,12 +535,12 @@ $(document).on('change', 'input[name="saletype"], input[name="construction"], in
         params.append('facing[]', $(this).val());
     });
 
-    // ... rest same
+    $('input[name="amenities[]"]:checked').each(function () {
+        params.append('amenities[]', $(this).val());
+    });
 
-    // ✅ show loader before page reload
     $("#pageLoader").fadeIn(200);
 
-    // Reload with new query string
     window.location.href = window.location.pathname + '?' + params.toString();
 });
 

@@ -23,8 +23,8 @@
                     <thead class="table-light">
                         <tr>
                             <th class="border-top-0">Project Name</th>
+                            <th class="border-top-0">Developer</th>
                             <th class="border-top-0">Price</th>
-                            <th class="border-top-0">Counts</th>
                             <th class="border-top-0">Interested</th>
                             <th class="border-top-0">Status</th>
                             <th class="border-top-0">Action</th>
@@ -47,11 +47,24 @@
                                             @endif
                                         </a>
                                         <div class="flex-grow-1 text-truncate">
-                                            <h5 class="m-0">{{ $value->property->title }}</h5>
-                                            {{ $value->property->location }}, {{ $value->property->city->name ?? '' }}<br />
+                                            <h5 class="m-0">{{ $value->property->title }} <span class="badge rounded text-blue bg-blue-subtle">{{ $value->property->savedProprty->count() }}</span></h5>
+                                            <a href="{{ route('propertyDetails', $value->id) }}" target="_blank" class="font-12 mt-1 mb-1 text-muted text-decoration-underline">#{{ $value->id }}</a><br />
+                                            {{ $value->property->area->name }}, {{ $value->property->city->name ?? '' }}<br />
                                         </div>
                                     </div>
                                  </td>
+                                 <td>
+                                    <a href="">
+                                        <div class="user-avatar">
+                                            @if ($value->property->builder->logo)
+                                                <img src="{{ asset('uploads/builder/' . $value->property->builder->logo) }}" height="80" width="80" class="rounded-circle">
+                                                {{ $value->property->builder->name ?? '' }}
+                                            @else
+                                                <img src="{{ asset('admin-assets/img/default-150x150.png') }}" alt="" height="80" class="me-2 align-self-center rounded"  />
+                                            @endif
+                                        </div>
+                                    </a>
+                                </td>
                                  <td>
                                     @php
                                         $price = $value->property->price;
@@ -59,7 +72,6 @@
                                     @endphp
                                     <span>₹{{ $formatted }}</span>                                    
                                  </td>
-                                 <td>{{ $value->property->savedProprty->count() }}</td>
                                 <td>
                                     <div class="d-flex align-items-center">
                                         @if(Auth::id() === $value->property->user_id) 
@@ -74,9 +86,9 @@
                                                         
                                                         <div class="user-details">
                                                             <strong>{{ $application->user->name }}</strong><br>
-                                                            {{ $application->user->role }}<br>
-                                                            <a href="mailto:{{ $application->user->email }}">{{ $application->user->email }}</a><br>
-                                                            <a href="tel:{{ $application->user->mobile }}">{{ $application->user->mobile }}</a>
+                                                            {{-- {{ $application->user->role }}<br> --}}
+                                                            E: <a href="mailto:{{ $application->user->email }}">{{ $application->user->email }}</a><br>
+                                                            M: <a href="tel:{{ $application->user->mobile }}">{{ $application->user->mobile }}</a>
                                                         </div>
                                                     </div>
                                                 @endif

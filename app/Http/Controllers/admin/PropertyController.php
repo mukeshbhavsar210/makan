@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
+use Illuminate\Support\Facades\Log;
 
 class PropertyController extends Controller {
 
@@ -46,7 +47,8 @@ class PropertyController extends Controller {
         $areas = Area::orderBy('name','ASC')->where('status',1)->get();
         $builders = Builder::orderBy('name','ASC')->where('status',1)->get();
         $rooms = Room::orderBy('title','ASC')->where('status',1)->get();        
-        $bathrooms = Bathroom::orderBy('title','ASC')->where('status',1)->get();        
+        $bathrooms = Bathroom::orderBy('title','ASC')->where('status',1)->get();
+        $amenities = Amenity::orderBy('title','ASC')->where('status',1)->get();
         $views = View::orderBy('title','ASC')->where('status',1)->get();    
         $categories = Category::orderBy('name','ASC')->where('status',1)->get();
         $propertyTypes = PropertyType::orderBy('name','ASC')->where('status',1)->get();
@@ -59,6 +61,7 @@ class PropertyController extends Controller {
             'builders' => $builders,
             'rooms' => $rooms,
             'bathrooms' => $bathrooms,
+            'amenities' => $amenities,
             'views' => $views,
             'categories' => $categories,            
             'propertyTypes' => $propertyTypes, 
@@ -66,6 +69,8 @@ class PropertyController extends Controller {
         ];
         return view('admin.property.create', $data);
     }
+
+
 
     //STORE PROPERTY
     public function store(Request $request){
@@ -76,66 +81,83 @@ class PropertyController extends Controller {
         $validator = Validator::make($request->all(),$rules);
         if ($validator->passes()) {
             $property = new Property;
-            $property->user_id = Auth::user()->id;
-            $property->title = $request->title;            
+            $property->title = $request->title;
             $property->slug = $request->slug;            
-            $property->sale_type_id = $request->saleType;
-            $property->category_id = $request->category;                    
-            $property->keywords = $request->keywords;          
+            $property->user_id = Auth::user()->id;
+            $property->category_id = $request->category;
+            $property->room_id = $request->room;  
             $property->city_id = $request->city;   
             $property->area_id = $request->area;  
-            $property->location = $request->location; 
+            $property->builder_id = $request->builder;           
+            $property->sale_type_id = $request->saleType;
             $property->property_type_id = $request->propertyType;
+            $property->view_id = $request->view;     
             $property->price = $request->price;
             $property->compare_price = $request->compare_price;            
+            $property->description = $request->description;  
+            $property->keywords = $request->keywords;
+            $property->location = $request->location;
             $property->size = $request->size;
-            $property->view_id = $request->view;     
             $property->rera = $request->rera;  
             $property->year_build = $request->year_build;  
             $property->total_area = $request->total_area;  
-            $property->description = $request->description;  
-            $property->is_featured = $request->is_featured;
-            $property->room_id = $request->room;  
-            $property->bathroom_id = $request->bathroom;  
             $property->related_properties = (!empty($request->related_properties)) ? implode(',',$request->related_properties) : '';
-            $property->related_amenities = (!empty($request->related_amenities)) ? implode(',',$request->related_amenities) : '';
             $property->related_facings = (!empty($request->related_facings)) ? implode(',',$request->related_facings) : '';            
-            $property->builder_id = $request->builder;           
+            $property->related_amenities = (!empty($request->related_amenities)) ? implode(',',$request->related_amenities) : '';
+            $property->bathroom_id = $request->bathroom;
+            $property->is_featured = $request->is_featured;
+            $property->construction_id = $request->construction;
+            $property->age_id = $request->age;
+            $property->amenity_id = $request->amenity;
+            $property->listed_type_id = $request->listed_type; 
+            Log::info('Incoming request data:', $request->all());           
             $property->save();
 
         if (!empty($request->image_array)) {
-            foreach ($request->image_array as $temp_image_id) {
-                $tempImageInfo = TempImage::find($temp_image_id);
-                $extArray = explode('.',$tempImageInfo->name);
-                $ext = last($extArray);
+            foreach ($request->image_array as $imageData) {
+                // $imageData now contains ['id' => temp_image_id, 'label' => 'Main/Bedroom/Elevation']
+                $temp_image_id = $imageData['id'] ?? null;
+                $label = $imageData['label'] ?? null;
 
-                $propertyImage = new PropertyImage();
-                $propertyImage->property_id = $property->id;
-                $propertyImage->image = "NULL";
-                $propertyImage->save();
+                if ($temp_image_id) {
+                    $tempImageInfo = TempImage::find($temp_image_id);
+                    if (!$tempImageInfo) {
+                        continue; // skip if not found
+                    }
 
-                $imageName = $property->id.'-'.$property->title.'-'.time().'.'.$ext;
-                $propertyImage->image = $imageName;
-                $propertyImage->save();
+                    $extArray = explode('.', $tempImageInfo->name);
+                    $ext = last($extArray);
 
-                //Large Image
-                $sourcePath = public_path().'/temp/'.$tempImageInfo->name;
-                $destPath = public_path().'/uploads/property/large/'.$imageName;
-                $manager = new ImageManager(new Driver());
-                $image = $manager->read($sourcePath);
-                $image->resize(1300,731, function ($constraint) {
-                    $constraint->aspectRatio();
-                });
-                $image->save($destPath);
+                    $propertyImage = new PropertyImage();
+                    $propertyImage->property_id = $property->id;
+                    $propertyImage->image = "NULL";
+                    $propertyImage->label = $label; // save enum label
+                    $propertyImage->save();
 
-                //Generate Thumnail
-                $destPath = public_path().'/uploads/property/small/'.$imageName;
-                $manager = new ImageManager(new Driver());
-                $image = $manager->read($sourcePath);
-                $image->cover(488,326);
-                $image->save($destPath);
+                    $imageName = $property->id . '-' . $property->title . '-' . time() . '.' . $ext;
+                    $propertyImage->image = $imageName;
+                    $propertyImage->save();
+
+                    // Large Image
+                    $sourcePath = public_path() . '/temp/' . $tempImageInfo->name;
+                    $destPath = public_path() . '/uploads/property/large/' . $imageName;
+                    $manager = new ImageManager(new Driver());
+                    $image = $manager->read($sourcePath);
+                    $image->resize(1300, 731, function ($constraint) {
+                        $constraint->aspectRatio();
+                    });
+                    $image->save($destPath);
+
+                    // Thumbnail
+                    $destPath = public_path() . '/uploads/property/small/' . $imageName;
+                    $manager = new ImageManager(new Driver());
+                    $image = $manager->read($sourcePath);
+                    $image->cover(488, 326);
+                    $image->save($destPath);
+                }
             }
         }
+
 
         // if (!empty($request->document_array)) {
         //     foreach ($request->document_array as $temp_document_id) {
@@ -186,10 +208,10 @@ class PropertyController extends Controller {
         }
 
         //Fetch Product Images
-        $propertyImage = PropertyImage::where('property_id',$property->id)->get();   
+        $propertyImage = PropertyImage::where('property_id',$property->id)->get()->unique('label');   
         $areas = Area::where('city_id',$property->city_id)->get();        
 
-        //Fetch Related products
+        //Fetch Related properties
         $relatedProperties = [];
         if ($property->related_properties != '') {
             $propertyArray = explode(',',$property->related_properties);
@@ -203,7 +225,7 @@ class PropertyController extends Controller {
             $relatedAmenities = Amenity::whereIn('id',$amenityArray)->get();
         }       
 
-        //Fetch Bathrooms
+        //Fetch Facings
         $relatedFacings = [];
         if ($property->related_facings != '') {
             $facingsArray = explode(',',$property->related_facings);
@@ -236,6 +258,8 @@ class PropertyController extends Controller {
         $data['relatedProperties'] = $relatedProperties;
         $data['relatedAmenities'] = $relatedAmenities;  
         $data['relatedFacings'] = $relatedFacings;  
+        $data['relatedFacings'] = $relatedFacings;
+
         
         return view('admin.property.edit',$data);
     }
@@ -256,29 +280,35 @@ class PropertyController extends Controller {
         $propertyImage = PropertyImage::where('property_id',$property->id)->get();   
 
         if ($validator->passes()) {
-            $property->title = $request->title;            
+            $property->title = $request->title;
             $property->slug = $request->slug;            
-            $property->sale_type_id = $request->saleType;
-            $property->category_id = $request->category;                    
-            $property->keywords = $request->keywords;          
+            $property->category_id = $request->category;
+            $property->room_id = $request->room;  
             $property->city_id = $request->city;   
             $property->area_id = $request->area;  
-            $property->location = $request->location; 
+            $property->builder_id = $request->builder;           
+            $property->sale_type_id = $request->saleType;
             $property->property_type_id = $request->propertyType;
+            $property->view_id = $request->view;     
             $property->price = $request->price;
             $property->compare_price = $request->compare_price;            
+            $property->description = $request->description;  
+            $property->keywords = $request->keywords;
+            $property->location = $request->location;
             $property->size = $request->size;
-            $property->view_id = $request->view;     
             $property->rera = $request->rera;  
             $property->year_build = $request->year_build;  
             $property->total_area = $request->total_area;  
-            $property->description = $request->description;  
-            $property->is_featured = $request->is_featured;
-            $property->room_id = $request->room;  
-            $property->bathroom_id = $request->bathroom; 
             $property->related_properties = (!empty($request->related_properties)) ? implode(',',$request->related_properties) : '';
-            $property->related_amenities = (!empty($request->related_amenities)) ? implode(',',$request->related_amenities) : '';            
-            $property->builder_id = $request->builder;    
+            $property->related_facings = (!empty($request->related_facings)) ? implode(',',$request->related_facings) : '';            
+            $property->related_amenities = (!empty($request->related_amenities)) ? implode(',',$request->related_amenities) : '';
+            $property->bathroom_id = $request->bathroom;
+            $property->is_featured = $request->is_featured;
+            $property->construction_id = $request->construction;
+            $property->age_id = $request->age;
+            $property->amenity_id = $request->amenity;
+            $property->listed_type_id = $request->listed_type; 
+            $property->status = $request->status;
             $property->save();
 
             if (!empty($request->image_array)) {

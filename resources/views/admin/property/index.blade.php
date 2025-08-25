@@ -41,7 +41,6 @@
                     <thead class="table-light">
                         <tr>
                             <th class="border-top-0">Project Name</th>
-                            <th class="border-top-0">Developer</th>
                             <th class="border-top-0">Interested</th>
                             <th class="border-top-0">Saved</th>
                             <th class="border-top-0">Posted</th>                            
@@ -66,13 +65,12 @@
                                                 @endif
                                             </a>
                                             <div class="flex-grow-1 text-truncate"> 
-                                                <h5 class="m-0">{{ $value->title }}</h5>
-                                                <a href="{{ route('propertyDetails', $value->id) }}" target="_blank" class="font-12 mt-1 mb-1 text-muted text-decoration-underline">#{{ $value->id }}</a><br />
-                                                <span class="badge rounded text-blue bg-blue-subtle">{{ $value->applications->count() }}</span> Interested                                                
+                                                <h5 class="m-0">{{ $value->title }} <span class="badge rounded text-blue bg-blue-subtle">{{ $value->applications->count() }}</span></h5>
+                                                {{ $value->builder->name ?? '' }}<br />
+                                                <a href="{{ route('propertyDetails', $value->id) }}" target="_blank" class="font-12 mt-1 mb-1 text-muted text-decoration-underline">#{{ $value->id }}</a>
                                             </div>
                                         </div>
                                     </td>
-                                    <td>{{ $value->builder->name ?? '' }}</td>
                                     <td>
                                         <div class="d-flex">
                                             @foreach($value->applications as $application)
