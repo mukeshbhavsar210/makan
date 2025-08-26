@@ -70,25 +70,36 @@ class HomeController extends Controller {
         $cities = City::where('status',1)->get();
         $areas = Area::where('status',1)->get();    
         $users = User::select('id', 'name', 'role')->get();                    
-        //$cityId = $request->get('city');
-        //$areaId = $request->get('area');
+        $cityId = $request->get('city');
+        $areaId = $request->get('area');
         $roomIds = $request->get('room', []);
         $properties = Property::with('property_images')->where('status',1);                    
-        $citySelected = $request->filled('city') ? \App\Models\City::find($request->city) : null;
-        $areaSelected = $request->filled('area') ? \App\Models\Area::find($request->area) : null;        
+        $citySelected = $request->filled('city') ? \App\Models\City::where('slug', $request->city)->first() : null;
+        $areaSelected = $request->filled('area') ? \App\Models\Area::where('slug', $request->area)->first() : null;
+        $selectedAreas = $request->filled('area') ? \App\Models\Area::where('slug', $request->area)->first() : null;
 
-        // $city = null;
-        // $area = null;
+        $city = null;
+        $areas = collect();
+        $area = null;
 
-        // if ($cityId) {
-        //     $city = City::find($cityId);
-        // }
+        if ($request->filled('city')) {
+            $city = \App\Models\City::where('slug', strtolower($request->city))->first();
+        }
 
-        // if ($areaId) {
-        //     $area = Area::find($areaId);
-        // }
+        if ($request->filled('area')) {
+            $areaSlugs = (array) $request->area;
+            $areas = \App\Models\Area::whereIn('slug', array_map('strtolower', $areaSlugs))->get();
+        }
+
+        if ($cityId) {
+            $city = City::find($cityId);
+        }
+
+        if ($areaId) {
+            $area = Area::find($areaId);
+        }
         
-        //$categoryWord = null;
+        $categoryWord = null;
 
         //Filter using category               
          if (!empty($request->category)) {
@@ -97,31 +108,27 @@ class HomeController extends Controller {
 
         //Filter using city
         if ($request->city) {
-    $city = City::where('slug', strtolower($request->city))->first();
-    if ($city) {
-        $properties = $properties->where('city_id', $city->id);
-    }
-}
-
-
-        // if(!empty($request->city)){            
-        //     $properties = $properties->where('city_id',$request->city);
-        // }  
+            $city = City::where('slug', strtolower($request->city))->first();
+            if ($city) {
+                $properties = $properties->where('city_id', $city->id);
+            }
+        }
 
         //Filter using areas
-        if ($request->area) {
-    $area = Area::where('slug', strtolower($request->area))->first();
-    if ($area) {
-        $properties = $properties->where('area_id', $area->id);
-    }
-}
+        if ($request->filled('area')) {
+            $areaSlugs = (array) $request->area; // always treat as array
+            $areas = \App\Models\Area::whereIn('slug', array_map('strtolower', $areaSlugs))->pluck('id');
+
+            if ($areas->count() > 0) {
+                $properties = $properties->whereIn('area_id', $areas);
+            }
+        }
+
 
         // if ($request->filled('area')) {
         //     if (is_array($request->area)) {
-        //         // Multiple areas (property listing page)
         //         $properties->whereIn('area_id', $request->area);
         //     } else {
-        //         // Single area (home page)
         //         $properties->where('area_id', $request->area);
         //     }
         // }
@@ -260,8 +267,9 @@ class HomeController extends Controller {
             'users' => $users,
             'citySelected' => $citySelected,
             'areaSelected' => $areaSelected,
-            //'area' => $area,
-            //'categoryWord' => $categoryWord,
+            'selectedAreas' => $selectedAreas,
+            'area' => $area,
+            'categoryWord' => $categoryWord,
             'savedPropertyIds' => $savedPropertyIds,            
         ];        
 

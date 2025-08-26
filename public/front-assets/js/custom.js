@@ -616,19 +616,21 @@ $(document).on("click", "#showAllAreasBtm", function (e) {
 // Remove selected area on X click
 $(document).on("click", ".remove-area", function (e) {
     e.preventDefault();
-    let areaId = $(this).data("id");
+    let areaSlug = $(this).data("slug");
 
     let params = new URLSearchParams(window.location.search);
     let selectedAreas = params.getAll("area[]");
 
-    selectedAreas = selectedAreas.filter(id => id != areaId);
+    // remove the clicked slug
+    selectedAreas = selectedAreas.filter(slug => slug !== areaSlug);
 
+    // reset query params
     params.delete("area[]");
-
-    selectedAreas.forEach(id => {
-        params.append("area[]", id);
+    selectedAreas.forEach(slug => {
+        params.append("area[]", slug);
     });
 
+    // redirect with updated query string
     window.location.href = window.location.pathname + "?" + params.toString();
 });
 
