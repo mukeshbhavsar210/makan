@@ -11,4 +11,8 @@ class City extends Model {
     public function areas(){
         return $this->hasMany(Area::class);
     }
+
+    public function getRouteKeyName() {
+        return 'slug'; // Tells Laravel to use slug instead of ID
+    }
 }

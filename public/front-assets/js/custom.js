@@ -4,31 +4,31 @@ $(document).ready(function(){
         $('.alert').fadeOut('fast');
     }, 1500);   
 
-    $('.center').slick({
-        centerMode: true,
-        centerPadding: '260px',
-        slidesToShow: 1,
-        responsive: [
-            {
-            breakpoint: 768,
-            settings: {
-                arrows: false,
-                centerMode: true,
-                centerPadding: '140px',
-                slidesToShow: 1
-            }
-            },
-            {
-            breakpoint: 480,
-            settings: {
-                arrows: false,
-                centerMode: true,
-                centerPadding: '140px',
-                slidesToShow: 1
-            }
-            }
-        ]
-    });
+    // $('.center').slick({
+    //     centerMode: true,
+    //     centerPadding: '260px',
+    //     slidesToShow: 1,
+    //     responsive: [
+    //         {
+    //         breakpoint: 768,
+    //         settings: {
+    //             arrows: false,
+    //             centerMode: true,
+    //             centerPadding: '140px',
+    //             slidesToShow: 1
+    //         }
+    //         },
+    //         {
+    //         breakpoint: 480,
+    //         settings: {
+    //             arrows: false,
+    //             centerMode: true,
+    //             centerPadding: '140px',
+    //             slidesToShow: 1
+    //         }
+    //         }
+    //     ]
+    // });
 
 
     $('.tagNav .nav-link').on('click', function(e){
@@ -84,128 +84,122 @@ $(document).ready(function(){
         $module.find('.counter-current').text(index);
         $module.find('.slick-progress').css('width', (index / total * 100) + '%');
     });
-    });
+});
 
 
-    // Fix when modal opens
-    $('#big-modal').on('shown.bs.modal', function () {
-        $('.center').slick('setPosition');
-    });
-    
-    $('.carousalHome').slick({
-        dots: false,
-        infinite: true,
-        speed: 500,
-        fade: true,
-        autoplay: true,
-        autoplaySpeed: 2000,
-        cssEase: 'linear',
-        prevArrow:'<i class="icon-left-arrow right-arrow arrow"></i>',
-        nextArrow:'<i class="icon-right-arrow left-arrow arrow"></i>',
-        arrows: true
-      });
+// Fix when modal opens
+$('#big-modal').on('shown.bs.modal', function () {
+    $('.center').slick('setPosition');
+});
 
-      $('.propertyMedia').slick({
-        dots: false,
-        infinite: true,
-        speed: 500,
-        fade: true,
-        autoplay: true,
-        autoplaySpeed: 1000,
-        cssEase: 'linear',
-        arrows: false
-      });
+$('.carousalHome').slick({
+    dots: false,
+    infinite: true,
+    speed: 500,
+    fade: true,
+    autoplay: true,
+    autoplaySpeed: 2000,
+    cssEase: 'linear',
+    prevArrow:'<i class="icon-left-arrow right-arrow arrow"></i>',
+    nextArrow:'<i class="icon-right-arrow left-arrow arrow"></i>',
+    arrows: true
+});
 
-      $('.listing-gallery').slick({
-        autoplay: true,
-        autoplaySpeed: 3000,
-        dots: true,
-        arrows: true,
-      });
+$('.propertyMedia').slick({
+    dots: false,
+    infinite: true,
+    speed: 500,
+    fade: true,
+    autoplay: true,
+    autoplaySpeed: 1000,
+    cssEase: 'linear',
+    arrows: false
+});
 
+$('.listing-gallery').slick({
+    autoplay: true,
+    autoplaySpeed: 3000,
+    dots: true,
+    arrows: true,
+});
 
-      
+$('.discoverProducts').slick({
+    autoplay: true,
+    autoplaySpeed: 2000,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    arrows: true,
+    prevArrow:'<i class="icon-left-arrow right-arrow arrow"></i>',
+    nextArrow:'<i class="icon-right-arrow left-arrow arrow"></i>',
+});
 
-   
+$('.meetDeveloprs').slick({
+    lazyLoad: 'ondemand',
+    centerMode: true,
+    centerPadding: '50px',
+    autoplay: true,
+    autoplaySpeed: 2000,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    arrows: true,
+    prevArrow:'<i class="icon-left-arrow right-arrow arrow"></i>',
+    nextArrow:'<i class="icon-right-arrow left-arrow arrow"></i>',
+});
 
-    $('.discoverProducts').slick({
-        autoplay: true,
-        autoplaySpeed: 2000,
-        slidesToShow: 3,
-        slidesToScroll: 1,
-        arrows: true,
-        prevArrow:'<i class="icon-left-arrow right-arrow arrow"></i>',
-        nextArrow:'<i class="icon-right-arrow left-arrow arrow"></i>',
-    });
-
-    $('.meetDeveloprs').slick({
-        lazyLoad: 'ondemand',
-        centerMode: true,
-        centerPadding: '50px',
-        autoplay: true,
-        autoplaySpeed: 2000,
-        slidesToShow: 3,
-        slidesToScroll: 1,
-        arrows: true,
-        prevArrow:'<i class="icon-left-arrow right-arrow arrow"></i>',
-        nextArrow:'<i class="icon-right-arrow left-arrow arrow"></i>',
-    });
-
-    $(".responsive").slick({
-        centerMode: false,
-        slidesToShow: 4,
-        slidesToScroll: 1,
-        arrows: true,
-        prevArrow:'<i class="icon-left-arrow right-arrow arrow"></i>',
-        nextArrow:'<i class="icon-right-arrow left-arrow arrow"></i>',
-        responsive: [{
-            breakpoint: 1200,
-            settings: {
+$(".responsive").slick({
+    centerMode: false,
+    slidesToShow: 4,
+    slidesToScroll: 1,
+    arrows: true,
+    prevArrow:'<i class="icon-left-arrow right-arrow arrow"></i>',
+    nextArrow:'<i class="icon-right-arrow left-arrow arrow"></i>',
+    responsive: [{
+        breakpoint: 1200,
+        settings: {
+            centerMode: false,
+            centerPadding: '0px',
+            slidesToShow: 5,
+            slidesToScroll: 1,
+            
+        }
+    },{
+        breakpoint: 1300,
+        settings: {
                 centerMode: false,
-                centerPadding: '0px',
-                slidesToShow: 5,
-                slidesToScroll: 1,
-                
-            }
-        },{
-            breakpoint: 1300,
-            settings: {
-                 centerMode: false,
-                slidesToShow: 3,
-                slidesToScroll: 1,
-            }
-        },{
-            breakpoint: 1200,
-            settings: {
-                 centerMode: false,
-                slidesToShow: 3,
-                slidesToScroll: 1,
-            }
-        },{
-            breakpoint: 1024,
-            settings: {
-                 centerMode: false,
-                slidesToShow: 2,
-                slidesToScroll: 1,
-            }
-        },{
-            breakpoint: 992,
-            settings: {
-                 centerMode: false,
-                slidesToShow: 2,
-                slidesToScroll: 1,
-            }
-        },{
-            breakpoint: 576,
-            settings: {
-                 centerMode: false,
-                slidesToShow: 1,
-                slidesToScroll: 1,      
-            }
-        }] 
-    });
+            slidesToShow: 3,
+            slidesToScroll: 1,
+        }
+    },{
+        breakpoint: 1200,
+        settings: {
+                centerMode: false,
+            slidesToShow: 3,
+            slidesToScroll: 1,
+        }
+    },{
+        breakpoint: 1024,
+        settings: {
+                centerMode: false,
+            slidesToShow: 2,
+            slidesToScroll: 1,
+        }
+    },{
+        breakpoint: 992,
+        settings: {
+                centerMode: false,
+            slidesToShow: 2,
+            slidesToScroll: 1,
+        }
+    },{
+        breakpoint: 576,
+        settings: {
+                centerMode: false,
+            slidesToShow: 1,
+            slidesToScroll: 1,      
+        }
+    }] 
+});
    
-
     $("#resetFiltersBtn").on("click", function () {
         // Uncheck all checkboxes
         $('input[name="area[]"]').prop("checked", false);
@@ -229,6 +223,7 @@ $(document).ready(function(){
 
 
 //From home page
+//From home page
 let selectedCategory = $('input[name="category"]:checked').val(); // set default if checked
 // Handle category selection
 $('input[name="category"]').on('change', function () {
@@ -239,10 +234,10 @@ $('input[name="category"]').on('change', function () {
 // Handle city change
 $('#city').on('change', function () { 
     let cityID = $(this).val();
+    let citySlug = $('#city option:selected').data('slug'); // ✅ use slug instead of name
     let areasContainer = $('#areas');
     let areasTopContainer = $('#areas_top');
     let areasBtmContainer = $('#areas_btm');
-    let searchInput = $('#keyword');
 
     // Add or remove .active class on city select
     if (cityID) {
@@ -264,7 +259,7 @@ $('#city').on('change', function () {
                 let html = '';
                 data.forEach(function (area) {
                     html += `<li>
-                                <a href="#" class="area-item" data-id="${area.id}">
+                                <a href="#" class="area-item" data-id="${area.id}" data-slug="${area.slug}">
                                     <div class="icon">
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <mask id="mask0_1_3059" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
@@ -291,18 +286,24 @@ $('#city').on('change', function () {
                 areasBtmContainer.html(html).show();
 
                 // Click to select area
-                $('.area-item').on('click', function () {
-                    let areaID = $(this).data('id');
+                $('.area-item').on('click', function (e) {
+                    e.preventDefault();
+                    let areaSlug = $(this).data('slug'); // ✅ use slug instead of name
                     let params = new URLSearchParams(window.location.search);
                     params.set('category', selectedCategory);
-                    params.set('city', cityID);
-                    params.set('area', areaID);
+                    params.set('city', citySlug); 
+                    params.set('area', areaSlug);
                     window.location.href = '/properties?' + params.toString();
                 });
             }
         });
     }
 });
+
+
+
+
+
 
 
 
@@ -368,8 +369,8 @@ $('.rentBuy input[type="radio"]').on('change', function() {
 
 
 //Price Range
-let priceLabels = ["0", "50L", "1Cr", "2Cr", "3Cr", "4Cr", "5Cr+"];
-let priceValues = [0, 5000000, 10000000, 20000000, 30000000, 40000000, 50000000];
+let priceLabels = ["0", "50L", "75L", "1Cr", "2Cr", "3Cr", "4Cr", "5Cr+"];
+let priceValues = [0, 5000000, 7500000, 10000000, 20000000, 30000000, 40000000, 50000000];
 
 let fromIndex = 0;
 let toIndex = 6;
@@ -399,19 +400,7 @@ let slider = $("#priceRange").ionRangeSlider({
     }
 }).data("ionRangeSlider");
 
-// Reset Button Click
-$("#resetPriceRange").on("click", function () {
-    // Reset hidden inputs
-    $("#price_min").val("");
-    $("#price_max").val("");
 
-    // Reset slider visually
-    slider.update({
-        from: 0,
-        to: priceLabels.length - 1
-    });
-    $("#filterForm").submit();
-});
 
 
 //Size range
@@ -445,6 +434,18 @@ let sizeSlider = $("#sizeRange").ionRangeSlider({
         $("#size_max").val(sizeValues[data.to]);
     }
 }).data("ionRangeSlider");
+
+// Reset Button Click
+$("#resetPriceRange").on("click", function () {
+    $("#price_min").val("");
+    $("#price_max").val("");
+
+    slider.update({
+        from: 0,
+        to: priceLabels.length - 1
+    });
+    $("#filterForm").submit();
+});
 
 // Reset Button Click
 $("#resetSizeRange").on("click", function () {
@@ -484,7 +485,7 @@ filters.forEach(f => {
 });
 
 //Main filters
-$(document).on('change', 'input[name="saletype"], input[name="construction"], input[name="age"], input[name="property_type[]"], input[name="room[]"], input[name="bathroom[]"], input[name="listed_type[]"], input[name="area[]"], input[name="amenities[]"], input[name="facing[]"]', function () {
+$(document).on('change', 'input[name="saletype"], input[name="posted_by"], input[name="construction"], input[name="age"], input[name="property_type[]"], input[name="room[]"], input[name="bathroom[]"], input[name="listed_type[]"], input[name="area[]"], input[name="amenities[]"], input[name="facing[]"]', function () {
     let params = new URLSearchParams(window.location.search);
 
     // Clear old params (so unchecked values don’t remain in URL)
@@ -498,6 +499,7 @@ $(document).on('change', 'input[name="saletype"], input[name="construction"], in
     params.delete('area[]');
     params.delete('facing[]');
     params.delete('amenities[]');    
+    params.delete('posted_by');
 
     // ✅ Single-select fields
     let saleTypeChecked = $('input[name="saletype"]:checked');
@@ -508,6 +510,10 @@ $(document).on('change', 'input[name="saletype"], input[name="construction"], in
 
     let ageChecked = $('input[name="age"]:checked');
     if (ageChecked.length) params.set('age', ageChecked.val());
+
+    //Search with users role
+    let userChecked = $('input[name="posted_by"]:checked');
+    if (userChecked.length) params.set('posted_by', userChecked.val());
 
     // ✅ Multi-select fields
     $('input[name="property_type[]"]:checked').each(function () {
@@ -615,18 +621,14 @@ $(document).on("click", ".remove-area", function (e) {
     let params = new URLSearchParams(window.location.search);
     let selectedAreas = params.getAll("area[]");
 
-    // Remove clicked area
     selectedAreas = selectedAreas.filter(id => id != areaId);
 
-    // Clear existing areas in params
     params.delete("area[]");
 
-    // Re-append remaining areas
     selectedAreas.forEach(id => {
         params.append("area[]", id);
     });
 
-    // Refresh page with updated query
     window.location.href = window.location.pathname + "?" + params.toString();
 });
 

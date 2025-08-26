@@ -10,21 +10,16 @@
         </div>
        
         <div class="search-engine">
-            <form action="{{ route('properties.index', request('category', 'Buy')) }}" method="GET">
+            <form action="{{ route('properties.index') }}" method="GET">
                 <ul class="rentBuy">
                     @php
-                        $categories = ['Buy', 'Rent'];
+                        $categories = ['buy', 'rent'];
                     @endphp
-
                     @foreach ($categories as $value)
                         <li>
                             <label class="{{ request('category') == $value || (!request('category') && $loop->first) ? 'activeTab' : '' }}">
-                                <input type="radio" 
-                                    name="category" 
-                                    value="{{ $value }}"
-                                    {{ request('category') == $value || (!request('category') && $loop->first) ? 'checked' : '' }}>
-                                {{ $value }}
-                            </label>
+                                <input type="radio" name="category" value="{{ $value }}" {{ request('category') == $value || (!request('category') && $loop->first) ? 'checked' : '' }}>{{ $value }}
+                            </label> 
                         </li>
                     @endforeach
                 </ul>
@@ -34,20 +29,15 @@
                         <select name="city" id="city" class="city">
                             <option value="">Select City</option>
                             @foreach ($cities as $city)
-                                <option value="{{ $city->id }}" {{ Request::get('city') == $city->id ? 'selected' : '' }}>
+                                <option value="{{ $city->id }}" data-slug="{{ $city->slug }}" {{ Request::get('city') == $city->id ? 'selected' : '' }}>
                                     {{ $city->name }}
                                 </option>
                             @endforeach
                         </select>           
 
                         <div id="search-container" style="display:none;">
-                            <input value="{{ Request::get('keyword') }}" 
-                                type="text" 
-                                name="keyword" 
-                                id="keyword" 
-                                placeholder="Search for locality, landmark, project or builder" 
-                                class="form-control">
-
+                            <input value="{{ Request::get('keyword') }}" type="text" name="keyword" id="keyword" 
+                                placeholder="Search for locality, landmark, project or builder" class="form-control">
                             <ul id="areas" class="areas-list" style="display:none;">
                                 <li>Popular search in </li>
                             </ul>
@@ -84,7 +74,7 @@
 
 @endsection
 @section('customJs')
-
+{{-- 
 <script type="text/javascript">
     function interested(id){
         $.ajax({
@@ -109,4 +99,4 @@
             }
         });
     }   
-</script>
+</script> --}}

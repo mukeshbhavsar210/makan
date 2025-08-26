@@ -368,6 +368,10 @@ header { position: fixed; width: 100%; top:0; left: 0; z-index: 99; background-c
 .propery-listings .details .developer .btn { margin-top: 5px;  }
 .propery-listings .details p { margin: 0;  font-size: 14px;}
 
+.btn-sm { height: 35px; padding: 7px 12px !important;}
+
+.flex-wrapper { display: flex; justify-content: left; padding: 0; margin: 0;}
+
 .listing-gallery .slick-slide { border-radius: 8px;}
 
 .modal-builder { margin-bottom: 10px;}

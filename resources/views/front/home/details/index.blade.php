@@ -19,7 +19,7 @@
                 <div class="first">
                     <h2>{{ $property->title }}</h2>
                     <p>By <a href="#" class="link">{{ $property->builder->name }}</a></p>
-                    <p class="address">{{ $property->location }}, {{ $property->category->name }}, {{ $property->area->name }}, {{ $property->city->name }}.</p>
+                    {{-- <p class="address">{{ $property->location }}, {{ $property->category->name }}, {{ $property->area->name }}, {{ $property->city->name }}.</p> --}}
 
                     @if(Auth::check())
                         @if($saveCount > 1 || $saveCount == 1)
@@ -127,7 +127,7 @@
             <div class="row">
                 <div class="col-md-3 col-6">
                     <div class="center">
-                        <p>
+                        {{-- <p>
                             @if(!empty($property->room->title))
                                 {{ $property->room->title }}
                             @endif 
@@ -135,7 +135,7 @@
                                 {{ $property->category->type }}
                             @endif 
                             <br />Configuration
-                        </p>
+                        </p> --}}
                     </div>                    
                 </div>
                 <div class="col-md-3 col-6">
@@ -166,7 +166,7 @@
      </div>
 
      <div>Details</div>
-    <p>
+    {{-- <p>
     @if(!empty($property->bathroom->title))
         {{ $property->bathroom->title }}
     @endif 
@@ -176,7 +176,7 @@
         @if(!empty($property->year_build))
             {{ $property->year_build }}
         @endif
-    </p>
+    </p> --}}
 </div>
              
         
