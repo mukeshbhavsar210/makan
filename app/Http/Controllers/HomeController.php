@@ -2,33 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Age;
-use App\Models\Amenity;
-use App\Models\Category;
 use App\Models\Property;
 use App\Models\City;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Area;
 use App\Models\Builder;
-use App\Models\Construction;
 use Illuminate\Support\Facades\Mail;
 use App\Models\JobApplication;
-use App\Models\ListedType;
 use App\Models\PropertyApplication;
-use App\Models\SaleType;
 use App\Models\SavedProperty;
 use App\Models\User;
-use App\Models\View;
 
 class HomeController extends Controller {
-    public function index(Request $request){
-        $categories = Category::where('status',1)->orderBy('name','ASC')->take(8)->get();
+    public function index(Request $request){        
         $cities = City::where('status',1)->get();
-        $areas = Area::where('status',1)->get();        
-        $newCategories = Category::where('status',1)->orderBy('name','ASC')->get();
+        $areas = Area::where('status',1)->get();                
         $featuredJobs = Property::where('status',1)->orderBy('created_at','DESC')->take(6)->get();
-        //$featuredJobs = Property::where('status',1)->orderBy('created_at','DESC')->with('jobType')->where('isFeatured','Yes')->take(6)->get();
         $latestJobs = Property::where('status',1)->orderBy('created_at','DESC')->with('amenityType')->take(6)->get();
         $properties = Property::where('status',1);
         $jobTypes = Builder::where('status',1)->get();        
@@ -51,18 +41,17 @@ class HomeController extends Controller {
         if (!empty($request->area) && is_array($request->area)) {            
             $properties = $properties->whereIn('area_id', $request->area);
         }        
+        
 
         $properties = $properties->paginate(10);
 
         $data = [
-            'categories' => $categories,
             'cities' => $cities,
             'areas' => $areas,
             'jobTypes' => $jobTypes,
             'properties' => $properties,  
             'featuredJobs' => $featuredJobs,
-            'latestJobs' => $latestJobs,
-            'newCategories' => $newCategories,
+            'latestJobs' => $latestJobs,            
         ];
 
         return view('front.home.index', $data);
@@ -70,17 +59,17 @@ class HomeController extends Controller {
 
 
     public function getAreas($city_id) {
-        $areas = Area::where('city_id', $city_id)->get();
+        $areas = Area::where('city_id', $city_id)->get(['id', 'name', 'slug']); 
         return response()->json($areas);
     }
     
 
+
     
     public function properties(Request $request) {
-        $categories = Category::get();
-        $category = \App\Models\Category::where('name', $request->category)->first();
         $cities = City::where('status',1)->get();
-        $areas = Area::where('status',1)->get();                        
+        $areas = Area::where('status',1)->get();    
+        $users = User::select('id', 'name', 'role')->get();                    
         //$cityId = $request->get('city');
         //$areaId = $request->get('area');
         $roomIds = $request->get('room', []);
@@ -99,27 +88,43 @@ class HomeController extends Controller {
         //     $area = Area::find($areaId);
         // }
         
-        $categoryWord = null;
+        //$categoryWord = null;
 
-        //Filter using category       
-        if (!empty($request->category)) {
+        //Filter using category               
+         if (!empty($request->category)) {
             $properties = $properties->where('category', $request->category);
         }
 
         //Filter using city
-        if(!empty($request->city)){            
-            $properties = $properties->where('city_id',$request->city);
-        }  
+        if ($request->city) {
+    $city = City::where('slug', strtolower($request->city))->first();
+    if ($city) {
+        $properties = $properties->where('city_id', $city->id);
+    }
+}
 
-        if ($request->filled('area')) {
-            if (is_array($request->area)) {
-                // Multiple areas (property listing page)
-                $properties->whereIn('area_id', $request->area);
-            } else {
-                // Single area (home page)
-                $properties->where('area_id', $request->area);
-            }
-        }
+
+        // if(!empty($request->city)){            
+        //     $properties = $properties->where('city_id',$request->city);
+        // }  
+
+        //Filter using areas
+        if ($request->area) {
+    $area = Area::where('slug', strtolower($request->area))->first();
+    if ($area) {
+        $properties = $properties->where('area_id', $area->id);
+    }
+}
+
+        // if ($request->filled('area')) {
+        //     if (is_array($request->area)) {
+        //         // Multiple areas (property listing page)
+        //         $properties->whereIn('area_id', $request->area);
+        //     } else {
+        //         // Single area (home page)
+        //         $properties->where('area_id', $request->area);
+        //     }
+        // }
 
         //Filter using keyword
         if (!empty($request->keyword)) {
@@ -177,14 +182,12 @@ class HomeController extends Controller {
                     $query->orWhereJsonContains('amenities', (int) $Id);
                 }
             });
-        }
-        
+        }        
 
         //Filter using Listed Types working
-        if (!empty($request->listed_type) && is_array($request->listed_type)) {
-            $properties = $properties->whereIn('listed_type_id', $request->listed_type);
-        } 
-
+        // if (!empty($request->listed_type) && is_array($request->listed_type)) {
+        //     $properties = $properties->whereIn('listed_type_id', $request->listed_type);
+        // } 
        
         //Filter using Sale Types
         if (!empty($request->saletype)) {
@@ -195,6 +198,13 @@ class HomeController extends Controller {
             }
         }
 
+        //Filter using Posted By User
+        if ($request->filled('posted_by')) {
+            $properties = $properties->whereHas('user', function ($q) use ($request) {
+                $q->where('role', $request->posted_by);
+            });
+        }
+      
         //Filter using Constructions
         if (!empty($request->construction)) {
             if (is_array($request->construction)) {
@@ -245,18 +255,17 @@ class HomeController extends Controller {
             
         $data = [
             'properties' => $properties,   
-            '$category' => $category,
-            'categories' => $categories,
             'cities' => $cities,
             'areas' => $areas,
+            'users' => $users,
             'citySelected' => $citySelected,
             'areaSelected' => $areaSelected,
             //'area' => $area,
-            'categoryWord' => $categoryWord,
+            //'categoryWord' => $categoryWord,
             'savedPropertyIds' => $savedPropertyIds,            
         ];        
 
-        return view('front.home.listings', $data);
+        return view('front.home.results.listings', $data);
     }
 
 
@@ -266,7 +275,7 @@ class HomeController extends Controller {
         $property = Property::where([
             'id' => $id,
             'status' => 1,
-        ])->with(['room','bathroom','category','city'])->first();
+        ])->first();
         
         if($property == null){
             abort(404);
@@ -298,23 +307,23 @@ class HomeController extends Controller {
             $relatedProperties = Property::whereIn('id',$propertyArray)->where('status',1)->with('property_images')->get();
         }
         //Amenities
-        $relatedAmenities = [];
-        if ($property->related_amenities != '') {
-            $amenityArray = explode(',',$property->related_amenities);
-            $relatedAmenities = Amenity::whereIn('id',$amenityArray)->where('status',1)->get();
-        }
+        // $relatedAmenities = [];
+        // if ($property->related_amenities != '') {
+        //     $amenityArray = explode(',',$property->related_amenities);
+        //     $relatedAmenities = Amenity::whereIn('id',$amenityArray)->where('status',1)->get();
+        // }
        
         //Rooms
-        $relatedFacings = [];
-        if ($property->related_facings != '') {
-            $facingsArray = explode(',',$property->related_facings);
-            $relatedFacings = View::whereIn('id',$facingsArray)->where('status',1)->get();
-        }
+        // $relatedFacings = [];
+        // if ($property->related_facings != '') {
+        //     $facingsArray = explode(',',$property->related_facings);
+        //     $relatedFacings = View::whereIn('id',$facingsArray)->where('status',1)->get();
+        // }
 
         $data['property'] = $property;
         $data['relatedProperties'] = $relatedProperties;
-        $data['relatedAmenities'] = $relatedAmenities;
-        $data['relatedFacings'] = $relatedFacings;
+        //$data['relatedAmenities'] = $relatedAmenities;
+        //$data['relatedFacings'] = $relatedFacings;
         $data['properties'] = $properties;
         $data['applications'] = $applications;
         $data['saveCount'] = $saveCount; 

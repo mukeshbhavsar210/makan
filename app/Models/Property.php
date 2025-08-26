@@ -40,20 +40,16 @@ class Property extends Model {
         return $this->belongsTo(Category::class);
     }
 
-    // public function city(){
-    //     return $this->belongsTo(City::class);
-    // }
-
     public function city() {
         return $this->belongsTo(\App\Models\City::class, 'city_id'); 
-    }
-
-    public function user() {
-        return $this->belongsTo(\App\Models\User::class, 'user_id'); 
-    }
+    }   
 
     public function users(){
         return $this->belongsTo(User::class);
+    }
+
+    public function user() {
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function property_images_new() {

@@ -79,13 +79,27 @@
                             Price Range
                         </button>
                         <ul class="dropdown-menu custom-price" aria-labelledby="priceDropdown">
+
                             <form id="filterForm" method="GET" action="{{ route('properties.index') }}">
+                                <input type="hidden" name="price_min" id="price_min" value="{{ request('price_min', 1000) }}">
+                                <input type="hidden" name="price_max" id="price_max" value="{{ request('price_max', 50000) }}">
+                                
+                                <p>
+                                    <label for="priceRange">Price range:</label>
+                                    <input type="text" id="priceRange" readonly style="border:0; color:#f6931f; font-weight:bold;">
+                                </p>
+                                <div id="priceSlider"></div>
+
+                                <button type="submit" class="btn btn-primary">Filter</button>
+                            </form>
+
+                            {{-- <form id="filterForm" method="GET" action="{{ route('properties.index') }}">
                                 <input type="hidden" name="price_min" id="price_min" value="{{ request('price_min') }}">
                                 <input type="hidden" name="price_max" id="price_max" value="{{ request('price_max') }}">
                                 <input type="text" id="priceRange" />
                                 <button type="submit" class="btn btn-primary">Filter</button>
                                 <button type="button" id="resetPriceRange" class="btn btn-secondary">Reset</button>
-                            </form>
+                            </form> --}}
                         </ul>
                     </div>
                 </div>
@@ -166,17 +180,21 @@
                                 <div class="tab-pane fade show active" id="listedby-content" role="tabpanel">
                                     <div class="more-filter-checkbox">
                                         <h6>Listed By</h6>
-                                        {{-- @foreach ($listedTypes as $value)
-                                            <label class="custom-checkbox-label {{ is_array(request('listed_type')) && in_array($value->id, request('listed_type')) ? 'active' : '' }}">
-                                                <input type="checkbox" name="listed_type[]" value="{{ $value->id }}" data-label="{{ $value->title }}"
-                                                    {{ is_array(request('listed_type')) && in_array($value->id, request('listed_type')) ? 'checked' : '' }}>
-                                                <span class="checkmark"></span>
-                                                {{ $value->title }}
-                                                <svg fill="#ffffff" width="14px" height="14px" viewBox="-3.5 0 19 19" xmlns="http://www.w3.org/2000/svg" class="cf-icon-svg">
-                                                    <path d="M11.383 13.644A1.03 1.03 0 0 1 9.928 15.1L6 11.172 2.072 15.1a1.03 1.03 0 1 1-1.455-1.456l3.928-3.928L.617 5.79a1.03 1.03 0 1 1 1.455-1.456L6 8.261l3.928-3.928a1.03 1.03 0 0 1 1.455 1.456L7.455 9.716z"></path>
-                                                </svg>  
-                                            </label>
-                                        @endforeach --}}
+                                        <ul class="flex-wrapper">
+                                            @php
+                                                $uniqueRoles = $users->pluck('role')->unique();
+                                            @endphp
+
+                                            @foreach ($uniqueRoles as $role)
+                                                <li>
+                                                    <label class="dropdown-item custom-radio-label {{ request('posted_by') == $role ? 'active' : '' }}">
+                                                        <input type="radio" name="posted_by" value="{{ $role }}" {{ request('posted_by') == $role ? 'checked' : '' }}>
+                                                        <span class="radiomark"></span>
+                                                        {{ $role }}
+                                                    </label>
+                                                </li>
+                                            @endforeach  
+                                        </ul>                                  
                                     </div>
                                 </div>
 
@@ -321,14 +339,52 @@
                             </div>
                         </div>
                     </div>
-                </div>                
+                </div>    
+
+                @php
+                    $resetUrl = url()->current() . '?' . http_build_query([
+                        'category' => request('category'),
+                        'city' => request('city'),
+                        'area' => request('area'),
+                    ]);
+                @endphp
+
+                <button type="button" id="resetPriceRange" class="btn btn-primary btn-sm">Reset</button>
+
+                <script>
+                    let resetUrl = @json($resetUrl);
+
+                    $("#resetPriceRange").on("click", function () {
+                        $("#price_min").val("");
+                        $("#price_max").val("");
+
+                        slider.update({
+                            from: 0,
+                            to: priceLabels.length - 1
+                        });
+
+                        // Redirect instead of just submitting
+                        window.location.href = resetUrl;
+                    });
+
+                    // $("#resetSizeRange").on("click", function () {
+                    //     $("#size_min").val("");
+                    //     $("#size_max").val("");
+                    //     slider.update({
+                    //         from: 0,
+                    //         to: sizeLabels.length - 1
+                    //     });
+                    //     window.location.href = resetUrl;
+                    // });
+                </script>
+
 
                 <select name="sort" id="sort" class="form-control">
                     <option value="1" {{ (Request::get('sort') == '1') ? 'selected' : '' }}>Latest</option>
                     <option value="0" {{ (Request::get('sort') == '0') ? 'selected' : '' }}>Oldest</option>
                 </select>
 
-                <div class="col">
+                {{-- <div class="col">
                     <div style="display: none">
                         <select name="city" id="city" >
                             <option value="">City</option>
@@ -339,7 +395,7 @@
                             @endif
                         </select>
                     </div>
-                </div>
+                </div> --}}
             </div>
         </div>    
     </form>     

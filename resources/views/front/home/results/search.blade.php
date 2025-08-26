@@ -54,13 +54,13 @@
         <div class="hidden-areas-added-top">
             @php $rendered = []; @endphp
 
-            @php 
+            {{-- @php 
                 $rendered = [];
                 $selectedUnique = collect($selectedAreas)->unique();
-            @endphp
+            @endphp --}}
 
             <div class="listing-areas-top" style="display: none" >
-                <ul class="added-top" style="{{ $selectedUnique->count() > 1 ? '' : 'display:none;' }}">                    
+                {{-- <ul class="added-top" style="{{ $selectedUnique->count() > 1 ? '' : 'display:none;' }}">                    
                     @foreach($selectedAreas as $index => $areaId)
                         @if($areaId != $firstAreaId && !in_array($areaId, $rendered))
                             @php 
@@ -82,11 +82,11 @@
                             @endif
                         @endif
                     @endforeach
-                </ul>
+                </ul> --}}
 
                 <ul class="add-more-areas">
                     <li class="popular">Popular</li>
-                    @foreach($areas as $index => $area)
+                    {{-- @foreach($areas as $index => $area)
                         @if(!in_array($area->id, $selectedAreas) && !(!$selectedAreas && $index == 0))
                             <li class="top">
                                 <label class="custom-checkbox-label top">
@@ -94,7 +94,7 @@
                                 </label>
                             </li>
                         @endif
-                    @endforeach  
+                    @endforeach   --}}
                 </ul>
             </div>
         </div>                     

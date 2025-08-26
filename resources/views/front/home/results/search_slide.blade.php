@@ -3,17 +3,24 @@
                 <form action="{{ route('properties') }}" >            
                     <ul class="rentBuy">
                         <li>I'm looking to</li>
-                        @if ($categories)                               
-                            @foreach ($categories as $value)                            
-                                <li>
-                                    <label class="{{ request('category') == $value->id || (!request('category') && $loop->first) ? 'activeTab' : '' }}">
-                                        <input type="radio" name="category" value="{{ $value->id }}"
-                                            {{ request('category') == $value->id || (!request('category') && $loop->first) ? 'checked' : '' }}>
-                                        {{ $value->name }}
-                                    </label>
-                                </li>
-                            @endforeach                            
-                        @endif
+
+                        @php
+                            $categories = [
+                                ['id' => 1, 'title' => 'Buy'],
+                                ['id' => 2, 'title' => 'Rent'],
+                            ];
+                        @endphp
+
+                        @foreach ($categories as $value)
+                            <li>
+                                <label class="dropdown-item custom-radio-label {{ request('category') == $value['id'] ? 'active' : '' }}">
+                                    <input type="radio" name="category" value="{{ $value['id'] }}" data-label="{{ $value['title'] }}"
+                                        {{ request('category') == $value['id'] ? 'checked' : '' }}>
+                                    <span class="radiomark"></span>
+                                    {{ $value['title'] }}
+                                </label>
+                            </li>
+                        @endforeach
                     </ul>
 
                     <div class="search-controls">                        
@@ -81,7 +88,7 @@
                                 @endif
                             </ul>
 
-                            <div class="hidden-areas-added-btm">
+                            {{-- <div class="hidden-areas-added-btm">
                                 @php $rendered = []; @endphp
 
                                 @php 
@@ -129,7 +136,7 @@
                                     <ul id="areas_dynamic" >
                                     </ul>
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>                        
 
                         <div class="right-btn">

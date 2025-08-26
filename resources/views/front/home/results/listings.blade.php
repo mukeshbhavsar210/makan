@@ -10,12 +10,12 @@
     <div class="strip">
         <a class="navbar-brand" href="{{ route('front.home') }}"><img src="{{ asset('front-assets/images/logo.png') }}" /></a>
         <a class="toggleHeader toggleControl">
-            @if($categoryWord)
+            {{-- @if($categoryWord)
                 {{ $categoryWord }} 
             @endif
             @if($citySelected)
                 in {{ $citySelected->name }}
-            @endif
+            @endif --}}
             <span class="down-arrow">
                 <?xml version="1.0" encoding="utf-8"?>
                 <svg width="15px" height="15px" viewBox="0 0 1024 1024" class="icon"  version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M903.232 256l56.768 50.432L512 768 64 306.432 120.768 256 512 659.072z" fill="#ffffff" /></svg>
@@ -32,9 +32,9 @@
             </span>                
         </a>  
 
-        @include('front.home.search') 
-        @include('front.home.login')
-        @include('front.home.search_slide')
+        @include('front.home.results.search') 
+        @include('front.home.results.login')
+        @include('front.home.results.search_slide')
                     
         <div class="overlay"></div>
     </div>
@@ -42,12 +42,12 @@
 
 @section('main')
 
-@include('front.home.filters')
+@include('front.home.results.filters')
 
 <div class="body-details">
     <div class="row">
         <div class="col-md-8 col-12">
-            @include('front.home.breadcrumb')
+            @include('front.home.results.breadcrumb')
 
             @if ($properties->isNotEmpty())
                 @foreach ($properties as $value)      
@@ -129,9 +129,9 @@
                                 </div>
 
                                @if(Auth::check())
-                                    <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#longModal_{{ $value->id }}">Contact</a>  
+                                    <a href="#" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#longModal_{{ $value->id }}">Contact</a>  
                                 @else
-                                    <a href="http://127.0.0.1:8000/account/login" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-primary">Contact</a>
+                                    <a href="http://127.0.0.1:8000/account/login" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-primary btn-sm">Contact</a>
                                 @endif                                                                
 
                                 <div class="modal fade" id="longModal_{{ $value->id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -206,9 +206,7 @@
             }
         });
     }
-</script>
 
-<script>
 function updateDropdownLabel(dropdownId, inputSelector, defaultText) {
     var checked = $(inputSelector + ':checked');
     var button = $(dropdownId);
