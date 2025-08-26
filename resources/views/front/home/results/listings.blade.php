@@ -10,12 +10,12 @@
     <div class="strip">
         <a class="navbar-brand" href="{{ route('front.home') }}"><img src="{{ asset('front-assets/images/logo.png') }}" /></a>
         <a class="toggleHeader toggleControl">
-            {{-- @if($categoryWord)
+            @if($categoryWord)
                 {{ $categoryWord }} 
             @endif
             @if($citySelected)
                 in {{ $citySelected->name }}
-            @endif --}}
+            @endif
             <span class="down-arrow">
                 <?xml version="1.0" encoding="utf-8"?>
                 <svg width="15px" height="15px" viewBox="0 0 1024 1024" class="icon"  version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M903.232 256l56.768 50.432L512 768 64 306.432 120.768 256 512 659.072z" fill="#ffffff" /></svg>

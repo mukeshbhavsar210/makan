@@ -88,7 +88,7 @@
                                 @endif
                             </ul>
 
-                            {{-- <div class="hidden-areas-added-btm">
+                            <div class="hidden-areas-added-btm">
                                 @php $rendered = []; @endphp
 
                                 @php 
@@ -136,7 +136,7 @@
                                     <ul id="areas_dynamic" >
                                     </ul>
                                 </div>
-                            </div> --}}
+                            </div>
                         </div>                        
 
                         <div class="right-btn">

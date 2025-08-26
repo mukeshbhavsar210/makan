@@ -11,4 +11,12 @@ class Area extends Model {
     public function city(){
         return $this->belongsTo(City::class);
     }
+
+    // public function properties() {
+    //     return $this->hasMany(Property::class);
+    // }
+
+    public function properties() {
+        return $this->hasMany(Property::class, 'area_id', 'id');
+    }
 }

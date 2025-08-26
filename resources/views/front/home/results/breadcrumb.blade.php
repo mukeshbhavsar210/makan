@@ -1,30 +1,23 @@
 <div class="container-fluid">        
     <ul class="breadcrumb">
         <li><a href="{{ route('front.home') }}">Home</a></li>                
-        @if($citySelected)
-            <li><a href="{{ url('/properties?city='.$citySelected->id) }}">{{ $citySelected->name }}</a></li>
-        @endif
-        {{-- @if($areaSelected)
-            <li><a href="{{ url('/properties?city='.$areaSelected->id) }}">{{ $areaSelected->name }}</a></li>
-        @endif --}}
+        @php
+            $category = request()->get('category'); // keep current category
+        @endphp
 
-        {{-- @php
+        @if($citySelected)
+            <li><a href="{{ url('/properties') }}?category={{ $category }}&city={{ $citySelected->slug }}">{{ $citySelected->name }}</a></li>
+        @endif
+
+        @php
             $areas = $area instanceof \Illuminate\Support\Collection ? $area : collect([$area]);
         @endphp
 
-        @if($areas->count())
-            <li class="active" aria-current="page"> 
-                
-                Flat 
-                @if($categoryWord)
-                    {{ $categoryWord }} 
-                @endif
-                in 
-                @foreach($areas as $a)
-                    {{ $a->name }}@if(!$loop->last), @endif
-                @endforeach
-            </li>
-        @endif --}}
+        @if($areas->count())            
+            @if($areaSelected)
+                <li class="active" aria-current="page">{{ $areaSelected->name }}</li>
+            @endif              
+        @endif
     </ul>
 
     <div class="search-counts">
@@ -36,23 +29,25 @@
     </div>
 
     <div class="page-title">
-        {{-- @php
+        @php
             $areas = $area instanceof \Illuminate\Support\Collection ? $area : collect([$area]);
         @endphp
         <h5>
             @if($areas->count())
-               
                 Flat 
-                @if($categoryWord)
-                    {{ $categoryWord }} 
+                @php
+                    $category = ucfirst(request()->get('category', 'buy')); 
+                @endphp
+                @if($category)
+                    {{ $category }}
                 @endif
                 in 
-                @foreach($areas as $a)
-                    {{ $a->name }}@if(!$loop->last), @endif
-                @endforeach
+                @if($areaSelected)
+                    {{ $areaSelected->name }},    
+                @endif
+                 {{ $citySelected->name }}
             @endif
-        </h5> --}}
-
+        </h5>
         <div class="css-7b7t20">Sort by:<div class="input-container-dropdown css-1bh13te"><div class="input-container"><div class="css-gg4vpm"><div>Relevance</div><span class="css-5m6l3y"></span></div></div></div></div>
     </div>
 </div>
