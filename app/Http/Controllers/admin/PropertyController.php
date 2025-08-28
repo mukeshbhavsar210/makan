@@ -4,34 +4,26 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Category;
 use App\Models\Property;
 use App\Models\PropertyImage;
 use App\Models\TempImage;
 use Illuminate\Http\Request;
 use App\Models\City;
 use App\Models\Area;
-use App\Models\Amenity;
 use App\Models\Builder;
-use App\Models\Room;
-use App\Models\Bathroom;
 use App\Models\PropertyApplication;
 use App\Models\PropertyDocument;
 use App\Models\View;
-use App\Models\PropertyType;
-use App\Models\SaleType;
-use App\Models\SavedJob;
 use App\Models\SavedProperty;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
-use Illuminate\Support\Facades\Log;
+
 
 class PropertyController extends Controller {
-
     public function index(){
-        $properties = Property::where('user_id', auth()->id())->with('saleType')->orderBy('created_at','DESC')->paginate(10);        
+        $properties = Property::where('user_id', auth()->id())->orderBy('created_at','DESC')->paginate(10);        
         $counts = Property::where('user_id', auth()->id())->count();
 
         return view('admin.property.index', [
@@ -40,32 +32,21 @@ class PropertyController extends Controller {
         ]);
     }
 
+
     //CREATE PROPERTY
     public function create(){
         $data = [];
         $cities = City::orderBy('name','ASC')->where('status',1)->get();
         $areas = Area::orderBy('name','ASC')->where('status',1)->get();
         $builders = Builder::orderBy('name','ASC')->where('status',1)->get();
-        $rooms = Room::orderBy('title','ASC')->where('status',1)->get();        
-        $bathrooms = Bathroom::orderBy('title','ASC')->where('status',1)->get();
-        $amenities = Amenity::orderBy('title','ASC')->where('status',1)->get();
-        $views = View::orderBy('title','ASC')->where('status',1)->get();    
-        $categories = Category::orderBy('name','ASC')->where('status',1)->get();
-        $propertyTypes = PropertyType::orderBy('name','ASC')->where('status',1)->get();
-        $saleTypes = SaleType::orderBy('title','ASC')->where('status',1)->get();        
-        $categories = Category::orderBy('name','ASC')->get();
+        $relatedProperties = Property::where('status',1)->get();
 
         $data = [ 
             'cities' => $cities,
             'areas' => $areas,            
             'builders' => $builders,
-            'rooms' => $rooms,
-            'bathrooms' => $bathrooms,
-            'amenities' => $amenities,
-            'views' => $views,
-            'categories' => $categories,            
-            'propertyTypes' => $propertyTypes, 
-            'saleTypes' => $saleTypes, 
+            'relatedProperties' => $relatedProperties,
+
         ];
         return view('admin.property.create', $data);
     }
@@ -81,82 +62,85 @@ class PropertyController extends Controller {
         $validator = Validator::make($request->all(),$rules);
         if ($validator->passes()) {
             $property = new Property;
+            $property->user_id = Auth::user()->id;
             $property->title = $request->title;
             $property->slug = $request->slug;            
-            $property->user_id = Auth::user()->id;
-            $property->category_id = $request->category;
-            $property->room_id = $request->room;  
+            $property->category = $request->category;
+            $property->sale_types = $request->sale_types;            
+            $property->construction_types = $request->construction_types;
             $property->city_id = $request->city;   
             $property->area_id = $request->area;  
-            $property->builder_id = $request->builder;           
-            $property->sale_type_id = $request->saleType;
-            $property->property_type_id = $request->propertyType;
-            $property->view_id = $request->view;     
-            $property->price = $request->price;
-            $property->compare_price = $request->compare_price;            
             $property->description = $request->description;  
             $property->keywords = $request->keywords;
             $property->location = $request->location;
             $property->size = $request->size;
             $property->rera = $request->rera;  
             $property->year_build = $request->year_build;  
-            $property->total_area = $request->total_area;  
-            $property->related_properties = (!empty($request->related_properties)) ? implode(',',$request->related_properties) : '';
-            $property->related_facings = (!empty($request->related_facings)) ? implode(',',$request->related_facings) : '';            
-            $property->related_amenities = (!empty($request->related_amenities)) ? implode(',',$request->related_amenities) : '';
-            $property->bathroom_id = $request->bathroom;
-            $property->is_featured = $request->is_featured;
-            $property->construction_id = $request->construction;
-            $property->age_id = $request->age;
-            $property->amenity_id = $request->amenity;
-            $property->listed_type_id = $request->listed_type; 
-            Log::info('Incoming request data:', $request->all());           
+            $property->total_area = $request->total_area;
+            $property->is_featured = $request->is_featured;            
+            $property->status = $request->status;  
+
+            $fields = [
+                'rooms_json'             => 'rooms',
+                'bathrooms_json'         => 'bathrooms',
+                'property_types_json'    => 'property_types',
+                'amenities_json'         => 'amenities',
+                'facings_json'           => 'facings',
+                'related_properties_json'=> 'related_properties',
+            ];
+
+            foreach ($fields as $requestKey => $propertyKey) {
+                $property->$propertyKey = $request->filled($requestKey) 
+                    ? $request->$requestKey 
+                    : null;
+            }
+            
             $property->save();
 
-        if (!empty($request->image_array)) {
-            foreach ($request->image_array as $imageData) {
-                // $imageData now contains ['id' => temp_image_id, 'label' => 'Main/Bedroom/Elevation']
-                $temp_image_id = $imageData['id'] ?? null;
-                $label = $imageData['label'] ?? null;
+            if (!empty($request->image_array)) {
+                foreach ($request->image_array as $imageData) {
+                    // $imageData now contains ['id' => temp_image_id, 'label' => 'Main/Bedroom/Elevation']
+                    $temp_image_id = $imageData['id'] ?? null;
+                    $label = $imageData['label'] ?? null;
 
-                if ($temp_image_id) {
-                    $tempImageInfo = TempImage::find($temp_image_id);
-                    if (!$tempImageInfo) {
-                        continue; // skip if not found
+                    if ($temp_image_id) {
+                        $tempImageInfo = TempImage::find($temp_image_id);
+                        if (!$tempImageInfo) {
+                            continue; // skip if not found
+                        }
+
+                        $extArray = explode('.', $tempImageInfo->name);
+                        $ext = last($extArray);
+
+                        $propertyImage = new PropertyImage();
+                        $propertyImage->property_id = $property->id;
+                        $propertyImage->image = "NULL";
+                        $propertyImage->label = $label; // save enum label
+                        $propertyImage->save();
+
+                        $imageName = $property->id . '-' . $property->title . '-' . time() . '.' . $ext;
+                        $propertyImage->image = $imageName;
+                        $propertyImage->save();
+
+                        // Large Image
+                        $sourcePath = public_path() . '/temp/' . $tempImageInfo->name;
+                        $destPath = public_path() . '/uploads/property/large/' . $imageName;
+                        $manager = new ImageManager(new Driver());
+                        $image = $manager->read($sourcePath);
+                        $image->resize(1300, 731, function ($constraint) {
+                            $constraint->aspectRatio();
+                        });
+                        $image->save($destPath);
+
+                        // Thumbnail
+                        $destPath = public_path() . '/uploads/property/small/' . $imageName;
+                        $manager = new ImageManager(new Driver());
+                        $image = $manager->read($sourcePath);
+                        $image->cover(488, 326);
+                        $image->save($destPath);
                     }
-
-                    $extArray = explode('.', $tempImageInfo->name);
-                    $ext = last($extArray);
-
-                    $propertyImage = new PropertyImage();
-                    $propertyImage->property_id = $property->id;
-                    $propertyImage->image = "NULL";
-                    $propertyImage->label = $label; // save enum label
-                    $propertyImage->save();
-
-                    $imageName = $property->id . '-' . $property->title . '-' . time() . '.' . $ext;
-                    $propertyImage->image = $imageName;
-                    $propertyImage->save();
-
-                    // Large Image
-                    $sourcePath = public_path() . '/temp/' . $tempImageInfo->name;
-                    $destPath = public_path() . '/uploads/property/large/' . $imageName;
-                    $manager = new ImageManager(new Driver());
-                    $image = $manager->read($sourcePath);
-                    $image->resize(1300, 731, function ($constraint) {
-                        $constraint->aspectRatio();
-                    });
-                    $image->save($destPath);
-
-                    // Thumbnail
-                    $destPath = public_path() . '/uploads/property/small/' . $imageName;
-                    $manager = new ImageManager(new Driver());
-                    $image = $manager->read($sourcePath);
-                    $image->cover(488, 326);
-                    $image->save($destPath);
                 }
             }
-        }
 
 
         // if (!empty($request->document_array)) {
@@ -207,59 +191,32 @@ class PropertyController extends Controller {
             return redirect()->route('properties.index')->with('error','Property not found');
         }
 
+        $relatedProperties = Property::where('id', '!=', $property->id)->get();
+
         //Fetch Product Images
         $propertyImage = PropertyImage::where('property_id',$property->id)->get()->unique('label');   
         $areas = Area::where('city_id',$property->city_id)->get();        
 
-        //Fetch Related properties
-        $relatedProperties = [];
-        if ($property->related_properties != '') {
-            $propertyArray = explode(',',$property->related_properties);
-            $relatedProperties = Property::whereIn('id',$propertyArray)->get();
-        }
-
-        //Fetch Amenities
-        $relatedAmenities = [];
-        if ($property->related_amenities != '') {
-            $amenityArray = explode(',',$property->related_amenities);
-            $relatedAmenities = Amenity::whereIn('id',$amenityArray)->get();
-        }       
+      
 
         //Fetch Facings
-        $relatedFacings = [];
-        if ($property->related_facings != '') {
-            $facingsArray = explode(',',$property->related_facings);
-            $relatedFacings = Amenity::whereIn('id',$facingsArray)->get();
-        }
+        // $relatedFacings = [];
+        // if ($property->related_facings != '') {
+        //     $facingsArray = explode(',',$property->related_facings);
+        //     $relatedFacings = Amenity::whereIn('id',$facingsArray)->get();
+        // }
 
         $data = [];
-        $categories = Category::orderBy('name','ASC')->get();
-        $saleTypes = SaleType::orderBy('title','ASC')->get();  
         $cities = City::orderBy('name','ASC')->get();
         $areas = Area::orderBy('name','ASC')->get();        
         $builders = Builder::orderBy('name','ASC')->get();
-        $rooms = Room::orderBy('title','ASC')->get();        
-        $bathrooms = Bathroom::orderBy('title','ASC')->get();        
-        $views = View::orderBy('title','ASC')->get();    
-        $categories = Category::orderBy('name','ASC')->get();
-        $propertyTypes = PropertyType::orderBy('name','ASC')->get();
 
-        $data['categories'] = $categories;
-        $data['saleTypes'] = $saleTypes;
-        $data['propertyTypes'] = $propertyTypes;
         $data['cities'] = $cities;
         $data['areas'] = $areas;
-        $data['views'] = $views;
-        $data['rooms'] = $rooms;
-        $data['bathrooms'] = $bathrooms;
         $data['builders'] = $builders;
         $data['property'] = $property;
         $data['propertyImage'] = $propertyImage;
-        $data['relatedProperties'] = $relatedProperties;
-        $data['relatedAmenities'] = $relatedAmenities;  
-        $data['relatedFacings'] = $relatedFacings;  
-        $data['relatedFacings'] = $relatedFacings;
-
+        $data['relatedProperties'] = $relatedProperties; 
         
         return view('admin.property.edit',$data);
     }
@@ -272,7 +229,6 @@ class PropertyController extends Controller {
         $rules = [
             'title' => 'required',
             'slug' => 'required|unique:properties,slug,'.$property->id.',id',
-            'price' => 'required|numeric',
             'is_featured' => 'required|in:Yes,No',
         ];
       
@@ -282,33 +238,37 @@ class PropertyController extends Controller {
         if ($validator->passes()) {
             $property->title = $request->title;
             $property->slug = $request->slug;            
-            $property->category_id = $request->category;
-            $property->room_id = $request->room;  
+            $property->category = $request->category;
+            $property->sale_types = $request->sale_types;
+            $property->construction_types = $request->construction_types;
+            $property->property_age = $request->property_age;
             $property->city_id = $request->city;   
             $property->area_id = $request->area;  
-            $property->builder_id = $request->builder;           
-            $property->sale_type_id = $request->saleType;
-            $property->property_type_id = $request->propertyType;
-            $property->view_id = $request->view;     
-            $property->price = $request->price;
-            $property->compare_price = $request->compare_price;            
             $property->description = $request->description;  
             $property->keywords = $request->keywords;
             $property->location = $request->location;
             $property->size = $request->size;
             $property->rera = $request->rera;  
             $property->year_build = $request->year_build;  
-            $property->total_area = $request->total_area;  
-            $property->related_properties = (!empty($request->related_properties)) ? implode(',',$request->related_properties) : '';
-            $property->related_facings = (!empty($request->related_facings)) ? implode(',',$request->related_facings) : '';            
-            $property->related_amenities = (!empty($request->related_amenities)) ? implode(',',$request->related_amenities) : '';
-            $property->bathroom_id = $request->bathroom;
-            $property->is_featured = $request->is_featured;
-            $property->construction_id = $request->construction;
-            $property->age_id = $request->age;
-            $property->amenity_id = $request->amenity;
-            $property->listed_type_id = $request->listed_type; 
-            $property->status = $request->status;
+            $property->total_area = $request->total_area;
+            $property->is_featured = $request->is_featured;            
+            $property->status = $request->status;  
+
+            $fields = [
+                'rooms_json'             => 'rooms',
+                'bathrooms_json'         => 'bathrooms',
+                'property_types_json'    => 'property_types',
+                'amenities_json'         => 'amenities',
+                'facings_json'           => 'facings',
+                'related_properties_json'=> 'related_properties',
+            ];
+
+            foreach ($fields as $requestKey => $propertyKey) {
+                $property->$propertyKey = $request->filled($requestKey) 
+                    ? $request->$requestKey 
+                    : null;
+            }
+            
             $property->save();
 
             if (!empty($request->image_array)) {
@@ -564,14 +524,10 @@ class PropertyController extends Controller {
         ]);
     }
 
-
-
-  
-
     //Saved
     public function savedProperties(Request $request){
         $saved = SavedProperty::where(['user_id' => Auth::user()->id])
-                                ->with(['property','property.saleType','property.applications'])
+                                ->with(['property','property.applications'])
                                 ->orderBy('created_at','DESC')->paginate(10);
 
         $counts = SavedProperty::where('user_id', auth()->id())->count();
@@ -586,7 +542,7 @@ class PropertyController extends Controller {
     //Interested
     public function interested(Request $request){
         $interested = PropertyApplication::where('user_id',Auth::user()->id)
-                    ->with(['property','property.saleType','property.applications'])
+                    ->with(['property','property.applications'])
                     ->orderBy('created_at','DESC')
                     ->paginate(10);
 

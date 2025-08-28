@@ -16,9 +16,16 @@ use Intervention\Image\ImageManager;
 
 class BuilderController extends Controller {
     public function index(Request $request){
+        $properties = Property::with(['builder', 'user'])
+                    ->whereHas('builder', function($query) {
+                        $query->where('role', 'builder');
+                    })
+                    ->latest()
+                    ->get();
+
         $builders = Builder::with('properties')->latest();
         $addedProperty = Property::latest();        
-        $properties = Property::orderBy('title','ASC')->get();
+        //$properties = Property::orderBy('title','ASC')->get();
         $counts = Builder::count();
         $roles = User::select('role')->distinct()->pluck('role');
        
@@ -31,7 +38,6 @@ class BuilderController extends Controller {
         //     $propertyArray = explode(',',$builders->related_properties);
         //     $relatedProperties = Builder::whereIn('id',$propertyArray)->where('status',1)->get();
         // }
-
 
         $propertiesByRole = [];
             foreach ($roles as $role) {
@@ -51,9 +57,9 @@ class BuilderController extends Controller {
         $data['relatedProperties'] = $relatedProperties;
         $data['counts'] = $counts;
         $data['roles'] = $roles;
-        $data['propertiesByRole'] = $propertiesByRole;
-        
-    
+        $data['propertiesByRole'] = $propertiesByRole;        
+            
+            
         return view('admin.builder.list', $data);
     }
 

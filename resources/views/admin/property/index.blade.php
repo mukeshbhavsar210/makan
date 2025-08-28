@@ -25,7 +25,7 @@
                     </div>
                 </form>
 
-            <a href="{{ route('properties.create') }}" class="btn btn-primary btn-sm pull-right">New Property</a>
+            <a href="{{ route('properties.create') }}" class="btn btn-primary pull-right">New Property</a>
             </div>
         </div>
     </div>

@@ -17,13 +17,8 @@
 .h-6 {
   height: 1.5rem;}
 .dropzone {
-  background: white;
-  border-radius: 5px;
-  border: 2px dashed rgb(0, 135, 247);
-  border-image: none;
-  max-width: 100%;
-  margin-left: auto;
-  margin-right: auto;}
+  border: 2px dashed rgb(0, 135, 247) !important;
+  }
 .select2-container { width:100% !important;}
 .image-container { position: relative; max-width: 200px;}
 .image-container .image_flex { margin-top: 7px;}
@@ -227,7 +222,7 @@ input:checked + .slider { box-shadow:0 0 0 2px #007bff,0 0 2px #007bff;}
 .media-gallery .label { padding: 7px 0 0 0; display: flex; justify-content: space-between;}
 .media-gallery .label .deleteCardImg { padding:0 3px; border-radius: 3px; height:20px; width: 18px; color:#000; font-size: 13px; text-align: center;}
 .media-gallery .label .deleteCardImg:hover { background-color: #0d6efd; color: #fff;}
-.btn-group .btn { font-size: 12px; padding: 9px 13px 7px 13px; border-radius: 3px; height: 40px;}
+.btn-group .btn { font-size: 12px; padding: 7px 13px 6px 13px; border-radius: 3px; height: 35px;}
 .img-responsive { width: 100%;}
 .form-group { margin-bottom: 10px;}
 .form-group label { margin-bottom: 5px;}
@@ -238,6 +233,8 @@ input:checked + .slider { box-shadow:0 0 0 2px #007bff,0 0 2px #007bff;}
 .accordion-body  { padding: 20px 30px;}
 .accordion-button { font-size: 16px; padding: 20px 30px;}
 .accordion-button:not(.collapsed) { color: #0d6efd; background-color: #e8f5ff;}
+
+.overflow-y {  height: 120px; overflow-y: auto;}
 .modal{
   &.drawer{
     display: flex !important;

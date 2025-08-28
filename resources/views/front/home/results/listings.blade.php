@@ -121,9 +121,9 @@
 
                             <div class="developer">
                                 <div class="branding">
-                                    <img alt="" class="logo" src="{{ asset('uploads/builder/'.$value->builder->logo) }}" >
+                                    {{-- <img alt="" class="logo" src="{{ asset('uploads/builder/'.$value->builder->logo) }}" > --}}
                                     <div class="name">
-                                        <p class="builder_name">{{ $value->builder->name }}</p>
+                                        {{-- <p class="builder_name">{{ $value->builder->name }}</p> --}}
                                         <p>{{ $value->user->role }}</p>  
                                     </div>                                  
                                 </div>
@@ -144,7 +144,7 @@
                                             <div class="modal-body">                                            
                                                 <div class="modal-builder">
                                                 <h3>Contact Seller</h3>
-                                                    <div class="logo-details">
+                                                    {{-- <div class="logo-details">
                                                         <div class="logo">
                                                             <img alt="" src="{{ asset('uploads/builder/'.$value->builder->logo) }}" >
                                                         </div>
@@ -153,7 +153,7 @@
                                                             <p>Developer</p>
                                                             <p>+91-{{ $value->builder->mobile }}</p>
                                                         </div>
-                                                    </div>
+                                                    </div> --}}
                                                 </div>
 
                                                 Please share your contact
