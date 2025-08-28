@@ -5,10 +5,31 @@
 <section class="content-header">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-sm-9">
+            <div class="col-md-9 col-12">
                 <h1>Developers <span class="badge rounded text-blue bg-blue-subtle">{{ $counts }}</span></h1>
             </div>
-            
+
+            <div class="col-md-3 col-12">
+                <form action="" method="get" >
+                    <div class="card-header">
+                        <div class="card-title">
+                            <button type="button" onclick="window.location.href='{{ route('builders.index') }}'" class="btn btn-default btn-sm">Reset</button>
+                        </div>
+
+                        <div class="card-tools">
+                            <div class="input-group input-group" style="width: 250px;">
+                                <input value="{{ Request::get('keyword') }}" type="text" name="keyword" class="form-control float-right" placeholder="Search">
+
+                                <div class="input-group-append">
+                                <button type="submit" class="btn btn-default">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </section>
@@ -110,153 +131,134 @@
                 </div>
         </div>       
 
-       <ul class="nav nav-tabs" id="roleTabs" role="tablist">
-            @php $tabIndex = 0; @endphp {{-- separate counter for visible tabs --}}
-            @foreach($roles as $index => $role)
-                @if(strtolower($role) !== 'admin') {{-- skip admin role --}}
-                    <li class="nav-item">
-                        <a class="nav-link {{ $tabIndex == 0 ? 'active' : '' }}" 
-                        id="role-{{ $index }}-tab" 
-                        data-toggle="tab" 
-                        href="#role-{{ $index }}" 
-                        role="tab">
-                            {{ ucfirst($role) }}
-                        </a>
-                    </li>
-                    @php $tabIndex++; @endphp
-                @endif
-            @endforeach
+      <div class="card-body pt-0">
+        <ul class="nav nav-tabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <a class="nav-link active" data-bs-toggle="tab" href="#users" role="tab" aria-selected="true">User</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" data-bs-toggle="tab" href="#developers" role="tab" aria-selected="false" tabindex="-1">Developer</a>
+            </li> 
         </ul>
 
-        <div class="card">
-            <form action="" method="get" >
-                <div class="card-header">
-                    <div class="card-title">
-                        <button type="button" onclick="window.location.href='{{ route('builders.index') }}'" class="btn btn-default btn-sm">Reset</button>
-                    </div>
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div class="tab-pane active show" id="users" role="tabpanel">
+                <div class="tab-content border border-top-0" id="roleTabsContent">
+                    
+                    @foreach ($properties as $value)
+                        {{ $value->title }}
+                        {{ $value->user->name }}
+                        {{ $value->builder->name; }}
+                    @endforeach
 
-                    <div class="card-tools">
-                        <div class="input-group input-group" style="width: 250px;">
-                            <input value="{{ Request::get('keyword') }}" type="text" name="keyword" class="form-control float-right" placeholder="Search">
-
-                            <div class="input-group-append">
-                            <button type="submit" class="btn btn-default">
-                                <i class="fas fa-search"></i>
-                            </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        
-            <div class="tab-content border border-top-0" id="roleTabsContent">
-                @foreach($roles as $index => $role)
-                    <div class="tab-pane fade {{ $index == 0 ? 'show active' : '' }}" 
-                        id="role-{{ $index }}" role="tabpanel" 
-                        aria-labelledby="role-{{ $index }}-tab">
-                        
-                        <table class="table table-hover text-nowrap">
-                            <thead>
-                                <tr>
-                                    <th width="50">ID</th>
-                                    <th>Builder Name</th>
-                                </tr>
-                            </thead>
-                            <tbody>
+                    @foreach($roles as $index => $role)
+                        <div class="tab-pane fade {{ $index == 0 ? 'show active' : '' }}" id="role-{{ $index }}" role="tabpanel" aria-labelledby="role-{{ $index }}-tab">                            
+                            <table class="table table-hover text-nowrap">
+                                <thead>
+                                    <tr>
+                                        <th width="50">ID</th>
+                                        <th>Builder Name</th>
+                                    </tr>
+                                </thead>
                                 <tbody>
-                                    <div id="accordion{{ $role }}"> {{-- parent wrapper per role --}}
-                                        @forelse($propertiesByRole[$role] as $builderId => $properties)
-                                            @php
-                                                $builder = $properties->first()->builder;
-                                            @endphp
-                                            <tr>
-                                                <td>{{ $builder->id }}</td>
-                                                <td>
-                                                    <div id="headingBuilder{{ $builder->id }}">
-                                                        <a class="collapsed" 
-                                                        data-toggle="collapse" 
-                                                        href="#collapseBuilder_{{ $builder->id }}" 
-                                                        aria-expanded="false" 
-                                                        aria-controls="collapseBuilder_{{ $builder->id }}">
-                                                            <img style="border-radius:100px; width:35px; height:35px" 
-                                                                src="{{ asset('uploads/builder/'.$builder->logo) }}" 
-                                                                alt="" />
-                                                            <span class="ml-2">{{ $builder->name }}</span>
-                                                            <span class="badge badge-primary">{{ $properties->count() }}</span>
-                                                        </a>
-                                                    </div>
-
-                                                    <div id="collapseBuilder_{{ $builder->id }}" class="collapse" aria-labelledby="headingBuilder{{ $builder->id }}" data-parent="#accordion{{ $role }}">
-                                                        <div class="mt-3 mb-3">
-
-                                                            <table class="table table-hover text-nowrap">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th width="130">Picture</th>
-                                                                        <th>Project Name</th>
-                                                                        <th>Posted by</th>
-                                                                        <th>Status</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                    @foreach($properties as $property)                                                                
-                                                                        <tr>  
-                                                                            <td>                                                                            
-                                                                                @php
-                                                                                    $PropertyImage = $property->property_images->first();
-                                                                                @endphp  
-                                                                                <a href="{{ route('propertyDetails', $property->id) }}" target="_blank">
-                                                                                    @if (!empty($PropertyImage->image))
-                                                                                        <img src="{{ asset('uploads/property/small/'.$PropertyImage->image) }}" class="img-responsive" />
-                                                                                    @else
-                                                                                        <img src="{{ asset('admin-assets/img/default-150x150.png') }}" alt="" class="img-responsive" />
-                                                                                    @endif
-                                                                                </a>
-                                                                            </td>                                                    
-                                                                            <td>
-                                                                                <h5>{{ $property->title }}</h5>
-                                                                                @php
-                                                                                    $price = $property->price;
-                                                                                    $formatted = number_format($price / 100000, 1) . ' L'; 
-                                                                                @endphp
-                                                                                <span>₹{{ $formatted }}</span><br />
-                                                                                {{ $property->area->name }}, {{ $property->city->name }}
-                                                                            </td>
-                                                                            <td>{{ $property->user->name }}<br />
-                                                                                M. {{ $property->user->mobile }} 
-                                                                            </td>                                                                            
-                                                                            <td>
-                                                                                @if($property->status == 1)
-                                                                                    <span class="badge badge-success">Approved</span>
-                                                                                @else
-                                                                                    <span class="badge badge-danger">Inactive</span>
-                                                                                @endif
-                                                                            </td>
-                                                                        </tr>
-                                                                    @endforeach
-                                                                </tbody>
-                                                            </table>
+                                    <tbody>
+                                        {{-- <div id="accordion{{ $role }}">
+                                            @forelse($propertiesByRole[$role] as $builderId => $properties)
+                                                @php
+                                                    $builder = $properties->first()->builder;
+                                                @endphp
+                                                <tr>
+                                                    <td>{{ $builder->id }}</td>
+                                                    <td>
+                                                        <div id="headingBuilder{{ $builder->id }}">
+                                                            <a class="collapsed" data-toggle="collapse" href="#collapseBuilder_{{ $builder->id }}" aria-expanded="false" aria-controls="collapseBuilder_{{ $builder->id }}">
+                                                                <img style="border-radius:100px; width:35px; height:35px" 
+                                                                    src="{{ asset('uploads/builder/'.$builder->logo) }}" 
+                                                                    alt="" />
+                                                                <span class="ml-2">{{ $builder->name }}</span>
+                                                                <span class="badge badge-primary">{{ $properties->count() }}</span>
+                                                            </a>
                                                         </div>
-                                                    </div>
-                                                </td>                                                
-                                            </tr>
-                                        @empty
-                                            <tr>
-                                                <td colspan="5">No builders found for {{ $role }}</td>
-                                            </tr>
-                                        @endforelse
-                                    </div>
-                                </tbody>
-                            </tbody>
-                        </table>
-                    </div>
-                @endforeach
-            </div>
 
+                                                        <div id="collapseBuilder_{{ $builder->id }}" class="collapse" aria-labelledby="headingBuilder{{ $builder->id }}" data-parent="#accordion{{ $role }}">
+                                                            <div class="mt-3 mb-3">
+                                                                <table class="table table-hover text-nowrap">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th width="130">Picture</th>
+                                                                            <th>Project Name</th>
+                                                                            <th>Posted by</th>
+                                                                            <th>Status</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        @foreach($properties as $property)                                                                
+                                                                            <tr>  
+                                                                                <td>                                                                            
+                                                                                    @php
+                                                                                        $PropertyImage = $property->property_images->first();
+                                                                                    @endphp  
+                                                                                    <a href="{{ route('propertyDetails', $property->id) }}" target="_blank">
+                                                                                        @if (!empty($PropertyImage->image))
+                                                                                            <img src="{{ asset('uploads/property/small/'.$PropertyImage->image) }}" class="img-responsive" />
+                                                                                        @else
+                                                                                            <img src="{{ asset('admin-assets/img/default-150x150.png') }}" alt="" class="img-responsive" />
+                                                                                        @endif
+                                                                                    </a>
+                                                                                </td>                                                    
+                                                                                <td>
+                                                                                    <h5>{{ $property->title }}</h5>
+                                                                                    @php
+                                                                                        $price = $property->price;
+                                                                                        $formatted = number_format($price / 100000, 1) . ' L'; 
+                                                                                    @endphp
+                                                                                    <span>₹{{ $formatted }}</span><br />
+                                                                                    {{ $property->area->name }}, {{ $property->city->name }}
+                                                                                </td>
+                                                                                <td>{{ $property->user->name }}<br />
+                                                                                    M. {{ $property->user->mobile }} 
+                                                                                </td>                                                                            
+                                                                                <td>
+                                                                                    @if($property->status == 1)
+                                                                                        <span class="badge badge-success">Approved</span>
+                                                                                    @else
+                                                                                        <span class="badge badge-danger">Inactive</span>
+                                                                                    @endif
+                                                                                </td>
+                                                                            </tr>
+                                                                        @endforeach
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </td>                                                
+                                                </tr>
+                                            @empty
+                                                <tr>
+                                                    <td colspan="5">No builders found for {{ $role }}</td>
+                                                </tr>
+                                            @endforelse
+                                        </div> --}}
+                                    </tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    @endforeach
+                </div>        
+            </div>
+            <div class="tab-pane" id="developers" role="tabpanel">
+                <p class="mb-0 text-muted">
+                    Food truck fixie locavore, accusamus mcsweeney's
+                    single-origin coffee squid. 
+                </p>
+            </div>
+            
             <div class="card-footer clearfix">
                 {{ $builders->links() }}
             </div>
-        </div>
+        </div>              
+    </div>
     </div>
 </section>
 @endsection

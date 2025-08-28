@@ -35,12 +35,6 @@
                 <i class="iconoir-view-grid menu-icon"></i>
                 <span>Area</span>
             </a>
-        </li>  
-        <li class="nav-item">
-            <a href="{{ route('amenities.index') }}" class="nav-link">
-                <i class="iconoir-table-rows menu-icon"></i>
-                <span>Amenities</span>
-            </a>
         </li> 
     @endif
 </ul>

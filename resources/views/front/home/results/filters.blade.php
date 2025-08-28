@@ -10,25 +10,27 @@
                         @php
                             $propertyTypes = [
                                 ['id' => 1, 'title' => 'Apartment'],
-                                ['id' => 2, 'title' => 'Plot'],
-                                ['id' => 3, 'title' => 'Studio'],
-                                ['id' => 4, 'title' => 'Apartment'],
-                                ['id' => 5, 'title' => 'Plot'],
+                                ['id' => 2, 'title' => 'Independent House'],
+                                ['id' => 3, 'title' => 'Independent Floor'],
+                                ['id' => 4, 'title' => 'Plot'],
                                 ['id' => 6, 'title' => 'Studio'],
-                                ['id' => 7, 'title' => 'Apartment'],
-                                ['id' => 8, 'title' => 'Plot'],
-                                ['id' => 9, 'title' => 'Studio'],
+                                ['id' => 7, 'title' => 'Duplex'],
+                                ['id' => 8, 'title' => 'Pent House'],
+                                ['id' => 9, 'title' => 'Villa'],
+                                ['id' => 10, 'title' => 'Agricultural Land'],
                             ];
                         @endphp
 
-                        @foreach ($propertyTypes as $value)
+                         @foreach ($propertyTypes as $value)
                             <li>
-                                <label class="dropdown-item custom-checkbox-label {{ is_array(request('property_type')) && in_array($value['id'], request('property_type')) ? 'active' : '' }}">
-                                    <input type="checkbox" 
-                                        name="property_type[]" 
-                                        value="{{ $value['id'] }}"
-                                        data-label="{{ $value['title'] }}"
-                                        {{ is_array(request('property_type')) && in_array($value['id'], request('property_type')) ? 'checked' : '' }}>
+                                @php
+                                    $slug = strtolower(str_replace(' ', '_', $value['title']));
+                                @endphp
+
+                                <label class="dropdown-item custom-checkbox-label {{ is_array(request('property_type')) && in_array($slug, request('property_type')) ? 'active' : '' }}">
+                                    <input type="checkbox" name="property_type[]" value="{{ $slug }}" data-label="{{ $value['title'] }}"
+                                        {{ is_array(request('property_type')) && in_array($slug, request('property_type')) ? 'checked' : '' }}>
+                                    
                                     <span class="checkmark"></span>
                                     {{ $value['title'] }}
                                     <svg fill="#ffffff" width="14px" height="14px" viewBox="-3.5 0 19 19" xmlns="http://www.w3.org/2000/svg" class="cf-icon-svg">
@@ -57,13 +59,16 @@
                         @endphp
 
                         @foreach ($rooms as $value)
+                            @php
+                                $roomValue = strtolower(str_replace(' ', '_', $value['title']));
+                            @endphp
+
                             <li>
-                                <label class="dropdown-item custom-checkbox-label {{ is_array(request('room')) && in_array($value['id'], request('room')) ? 'active' : '' }}">
-                                    <input type="checkbox" name="room[]" value="{{ $value['id'] }}"
-                                        data-label="{{ $value['title'] }}"
-                                        {{ is_array(request('room')) && in_array($value['id'], request('room')) ? 'checked' : '' }}>
+                                <label class="dropdown-item custom-checkbox-label {{ is_array(request('room')) && in_array($roomValue, request('room')) ? 'active' : '' }}">
+                                    <input type="checkbox" name="room[]" value="{{ $roomValue }}" data-label="{{ $value['title'] }}" {{ is_array(request('room')) && in_array($roomValue, request('room')) ? 'checked' : '' }}>
                                     <span class="checkmark"></span>
-                                    {{ $value['title'] }}
+                                    {{ strtoupper(str_replace('_', ' ', $roomValue)) }}
+                                    
                                     <svg fill="#ffffff" width="14px" height="14px" viewBox="-3.5 0 19 19" xmlns="http://www.w3.org/2000/svg" class="cf-icon-svg">
                                         <path d="M11.383 13.644A1.03 1.03 0 0 1 9.928 15.1L6 11.172 2.072 15.1a1.03 1.03 0 1 1-1.455-1.456l3.928-3.928L.617 5.79a1.03 1.03 0 1 1 1.455-1.456L6 8.261l3.928-3.928a1.03 1.03 0 0 1 1.455 1.456L7.455 9.716z"></path>
                                     </svg>
@@ -229,10 +234,17 @@
                                         @endphp
 
                                         @foreach ($amenities as $value)
-                                            <label class="custom-checkbox-label {{ is_array(request('amenities')) && in_array($value['id'], request('amenities')) ? 'active' : '' }}">
-                                                <input class="hidden" type="checkbox" name="amenities[]" value="{{ $value['id'] }}" data-label="{{ $value['title'] }}"
-                                                    {{ is_array(request('amenities')) && in_array($value['id'], request('amenities')) ? 'checked' : '' }}><span class="radiomark"></span>
-                                                {{ $value['title'] }}
+                                            @php
+                                                $slug = strtolower(str_replace(' ', '_', $value['title'])); // "Gym" => "gym"
+                                            @endphp
+
+                                            <label class="custom-checkbox-label {{ is_array(request('amenities')) && in_array($slug, request('amenities')) ? 'active' : '' }}">
+                                                <input class="hidden" type="checkbox" name="amenities[]" value="{{ $slug }}" data-label="{{ $value['title'] }}"
+                                                    {{ is_array(request('amenities')) && in_array($slug, request('amenities')) ? 'checked' : '' }}>
+                                                
+                                                <span class="radiomark"></span>
+                                                {{ $value['title'] }} {{-- UI label --}}
+                                                
                                                 <svg fill="#ffffff" width="14px" height="14px" viewBox="-3.5 0 19 19" xmlns="http://www.w3.org/2000/svg" class="cf-icon-svg">
                                                     <path d="M11.383 13.644A1.03 1.03 0 0 1 9.928 15.1L6 11.172 2.072 15.1a1.03 1.03 0 1 1-1.455-1.456l3.928-3.928L.617 5.79a1.03 1.03 0 1 1 1.455-1.456L6 8.261l3.928-3.928a1.03 1.03 0 0 1 1.455 1.456L7.455 9.716z"></path>
                                                 </svg>
@@ -290,9 +302,19 @@
                                         @endphp
 
                                         @foreach ($facings as $value)
-                                            <label class="custom-checkbox-label {{ is_array(request('facing')) && in_array($value['id'], request('facing')) ? 'active' : '' }}">
-                                                <input type="checkbox" name="facing[]" value="{{ $value['id'] }}" data-label="{{ $value['title'] }}"
-                                                    {{ is_array(request('facing')) && in_array($value['id'], request('facing')) ? 'checked' : '' }}><span class="checkmark"></span>{{ $value['title'] }}
+                                            @php
+                                                $slug = strtolower(str_replace(' ', '_', $value['title']));
+                                            @endphp
+
+                                            <label class="custom-checkbox-label 
+                                                {{ is_array(request('facing')) && in_array($slug, request('facing')) ? 'active' : '' }}">
+
+                                                <input type="checkbox" name="facing[]" value="{{ $slug }}" data-label="{{ $value['title'] }}"
+                                                    {{ is_array(request('facing')) && in_array($slug, request('facing')) ? 'checked' : '' }}>
+
+                                                <span class="checkmark"></span>
+                                                {{ $value['title'] }}
+
                                                 <svg fill="#ffffff" width="14px" height="14px" viewBox="-3.5 0 19 19" xmlns="http://www.w3.org/2000/svg" class="cf-icon-svg">
                                                     <path d="M11.383 13.644A1.03 1.03 0 0 1 9.928 15.1L6 11.172 2.072 15.1a1.03 1.03 0 1 1-1.455-1.456l3.928-3.928L.617 5.79a1.03 1.03 0 1 1 1.455-1.456L6 8.261l3.928-3.928a1.03 1.03 0 0 1 1.455 1.456L7.455 9.716z"></path>
                                                 </svg>
@@ -316,14 +338,22 @@
                                         @endphp
 
                                         @foreach ($bathrooms as $value)
-                                            <label class="custom-checkbox-label {{ is_array(request('bathroom')) && in_array($value['id'], request('bathroom')) ? 'active' : '' }}">
+                                            @php
+                                                $slug = strtolower(str_replace(' ', '_', $value['title']));
+                                            @endphp
+
+                                            <label class="custom-checkbox-label 
+                                                {{ is_array(request('bathroom')) && in_array($slug, request('bathroom')) ? 'active' : '' }}">
+
                                                 <input type="checkbox" 
                                                     name="bathroom[]" 
-                                                    value="{{ $value['id'] }}" 
+                                                    value="{{ $slug }}" {{-- lowercase slug for DB --}}
                                                     data-label="{{ $value['title'] }}"
-                                                    {{ is_array(request('bathroom')) && in_array($value['id'], request('bathroom')) ? 'checked' : '' }}>
+                                                    {{ is_array(request('bathroom')) && in_array($slug, request('bathroom')) ? 'checked' : '' }}>
+
                                                 <span class="checkmark"></span>
                                                 {{ $value['title'] }}
+
                                                 <svg fill="#ffffff" width="14px" height="14px" viewBox="-3.5 0 19 19" xmlns="http://www.w3.org/2000/svg" class="cf-icon-svg">
                                                     <path d="M11.383 13.644A1.03 1.03 0 0 1 9.928 15.1L6 11.172 2.072 15.1a1.03 1.03 0 1 1-1.455-1.456l3.928-3.928L.617 5.79a1.03 1.03 0 1 1 1.455-1.456L6 8.261l3.928-3.928a1.03 1.03 0 0 1 1.455 1.456L7.455 9.716z"></path>
                                                 </svg>
@@ -366,16 +396,6 @@
                         // Redirect instead of just submitting
                         window.location.href = resetUrl;
                     });
-
-                    // $("#resetSizeRange").on("click", function () {
-                    //     $("#size_min").val("");
-                    //     $("#size_max").val("");
-                    //     slider.update({
-                    //         from: 0,
-                    //         to: sizeLabels.length - 1
-                    //     });
-                    //     window.location.href = resetUrl;
-                    // });
                 </script>
 
 

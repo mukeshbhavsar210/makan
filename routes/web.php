@@ -64,14 +64,7 @@ Route::group(['prefix' => 'admin','middleware' => 'checkRole'], function(){
       
     //Get area name parent city
     Route::get('/areaSub', [CityController::class, 'areaSub'])->name('areaSub.index');
-
-    //Category Routes
-    Route::get('/categories', [CategoryController::class, 'create'])->name('categories.create');    
-    Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store');
-    Route::get('/categories/{category}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
-    Route::put('/categories/{category}', [CategoryController::class, 'update'])->name('categories.update');
-    Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])->name('categories.delete');
-
+   
     //Developer Routes
     Route::get('/builders', [BuilderController::class, 'index'])->name('builders.index');
     Route::get('/builders/create', [BuilderController::class, 'create'])->name('builders.create');
@@ -79,14 +72,7 @@ Route::group(['prefix' => 'admin','middleware' => 'checkRole'], function(){
     Route::get('/builders/{id}/edit', [BuilderController::class, 'edit'])->name('builders.edit');
     Route::put('/builders/{id}', [BuilderController::class, 'update'])->name('builders.update');
     Route::delete('/builders/{id}', [BuilderController::class, 'destroy'])->name('builders.delete');
-
-    //Amienites routes
-    Route::get('/amenities', [AmenityController::class, 'index'])->name('amenities.index');    
-    Route::post('/amenities', [AmenityController::class, 'store'])->name('amenities.store');
-    Route::get('/amenities/{id}/edit', [AmenityController::class, 'edit'])->name('amenities.edit');
-    Route::put('/amenities/{id}', [AmenityController::class, 'update'])->name('amenities.update');
-    Route::delete('/amenities/{id}', [AmenityController::class, 'destroy'])->name('amenities.delete');
-
+    
     Route::get('/getSlug', function(Request $request){
         $slug = '';
         if (!empty($request->title)) {

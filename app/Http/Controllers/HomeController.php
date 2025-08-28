@@ -19,7 +19,7 @@ class HomeController extends Controller {
         $cities = City::where('status',1)->get();
         $areas = Area::where('status',1)->get();                
         $featuredJobs = Property::where('status',1)->orderBy('created_at','DESC')->take(6)->get();
-        $latestJobs = Property::where('status',1)->orderBy('created_at','DESC')->with('amenityType')->take(6)->get();
+        $latestJobs = Property::where('status',1)->orderBy('created_at','DESC')->take(6)->get();
         $properties = Property::where('status',1);
         $jobTypes = Builder::where('status',1)->get();        
 
@@ -149,17 +149,17 @@ class HomeController extends Controller {
         //Filter using property types working
         if (!empty($request->property_type) && is_array($request->property_type)) {
             $properties = $properties->where(function ($query) use ($request) {
-                foreach ($request->property_type as $Id) {
-                    $query->orWhereJsonContains('property_types', (int) $Id);
+                foreach ($request->property_type as $type) {
+                    $query->orWhereJsonContains('property_types', strtolower($type));
                 }
             });
-        }      
+        }
 
         //Filter using Room Working
         if (!empty($request->room) && is_array($request->room)) {
             $properties = $properties->where(function ($query) use ($request) {
-                foreach ($request->room as $Id) {
-                    $query->orWhereJsonContains('rooms', ['id' => (int) $Id]);
+                foreach ($request->room as $roomTitle) {
+                    $query->orWhereJsonContains('rooms', ['title' => $roomTitle]);
                 }
             });
         }
@@ -167,17 +167,18 @@ class HomeController extends Controller {
         //Filter using Bathrooms working
         if (!empty($request->bathroom) && is_array($request->bathroom)) {
             $properties = $properties->where(function ($query) use ($request) {
-                foreach ($request->bathroom as $bathroomId) {
-                    $query->orWhereJsonContains('bathrooms', (int) $bathroomId);
+                foreach ($request->bathroom as $bathroom) {
+                    $query->orWhereJsonContains('bathrooms', strtolower($bathroom));
                 }
             });
         }
 
+
         //Filter using Facings working
         if (!empty($request->facing) && is_array($request->facing)) {
             $properties = $properties->where(function ($query) use ($request) {
-                foreach ($request->facing as $Id) {
-                    $query->orWhereJsonContains('property_facings', (int) $Id);
+                foreach ($request->facing as $facing) {
+                    $query->orWhereJsonContains('facings', strtolower($facing));
                 }
             });
         }
@@ -185,11 +186,12 @@ class HomeController extends Controller {
         //Filter using Amenities
         if (!empty($request->amenities) && is_array($request->amenities)) {
             $properties = $properties->where(function ($query) use ($request) {
-                foreach ($request->amenities as $Id) {
-                    $query->orWhereJsonContains('amenities', (int) $Id);
+                foreach ($request->amenities as $amenity) {
+                    $query->orWhereJsonContains('amenities', strtolower($amenity));
                 }
             });
-        }        
+        }
+      
 
         //Filter using Listed Types working
         // if (!empty($request->listed_type) && is_array($request->listed_type)) {
