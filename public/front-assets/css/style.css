@@ -613,6 +613,8 @@ header { position: fixed; width: 100%; top:0; left: 0; z-index: 99; background-c
 .gallery-title .title .title-h4 .share-save li { margin-right: 10px;}
 .gallery-title .title .title-h4 .share-save li a { color: var(--black); text-decoration: none; border: 1px #666 solid; padding: 5px 12px; border-radius: 5px; font-size: 12px; background-color: var(--white);}
 .gallery-title .title .title-h4 .share-save li a:hover { color: var(--white); background-color: var(--primary); border-color: var(--primary);}
+.gallery-title .room-item { display: flex; }
+.gallery-title .room-item .room { margin-right: 20px;}
 .gallery-title .right-gallery-pagination { display: flex; justify-content: space-between;}
 .gallery-title .right-gallery-pagination .slick-info { width: 115px;}
 .gallery-title .right-gallery-pagination .slick-info .text { float: right; text-align: right;}

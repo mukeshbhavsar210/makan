@@ -66,7 +66,7 @@
 								@if( Auth::user()->role == 'admin')
 									<a class="dropdown-item" href=""><i class="las la-user fs-18 me-1 align-text-bottom"></i> User</a>
 								@endif	
-                                <a class="dropdown-item" href=""><i class="las la-user fs-18 me-1 align-text-bottom"></i> Profile</a>
+                                <a class="dropdown-item" href="{{ route('profile.index') }}"><i class="las la-user fs-18 me-1 align-text-bottom"></i> Profile</a>
                                 <a class="dropdown-item" href=""><i class="las la-cog fs-18 me-1 align-text-bottom"></i> Settings</a>
                                 <div class="dropdown-divider mb-0"></div>
                                 <a class="dropdown-item text-danger" href="{{ route('account.logout') }}"><i class="las la-power-off fs-18 me-1 align-text-bottom"></i> Logout</a>

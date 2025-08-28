@@ -63,7 +63,7 @@
                             </div>
                         </div>
 
-                        @include('front.home.modal')
+                        @include('front.home.results.modal')
                         
                         <div class="details">
                             <a href="{{ route('propertyDetails', $value->id) }}" class="product-link">
@@ -75,14 +75,17 @@
                                             </div>
                                         </h3>                                                                            
                                         <p>
-                                            @php
+                                            @php                                       
                                                 $roomsArray = json_decode($value->rooms, true) ?? [];
-                                                $titles = array_column($roomsArray, 'title');
                                             @endphp
 
-                                            {{ implode(', ', $titles) }}
-
-                                            BHK  in {{ $value->area->name }}.</p>
+                                            @if(!empty($roomsArray))
+                                                @foreach($roomsArray as $room)
+                                                    {{ isset($room['title']) ? strtoupper(str_replace('_', ' ', $room['title'])) : '' }},
+                                                @endforeach
+                                            @endif
+                                            in {{ $value->area->name }}.
+                                        </p>
                                     </div>
                                     <div class="right">
                                         @if ($value->category == 'Rent')
@@ -97,17 +100,24 @@
                                     @php                                       
                                         $roomsArray = json_decode($value->rooms, true) ?? [];
                                         $propertyTypes = json_decode($value->property_types, true) ?? [];
+
+                                        $formatPrice = function ($price) {
+                                            if ($price >= 10000000) {
+                                                return number_format($price / 10000000, 1) . ' Cr';
+                                            } elseif ($price >= 100000) {
+                                                return number_format($price / 100000, 1) . ' Lacs';
+                                            } else {
+                                                return number_format($price);
+                                            }
+                                        };
                                     @endphp
 
                                     @if(!empty($roomsArray))
                                         @foreach($roomsArray as $room)
                                             <div class="room-item">
-                                                <p>
-                                                    {{ $room['title'] ?? '' }} BHK
-                                                </p>
-
+                                                <p>{{ isset($room['title']) ? strtoupper(str_replace('_', ' ', $room['title'])) : '' }}</p>
                                                 @if(!empty($room['price']))
-                                                    <p class="price">₹{{ number_format($room['price']) }}</p>
+                                                    <p class="price">₹{{ $formatPrice($room['price']) }}</p>
                                                 @endif
                                             </div>
                                         @endforeach
@@ -121,11 +131,15 @@
 
                             <div class="developer">
                                 <div class="branding">
-                                    {{-- <img alt="" class="logo" src="{{ asset('uploads/builder/'.$value->builder->logo) }}" > --}}
-                                    <div class="name">
-                                        {{-- <p class="builder_name">{{ $value->builder->name }}</p> --}}
-                                        <p>{{ $value->user->role }}</p>  
-                                    </div>                                  
+                                    @if ($value->builder && $value->builder->logo)
+                                        <img src="{{ asset('uploads/builder/' . $value->builder->logo) }}" class="logo" >
+                                        <div class="name">
+                                            <p class="builder_name">{{ $value->builder->name }}</p>
+                                            <p>{{ $value->user->role }}</p>  
+                                        </div>                                  
+                                    @else
+                                        <img src="{{ asset('admin-assets/img/default-150x150.png') }}" alt="" height="80" class="logo" />
+                                    @endif
                                 </div>
 
                                @if(Auth::check())
@@ -144,16 +158,20 @@
                                             <div class="modal-body">                                            
                                                 <div class="modal-builder">
                                                 <h3>Contact Seller</h3>
-                                                    {{-- <div class="logo-details">
-                                                        <div class="logo">
-                                                            <img alt="" src="{{ asset('uploads/builder/'.$value->builder->logo) }}" >
-                                                        </div>
-                                                        <div class="details-modal">
-                                                            <h4>{{ $value->builder->name }}</h4>
-                                                            <p>Developer</p>
-                                                            <p>+91-{{ $value->builder->mobile }}</p>
-                                                        </div>
-                                                    </div> --}}
+                                                <div class="logo-details">
+                                                        @if ($value->builder && $value->builder->logo)
+                                                            <div class="logo">
+                                                                <img src="{{ asset('uploads/builder/' . $value->builder->logo) }}" class="logo" >
+                                                            </div>
+                                                            <div class="details-modal">
+                                                                <h4>{{ $value->builder->name }}</h4>
+                                                                <p>{{ $value->user->role }}</p>  
+                                                                <p>M. {{ $value->builder->mobile }}</p>
+                                                            </div>                                  
+                                                        @else
+                                                            <img src="{{ asset('admin-assets/img/default-150x150.png') }}" alt="" height="80" class="logo" />
+                                                        @endif
+                                                    </div>
                                                 </div>
 
                                                 Please share your contact

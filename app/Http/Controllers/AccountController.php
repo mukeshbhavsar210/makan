@@ -38,16 +38,19 @@ use Illuminate\Support\Str;
 use Spatie\Permission\Traits\HasRoles;
 use Intervention\Image\Facades\Image;
 
-class AccountController extends Controller
-{
-
+class AccountController extends Controller {
     public function index(){
         $id = Auth::user()->id;
         $user = User::where('id',$id)->first();
 
-        return view('admin.account.profile',[
-            'user' => $user
-        ]);
+        $builders = $user->builders()->latest()->paginate(10);
+        $counts = Builder::count();
+
+        $data['user'] = $user;
+        $data['builders'] = $builders;
+        $data['counts'] = $counts;
+
+        return view('admin.account.profile', $data);
     }
 
     public function registration(){
@@ -296,6 +299,201 @@ class AccountController extends Controller
 
         return redirect()->route('account.login')->with('success','You have successfully changed your password');
     }
+
+
+
+
+    //BUILDERS
+    public function index_builder(Request $request){
+        $properties = Property::with(['builder', 'user'])->whereHas('builder', function($query) {
+                        $query->where('role', 'builder');
+                    })->latest()->get();
+
+        $builders = Builder::with('properties')->latest();
+        $addedProperty = Property::latest();        
+        //$properties = Property::orderBy('title','ASC')->get();
+        $counts = Builder::count();
+        $roles = User::select('role')->distinct()->pluck('role');
+       
+        if(!empty($request->get('keyword'))){
+            $builders = $builders->where('name', 'like', '%'.$request->get('keyword').'%');
+        }
+
+        $relatedProperties = [];
+        // if ($builders->related_properties != '') {
+        //     $propertyArray = explode(',',$builders->related_properties);
+        //     $relatedProperties = Builder::whereIn('id',$propertyArray)->where('status',1)->get();
+        // }
+
+        $propertiesByRole = [];
+            foreach ($roles as $role) {
+                $propertiesByRole[$role] = \App\Models\Property::with(['user', 'builder'])
+                    ->whereHas('user', function ($q) use ($role) {
+                        $q->where('role', $role);
+                    })
+                    ->get()
+                    ->groupBy('builder_id'); // 👈 group properties by builder
+            }
+
+        $builders = $builders->paginate(10);
+
+        $data['builders'] = $builders;
+        $data['properties'] = $properties;
+        $data['addedProperty'] = $addedProperty;
+        $data['relatedProperties'] = $relatedProperties;
+        $data['counts'] = $counts;
+        $data['roles'] = $roles;
+        $data['propertiesByRole'] = $propertiesByRole;        
+            
+            
+        return view('admin.builder.list', $data);
+    }
+
+    //CREATE
+    public function create_builder(){
+        $properties = Property::orderBy('title','ASC')->get();
+        $data['properties'] = $properties;
+        $cities = City::orderBy('name','ASC')->get();
+        $data['cities'] = $cities;
+        return view("admin.builder.create", $data);
+    }
+
+
+    public function store_builder(Request $request){
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',            
+        ]);
+
+        if ($validator->passes()) {
+            $builder = new Builder();
+            $builder->name = $request->name;
+            $builder->email = $request->email;
+            $builder->landline = $request->landline;
+            $builder->mobile = $request->mobile;
+            $builder->whatsapp = $request->whatsapp;
+            $builder->year_estd = $request->year_estd;
+            $builder->address = $request->address;
+            $builder->property_id = $request->property;     
+            $builder->related_properties = (!empty($request->related_properties)) ? implode(',',$request->related_properties) : '';                
+            $builder->save();
+
+            // Save image here
+            if (!empty($request->image_id)) {
+                $tempImage = TempImage::find($request->image_id);
+                $extArray = explode('.',$tempImage->name);
+                $ext = last($extArray);
+
+                $newImageName = $builder->id.'_'.$builder->name.'.'.$ext;
+                $sPath = public_path().'/temp/'.$tempImage->name;
+                $dPath = public_path().'/uploads/builder/'.$newImageName;
+                File::copy($sPath,$dPath);
+
+                // //Generate image thumbnail
+                // $dPath = public_path().'/uploads/builder/thumb/'.$newImageName;
+                // $img = Image::make($sPath);
+                // $img->resize(200, 200);
+                // $img->save($dPath);
+                // File::copy($sPath,$dPath);
+
+                $builder->logo = $newImageName;
+                $builder->save();
+            }
+            
+            $request->session()->flash('success', 'Builder added successfully');
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Builder added successfully'
+            ]);
+
+        } else {
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors()
+            ]);
+        }
+    }
+
+
+
+    public function edit_builder($builderId, Request $request){
+        $builder = Builder::find($builderId);
+        if (empty($builder)) {
+            return redirect()->route('builders.index');
+        }
+        return view('admin.builder.edit', compact('builder'));
+    }
+
+
+    public function update_builder($id, Request $request){
+        $builder = Builder::find($id);
+        if (empty($builder)) {
+            $request->session()->flash('error', 'Builder not found');
+            return response()->json([
+                'status' => false,
+                'notFound' => true,
+                'message' => 'builder not found'
+            ]);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',            
+        ]);
+
+        if ($validator->passes()) {
+            $builder->name = $request->name;
+            $builder->email = $request->email;
+            $builder->landline = $request->landline;
+            $builder->mobile = $request->mobile;
+            $builder->whatsapp = $request->whatsapp;
+            $builder->year_estd = $request->year_estd;
+            $builder->address = $request->address;
+            $builder->property_id = $request->property_id;
+            $builder->status = $request->status;             
+            $builder->save();
+
+            $request->session()->flash('success', 'builder updated successfully');
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Builder updated successfully'
+            ]);
+
+        } else {
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors()
+            ]);
+        }
+    }
+
+
+    public function destroy_builder($builderId, Request $request){
+        $builder = Builder::find($builderId);
+
+        if(empty($builder)){
+            $request->session()->flash('error', 'Builder not found');
+            return response()->json([
+                'status' => true,
+                'message' => 'Builder not found'
+            ]);
+            return redirect()->route('builders.index');
+        }
+
+        //Delete old image
+        File::delete(public_path().'/uploads/builder_logo_photo/thumb/'.$builder->image);
+        File::delete(public_path().'/uploads/builder_logo_photo/'.$builder->image);
+
+        $builder->delete();
+
+        $request->session()->flash('success', 'Builder deleted successfully');
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Builder deleted successfully'
+        ]);
+    }
+
 
 
 }

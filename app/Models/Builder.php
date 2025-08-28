@@ -15,4 +15,9 @@ class Builder extends Model {
      public function properties() {
         return $this->hasMany(Property::class, 'builder_id');
     }
+
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
+
 }

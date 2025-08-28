@@ -29,11 +29,33 @@
                                         </div>
                                     </div>
 
-                                    @php
-                                        $price = $value->price;
-                                        $formatted = number_format($price / 100000, 1) . ' L'; 
+                                    @php                                       
+                                        $roomsArray = json_decode($value->rooms, true) ?? [];
+                                        $propertyTypes = json_decode($value->property_types, true) ?? [];
+
+                                        $formatPrice = function ($price) {
+                                            if ($price >= 10000000) {
+                                                return number_format($price / 10000000, 1) . ' Cr';
+                                            } elseif ($price >= 100000) {
+                                                return number_format($price / 100000, 1) . ' Lacs';
+                                            } else {
+                                                return number_format($price);
+                                            }
+                                        };
                                     @endphp
-                                    <span>₹{{ $formatted }}</span>
+
+                                    @if(!empty($roomsArray))
+                                        <div class="room-item">
+                                            @foreach($roomsArray as $room)
+                                                <div class="room">
+                                                    <span>{{ isset($room['title']) ? strtoupper(str_replace('_', ' ', $room['title'])) : '' }} </span>
+                                                    @if(!empty($room['price']))
+                                                        <span>₹{{ $formatPrice($room['price']) }}</span>,
+                                                    @endif
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @endif                                   
 
                                     <ul class="nav nav-tabs tagNav">
                                         <li class="nav-item"><a class="nav-link active" data-target="main">Main</a></li>

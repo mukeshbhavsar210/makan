@@ -65,13 +65,7 @@ Route::group(['prefix' => 'admin','middleware' => 'checkRole'], function(){
     //Get area name parent city
     Route::get('/areaSub', [CityController::class, 'areaSub'])->name('areaSub.index');
    
-    //Developer Routes
-    Route::get('/builders', [BuilderController::class, 'index'])->name('builders.index');
-    Route::get('/builders/create', [BuilderController::class, 'create'])->name('builders.create');
-    Route::post('/builders', [BuilderController::class, 'store'])->name('builders.store');
-    Route::get('/builders/{id}/edit', [BuilderController::class, 'edit'])->name('builders.edit');
-    Route::put('/builders/{id}', [BuilderController::class, 'update'])->name('builders.update');
-    Route::delete('/builders/{id}', [BuilderController::class, 'destroy'])->name('builders.delete');
+    
     
     Route::get('/getSlug', function(Request $request){
         $slug = '';
@@ -102,6 +96,14 @@ Route::group(['prefix' => 'account'], function(){
         Route::get("/logout",[AccountController::class, 'logout'])->name('account.logout');
         Route::post("/updateProfilePic",[AccountController::class, 'updateProfilePic'])->name('profile.updatePic');
         //Route::post("/updateProfilePic",[BuilderController::class, 'updateProfilePic'])->name('builders.updateProfilePic');
+
+        //Developer Routes
+        //Route::get('/builders', [AccountController::class, 'index_builder'])->name('builders.index');
+        Route::get('/builders/create', [AccountController::class, 'create_builder'])->name('developer.create');
+        Route::post('/builders', [AccountController::class, 'store_builder'])->name('developer.store');
+        Route::get('/builders/{id}/edit', [AccountController::class, 'edit_builder'])->name('developer.edit');
+        Route::put('/builders/{id}', [AccountController::class, 'update_builder'])->name('developer.update');
+        Route::delete('/builders/{id}', [AccountController::class, 'destroy_builder'])->name('developer.delete');
                
         //Product Route
         Route::get('/properties', [PropertyController::class, 'index'])->name('properties.index');
