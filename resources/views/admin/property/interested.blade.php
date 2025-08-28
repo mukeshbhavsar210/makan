@@ -41,9 +41,9 @@
 
                                             <a href="{{ route('propertyDetails', $value->property_id) }}">
                                                 @if ($PropertyImage && !empty($PropertyImage->image))
-                                                    <img src="{{ asset('uploads/property/small/' . $PropertyImage->image) }}" height="80" width="80" class="me-2 align-self-center rounded" >                                                
+                                                    <img src="{{ asset('uploads/property/small/' . $PropertyImage->image) }}" height="100" width="100" class="me-2 align-self-center rounded" >                                                
                                                 @else
-                                                    <img src="{{ asset('admin-assets/img/default-150x150.png') }}" alt="" height="80" class="me-2 align-self-center rounded"  />
+                                                    <img src="{{ asset('admin-assets/img/default-150x150.png') }}" alt="" height="100" class="me-2 align-self-center rounded"  />
                                                 @endif
                                             </a>
                                             <div class="flex-grow-1 text-truncate"> 
@@ -54,16 +54,16 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <a href="">
-                                            <div class="user-avatar">
-                                                @if ($value->property->builder->logo)
-                                                    <img src="{{ asset('uploads/builder/' . $value->property->builder->logo) }}" height="80" width="80" class="rounded-circle">
-                                                    {{ $value->property->builder->name ?? '' }}
-                                                @else
-                                                    <img src="{{ asset('admin-assets/img/default-150x150.png') }}" alt="" height="80" class="me-2 align-self-center rounded"  />
-                                                @endif
-                                            </div>
-                                        </a>
+                                     <div class="user-avatar">
+                                        @if ($value->property->builder && $value->property->builder->logo)
+                                            <img src="{{ asset('uploads/builder/' . $value->property->builder->logo) }}" 
+                                                height="80" width="80" class="rounded-circle" >
+                                            {{ $value->property->builder->name }}
+                                        @else
+                                            <img src="{{ asset('admin-assets/img/default-150x150.png') }}" 
+                                                alt="" height="80" class="me-2 align-self-center rounded" />
+                                        @endif
+                                     </div>
                                     </td>
                                     <td>
                                          <div class="d-flex align-items-center">

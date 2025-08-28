@@ -15,5 +15,13 @@ class SavedProperty extends Model {
     public function builder(){
         return $this->belongsTo(Builder::class);
     }
+
+    public function property_saved () {
+        return $this->belongsTo(Property::class, 'property_id');
+    }
+
+    public function user() {
+        return $this->belongsTo(\App\Models\User::class, 'user_id');
+    }
  
 }

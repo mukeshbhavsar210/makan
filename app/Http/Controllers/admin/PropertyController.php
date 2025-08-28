@@ -23,8 +23,10 @@ use Intervention\Image\Drivers\Gd\Driver;
 
 class PropertyController extends Controller {
     public function index(){
-        $properties = Property::where('user_id', auth()->id())->orderBy('created_at','DESC')->paginate(10);        
+        $properties = Property::with('builder')->where('user_id', auth()->id())->orderBy('created_at','DESC')->paginate(10);
         $counts = Property::where('user_id', auth()->id())->count();
+
+        
 
         return view('admin.property.index', [
             'properties' => $properties,
@@ -40,6 +42,7 @@ class PropertyController extends Controller {
         $areas = Area::orderBy('name','ASC')->where('status',1)->get();
         $builders = Builder::orderBy('name','ASC')->where('status',1)->get();
         $relatedProperties = Property::where('status',1)->get();
+        $builder = Builder::where('user_id', Auth::id())->first();
 
         $data = [ 
             'cities' => $cities,
@@ -63,6 +66,13 @@ class PropertyController extends Controller {
         if ($validator->passes()) {
             $property = new Property;
             $property->user_id = Auth::user()->id;
+
+            // also check if logged user has a builder profile
+            $builder = Builder::where('user_id', Auth::id())->first();
+            if ($builder) {
+                $property->builder_id = $builder->id;
+            }
+
             $property->title = $request->title;
             $property->slug = $request->slug;            
             $property->category = $request->category;
@@ -527,7 +537,7 @@ class PropertyController extends Controller {
     //Saved
     public function savedProperties(Request $request){
         $saved = SavedProperty::where(['user_id' => Auth::user()->id])
-                                ->with(['property','property.applications'])
+                                ->with(['property','property.applications', 'property.builder'])
                                 ->orderBy('created_at','DESC')->paginate(10);
 
         $counts = SavedProperty::where('user_id', auth()->id())->count();
@@ -540,11 +550,12 @@ class PropertyController extends Controller {
 
 
     //Interested
-    public function interested(Request $request){
-        $interested = PropertyApplication::where('user_id',Auth::user()->id)
-                    ->with(['property','property.applications'])
-                    ->orderBy('created_at','DESC')
+    public function interested(Request $request){       
+        $interested = PropertyApplication::where('user_id', Auth::user()->id)
+                    ->with(['property', 'property.applications', 'property.builder'])
+                    ->orderBy('created_at', 'DESC')
                     ->paginate(10);
+
 
         $counts = PropertyApplication::where('user_id', auth()->id())->count();
 

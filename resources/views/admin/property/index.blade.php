@@ -41,10 +41,10 @@
                     <thead class="table-light">
                         <tr>
                             <th class="border-top-0">Project Name</th>
+                            <th class="border-top-0">Developer</th>
                             <th class="border-top-0">Interested</th>
                             <th class="border-top-0">Saved</th>
                             <th class="border-top-0">Posted</th>                            
-                            <th class="border-top-0">Status</th>
                             <th class="border-top-0">Action</th>
                         </tr>
                     </thead>
@@ -59,16 +59,58 @@
                                         <div class="d-flex align-items-center">
                                             <a href="{{ route('propertyDetails', $value->id) }}" target="_blank">
                                                 @if (!empty($PropertyImage->image))
-                                                    <img src="{{ asset('uploads/property/small/'.$PropertyImage->image) }}" height="80" width="80" class="me-2 align-self-center rounded" >
+                                                    <img src="{{ asset('uploads/property/small/'.$PropertyImage->image) }}" height="100" width="100" class="me-2 align-self-center rounded" >
                                                 @else
-                                                    <img src="{{ asset('admin-assets/img/default-150x150.png') }}" alt="" height="80" class="me-2 align-self-center rounded"  />
+                                                    <img src="{{ asset('admin-assets/img/default-150x150.png') }}" alt="" height="100" class="me-2 align-self-center rounded"  />
                                                 @endif
                                             </a>
+
                                             <div class="flex-grow-1 text-truncate"> 
-                                                <h5 class="m-0">{{ $value->title }} <span class="badge rounded text-blue bg-blue-subtle">{{ $value->applications->count() }}</span></h5>
-                                                {{ $value->builder->name ?? '' }}<br />
-                                                <a href="{{ route('propertyDetails', $value->id) }}" target="_blank" class="font-12 mt-1 mb-1 text-muted text-decoration-underline">#{{ $value->id }}</a>
+                                                <h4 class="m-0">{{ $value->title }} <span class="badge rounded text-blue bg-blue-subtle">{{ $value->applications->count() > 0 ? $value->applications->count() : '' }}</span></h4>
+                                                <p class="m-0">
+                                                    @php
+                                                        $roomsArray = json_decode($value->rooms, true) ?? [];
+                                                    @endphp
+
+                                                    @if(!empty($roomsArray))
+                                                        @foreach($roomsArray as $room)                                                         
+                                                            {{ isset($room['title']) ? strtoupper(str_replace('_', ' ', $room['title'])) : '' }} -
+                                                            @if(!empty($room['price']))
+                                                                @php
+                                                                    $price = $room['price'];
+                                                                    if ($price >= 10000000) {
+                                                                        $formatted = number_format($price / 10000000, 1) . ' Cr';
+                                                                    } elseif ($price >= 100000) {
+                                                                        $formatted = number_format($price / 100000, 1) . ' Lacs';
+                                                                    } else {
+                                                                        $formatted = number_format($price);
+                                                                    }
+                                                                @endphp
+                                                                <span class="price">₹{{ $formatted }}</span>,  
+                                                            @endif                                                        
+                                                        @endforeach
+                                                    @endif
+                                                </p>
+
+                                                <p class="m-0">{{ $value->location }}, {{ $value->area->name }}.</p>
+                                                <a href="{{ route('propertyDetails', $value->id) }}" target="_blank" class="font-12 text-muted text-decoration-underline">#{{ $value->id }}</a>
                                             </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="user-avatar">
+                                            @if ($value->builder && $value->builder->logo)
+                                                <img src="{{ asset('uploads/builder/' . $value->builder->logo) }}" height="80" width="80" class="rounded-circle" >                                                
+
+                                                <div class="user-details">
+                                                    <strong>{{ $value->builder->name }}</strong><br>                                                
+                                                    E: <a href="mailto:{{ $value->builder->email }}">{{ $value->builder->email }}</a><br>
+                                                    M: <a href="tel:{{ $value->builder->mobile }}">{{ $value->builder->mobile }}</a>
+                                                </div>
+                                            @else
+                                                <img src="{{ asset('admin-assets/img/default-150x150.png') }}" 
+                                                    alt="" height="80" class="me-2 align-self-center rounded" />
+                                            @endif
                                         </div>
                                     </td>
                                     <td>
@@ -94,29 +136,29 @@
                                     </td>
                                     <td>
                                         <div class="d-flex">
-                                            @foreach($value->applications as $application)
-                                                <div class="user-avatar" title="{{ $application->user->name }}">
-                                                    @if (!empty($application->user->image))
-                                                        <img src="{{ asset('profile_pic/thumb/' . $application->user->image) }}" alt="{{ $application->user->name }}" class="rounded-circle">
-                                                    @else
-                                                        <img src="{{ asset('admin-assets/img/default-150x150.png') }}" alt="" height="80" class="thumb-md shadow-sm rounded-circle"  />
-                                                    @endif
-
-                                                    <!-- Hover Card -->
+                                            @foreach($value->savedUsers as $saved)
+                                                <div class="img-group d-flex justify-content-end user-avatar" title="{{ $saved->user->name }}">
+                                                    <a class="position-relative d-inline-block" href="#">
+                                                        @if (!empty($saved->user->image))
+                                                            <img src="{{ asset('profile_pic/thumb/' . $saved->user->image) }}" alt="{{ $saved->user->name }}" class="thumb-md shadow-sm rounded-circle">
+                                                        @else
+                                                            <img src="{{ asset('admin-assets/img/default-150x150.png') }}" alt="" height="80" class="thumb-md shadow-sm rounded-circle" />
+                                                        @endif
+                                                    </a>                                                             
                                                     <div class="user-details">
-                                                        <strong>{{ $application->user->name }}</strong><br>
-                                                        {{ $application->user->role }}<br>
-                                                        <a href="mailto:{{ $application->user->email }}">{{ $application->user->email }}</a><br>
-                                                        <a href="tel:{{ $application->user->mobile }}">{{ $application->user->mobile }}</a>
+                                                        <strong>{{ $saved->user->name }}</strong><br>
+                                                        {{ $saved->user->role }}<br>
+                                                        <a href="mailto:{{ $saved->user->email }}">{{ $saved->user->email }}</a><br>
+                                                        <a href="tel:{{ $saved->user->mobile }}">{{ $saved->user->mobile }}</a>
                                                     </div>
                                                 </div>
                                             @endforeach
+
                                         </div>
                                     </td>
-                                    <td>{{ \Carbon\Carbon::parse($value->created_at)->format('M, Y') }}</td>                                        
-
+                                    <td>{{ \Carbon\Carbon::parse($value->created_at)->format('M, Y') }}</td>                                                                          
                                     <td>
-                                        @if ($value->status == 1)
+                                        @if ($value->is_featured == 'Yes')
                                             <svg class="text-success-500 h-6 w-6 text-success" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                             </svg>
@@ -124,9 +166,7 @@
                                             <svg class="text-danger h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                             </svg>
-                                        @endif                                    
-                                    </td>
-                                    <td>
+                                        @endif 
                                         <a href="{{ route('properties.edit', $value->id) }}"><i class="las la-pen text-secondary fs-18"></i></a>
                                         <a href="#" onclick="deleteProperty( {{ $value->id }} )"><i class="las la-trash-alt text-secondary fs-18"></i></a>
                                     </td>

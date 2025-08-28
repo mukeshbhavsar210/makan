@@ -40,20 +40,12 @@ class Property extends Model {
         return $this->hasMany(SavedProperty::class);
     }
 
-    public function builder(){
-        return $this->belongsTo(Builder::class);
-    }
+    public function builder() {
+        return $this->belongsTo(\App\Models\Builder::class, 'builder_id');
+    }    
 
-    // public function builder() {
-    //     return $this->belongsTo(User::class, 'builder_id'); // builder info
-    // }
-
-    public function builderName() {
-        return $this->hasMany(\App\Models\Builder::class, 'builder_id');
-    }
-
-    public function builders() {
-        return $this->belongsTo(Builder::class, 'builder_id');
+    public function savedUsers() {
+        return $this->hasMany(\App\Models\SavedProperty::class, 'property_id');
     }
 
 }

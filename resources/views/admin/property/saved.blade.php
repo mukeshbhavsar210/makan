@@ -23,10 +23,10 @@
                     <thead class="table-light">
                         <tr>
                             <th class="border-top-0">Project Name</th>
-                            <th class="border-top-0">Developer</th>
+                            <th class="border-top-0">BHK</th>                            
                             <th class="border-top-0">Price</th>
+                            <th class="border-top-0">Developer</th>                            
                             <th class="border-top-0">Interested</th>
-                            <th class="border-top-0">Status</th>
                             <th class="border-top-0">Action</th>
                         </tr>
                     </thead>
@@ -41,9 +41,9 @@
                                         @endphp
                                         <a href="{{ route('propertyDetails', $value->property_id) }}">
                                             @if ($PropertyImage && !empty($PropertyImage->image))
-                                                <img src="{{ asset('uploads/property/small/' . $PropertyImage->image) }}"  height="80" width="80" class="me-2 align-self-center rounded" >
+                                                <img src="{{ asset('uploads/property/small/' . $PropertyImage->image) }}"  height="100" width="100" class="me-2 align-self-center rounded" >
                                             @else
-                                                <img src="{{ asset('admin-assets/img/default-150x150.png') }}" height="80" width="80" class="me-2 align-self-center rounded" >
+                                                <img src="{{ asset('admin-assets/img/default-150x150.png') }}" height="100" width="100" class="me-2 align-self-center rounded" >
                                             @endif
                                         </a>
                                         <div class="flex-grow-1 text-truncate">
@@ -54,24 +54,56 @@
                                     </div>
                                  </td>
                                  <td>
-                                    <a href="">
-                                        <div class="user-avatar">
-                                            @if ($value->property->builder->logo)
-                                                <img src="{{ asset('uploads/builder/' . $value->property->builder->logo) }}" height="80" width="80" class="rounded-circle">
-                                                {{ $value->property->builder->name ?? '' }}
-                                            @else
-                                                <img src="{{ asset('admin-assets/img/default-150x150.png') }}" alt="" height="80" class="me-2 align-self-center rounded"  />
-                                            @endif
-                                        </div>
-                                    </a>
-                                </td>
+                                    @php
+                                        $roomsArray = json_decode($value->property->rooms, true) ?? [];
+                                    @endphp
+                                    @if(!empty($roomsArray))
+                                        @foreach($roomsArray as $room)
+                                            <div class="room-item">
+                                                <span>{{ isset($room['title']) ? strtoupper(str_replace('_', ' ', $room['title'])) : '' }} </span>
+                                            </div>
+                                        @endforeach
+                                    @endif
+                                 </td>
                                  <td>
                                     @php
-                                        $price = $value->property->price;
-                                        $formatted = number_format($price / 100000, 1) . ' L'; 
+                                        $roomsArray = json_decode($value->property->rooms, true) ?? [];
+
+                                        $formatPrice = function ($price) {
+                                            if ($price >= 10000000) {
+                                                return number_format($price / 10000000, 1) . ' Cr';
+                                            } elseif ($price >= 100000) {
+                                                return number_format($price / 100000, 1) . ' Lacs';
+                                            } else {
+                                                return number_format($price);
+                                            }
+                                        };
                                     @endphp
-                                    <span>₹{{ $formatted }}</span>                                    
+                                    @if(!empty($roomsArray))
+                                        @foreach($roomsArray as $room)                                            
+                                            @if(!empty($room['price']))
+                                                <p class="m-0">₹{{ $formatPrice($room['price']) }}</p>
+                                            @endif                                            
+                                        @endforeach
+                                    @endif
                                  </td>
+                                 
+                                 <td>
+                                    <div class="user-avatar">
+                                        @if ($value->property->builder && $value->property->builder->logo)
+                                                <img src="{{ asset('uploads/builder/' . $value->property->builder->logo) }}" height="80" width="80" class="rounded-circle" >
+                                            @else
+                                                <img src="{{ asset('admin-assets/img/default-150x150.png') }}" 
+                                                    alt="" height="80" class="me-2 align-self-center rounded" />
+                                            @endif
+
+                                            <div class="user-details">
+                                                <strong>{{ $value->property->builder->name }}</strong><br>
+                                                E: <a href="mailto:{{ $value->property->builder->email }}">{{ $value->property->builder->email }}</a><br>
+                                                M: <a href="tel:{{ $value->property->builder->mobile }}">{{ $value->property->builder->mobile }}</a>
+                                            </div>
+                                    </div>                                    
+                                </td>
                                 <td>
                                     <div class="d-flex align-items-center">
                                         @if(Auth::id() === $value->property->user_id) 
@@ -105,9 +137,7 @@
                                         <svg class="text-danger h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                         </svg>
-                                    @endif                                       
-                                </td>
-                                <td>
+                                    @endif 
                                     <a href="#" onclick="removeProperty({{ $value->id }})"><i class="las la-trash-alt text-secondary fs-18"></i></a>
                                 </td>
                             </tr>

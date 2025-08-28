@@ -16,4 +16,8 @@ class PropertyApplication extends Model
     public function user(){
         return $this->belongsTo(User::class);
     }
+
+    public function builder() {
+        return $this->belongsTo(\App\Models\Builder::class, 'builder_id');
+    }
 }
