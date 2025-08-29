@@ -2,16 +2,10 @@
 
 @section('content')
     <section class="content-header">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-sm-6">
-                    <h1>Create Property</h1>
-                </div>
-                <div class="col-sm-6 text-right">
-                    <a href="{{ route('properties.index') }}" class="btn btn-primary pull-right">Back</a>
-                </div>
-            </div>
-        </div>
+        <div class="title-icon">
+            <a href="{{ route('properties.index') }}" class="icon-arrow"><i class="las la-arrow-circle-left"></i></a>
+            <h1>Create Property</h1>                
+        </div>        
     </section>
     <!-- Main content -->
 
@@ -37,11 +31,11 @@
                                         <div class="btn-group" role="group" aria-label="Is Category Switch">
                                             <input type="radio" class="btn-check" name="category" id="is_category_buy" value="buy" autocomplete="off"
                                                 {{ (isset($property) && $property->category == 'buy') ? 'checked' : (!isset($property) ? 'checked' : '') }}>
-                                            <label class="btn btn-outline-secondary" for="is_category_buy">Buy</label>
+                                            <label class="btn btn-outline-primary" for="is_category_buy">Buy</label>
 
                                             <input type="radio" class="btn-check" name="category" id="is_category_rent" value="rent" autocomplete="off"
                                                 {{ (isset($property) && $property->category == 'rent') ? 'checked' : '' }}>
-                                            <label class="btn btn-outline-secondary" for="is_category_rent">Rent</label>
+                                            <label class="btn btn-outline-primary" for="is_category_rent">Rent</label>
                                         </div> 
                                     </div>
                                 </div>
@@ -51,11 +45,11 @@
                                         <div class="btn-group" role="group" aria-label="Is SaleType Switch">
                                             <input type="radio" class="btn-check" name="sale_types" id="is_sale_new" value="new" autocomplete="off"
                                                 {{ (isset($property) && $property->sale_types == 'new') ? 'checked' : (!isset($property) ? 'checked' : '') }}>
-                                            <label class="btn btn-outline-secondary" for="is_sale_new">New</label>
+                                            <label class="btn btn-outline-primary" for="is_sale_new">New</label>
 
                                             <input type="radio" class="btn-check" name="sale_types" id="is_sale_resale" value="resale" autocomplete="off"
                                                 {{ (isset($property) && $property->sale_types == 'resale') ? 'checked' : '' }}>
-                                            <label class="btn btn-outline-secondary" for="is_sale_resale">Resale</label>
+                                            <label class="btn btn-outline-primary" for="is_sale_resale">Resale</label>
                                         </div>                           
                                     </div>
                                 </div>
@@ -98,11 +92,11 @@
                                         <div class="btn-group" role="group" aria-label="Is Construction Switch">
                                             <input type="radio" class="btn-check" name="construction_types" id="is_construction_under" value="under" autocomplete="off"
                                                 {{ (isset($property) && $property->construction_types == 'under') ? 'checked' : (!isset($property) ? 'checked' : '') }}>
-                                            <label class="btn btn-outline-secondary" for="is_construction_under">Under Construction</label>
+                                            <label class="btn btn-outline-primary" for="is_construction_under">Under Construction</label>
 
                                             <input type="radio" class="btn-check" name="construction_types" id="is_construction_ready" value="ready" autocomplete="off"
                                                 {{ (isset($property) && $property->construction_types == 'ready') ? 'checked' : '' }}>
-                                            <label class="btn btn-outline-secondary" for="is_construction_ready">Ready to Move</label>
+                                            <label class="btn btn-outline-primary" for="is_construction_ready">Ready to Move</label>
                                         </div>
                                         <p class="error"></p>
                                     </div>
@@ -153,7 +147,7 @@
                                     <div class="form-group">
                                         <label id="similarCounts">Similar Properties <span class="req">*</span></label>
                                         <div class="dropdown">
-                                            <button class="btn btn-outline-secondary dropdown-toggle w-100" type="button" id="similar-label" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <button class="btn btn-outline-primary dropdown-toggle w-100" type="button" id="similar-label" data-bs-toggle="dropdown" aria-expanded="false">
                                                 Similar Properties
                                             </button>
 
@@ -205,7 +199,7 @@
                             <div class="form-group">
                                 <label for="room" id="roomCounts" class="mb-1">BHK <span class="req">*</span></label>
                                 <div class="dropdown">
-                                    <button class="btn btn-outline-secondary dropdown-toggle w-100" type="button" id="roomDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <button class="btn btn-outline-primary dropdown-toggle w-100" type="button" id="roomDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                                         Select BHK
                                     </button>
 
@@ -238,7 +232,7 @@
                                     Bathroom <span class="req">*</span>
                                 </label>
                                 <div class="dropdown">
-                                    <button class="btn btn-outline-secondary dropdown-toggle w-100" type="button" id="bathroomDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <button class="btn btn-outline-primary dropdown-toggle w-100" type="button" id="bathroomDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                                         Select Bathroom
                                     </button>
 
@@ -269,7 +263,7 @@
                                     Property Type<span class="req">*</span>
                                 </label>
                                 <div class="dropdown">
-                                    <button class="btn btn-outline-secondary dropdown-toggle w-100" type="button" id="propertyTypes-label" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <button class="btn btn-outline-primary dropdown-toggle w-100" type="button" id="propertyTypes-label" data-bs-toggle="dropdown" aria-expanded="false">
                                         Select Property Type
                                     </button>
 
@@ -297,7 +291,7 @@
                             <div class="form-group">
                                 <label id="amenitiesCounts">Amenities <span class="req">*</span></label>
                                 <div class="dropdown">
-                                    <button class="btn btn-outline-secondary dropdown-toggle w-100" type="button" id="amenities-label" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <button class="btn btn-outline-primary dropdown-toggle w-100" type="button" id="amenities-label" data-bs-toggle="dropdown" aria-expanded="false">
                                         Select Amenities
                                     </button>
 
@@ -322,7 +316,7 @@
                             <div class="form-group">
                                 <label id="facingsCounts">Facings <span class="req">*</span></label>
                                 <div class="dropdown">
-                                    <button class="btn btn-outline-secondary dropdown-toggle w-100" type="button" id="facings-label" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <button class="btn btn-outline-primary dropdown-toggle w-100" type="button" id="facings-label" data-bs-toggle="dropdown" aria-expanded="false">
                                         Select Facings
                                     </button>
 
@@ -365,11 +359,11 @@
                                         <div class="btn-group" role="group" aria-label="Is Featured Switch">
                                             <input type="radio" class="btn-check" name="is_featured" id="is_featured_yes" value="Yes" autocomplete="off"
                                                 {{ (isset($property) && $property->is_featured == 'Yes') ? 'checked' : (!isset($property) ? 'checked' : '') }}>
-                                            <label class="btn btn-outline-secondary" for="is_featured_yes">Yes</label>
+                                            <label class="btn btn-outline-primary" for="is_featured_yes">Yes</label>
 
                                             <input type="radio" class="btn-check" name="is_featured" id="is_featured_no" value="No" autocomplete="off"
                                                 {{ (isset($property) && $property->is_featured == 'No') ? 'checked' : '' }}>
-                                            <label class="btn btn-outline-secondary" for="is_featured_no">No</label>
+                                            <label class="btn btn-outline-primary" for="is_featured_no">No</label>
                                         </div>
                                         <p class="error"></p>
                                     </div>
@@ -380,11 +374,11 @@
                                         <div class="btn-group" role="group" aria-label="Status Switch">
                                             <input type="radio" class="btn-check" name="status" id="status_active" value="1" autocomplete="off"
                                                 {{ (isset($property) && $property->status == 1) ? 'checked' : (!isset($property) ? 'checked' : '') }}>
-                                            <label class="btn btn-outline-secondary" for="status_active">Active</label>
+                                            <label class="btn btn-outline-primary" for="status_active">Active</label>
 
                                             <input type="radio" class="btn-check" name="status" id="status_block" value="0" autocomplete="off"
                                                 {{ (isset($property) && $property->status == 0) ? 'checked' : '' }}>
-                                            <label class="btn btn-outline-secondary" for="status_block">Block</label>
+                                            <label class="btn btn-outline-primary" for="status_block">Block</label>
                                         </div>
                                         <p class="error"></p>
                                     </div>
@@ -571,22 +565,7 @@
         }
     });   
 
-    //Similar property
-    $('.relatedFacings').select2({
-        ajax: {
-            url: '{{ route('property.facings') }}',
-            dataType: 'json',
-            tags: true,
-            multiple: true,
-            minimumInputLength: 3,
-            processResults: function (data) {
-                return {
-                    results: data.tags
-                };
-            }
-        }
-    });
-
+   
     //Slug automatically add
     $('#title').change(function(){
         element = $(this);

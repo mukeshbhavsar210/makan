@@ -15,6 +15,7 @@ use App\Models\PropertyApplication;
 use App\Models\PropertyDocument;
 use App\Models\View;
 use App\Models\SavedProperty;
+use App\Models\User;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\ImageManager;
@@ -22,18 +23,39 @@ use Intervention\Image\Drivers\Gd\Driver;
 
 
 class PropertyController extends Controller {
-    public function index(){
-        $properties = Property::with('builder')->where('user_id', auth()->id())->orderBy('created_at','DESC')->paginate(10);
-        $counts = Property::where('user_id', auth()->id())->count();
 
-        
+    public function index(Request $request) {
+        $user = auth()->user();
+
+        // Base query
+        if ($user->role === 'Admin') {
+            $properties = Property::query()->where('status', 1)->orderBy('created_at','DESC');
+        } else {
+            $properties = Property::query()
+                ->where('user_id', $user->id)
+                ->where('status', 1)
+                ->orderBy('created_at','DESC');
+        }
+
+        // Search filter
+        if ($request->filled('keyword')) {
+            $keyword = $request->keyword;
+            $properties->where('title', 'like', "%{$keyword}%");
+        }
+
+        // Counts
+        $counts = Property::where('user_id', $user->id)->count();
+        $all_counts = Property::count();
+
+        // Paginate
+        $properties = $properties->paginate(10);
 
         return view('admin.property.index', [
             'properties' => $properties,
-            'counts' => $counts
+            'counts' => $counts,
+            'all_counts' => $all_counts
         ]);
     }
-
 
     //CREATE PROPERTY
     public function create(){
@@ -53,8 +75,6 @@ class PropertyController extends Controller {
         ];
         return view('admin.property.create', $data);
     }
-
-
 
     //STORE PROPERTY
     public function store(Request $request){
@@ -192,7 +212,6 @@ class PropertyController extends Controller {
         }
     }
 
-
     //EDIT PROPERTY
     public function edit($id, Request $request){
         $property = Property::find($id);        
@@ -230,9 +249,6 @@ class PropertyController extends Controller {
         
         return view('admin.property.edit',$data);
     }
-
-
-
 
     public function update($id, Request $request){
         $property = Property::find($id);
@@ -329,8 +345,6 @@ class PropertyController extends Controller {
         }
     }
 
-
-
     //DELETE PROPERTY
     public function destroy($id, Request $request){
         $property = Property::find($id);
@@ -360,8 +374,6 @@ class PropertyController extends Controller {
         ]);
     }
 
-
-
     public function getProducts(Request $request){
         $tempProduct = [];
         if($request->term != ""){
@@ -381,7 +393,6 @@ class PropertyController extends Controller {
             'status' => true,
         ]);
     }
-
 
     //Similar Property show 
     public function similar_properties(Request $request){
@@ -403,9 +414,6 @@ class PropertyController extends Controller {
         ]);
     }
 
-
-
-
     //Similar Property show 
     public function similar_amenities(Request $request){
         $tempAmenity = [];
@@ -425,8 +433,6 @@ class PropertyController extends Controller {
             'status' => true,
         ]);
     }
-
-
 
     //Similar Rooms 
     public function similar_rooms(Request $request){
@@ -448,8 +454,6 @@ class PropertyController extends Controller {
         ]);
     }
 
-
-    
     //Similar Rooms 
     public function similar_bathrooms(Request $request){
         $tempBathrooms = [];
@@ -490,10 +494,7 @@ class PropertyController extends Controller {
         ]);
     }
 
-
-
-    
-
+    //Remove Saved Property
     public function removeSavedProperty(Request $request) {
         $savedJob = SavedProperty::where(['id' => $request->id,'user_id' => Auth::user()->id])->first();
 
@@ -534,17 +535,23 @@ class PropertyController extends Controller {
         ]);
     }
 
-    //Saved
+    //Saved Property
     public function savedProperties(Request $request){
         $saved = SavedProperty::where(['user_id' => Auth::user()->id])
                                 ->with(['property','property.applications', 'property.builder'])
                                 ->orderBy('created_at','DESC')->paginate(10);
 
+        $all_saved = SavedProperty::with(['property','property.applications', 'property.builder'])
+                                ->orderBy('created_at','DESC')->paginate(10);
+
         $counts = SavedProperty::where('user_id', auth()->id())->count();
+        $all_counts = SavedProperty::count();
 
         return view('admin.property.saved',[
             'saved' => $saved,
+            'all_saved' => $all_saved,
             'counts' => $counts,
+            'all_counts' => $all_counts
         ]);
     }
 
@@ -556,12 +563,19 @@ class PropertyController extends Controller {
                     ->orderBy('created_at', 'DESC')
                     ->paginate(10);
 
+        $all_interested = PropertyApplication::with(['property', 'property.applications', 'property.builder'])
+                    ->orderBy('created_at', 'DESC')
+                    ->paginate(10);
+
 
         $counts = PropertyApplication::where('user_id', auth()->id())->count();
+        $all_counts = PropertyApplication::count();
 
         return view('admin.property.interested',[
             'interested' => $interested,
+            'all_interested' => $all_interested,
             'counts' => $counts,
+            'all_counts' => $all_counts
         ]);
     }
 }

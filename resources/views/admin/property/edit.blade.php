@@ -2,15 +2,9 @@
 
 @section('content')
     <section class="content-header">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-sm-6">
-                    <h1>Edit Product</h1>
-                </div>
-                <div class="col-sm-6 text-right">
-                    <a href="{{ route('properties.index') }}" class="btn btn-primary btn-sm pull-right">Back</a>
-                </div>
-            </div>
+        <div class="title-icon">
+            <a href="{{ route('properties.index') }}" class="icon-arrow"><i class="las la-arrow-circle-left"></i></a>
+            <h1>Edit Property</h1>
         </div>
     </section>
 
@@ -18,7 +12,7 @@
         <form action="" method="post" id="updateJobForm" name="updateJobForm">
             <div class="card">
                 <div class="card-body">
-                    <h4>Property</h4>
+                    <h4>Property Details</h4>
                     <div class="row">
                         <div class="col-md-9 col-12">
                             <div class="row">
@@ -534,39 +528,6 @@
         }
     });
 
-
-    //Similar property
-    $('.relatedAmenity').select2({
-        ajax: {
-            url: '{{ route('property.amenities') }}',
-            dataType: 'json',
-            tags: true,
-            multiple: true,
-            minimumInputLength: 3,
-            processResults: function (data) {
-                return {
-                    results: data.tags
-                };
-            }
-        }
-    });
-
-    //Similar property
-    $('.relatedFacings').select2({
-        ajax: {
-            url: '{{ route('property.facings') }}',
-            dataType: 'json',
-            tags: true,
-            multiple: true,
-            minimumInputLength: 3,
-            processResults: function (data) {
-                return {
-                    results: data.tags
-                };
-            }
-        }
-    });
-
     $('#title').change(function(){
         element = $(this);
         $("button[type=submit]").prop('disabled', true);
@@ -583,8 +544,6 @@
             }
         });
     })
-
-
 
     //Product form add details in database
     $("#updateJobForm").submit(function(event){
