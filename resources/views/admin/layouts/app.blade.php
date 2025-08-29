@@ -30,8 +30,7 @@
                             </button>
                         </li> 
                         <li class="mx-3 welcome-text">
-                            <h3 class="mb-0 fw-bold text-truncate">Good Morning, {{ Auth::user()->name }}!</h3>
-                            <h6 class="mb-0 fw-normal text-muted text-truncate fs-14">Here's your overview this week.</h6>
+                            <h4 class="mb-0 fw-bold text-truncate">Good Morning, {{ Auth::user()->name }}!</h4>
                         </li>                   
                     </ul>
 
@@ -55,7 +54,7 @@
                             <div class="dropdown-menu dropdown-menu-end py-0" style="">
                                 <div class="d-flex align-items-center dropdown-item py-2 bg-secondary-subtle">
                                     <div class="flex-shrink-0">
-										{{ Auth::user()->name }} - {{ Auth::user()->role }}
+										{{ Auth::user()->name }}
                                     </div>
                                     <div class="flex-grow-1 ms-2 text-truncate align-self-center">
                                         <h6 class="my-0 fw-medium text-dark fs-13"></h6>

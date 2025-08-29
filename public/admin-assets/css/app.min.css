@@ -383,7 +383,7 @@ body[data-sidebar-size=default] .page-wrapper .page-content{width:100%;-webkit-t
 .topbar .app-search input.form-control:-moz-placeholder{color:var(--bs-topbar-nav-icon-color)}
 .topbar .app-search input.form-control::-moz-placeholder{color:var(--bs-topbar-nav-icon-color)}
 .topbar .app-search input.form-control:-ms-input-placeholder{color:var(--bs-topbar-nav-icon-color)}
-.topbar .topbar-custom.nav-sticky .topbar-item,.topbar:has(.nav-sticky){height:calc(var(--bs-topbar-height) - 20px);-webkit-transition:.3s;transition:.3s}
+.topbar .topbar-custom.nav-sticky .topbar-item,.topbar:has(.nav-sticky){height:calc(var(--bs-topbar-height) - 40px);-webkit-transition:.3s;transition:.3s}
 html[data-bs-theme=dark] .topbar .topbar-custom .nav-link.nav-icon .light-mode{display:none}
 html[data-bs-theme=dark] .topbar .topbar-custom .nav-link.nav-icon .dark-mode{display:inline-block}
 html[data-bs-theme=light] .topbar .topbar-custom .nav-link.nav-icon .light-mode{display:inline-block}

@@ -91,13 +91,13 @@ Route::group(['prefix' => 'account'], function(){
 
     //Authenticate routes
     Route::group(['middleware' => 'auth'], function(){
+        //Profile Routes
         Route::get("/profile",[AccountController::class, 'index'])->name('profile.index');
-        Route::put("/update-profile",[AccountController::class, 'update'])->name('profile.update');
-        Route::get("/logout",[AccountController::class, 'logout'])->name('account.logout');
-        Route::post("/updateProfilePic",[AccountController::class, 'updateProfilePic'])->name('profile.updatePic');
-        //Route::post("/updateProfilePic",[BuilderController::class, 'updateProfilePic'])->name('builders.updateProfilePic');
+        Route::put("/update-profile",[AccountController::class, 'update_profile'])->name('profile.update');
+        Route::put("/update-developer",[AccountController::class, 'update_developer'])->name('developer.update');
+        Route::post("/update-password",[AccountController::class, 'update_password'])->name('password.update');
+        Route::get("/logout",[AccountController::class, 'logout'])->name('account.logout');                
 
-        //Developer Routes
         //Route::get('/builders', [AccountController::class, 'index_builder'])->name('builders.index');
         Route::get('/builders/create', [AccountController::class, 'create_builder'])->name('developer.create');
         Route::post('/builders', [AccountController::class, 'store_builder'])->name('developer.store');
@@ -117,19 +117,12 @@ Route::group(['prefix' => 'account'], function(){
         //Delete Product Images Route
         Route::post('/property-images/update', [PropertyImageController::class, 'update'])->name('property-images.update');
         Route::delete('/property-images', [PropertyImageController::class, 'destroy'])->name('property-images.destroy');   
-
-        //Array Data
-        Route::get('/get-amenities',[PropertyController::class,'get_amenities'])->name('property.amenities');
         Route::get('/get-properties',[PropertyController::class,'similar_properties'])->name('property.properties');
-        Route::get('/get-amenities',[PropertyController::class,'similar_amenities'])->name('property.amenities');
-        Route::get('/get-rooms',[PropertyController::class,'similar_rooms'])->name('property.rooms');
-        Route::get('/get-bathrooms',[PropertyController::class,'similar_bathrooms'])->name('property.bathrooms');
-        Route::get('/get-facings',[PropertyController::class,'similar_facings'])->name('property.facings');
+
         Route::get("/savedProperties",[PropertyController::class, 'savedProperties'])->name('property.savedProperties');
         Route::post("/removeSavedProperty",[PropertyController::class, 'removeSavedProperty'])->name('account.removeSavedProperty');
         Route::post("/removePropertyInterested",[PropertyController::class, 'removeProperty'])->name('account.removeProperties');
         Route::get("/interested",[PropertyController::class, 'interested'])->name('account.myPropertyApplications');
-        Route::post("/updatePassword",[AccountController::class, 'updatePassword'])->name('account.updatePassword');
 
         //Setting Route
         //Route::get('/change-password', [SettingController::class, 'showChangePasswordForm'])->name('admin.showChangePasswordForm');
