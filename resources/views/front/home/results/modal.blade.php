@@ -1,184 +1,134 @@
-<div class="modal fade bd-example-modal-lg" id="big-modal_{{ $value->id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            <div class="modal-body">
-                <div class="gallery-title">
-                    <div class="container">
-                        <div class="tag-module">
-                            <div class="row">
-                                <div class="col-md-10 col-12">
-                                    <div class="title">
-                                        <div class="title-h4">
-                                            <h4>{{ $value->title }}</h4>
-                                            <ul class="share-save">
-                                                <li><a href="#">Share</a></li>
-                                                <li><a href="#">Save</a></li>
-                                            </ul>
-                                        </div>
 
-                                        <div class="right-gallery-pagination">
-                                            <div class="slick-info">
-                                                <div class="text">
-                                                    <span class="counter-current">1</span>/<span class="counter-total">0</span>
-                                                </div>
-                                                <div class="progress">
-                                                    <div class="slick-progress progress-bar bg-primary" role="progressbar" style="width:0%"></div>
+@foreach ($properties as $value)
+    @php
+        $elevationImage = $value->property_images->where('label', 'Main')->first();
+        $video = $value->property_images->where('label', 'Video')->first();
+        $elevation = $value->property_images->where('label', 'Elevation')->first();
+        $bathroom = $value->property_images->where('label', 'Bedroom')->first();
+        $living = $value->property_images->where('label', 'Living')->first();
+        $balcony = $value->property_images->where('label', 'Balcony')->first();
+        $amenities = $value->property_images->where('label', 'Amenities')->first();
+        $floor = $value->property_images->where('label', 'Floor')->first();
+        $location = $value->property_images->where('label', 'Location')->first();
+        $cluster = $value->property_images->where('label', 'Cluster')->first();
+    @endphp
+
+    <div class="modal fade bd-example-modal-lg" id="big-modal_{{ $value->id }}">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">                    
+                    <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M20.7457 3.32851C20.3552 2.93798 19.722 2.93798 19.3315 3.32851L12.0371 10.6229L4.74275 3.32851C4.35223 2.93798 3.71906 2.93798 3.32854 3.32851C2.93801 3.71903 2.93801 4.3522 3.32854 4.74272L10.6229 12.0371L3.32856 19.3314C2.93803 19.722 2.93803 20.3551 3.32856 20.7457C3.71908 21.1362 4.35225 21.1362 4.74277 20.7457L12.0371 13.4513L19.3315 20.7457C19.722 21.1362 20.3552 21.1362 20.7457 20.7457C21.1362 20.3551 21.1362 19.722 20.7457 19.3315L13.4513 12.0371L20.7457 4.74272C21.1362 4.3522 21.1362 3.71903 20.7457 3.32851Z" fill="#ffffff"/>
+                    </svg>
+                </button>
+                <div class="modal-body">
+                    <div class="gallery-title">
+                        <div class="container">
+                            <div class="tag-module">
+                                <div class="row">
+                                    <div class="col-md-10 col-12">
+                                        <div class="title">
+                                            <div class="title-h4">
+                                                <h4>{{ $value->title }}</h4>
+                                                <ul class="share-save">
+                                                    <li><a href="#">Share</a></li>
+                                                    <li><a href="#">Save</a></li>
+                                                </ul>
+                                            </div>
+
+                                            <div class="right-gallery-pagination">
+                                                <div class="slick-info">
+                                                    <div class="text">
+                                                        <span class="counter-current">1</span>/<span class="counter-total">0</span>
+                                                    </div>
+                                                    <div class="progress">
+                                                        <div class="slick-progress progress-bar bg-primary" role="progressbar" style="width:0%"></div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
+
+                                        @php                                       
+                                            $roomsArray = json_decode($value->rooms, true) ?? [];
+                                            $propertyTypes = json_decode($value->property_types, true) ?? [];
+
+                                            $formatPrice = function ($price) {
+                                                if ($price >= 10000000) {
+                                                    return number_format($price / 10000000, 1) . ' Cr';
+                                                } elseif ($price >= 100000) {
+                                                    return number_format($price / 100000, 1) . ' Lacs';
+                                                } else {
+                                                    return number_format($price);
+                                                }
+                                            };
+                                        @endphp
+
+                                        @if(!empty($roomsArray))
+                                            <div class="room-item">
+                                                @foreach($roomsArray as $room)
+                                                    <div class="room">
+                                                        <span>{{ isset($room['title']) ? strtoupper(str_replace('_', ' ', $room['title'])) : '' }} </span>
+                                                        @if(!empty($room['price']))
+                                                            <span>₹{{ $formatPrice($room['price']) }}</span>,
+                                                        @endif
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        @endif                                   
+
+                                        <ul class="nav nav-tabs tagNav" id="tag-nav-{{ $value->id }}">
+                                            <li class="nav-item"><a class="nav-link active" data-target="main-{{ $value->id }}">Main</a></li>
+                                            <li class="nav-item"><a class="nav-link" data-target="video-{{ $value->id }}">Video</a></li>
+                                            <li class="nav-item"><a class="nav-link" data-target="elevation-{{ $value->id }}">Elevation</a></li>
+                                            <li class="nav-item"><a class="nav-link" data-target="bedroom-{{ $value->id }}">Bedroom</a></li>
+                                            <li class="nav-item"><a class="nav-link" data-target="living-{{ $value->id }}">Living Area</a></li>
+                                            <li class="nav-item"><a class="nav-link" data-target="balcony-{{ $value->id }}">Balcony</a></li>
+                                            <li class="nav-item"><a class="nav-link" data-target="amenities-{{ $value->id }}">Amenities</a></li>
+                                            <li class="nav-item"><a class="nav-link" data-target="floor-{{ $value->id }}">Floor Plan</a></li>
+                                            <li class="nav-item"><a class="nav-link" data-target="location-{{ $value->id }}">Location Plan</a></li>
+                                            <li class="nav-item"><a class="nav-link" data-target="cluster-{{ $value->id }}">Cluster Plan</a></li>
+                                            <li class="nav-item"><a class="nav-link" data-target="contact-{{ $value->id }}">Contact</a></li>
+                                        </ul>
+                                    </div>                            
+                                    <div class="col-md-2 col-12">
+                                        <ul class="nav nav-tabs tagNav">
+                                            <li><a class="nav-link" data-target="contact">Contact Seller</a></li>
+                                        </ul>
                                     </div>
-
-                                    @php                                       
-                                        $roomsArray = json_decode($value->rooms, true) ?? [];
-                                        $propertyTypes = json_decode($value->property_types, true) ?? [];
-
-                                        $formatPrice = function ($price) {
-                                            if ($price >= 10000000) {
-                                                return number_format($price / 10000000, 1) . ' Cr';
-                                            } elseif ($price >= 100000) {
-                                                return number_format($price / 100000, 1) . ' Lacs';
-                                            } else {
-                                                return number_format($price);
-                                            }
-                                        };
-                                    @endphp
-
-                                    @if(!empty($roomsArray))
-                                        <div class="room-item">
-                                            @foreach($roomsArray as $room)
-                                                <div class="room">
-                                                    <span>{{ isset($room['title']) ? strtoupper(str_replace('_', ' ', $room['title'])) : '' }} </span>
-                                                    @if(!empty($room['price']))
-                                                        <span>₹{{ $formatPrice($room['price']) }}</span>,
-                                                    @endif
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                    @endif                                   
-
-                                    <ul class="nav nav-tabs tagNav">
-                                        <li class="nav-item"><a class="nav-link active" data-target="main">Main</a></li>
-                                        <li class="nav-item"><a class="nav-link" data-target="video">Video</a></li>
-                                        <li class="nav-item"><a class="nav-link" data-target="elevation">Elevation</a></li>
-                                        <li class="nav-item"><a class="nav-link" data-target="bedroom">Bedroom</a></li>
-                                        <li class="nav-item"><a class="nav-link" data-target="living">Living Area</a></li>
-                                        <li class="nav-item"><a class="nav-link" data-target="balcony">Balcony</a></li>
-                                        <li class="nav-item"><a class="nav-link" data-target="amenities">Amenities</a></li>
-                                        <li class="nav-item"><a class="nav-link" data-target="floor">Floor Plan</a></li>
-                                        <li class="nav-item"><a class="nav-link" data-target="location">Location Plan</a></li>
-                                        <li class="nav-item"><a class="nav-link" data-target="cluster">Cluster Plan</a></li>
-                                        <li class="nav-item"><a class="nav-link" data-target="contact">Contact</a></li>
-                                    </ul>
-                                </div>                            
-                                <div class="col-md-2 col-12">
-                                    <ul class="nav nav-tabs tagNav">
-                                        <li><a class="nav-link" data-target="contact">Contact Seller</a></li>
-                                    </ul>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                
-                <div class="tag-container d-flex overflow-auto mt-3" style="scroll-behavior: smooth; white-space: nowrap;">
-                    <div id="main" class="tag flex-shrink-0 div-active" >
-                        @foreach ($properties as $value)
-                            @if ($elevationImage = $value->property_images->where('label', 'Main')->first())
-                                <img src="{{ asset('uploads/property/large/' . $elevationImage->image) }}" class="img-fluid" alt="Bathroom Image">
-                            @endif
-                        @endforeach
 
-                        {{-- <div class="center">
-                            @foreach ($properties as $value)
-                                @if ($value->property_images && $value->property_images->count())
-                                    @foreach ($value->property_images as $propertyImage)
-                                        <div><img src="{{ asset('uploads/property/large/'.$propertyImage->image) }}" class="img-fluid" alt="Image"></div> 
-                                    @endforeach
+                    <div class="tag-container d-flex overflow-auto mt-3" id="tag-container-{{ $value->id }}" style="scroll-behavior: smooth; white-space: nowrap;">
+                        @php
+                            $sections = [
+                                'main'      => $elevationImage ?? null,
+                                'video'     => $video ?? null,
+                                'elevation' => $elevation ?? null,
+                                'bedroom'   => $bathroom ?? null,
+                                'living'   => $living ?? null,
+                                'balcony'   => $balcony ?? null,
+                                'amenities'   => $amenities ?? null,
+                                'floor'   => $floor ?? null,
+                                'location'   => $location ?? null,
+                                'cluster'   => $cluster ?? null,
+                            ];
+                        @endphp
+
+                        @foreach ($sections as $id => $media)
+                            <div id="{{ $id }}-{{ $value->id }}" class="tag flex-shrink-0 {{ $loop->first ? 'div-active' : '' }}">
+                                @if ($media)
+                                    <img src="{{ asset('uploads/property/large/' . $media->image) }}" class="img-fluid" alt="{{ $value->title ?? ucfirst($id) }}">
+                                @else
+                                    <img src="{{ asset('uploads/property/placeholder.jpg') }}" class="img-fluid" alt="No Image">
                                 @endif
-                            @endforeach
-                        </div> --}}
-                    </div>
-                    
-                    <div id="video" class="tag flex-shrink-0" >
-                        @foreach ($properties as $value)
-                            @if ($video = $value->property_images->where('label', 'Video')->first())
-                                <img src="{{ asset('uploads/property/large/' . $video->image) }}" class="img-fluid" alt="Bathroom Image">
-                            @endif
+                            </div>
                         @endforeach
-                    </div>
-                                    
-                    <div id="elevation" class="tag flex-shrink-0" >
-                        @foreach ($properties as $value)
-                            @if ($elevation = $value->property_images->where('label', 'Elevation')->first())
-                                <img src="{{ asset('uploads/property/large/' . $elevation->image) }}" class="img-fluid" alt="Bathroom Image">
-                            @endif
-                        @endforeach
-                    </div>
 
-                    <div id="bedroom" class="tag flex-shrink-0">
-                        @foreach ($properties as $value)
-                            @if ($bathroom = $value->property_images->where('label', 'Bedroom')->first())
-                                <img src="{{ asset('uploads/property/large/' . $bathroom->image) }}" class="img-fluid" alt="Bathroom Image">
-                            @endif
-                        @endforeach
-                    </div>
-
-                    <div id="living" class="tag flex-shrink-0">
-                        @foreach ($properties as $value)
-                            @if ($living = $value->property_images->where('label', 'Living')->first())
-                                <img src="{{ asset('uploads/property/large/' . $living->image) }}" class="img-fluid" alt="Living Area">
-                            @endif
-                        @endforeach
-                    </div>
-
-                    <div id="balcony" class="tag flex-shrink-0">
-                        @foreach ($properties as $value)
-                            @if ($balcony = $value->property_images->where('label', 'Balcony')->first())
-                                <img src="{{ asset('uploads/property/large/' . $balcony->image) }}" class="img-fluid" alt="Balcony">
-                            @endif
-                        @endforeach
-                    </div>
-
-                    <div id="amenities" class="tag flex-shrink-0">
-                        @foreach ($properties as $value)
-                            @if ($amenities = $value->property_images->where('label', 'Amenities')->first())
-                                <img src="{{ asset('uploads/property/large/' . $amenities->image) }}" class="img-fluid" alt="Amenities">
-                            @endif
-                        @endforeach
-                    </div>
-
-                    <div id="floor" class="tag flex-shrink-0">
-                        @foreach ($properties as $value)
-                            @if ($floor = $value->property_images->where('label', 'Floor')->first())
-                                <img src="{{ asset('uploads/property/large/' . $floor->image) }}" class="img-fluid" alt="Floor">
-                            @endif
-                        @endforeach
-                    </div>
-
-                    <div id="location" class="tag flex-shrink-0">
-                        @foreach ($properties as $value)
-                            @if ($location = $value->property_images->where('label', 'Location')->first())
-                                <img src="{{ asset('uploads/property/large/' . $location->image) }}" class="img-fluid" alt="Location">
-                            @endif
-                        @endforeach
-                    </div>
-
-                    <div id="cluster" class="tag flex-shrink-0">
-                        @foreach ($properties as $value)
-                            @if ($cluster = $value->property_images->where('label', 'Cluster')->first())
-                                <img src="{{ asset('uploads/property/large/' . $cluster->image) }}" class="img-fluid" alt="Cluster Plan">
-                            @endif
-                        @endforeach
-                    </div>
-                    
-                    <div id="contact" class="tag flex-shrink-0">
-                        <div class="contact-details-gallery">
-                            <h5>Property Information</h5>
-
-                        <div class="T_parentContainer">
-                            <div class="T_heading">Property Information</div>
-                            <div class="T_container">
+                        <div id="contact-{{ $value->id }}" class="tag flex-shrink-0">
+                            <div class="contact-details-gallery">
+                                <h5>Property Information</h5>
                                 <div class="T_itemContainer">
                                     <div class="T_iconStyle"></div>
                                     <div class="T_itemStyle">
@@ -200,37 +150,11 @@
                                             <div class="T_textEllipsis">Possession</div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
+                            </div>                               
                         </div>
-                    </div>                                            
+                    </div>
                 </div>
-
-                    
-
-                <!-- Parent Gallery -->
-                {{-- <div class="slider-for">
-                    @foreach ($properties as $value)
-                        @if ($value->property_images && $value->property_images->count())
-                            @foreach ($value->property_images as $propertyImage)
-                                <img src="{{ asset('uploads/property/large/'.$propertyImage->image) }}" class="img-fluid" alt="Image">                                                        
-                            @endforeach
-                        @endif
-                    @endforeach
-                </div>
-
-                <div class="slider-nav mt-3">
-                    @foreach ($properties as $value)
-                        @if ($value->property_images && $value->property_images->count())
-                            @foreach ($value->property_images as $propertyImage)
-                                <div>
-                                    <img src="{{ asset('uploads/property/thumb/'.$propertyImage->image) }}" class="img-thumbnail" alt="Thumb">
-                                </div>
-                            @endforeach
-                        @endif
-                    @endforeach
-                </div> --}}
             </div>
         </div>
     </div>
-</div> 
+@endforeach

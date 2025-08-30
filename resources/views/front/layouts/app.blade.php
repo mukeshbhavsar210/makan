@@ -10,7 +10,8 @@
 <link rel="stylesheet" type="text/css" href="{{ asset('front-assets/css/ion.rangeSlider.min.css') }}" />
 <link rel="stylesheet" type="text/css" href="{{ asset('front-assets/css/slick.css') }}" />
 <link rel="stylesheet" type="text/css" href="{{ asset('front-assets/css/slick-theme.css') }}" />
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="{{ asset('front-assets/css/bootstrap.min.css') }}" />
+
 <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <body >
@@ -148,7 +149,7 @@
 </footer>
 
 <script src="{{ asset('front-assets/js/jquery-3.6.0.min.js') }}"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+<script src="{{ asset('front-assets/js/bootstrap.min.js') }}"></script>
 <script src="{{ asset('front-assets/js/ion.rangeSlider.min.js') }}"></script>
 <script src="{{ asset('front-assets/js/custom.js') }}"></script>
 <script src="{{ asset('front-assets/js/slick.min.js') }}"></script>

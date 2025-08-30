@@ -4,52 +4,33 @@ $(document).ready(function(){
         $('.alert').fadeOut('fast');
     }, 1500);   
 
-    // $('.center').slick({
-    //     centerMode: true,
-    //     centerPadding: '260px',
-    //     slidesToShow: 1,
-    //     responsive: [
-    //         {
-    //         breakpoint: 768,
-    //         settings: {
-    //             arrows: false,
-    //             centerMode: true,
-    //             centerPadding: '140px',
-    //             slidesToShow: 1
-    //         }
-    //         },
-    //         {
-    //         breakpoint: 480,
-    //         settings: {
-    //             arrows: false,
-    //             centerMode: true,
-    //             centerPadding: '140px',
-    //             slidesToShow: 1
-    //         }
-    //         }
-    //     ]
-    // });
+   
 
 
-    $('.tagNav .nav-link').on('click', function(e){
+    $('.tagNav .nav-link').on('click', function(e) {
         e.preventDefault();
 
+        var $nav = $(this).closest('.tagNav'); // current nav
         var target = $(this).data('target');
         var $targetDiv = $('#' + target);
 
+        // Find the matching tag-container for this nav
+        var $container = $targetDiv.closest('.tag-container');
+
         // Scroll container to the target div
-        $('.tag-container').animate({
-            scrollLeft: $targetDiv.position().left + $('.tag-container').scrollLeft()
+        $container.animate({
+            scrollLeft: $targetDiv.position().left + $container.scrollLeft()
         }, 400);
 
-        // Navbar active state
-        $('.tagNav .nav-link').removeClass('active');
+        // Navbar active state (only inside this nav)
+        $nav.find('.nav-link').removeClass('active');
         $(this).addClass('active');
 
-        // Div active state
-        $('.tag-container .tag').removeClass('div-active');
+        // Div active state (only inside this container)
+        $container.find('.tag').removeClass('div-active');
         $targetDiv.addClass('div-active');
     });
+
 
 
 

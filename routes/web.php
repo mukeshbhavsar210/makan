@@ -94,7 +94,7 @@ Route::group(['prefix' => 'account'], function(){
         //Profile Routes
         Route::get("/profile",[AccountController::class, 'index'])->name('profile.index');
         Route::put("/update-profile",[AccountController::class, 'update_profile'])->name('profile.update');
-        Route::put("/update-developer",[AccountController::class, 'update_developer'])->name('developer.update');
+        Route::post('account/builders/save', [AccountController::class, 'update_builder'])->name('builder.save');
         Route::post("/update-password",[AccountController::class, 'update_password'])->name('password.update');
         Route::get("/logout",[AccountController::class, 'logout'])->name('account.logout');                
 

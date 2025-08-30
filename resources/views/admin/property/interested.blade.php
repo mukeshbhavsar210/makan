@@ -6,13 +6,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-6">
-                <h1>Interested 
-                    @if(Auth::user()->role == 'Admin')
-                        <span class="badge rounded text-blue bg-blue-subtle">{{ $all_counts }}</span>
-                    @else
-                        <span class="badge rounded text-blue bg-blue-subtle">{{ $counts }}</span>
-                    @endif  
-                </h1>
+                <h1>Interested <span class="badge rounded text-blue bg-blue-subtle">{{ $counts }}</span></h1>
             </div>
             <div class="col-sm-6">
                 <form action="" method="get" class="part">
@@ -52,114 +46,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @if(Auth::user()->role == 'Admin')
-                                @if ($all_interested->isNotEmpty())
-                                    @foreach ($all_interested as $value)
-                                    <tr>
-                                        <td class="px-0">
-                                            <div class="d-flex align-items-center">
-                                                @php
-                                                    $PropertyImage = $value->property->property_images->first();
-                                                @endphp
-                                                <a href="{{ route('propertyDetails', $value->property_id) }}" class="thumb" target="_blank">
-                                                    @if(Auth::user()->role == 'Admin')
-                                                        <span class="property-id">{{ $value->id }}</span>
-                                                    @endif
-                                                    @if ($PropertyImage && !empty($PropertyImage->image))
-                                                        <img src="{{ asset('uploads/property/small/' . $PropertyImage->image) }}" height="100" width="100" class="me-2 align-self-center rounded" >                                                
-                                                    @else
-                                                        <img src="{{ asset('admin-assets/img/default-150x150.png') }}" alt="" height="100" class="me-2 align-self-center rounded"  />
-                                                    @endif
-                                                </a>
-                                                <div class="flex-grow-1 text-truncate"> 
-                                                    <h4 class="m-0">{{ $value->property->title }} 
-                                                        {{-- <span class="badge rounded text-blue bg-blue-subtle">{{ $value->property->applications->count() }}</span> --}}
-                                                    </h4>
-                                                    <p class="m-0">{{ $value->property->locatiom }}</p>
-                                                    <p class="m-0">{{ $value->property->area->name }}, {{ $value->property->city->name ?? '' }}</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            @php
-                                                $roomsArray = json_decode($value->property->rooms, true) ?? [];
-                                            @endphp
-                                            @if(!empty($roomsArray))
-                                                @foreach($roomsArray as $room)                                            
-                                                    @if(!empty($room['price']))
-                                                        <span>{{ isset($room['title']) ? strtoupper(str_replace('_', ' ', $room['title'])) : '' }} </span><br />
-                                                    @endif                                            
-                                                @endforeach
-                                            @endif                                                    
-                                        </td>
-                                        <td>
-                                            @php
-                                                $roomsArray = json_decode($value->property->rooms, true) ?? [];
-
-                                                $formatPrice = function ($price) {
-                                                    if ($price >= 10000000) {
-                                                        return number_format($price / 10000000, 1) . ' Cr';
-                                                    } elseif ($price >= 100000) {
-                                                        return number_format($price / 100000, 1) . ' Lacs';
-                                                    } else {
-                                                        return number_format($price);
-                                                    }
-                                                };
-                                            @endphp
-                                            @if(!empty($roomsArray))
-                                                @foreach($roomsArray as $room)                                            
-                                                    @if(!empty($room['price']))                                                        
-                                                        <span>₹{{ $formatPrice($room['price']) }}</span><br />
-                                                    @endif                                            
-                                                @endforeach
-                                            @endif                                                    
-                                        </td>
-                                        <td>
-                                        <div class="user-avatar">
-                                            @if ($value->property->builder && $value->property->builder->logo)
-                                                <img src="{{ asset('uploads/builder/' . $value->property->builder->logo) }}" 
-                                                    height="80" width="80" class="rounded-circle" >
-                                                {{ $value->property->builder->name }}
-                                            @else
-                                                <img src="{{ asset('admin-assets/img/default-150x150.png') }}" 
-                                                    alt="" height="80" class="me-2 align-self-center rounded" />
-                                            @endif
-                                        </div>
-                                        </td>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                @foreach($value->property->applications as $application)
-                                                    <div class="user-avatar" title="{{ $application->user->name }}">
-                                                        @if ($application->user->image)
-                                                            <img src="{{ asset('profile_pic/thumb/' . $application->user->image) }}" alt="{{ $application->user->name }}" class="rounded-circle">
-                                                        @else
-                                                            <img src="{{ asset('admin-assets/img/user.png') }}" alt="" height="80" class="rounded-circle"  />
-                                                        @endif
-                                                        
-                                                        <!-- Hover Card -->
-                                                        <div class="user-details">
-                                                            <strong>{{ $application->user->name }}</strong><br>
-                                                            {{-- {{ $application->user->role }}<br> --}}
-                                                            E: <a href="mailto:{{ $application->user->email }}">{{ $application->user->email }}</a><br>
-                                                            M: <a href="tel:{{ $application->user->mobile }}">{{ $application->user->mobile }}</a>
-                                                        </div>
-                                                    </div>
-                                                @endforeach
-                                            </div>
-                                        </td>
-                                        <td>{{ \Carbon\Carbon::parse($application->applied_date)->format('d M Y') }}</td>                                    
-                                        <td>
-                                            <a href="#" onclick="removeProperty({{ $value->id }})"><i class="las la-trash-alt text-secondary fs-18"></i></a>
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                    @else
-                                        <tr>
-                                            <td colspan="5">people not found</td>
-                                        </tr>
-                                @endif
-                            @else
-                                @if ($interested->isNotEmpty())
+                            @if ($interested->isNotEmpty())
                                     @foreach ($interested as $value)
                                     <tr>
                                         <td class="px-0">
@@ -200,7 +87,6 @@
                                         <td>
                                             @php
                                                 $roomsArray = json_decode($value->property->rooms, true) ?? [];
-
                                                 $formatPrice = function ($price) {
                                                     if ($price >= 10000000) {
                                                         return number_format($price / 10000000, 1) . ' Cr';
@@ -221,13 +107,12 @@
                                         </td>
                                         <td>
                                         <div class="user-avatar">
-                                            @if ($value->property->builder && $value->property->builder->logo)
-                                                <img src="{{ asset('uploads/builder/' . $value->property->builder->logo) }}" 
+                                            @if ($value->property->builder && $value->property->builder->image)
+                                                <img src="{{ asset('uploads/builder/' . $value->property->builder->image) }}" 
                                                     height="80" width="80" class="rounded-circle" >
-                                                {{ $value->property->builder->name }}
+                                                {{ $value->property->builder->developer_name }}
                                             @else
-                                                <img src="{{ asset('admin-assets/img/default-150x150.png') }}" 
-                                                    alt="" height="80" class="me-2 align-self-center rounded" />
+                                                <img src="{{ asset('admin-assets/img/default-150x150.png') }}" alt="" height="80" class="me-2 align-self-center rounded" />
                                             @endif
                                         </div>
                                         </td>
@@ -262,8 +147,7 @@
                                         <tr>
                                             <td colspan="5">people not found</td>
                                         </tr>
-                                @endif
-                            @endif  
+                                @endif 
                         </tbody>
                     </table>
                 </div>

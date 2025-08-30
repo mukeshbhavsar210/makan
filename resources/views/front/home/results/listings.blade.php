@@ -131,10 +131,10 @@
 
                             <div class="developer">
                                 <div class="branding">
-                                    @if ($value->builder && $value->builder->logo)
-                                        <img src="{{ asset('uploads/builder/' . $value->builder->logo) }}" class="logo" >
+                                    @if ($value->builder && $value->builder->image)
+                                        <img src="{{ asset('uploads/builder/' . $value->builder->image) }}" class="logo" >
                                         <div class="name">
-                                            <p class="builder_name">{{ $value->builder->name }}</p>
+                                            <p class="builder_name">{{ $value->builder->developer_name }}</p>
                                             <p>{{ $value->user->role }}</p>  
                                         </div>                                  
                                     @else
@@ -159,21 +159,20 @@
                                                 <div class="modal-builder">
                                                 <h3>Contact Seller</h3>
                                                 <div class="logo-details">
-                                                        @if ($value->builder && $value->builder->logo)
+                                                        @if ($value->builder && $value->builder->image)
                                                             <div class="logo">
-                                                                <img src="{{ asset('uploads/builder/' . $value->builder->logo) }}" class="logo" >
+                                                                <img src="{{ asset('uploads/builder/' . $value->builder->image) }}" class="logo" >
                                                             </div>
                                                             <div class="details-modal">
-                                                                <h4>{{ $value->builder->name }}</h4>
+                                                                <h4>{{ $value->builder->developer_name }}</h4>
                                                                 <p>{{ $value->user->role }}</p>  
-                                                                <p>M. {{ $value->builder->mobile }}</p>
+                                                                <p>M. {{ $value->builder->developer_mobile }}</p>
                                                             </div>                                  
                                                         @else
                                                             <img src="{{ asset('admin-assets/img/default-150x150.png') }}" alt="" height="80" class="logo" />
                                                         @endif
                                                     </div>
                                                 </div>
-
                                                 Please share your contact
                                             </div>
                                             <div class="modal-footer">

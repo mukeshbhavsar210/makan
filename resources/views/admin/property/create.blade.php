@@ -125,10 +125,10 @@
                                     <div class="form-group">   
                                         <label>Select Builder</label>   
                                         <select name="builder" id="builder" class="form-select">                                                                  
-                                            <option value="">Select a Builder</option>
+                                            <option value="">Select a Developer</option>
                                             @if ($builders->isNotEmpty())
                                                 @foreach ($builders as $value)
-                                                    <option value="{{ $value->id }}">{{ $value->name }}</option>
+                                                    <option value="{{ $value->id }}">{{ $value->developer_name }}</option>
                                                 @endforeach
                                             @endif
                                         </select>                            

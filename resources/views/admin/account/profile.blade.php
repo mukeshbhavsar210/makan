@@ -87,67 +87,69 @@
                         @if($user->role == 'Builder')
                             <div class="row">
                                 <div class="col-md-2">
-                                    @if (Auth::user()->image != '')
-                                        <img src="{{ asset('profile_pic/thumb/'.Auth::user()->image) }}" alt="avatar" class="img-fluid" >
-                                    @else
-                                        <img src="{{ asset('assets/images/avatar7.png') }}" alt="avatar" class="img-fluid" >
+                                    @if(!empty($developer) && $developer->image)
+                                        <img src="{{ asset('uploads/builder/'.$developer->image) }}" alt="Builder Image" width="120" style="display:block; margin-bottom:10px;">
                                     @endif 
                                 </div>
 
                                 <div class="col-md-10">
                                     <h4 class="mb-3">Developer details</h4>
-                                    <form action="" method="post" id="developerForm" name="developerForm" class="mt-3" enctype="multipart/form-data">
+                                    <form id="builderForm" enctype="multipart/form-data">
+                                        @csrf
+                                        
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label for="" class="mb-1">Logo<span class="req">*</span></label>
-                                                    <input type="file" class="form-control" name="logo">
-                                                    <span id="image-error" class="text-danger"></span>
+                                                    <label for="" class="mb-1">Company Logo<span class="req">*</span></label>
+                                                <input type="file" name="image" accept="image/*" class="form-control">
+                                                <span id="image_error" class="text-danger"></span>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label for="" class="mb-1">Name <span class="req">*</span></label>
-                                                    <input type="text" name="name" id="name" placeholder="Name" class="form-control" value="{{ Auth::user()->name }}">
-                                                    <p></p>
+                                                    <label>Company Name<span class="req">*</span></label>
+                                                    <input type="text" name="developer_name" 
+                                                        value="{{ old('developer_name', $developer->developer_name ?? '') }}" class="form-control">
+                                                    <span id="developer_name_error" class="text-danger"></span>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label for="email">Corporate Address</label>
-                                                    <textarea class="form-control" name="address" id="address" cols="5" rows="5" placeholder="Corporate Address"></textarea>
-                                                    <p></p>
+                                                    <label>Email<span class="req">*</span></label>
+                                                    <input type="email" name="developer_email" 
+                                                        value="{{ old('developer_email', $developer->developer_email ?? '') }}" class="form-control">
+                                                    <span id="developer_email_error" class="text-danger"></span>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label for="email">Email</label>
-                                                    <input type="text" name="email" id="email" class="form-control" placeholder="Email">
-                                                    <p></p>
+                                                    <label>Mobile<span class="req">*</span></label>
+                                                    <input type="text" name="developer_mobile" 
+                                                        value="{{ old('developer_mobile', $developer->developer_mobile ?? '') }}" class="form-control">
+                                                    <span id="developer_mobile_error" class="text-danger"></span>
                                                 </div>
-                                                <div class="form-group">
-                                                    <label for="landline">Landline</label>
-                                                    <input type="text" name="landline" id="landline" class="form-control" placeholder="Landeline">
-                                                    <p></p>
-                                                </div>                                            
-                                            </div>                                        
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label for="mobile">Mobile</label>
-                                                    <input type="text" name="mobile" id="mobile" class="form-control" placeholder="Mobile">
-                                                    <p></p>
-                                                </div> 
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label for="whatsapp">Whatsapp</label>
-                                                    <input type="text" name="whatsapp" id="whatsapp" class="form-control" placeholder="Whatsapp">
-                                                    <p></p>
-                                                </div> 
+                                                    <label>Address<span class="req">*</span></label>
+                                                    <textarea name="address" cols="5" rows="5" class="form-control">{{ old('address', $developer->address ?? '') }}</textarea>
+                                                    <span id="address_error" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Landline<span class="req">*</span></label>
+                                                    <input type="text" name="developer_landline" 
+                                                        value="{{ old('developer_landline', $developer->developer_landline ?? '') }}" class="form-control">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>WhatsApp</label>
+                                                    <input type="text" name="developer_whatsapp" 
+                                                        value="{{ old('developer_whatsapp', $developer->developer_whatsapp ?? '') }}" class="form-control">
+                                                </div>
                                             </div>
                                         </div>
-
-                                        <button type="submit" class="btn btn-primary ">Update</button>
+                                        <button type="submit" class="btn btn-primary">Save Builder</button>
                                     </form>
                                 </div>
                             </div>
@@ -221,50 +223,44 @@
     });
 
 
+   $("#builderForm").submit(function(event){
+    event.preventDefault();
 
-    $("#developerForm").submit(function(event){
-        event.preventDefault();
+    var formData = new FormData(this);
 
-        //$("button[type='submit']").prop('disabled', true);
+    $.ajax({
+        url: '{{ route("builder.save") }}',
+        type: 'POST',
+        data: formData,
+        dataType: 'json',
+        contentType: false,
+        processData: false,
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function(response){
+            console.log("Response:", response);
 
-        $.ajax({
-            url: '{{ route("password.update") }}',
-            type: 'POST',
-            dataType: 'json',
-            data: $("#changePasswordForm").serializeArray(),
-            success: function(response){
-                //$("button[type='submit']").prop('disabled', false);
-
-                if(response.status == true){
-                    $("#old_password").removeClass('is-invalid').siblings("p").removeClass('invalid-feedback').html();
-                    $("#new_password").removeClass('is-invalid').siblings("p").removeClass('invalid-feedback').html();
-                    $("#confirm_password").removeClass('is-invalid').siblings("p").removeClass('invalid-feedback').html();                    
-                } else {
-                    var errors = response.errors;
-                    if(errors.old_password){
-                        $("#old_password").addClass('is-invalid').siblings('p').addClass('invalid-feedback').html(errors.old_password);
-                    } else {
-                        $("#old_password").removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html();
-                    }
-                    if(errors.new_password){
-                        $("#new_password").addClass('is-invalid').siblings('p').addClass('invalid-feedback').html(errors.new_password);
-                    } else {
-                        $("#new_password").removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html();
-                    }
-                    if(errors.confirm_password){
-                        $("#confirm_password").addClass('is-invalid').siblings('p').addClass('invalid-feedback').html(errors.confirm_password);
-                    } else {
-                        $("#confirm_password").removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html();
-                    }
-
-                    //window.location.href='{{ route("account.login") }}'
-                }
-            },
-            error: function(JQXHR, exception){
-                console.log("Something went wrong");
+            if(response.status === false){
+                var errors = response.errors;
+                if(errors.developer_name)     $("#developer_name_error").html(errors.developer_name[0]);
+                if(errors.developer_email)    $("#developer_email_error").html(errors.developer_email[0]);
+                if(errors.developer_mobile)   $("#developer_mobile_error").html(errors.developer_mobile[0]);
+                if(errors.address)            $("#address_error").html(errors.address[0]);
+            } else {
+                alert(response.message);
+                window.location.reload();
             }
-        })
+        },
+        error: function(xhr){
+            console.log("AJAX error:", xhr.responseText);
+        }
     });
+});
+
+
+
+
 
 
    
