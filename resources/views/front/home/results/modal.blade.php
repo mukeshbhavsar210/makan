@@ -17,7 +17,7 @@
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">                    
-                    <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M20.7457 3.32851C20.3552 2.93798 19.722 2.93798 19.3315 3.32851L12.0371 10.6229L4.74275 3.32851C4.35223 2.93798 3.71906 2.93798 3.32854 3.32851C2.93801 3.71903 2.93801 4.3522 3.32854 4.74272L10.6229 12.0371L3.32856 19.3314C2.93803 19.722 2.93803 20.3551 3.32856 20.7457C3.71908 21.1362 4.35225 21.1362 4.74277 20.7457L12.0371 13.4513L19.3315 20.7457C19.722 21.1362 20.3552 21.1362 20.7457 20.7457C21.1362 20.3551 21.1362 19.722 20.7457 19.3315L13.4513 12.0371L20.7457 4.74272C21.1362 4.3522 21.1362 3.71903 20.7457 3.32851Z" fill="#ffffff"/>
                     </svg>
                 </button>
@@ -74,19 +74,33 @@
                                                     </div>
                                                 @endforeach
                                             </div>
-                                        @endif                                   
+                                        @endif     
 
+                                        @php
+                                            $sections = [
+                                                'main'      => $elevationImage ?? null,
+                                                'video'     => $video ?? null,
+                                                'elevation' => $elevation ?? null,
+                                                'bedroom'   => $bathroom ?? null,
+                                                'living'   => $living ?? null,
+                                                'balcony'   => $balcony ?? null,
+                                                'amenities'   => $amenities ?? null,
+                                                'floor'   => $floor ?? null,
+                                                'location'   => $location ?? null,
+                                                'cluster'   => $cluster ?? null,
+                                            ];
+                                        @endphp
+                                        
                                         <ul class="nav nav-tabs tagNav" id="tag-nav-{{ $value->id }}">
-                                            <li class="nav-item"><a class="nav-link active" data-target="main-{{ $value->id }}">Main</a></li>
-                                            <li class="nav-item"><a class="nav-link" data-target="video-{{ $value->id }}">Video</a></li>
-                                            <li class="nav-item"><a class="nav-link" data-target="elevation-{{ $value->id }}">Elevation</a></li>
-                                            <li class="nav-item"><a class="nav-link" data-target="bedroom-{{ $value->id }}">Bedroom</a></li>
-                                            <li class="nav-item"><a class="nav-link" data-target="living-{{ $value->id }}">Living Area</a></li>
-                                            <li class="nav-item"><a class="nav-link" data-target="balcony-{{ $value->id }}">Balcony</a></li>
-                                            <li class="nav-item"><a class="nav-link" data-target="amenities-{{ $value->id }}">Amenities</a></li>
-                                            <li class="nav-item"><a class="nav-link" data-target="floor-{{ $value->id }}">Floor Plan</a></li>
-                                            <li class="nav-item"><a class="nav-link" data-target="location-{{ $value->id }}">Location Plan</a></li>
-                                            <li class="nav-item"><a class="nav-link" data-target="cluster-{{ $value->id }}">Cluster Plan</a></li>
+                                            @foreach ($sections as $id => $media)
+                                                @if ($media) 
+                                                    <li class="nav-item">
+                                                        <a class="nav-link {{ $loop->first ? 'active' : '' }}" data-target="{{ $id }}-{{ $value->id }}">
+                                                            {{ ucfirst($id) }}
+                                                        </a>
+                                                    </li>
+                                                @endif
+                                            @endforeach
                                             <li class="nav-item"><a class="nav-link" data-target="contact-{{ $value->id }}">Contact</a></li>
                                         </ul>
                                     </div>                            
@@ -101,56 +115,113 @@
                     </div>
 
                     <div class="tag-container d-flex overflow-auto mt-3" id="tag-container-{{ $value->id }}" style="scroll-behavior: smooth; white-space: nowrap;">
-                        @php
-                            $sections = [
-                                'main'      => $elevationImage ?? null,
-                                'video'     => $video ?? null,
-                                'elevation' => $elevation ?? null,
-                                'bedroom'   => $bathroom ?? null,
-                                'living'   => $living ?? null,
-                                'balcony'   => $balcony ?? null,
-                                'amenities'   => $amenities ?? null,
-                                'floor'   => $floor ?? null,
-                                'location'   => $location ?? null,
-                                'cluster'   => $cluster ?? null,
-                            ];
-                        @endphp
-
                         @foreach ($sections as $id => $media)
-                            <div id="{{ $id }}-{{ $value->id }}" class="tag flex-shrink-0 {{ $loop->first ? 'div-active' : '' }}">
-                                @if ($media)
+                            @if ($media)
+                                <div id="{{ $id }}-{{ $value->id }}" class="tag flex-shrink-0 {{ $loop->first ? 'div-active' : '' }}">
                                     <img src="{{ asset('uploads/property/large/' . $media->image) }}" class="img-fluid" alt="{{ $value->title ?? ucfirst($id) }}">
-                                @else
-                                    <img src="{{ asset('uploads/property/placeholder.jpg') }}" class="img-fluid" alt="No Image">
-                                @endif
-                            </div>
+                                </div>
+                            @endif
                         @endforeach
 
                         <div id="contact-{{ $value->id }}" class="tag flex-shrink-0">
                             <div class="contact-details-gallery">
                                 <h5>Property Information</h5>
-                                <div class="T_itemContainer">
-                                    <div class="T_iconStyle"></div>
-                                    <div class="T_itemStyle">
-                                        <div class="T_textEllipsis">2.14 Acres</div><div class="T_textEllipsis _sq1l2s _vv1q9c _ks15vq T_titlestyle _7lc65e _g31fwx _c819bv _cs1nn1">Project Area</div></div></div><div class="T_itemContainer _giy749 _jbllbu _ks15vq _l819bv _9s1txw _arvrvc _5jftgi _e21a70 _261mbq"><div class="_vyl52n _e2l52n _lzn0w4qz _bof91jbn _1y0k1gkc T_iconStyle"></div><div class="T_itemStyle _gz1fwx _0h1y6m _0f1h6o _ar1bp4 _9s1txw _vy1osq"><div class="T_textEllipsis _sq1l2s _vv1q9c _ks15vq T_propertyValueStyle _7lc65e _csbfng _g3exct _c8dlk8">991 sq.ft.</div><div class="T_textEllipsis _sq1l2s _vv1q9c _ks15vq T_titlestyle _7lc65e _g31fwx _c819bv _cs1nn1">Size</div></div></div><div class="T_itemContainer _giy749 _jbllbu _ks15vq _l819bv _9s1txw _arvrvc _5jftgi _e21a70 _261mbq"><div class="_vyl52n _e2l52n _lzn0w4qz _bof91jbn _1y0k1gkc T_iconStyle"></div><div class="T_itemStyle _gz1fwx _0h1y6m _0f1h6o _ar1bp4 _9s1txw _vy1osq"><div class="T_textEllipsis _sq1l2s _vv1q9c _ks15vq T_propertyValueStyle _7lc65e _csbfng _g3exct _c8dlk8">5 Buildings - 250 units</div><div class="T_textEllipsis _sq1l2s _vv1q9c _ks15vq T_titlestyle _7lc65e _g31fwx _c819bv _cs1nn1">Project Size</div></div></div><div class="T_itemContainer _giy749 _jbllbu _ks15vq _l819bv _9s1txw _arvrvc _5jftgi _e21a70 _261mbq"><div class="_vyl52n _e2l52n _lzn0w4qz _bof91jbn _1y0k1gkc T_iconStyle"></div>
-                                        <div class="T_itemStyle _gz1fwx _0h1y6m _0f1h6o _ar1bp4 _9s1txw _vy1osq">
-                                            <div class="T_propertyValueStyle">₹9.79 K/sq.ft</div>
-                                        <div class="T_textEllipsis">Average Price</div>
+
+                                <div class="property-modal-details">      
+                                    <div class="part">
+                                        @php                                       
+                                            $roomsArray = json_decode($value->rooms, true) ?? [];
+                                        @endphp
+
+                                        @if(!empty($roomsArray))
+                                            @foreach($roomsArray as $room)
+                                                {{ isset($room['size']) ? strtoupper(str_replace('_', ' ', $room['size'])) : '' }} -
+                                            @endforeach
+                                            sq.ft.
+                                        @endif  
+                                        <p class="small-text">Size</p>
+                                    </div>
+
+                                    <div class="part">
+                                        5 Buildings - 699 units
+                                        <p class="small-text">Project Size</p>
+                                    </div>
+
+                                    <div class="part">
+                                         @php
+                                            $roomsArray = json_decode($value->rooms, true) ?? [];
+                                            $totalPrice = 0;
+                                            $totalSize  = 0;
+
+                                            foreach ($roomsArray as $room) {
+                                                $price = isset($room['price']) ? (float) $room['price'] : 0;
+                                                $size  = isset($room['size']) ? (float) $room['size'] : 0;
+
+                                                $totalPrice += $price;
+                                                $totalSize  += $size;
+                                            }
+
+                                            $overallPricePerSqft = ($totalPrice > 0 && $totalSize > 0)
+                                                ? round($totalPrice / $totalSize, 2)
+                                                : 0;
+                                        @endphp
+
+                                        @if($overallPricePerSqft > 0)
+                                             ₹{{ number_format($overallPricePerSqft) }}/sq.ft.
+                                        @endif
+                                        <p class="small-text">Average Price:</p>
+                                    </div>
+
+                                    <div class="part">
+                                        @php                                       
+                                            $roomsArray = json_decode($value->rooms, true) ?? [];
+                                        @endphp
+
+                                        @if(!empty($roomsArray))
+                                            @foreach($roomsArray as $room)
+                                                {{ isset($room['title']) ? preg_replace('/[^0-9]/', '', $room['title']) : '' }},
+                                            @endforeach
+                                        @endif
+                                        BHK 
+                                        @php
+                                            $types = json_decode($value->property_types, true) ?? [];
+                                        @endphp
+                                        {{ implode(', ', array_map('ucwords', $types)) }}
+                                        <p class="small-text">BHK</p>
+                                    </div>
+
+                                    <div class="part">                                       
+                                        @php
+                                            $date = \Carbon\Carbon::parse($value->possession_date);
+                                        @endphp
+                                        {{ $date->year == now()->year ? $date->format('M') : $date->format('M, Y') }}
+                                        <p class="small-text">Possession</p>
+                                    </div>     
+                                </div>
+
+                                <div class="property-modal-developer">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <p>Contact Sellers in</p>
+                                            <div class="developer">
+                                                @if ($value->builder && $value->builder->image)
+                                                    <img src="{{ asset('uploads/builder/' . $value->builder->image) }}" class="logo" >
+                                                    <p class="builder_name">{{ $value->builder->developer_name }}</p>
+                                                @else
+                                                    <img src="{{ asset('admin-assets/img/default-150x150.png') }}" alt="" height="80" class="logo" />
+                                                @endif
+                                            </div>
+                                            <div class="form">
+                                                <p class="small-font">Please share your contact</p>
                                             </div>
                                         </div>
-                                            <div class="T_itemContainer">
-                                                <div class="T_iconStyle"></div>
-                                            <div class="T_itemStyle">
-                                                <div class="T_propertyValueStyle">3 BHK Flat</div>
-                                            <div class="T_textEllipsis">BHK</div></div></div>
-                                                <div class="T_itemContainer">
-                                                <div class="T_iconStyle"></div>
-                                            <div class="T_itemStyle">
-                                                <div class="T_propertyValueStyle">Ready to Move</div>
-                                            <div class="T_textEllipsis">Possession</div>
-                                        </div>
                                     </div>
-                            </div>                               
+                                    <div class="btm-text">
+                                        <span>I agree to be contacted by Housing and agents via</span>, WhatsApp, SMS, phone, email etc</span>
+                                        <button class="btn btn-primary">Get Contact Details</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

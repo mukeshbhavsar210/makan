@@ -247,6 +247,11 @@ input:checked + .slider { box-shadow:0 0 0 2px #007bff,0 0 2px #007bff;}
 
 .nav-item.active { background-color: rgba(13, 110, 253, 0.1);}
 
+.addingCheckbox { margin-bottom: 0 !important; display: flex; padding: 10px 15px !important; justify-content: space-between; -webkit-box-align: center !important; -ms-flex-align: center!important; align-items: center !important;}
+.addingCheckbox .price { margin: 0 5px !important; width: 100px !important;  }
+.addingCheckbox .size { width: 65px !important; }
+.addingCheckbox .form-control { padding: 5px !important;}
+
 .thumb { position: relative;}
 .thumb .property-id { position: absolute; top:5px; left:76px; background: linear-gradient(transparent,rgba(0,0,0,.8)); color: #fff; padding: 1px 4px; font-size: 10px; border-radius: 3px;}
 

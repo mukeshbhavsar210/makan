@@ -197,7 +197,7 @@
 
                         <div class="col-md-3 col-12">
                             <div class="form-group">
-                                <label for="room" id="roomCounts" class="mb-1">BHK <span class="req">*</span></label>
+                                <label for="room" id="roomCounts" class="mb-1">BHK, Price and Sq ft<span class="req">*</span></label>
                                 <div class="dropdown">
                                     <button class="btn btn-outline-primary dropdown-toggle w-100" type="button" id="roomDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                                         Select BHK
@@ -206,19 +206,26 @@
                                     @php
                                         $selectedRooms = isset($property) ? json_decode($property->rooms, true) ?? [] : [];
                                         $selectedRoomTitles = array_column($selectedRooms, 'title');
-                                        $roomPrices = collect($selectedRooms)->mapWithKeys(fn($item) => [$item['title'] => $item['price']])->toArray();
+                                        $roomPrices = collect($selectedRooms)->mapWithKeys(fn($item) => [
+                                            $item['title'] => $item['price'] ?? ''
+                                        ])->toArray();
+
+                                        $roomSizes = collect($selectedRooms)->mapWithKeys(fn($item) => [
+                                            $item['title'] => $item['size'] ?? ''
+                                        ])->toArray();
                                     @endphp
 
                                     <ul class="dropdown-menu overflow-y w-100" aria-labelledby="roomDropdown">
                                         @foreach (['1_rk'=>'1 RK','1_bhk'=>'1 BHK','2_bhk'=>'2 BHK','3_bhk'=>'3 BHK','4_bhk'=>'4 BHK','5_bhk'=>'5 BHK'] as $key => $label)
                                             <li>
-                                                <label class="dropdown-item d-flex justify-content-between align-items-center">
+                                                <label class="dropdown-item addingCheckbox ">
                                                     <div>
                                                         <input type="checkbox" class="room-option" name="rooms[]" value="{{ $key }}"
-                                                            {{ in_array($key, $selectedRoomTitles) ? 'checked' : '' }}> 
+                                                            {{ in_array($key, $selectedRoomTitles) ? 'checked' : '' }}>
                                                         {{ $label }}
                                                     </div>
-                                                    <input type="text" class="form-control showCheck" placeholder="Price" data-title="{{ $key }}" value="{{ $roomPrices[$key] ?? '' }}">
+                                                    <div><input type="text" class="form-control price showCheck" placeholder="Price" data-title="{{ $key }}" data-field="price" value="{{ $roomPrices[$key] ?? '' }}"></div>
+                                                    <div><input type="text" class="form-control size showCheck" placeholder="Sq Ft" data-title="{{ $key }}" data-field="size" value="{{ $roomSizes[$key] ?? '' }}"></div>
                                                 </label>
                                             </li>
                                         @endforeach

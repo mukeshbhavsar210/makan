@@ -174,31 +174,6 @@ class PropertyController extends Controller {
                 }
             }
 
-
-        // if (!empty($request->document_array)) {
-        //     foreach ($request->document_array as $temp_document_id) {
-        //         $tempDocumentInfo = TempImage::find($temp_document_id);
-        //         $extArray = explode('.',$tempDocumentInfo->name);
-        //         $ext = last($extArray);
-
-        //         $propertyDocument = new PropertyDocument();
-        //         $propertyDocument->property_id = $property->id;
-        //         $propertyDocument->image = "NULL";
-        //         $propertyDocument->save();
-
-        //         $documentName = $property->id.'-'.$property->title.'-'.time().'.'.$ext;
-        //         $propertyDocument->image = $documentName;
-        //         $propertyDocument->save();
-
-        //         //Large Image
-        //         $sourcePath = public_path().'/temp/'.$tempDocumentInfo->name;
-        //         $destPath = public_path().'/uploads/property/documents/'.$documentName;
-        //         $manager = new ImageManager(new Driver());
-        //         $image = $manager->read($sourcePath);
-        //         $image->save($destPath);
-        //     }
-        // }
-
         $request->session()->flash('success','Property added successfully');
 
         return response()->json([
@@ -228,15 +203,6 @@ class PropertyController extends Controller {
         $propertyImage = PropertyImage::where('property_id',$property->id)->get()->unique('label');   
         $areas = Area::where('city_id',$property->city_id)->get();        
 
-      
-
-        //Fetch Facings
-        // $relatedFacings = [];
-        // if ($property->related_facings != '') {
-        //     $facingsArray = explode(',',$property->related_facings);
-        //     $relatedFacings = Amenity::whereIn('id',$facingsArray)->get();
-        // }
-
         $data = [];
         $cities = City::orderBy('name','ASC')->get();
         $areas = Area::orderBy('name','ASC')->get();        
@@ -252,6 +218,8 @@ class PropertyController extends Controller {
 
         return view('admin.property.edit',$data);
     }
+
+
 
     public function update($id, Request $request){
         $property = Property::find($id);
@@ -293,10 +261,17 @@ class PropertyController extends Controller {
             ];
 
             foreach ($fields as $requestKey => $propertyKey) {
-                $property->$propertyKey = $request->filled($requestKey) 
-                    ? $request->$requestKey 
-                    : null;
+                if ($request->has($requestKey)) {
+                    $property->$propertyKey = $request->$requestKey;
+                }
             }
+
+
+            // foreach ($fields as $requestKey => $propertyKey) {
+            //     $property->$propertyKey = $request->filled($requestKey) 
+            //         ? $request->$requestKey 
+            //         : null;
+            // }
             
             $property->save();
 
