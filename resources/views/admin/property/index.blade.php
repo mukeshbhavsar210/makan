@@ -5,13 +5,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-7 col-12">
-                <h1>Property 
-                    @if(Auth::user()->role == 'Admin')
-                        <span class="badge rounded text-blue bg-blue-subtle">{{ $all_counts }}</span>
-                    @else
-                        <span class="badge rounded text-blue bg-blue-subtle">{{ $counts }}</span>
-                    @endif                    
-                </h1>
+                <h1>Property <span class="badge rounded text-blue bg-blue-subtle">{{ $counts }}</span></h1>
             </div>
             <div class="col-sm-5 col-12">
                 <div class="search-top">
@@ -107,7 +101,7 @@
                                                         if ($price >= 10000000) {
                                                             $formatted = number_format($price / 10000000, 1) . ' Cr';
                                                         } elseif ($price >= 100000) {
-                                                            $formatted = number_format($price / 100000, 1) . ' Lacs';
+                                                            $formatted = number_format($price / 100000, 1) . ' L';
                                                         } else {
                                                             $formatted = number_format($price);
                                                         }
@@ -120,13 +114,13 @@
                                     @if( Auth::user()->role == 'Admin')
                                         <td>
                                             <div class="user-avatar">
-                                                @if ($value->builder && $value->builder->logo)
-                                                    <img src="{{ asset('uploads/builder/' . $value->builder->logo) }}" height="80" width="80" class="rounded-circle" >                                                
+                                                @if ($value->builder && $value->builder->image)
+                                                    <img src="{{ asset('uploads/builder/' . $value->builder->image) }}" height="80" width="80" class="rounded-circle" >                                                
 
                                                     <div class="user-details">
-                                                        <strong>{{ $value->builder->name }}</strong><br>                                                
-                                                        E: <a href="mailto:{{ $value->builder->email }}">{{ $value->builder->email }}</a><br>
-                                                        M: <a href="tel:{{ $value->builder->mobile }}">{{ $value->builder->mobile }}</a>
+                                                        <strong>{{ $value->builder->developer_name }}</strong><br>                                                
+                                                        E: <a href="mailto:{{ $value->builder->developer_email }}">{{ $value->builder->developer_email }}</a><br>
+                                                        M: <a href="tel:{{ $value->builder->developer_mobile }}">{{ $value->builder->developer_mobile }}</a>
                                                     </div>
                                                 @else
                                                     <img src="{{ asset('admin-assets/img/default-150x150.png') }}" 

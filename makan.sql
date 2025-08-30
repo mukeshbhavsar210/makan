@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 28, 2025 at 03:14 PM
+-- Generation Time: Aug 30, 2025 at 10:04 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -63,16 +63,15 @@ INSERT INTO `areas` (`id`, `name`, `slug`, `city_id`, `status`, `created_at`, `u
 
 CREATE TABLE `builders` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) NOT NULL,
+  `developer_name` varchar(255) NOT NULL,
   `related_properties` longtext DEFAULT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  `landline` varchar(255) DEFAULT NULL,
-  `mobile` varchar(255) DEFAULT NULL,
-  `whatsapp` varchar(255) DEFAULT NULL,
-  `logo` varchar(255) DEFAULT NULL,
+  `developer_email` varchar(255) DEFAULT NULL,
+  `developer_landline` varchar(255) DEFAULT NULL,
+  `developer_mobile` varchar(255) DEFAULT NULL,
+  `developer_whatsapp` varchar(255) DEFAULT NULL,
+  `image` varchar(255) DEFAULT NULL,
   `address` text DEFAULT NULL,
   `property_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `status` int(11) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `user_id` bigint(20) UNSIGNED DEFAULT NULL
@@ -82,10 +81,10 @@ CREATE TABLE `builders` (
 -- Dumping data for table `builders`
 --
 
-INSERT INTO `builders` (`id`, `name`, `related_properties`, `email`, `landline`, `mobile`, `whatsapp`, `logo`, `address`, `property_id`, `status`, `created_at`, `updated_at`, `user_id`) VALUES
-(34, 'Keerthi Estate', '46,44', 'info@keerthiestate.com', '079-15478598', '9978835115', '9987754875', '34_Keerthi Estate.JPG', 'Hyderabad', NULL, 1, '2025-01-04 03:58:23', '2025-01-04 03:58:23', 3),
-(42, 'Dobariya & Company', '46,44', 'info@dobariya.com', '089-1234567', '9978812345', '9978812345', '41_Sanghani Infrastructure.png', 'Vejalpur', NULL, 1, '2025-01-10 23:28:06', '2025-08-14 05:23:53', 3),
-(43, 'Swastik Group', '46,44', 'info@dobariya.com', '089-1234567', '9978812345', '9978812345', '41_Sanghani Infrastructure.png', 'Vejalpur', NULL, 1, '2025-01-10 23:28:06', '2025-08-14 05:23:53', 3);
+INSERT INTO `builders` (`id`, `developer_name`, `related_properties`, `developer_email`, `developer_landline`, `developer_mobile`, `developer_whatsapp`, `image`, `address`, `property_id`, `created_at`, `updated_at`, `user_id`) VALUES
+(34, 'Keerthi Estate', '46,44', 'keerthi@gmail.com', '9999911111', '9999911111', '9999911111', '3-1756536979.png', 'Hyderabad, India', NULL, '2025-01-04 03:58:23', '2025-08-30 01:26:19', 3),
+(42, 'Dobariya & Company', '46,44', 'info@dobariya.com', '089-1234567', '9978812345', '9978812345', '41_Sanghani Infrastructure.png', 'Vejalpur', NULL, '2025-01-10 23:28:06', '2025-08-14 05:23:53', 3),
+(43, 'Swastik Group', '46,44', 'info@dobariya.com', '089-1234567', '9978812345', '9978812345', '41_Sanghani Infrastructure.png', 'Vejalpur', NULL, '2025-01-10 23:28:06', '2025-08-14 05:23:53', 3);
 
 -- --------------------------------------------------------
 
@@ -314,8 +313,8 @@ CREATE TABLE `properties` (
 --
 
 INSERT INTO `properties` (`id`, `title`, `slug`, `category`, `property_types`, `sale_types`, `construction_types`, `rooms`, `bathrooms`, `user_id`, `builder_id`, `property_age`, `facings`, `city_id`, `area_id`, `view_id`, `description`, `keywords`, `location`, `size`, `rera`, `year_build`, `total_area`, `related_properties`, `amenities`, `possession_date`, `status`, `created_at`, `updated_at`, `is_featured`) VALUES
-(44, 'Shlok Heights', 'shlok-heights', 'buy', '[\"apartment\",\"independent_house\",\"plot\"]', 'resale', 'under', '[{\"id\":1,\"title\":\"2_bhk\",\"price\":\"7500000\"},{\"id\":2,\"title\":\"3_bhk\",\"price\":\"9500000\"}]', '[\"2_baths\",\"3_baths\",\"4_baths\"]', 1, 43, '6_years', '[\"north\",\"south\"]', 1, 1, NULL, 'Shlok Heights', '3 BHK Apartment', 'Mansarovar Road', '13', '13', NULL, '13', '[\"50\",\"51\",\"52\",\"53\",\"55\"]', '[]', '2027-08-31', 1, '2025-01-06 05:12:07', '2025-08-28 00:25:53', 'Yes'),
-(50, 'Global Techie Town', 'global-techie-town', 'buy', '[]', 'new', 'under', '[{\"id\":1,\"title\":\"2_bhk\",\"price\":\"7500000\"},{\"id\":2,\"title\":\"3_bhk\",\"price\":\"9500000\"}]', '[]', 3, 34, '1_year', '[]', 2, 2, NULL, 'Details', '3 BHK Apartment', 'Electronic City', '1800', '123', '0000-00-00', '20000', '[]', '[]', '2027-08-31', 1, '2025-01-10 23:30:34', '2025-08-27 07:25:27', 'No'),
+(44, 'Shlok Heights', 'shlok-heights', 'buy', '[\"apartment\",\"independent_house\",\"plot\"]', 'resale', 'under', '[{\"id\":1,\"title\":\"2_bhk\",\"price\":\"7500000\"},{\"id\":2,\"title\":\"3_bhk\",\"price\":\"9500000\"}]', '[\"2_baths\",\"3_baths\",\"4_baths\"]', 3, 34, '6_years', '[\"north\",\"south\"]', 1, 1, NULL, 'Shlok Heights', '3 BHK Apartment', 'Mansarovar Road', '13', '13', NULL, '13', '[\"50\",\"51\",\"52\",\"53\",\"55\"]', '[]', '2027-08-31', 1, '2025-01-06 05:12:07', '2025-08-28 00:25:53', 'Yes'),
+(50, 'Global Techie Town', 'global-techie-town', 'buy', '[]', 'new', 'under', '[{\"id\":1,\"title\":\"2_bhk\",\"price\":\"7500000\"},{\"id\":2,\"title\":\"3_bhk\",\"price\":\"9500000\"}]', '[]', 4, 34, '1_year', '[]', 2, 2, NULL, 'Details', '3 BHK Apartment', 'Electronic City', '1800', '123', '0000-00-00', '20000', '[]', '[]', '2027-08-31', 1, '2025-01-10 23:30:34', '2025-08-27 07:25:27', 'No'),
 (51, 'Samarthya Status', 'samarthya_status', 'rent', NULL, 'new', 'under', NULL, NULL, 2, NULL, '1_year', NULL, 1, 1, NULL, 'Shlok Heights', '3 BHK Apartment', 'Ahmedabad', '1000', NULL, NULL, NULL, '', '', NULL, 1, '2025-01-06 05:12:07', '2025-01-08 06:19:22', 'Yes'),
 (53, 'Swastik Marvella', 'swastik_marvella', 'buy', '[\"apartment\",\"studio\"]', 'resale', 'ready', '[\r\n    {\"id\": 4, \"title\": \"3_bhk\", \"price\": \"9500000\"},\r\n    {\"id\": 5, \"title\": \"4_bhk\", \"price\": \"10000000\"}\r\n]', '[\"3_baths\",\"4_baths\"]', 4, 42, '5_years', '[\"west\",\"east\"]', 1, 1, 1, 'Swastik Marvella', '3 BHK Apartment', 'IOC Road', '1000', NULL, NULL, NULL, '', '[\"gym\",\"security\"]', NULL, 1, '2025-01-06 05:12:07', '2025-01-08 06:19:22', 'Yes'),
 (55, 'Sattva', 'sattva', 'buy', NULL, 'new', 'under', '[{\"id\":1,\"title\":\"2_bhk\",\"price\":\"7500000\"},{\"id\":2,\"title\":\"3_bhk\",\"price\":\"9500000\"}]', NULL, 3, 42, '1_year', NULL, 2, 12, NULL, 'Shlok Heights', '3 BHK Apartment', 'Ahmedabad', '1000', NULL, NULL, NULL, '', '', NULL, 1, '2025-01-06 05:12:07', '2025-01-08 06:19:22', 'Yes'),
@@ -1312,7 +1311,6 @@ CREATE TABLE `saved_properties` (
 
 INSERT INTO `saved_properties` (`id`, `property_id`, `user_id`, `created_at`, `updated_at`) VALUES
 (45, 44, 2, '2025-08-18 06:08:57', '2025-08-18 06:08:57'),
-(50, 53, 3, '2025-08-18 07:43:37', '2025-08-18 07:43:37'),
 (51, 44, 1, '2025-08-18 07:47:19', '2025-08-18 07:47:19'),
 (52, 55, 3, '2025-08-18 08:11:46', '2025-08-18 08:11:46'),
 (53, 44, 3, '2025-08-18 08:17:26', '2025-08-18 08:17:26'),
@@ -1535,7 +1533,17 @@ INSERT INTO `temp_images` (`id`, `name`, `created_at`, `updated_at`) VALUES
 (196, '1756361499.JPG', '2025-08-28 00:41:39', '2025-08-28 00:41:39'),
 (197, '1756361501.JPG', '2025-08-28 00:41:41', '2025-08-28 00:41:41'),
 (198, '1756361503.JPG', '2025-08-28 00:41:43', '2025-08-28 00:41:43'),
-(199, '1756361504.JPG', '2025-08-28 00:41:44', '2025-08-28 00:41:44');
+(199, '1756361504.JPG', '2025-08-28 00:41:44', '2025-08-28 00:41:44'),
+(200, '1756445208.JPG', '2025-08-28 23:56:48', '2025-08-28 23:56:48'),
+(201, '1756445214.JPG', '2025-08-28 23:56:54', '2025-08-28 23:56:54'),
+(202, '1756445572.JPG', '2025-08-29 00:02:52', '2025-08-29 00:02:52'),
+(203, '1756445832.JPG', '2025-08-29 00:07:12', '2025-08-29 00:07:12'),
+(204, '1756445880.JPG', '2025-08-29 00:08:00', '2025-08-29 00:08:00'),
+(205, '1756446000.JPG', '2025-08-29 00:10:00', '2025-08-29 00:10:00'),
+(206, '1756446148.JPG', '2025-08-29 00:12:28', '2025-08-29 00:12:28'),
+(207, '1756446698.JPG', '2025-08-29 00:21:38', '2025-08-29 00:21:38'),
+(208, '1756446721.JPG', '2025-08-29 00:22:01', '2025-08-29 00:22:01'),
+(209, '1756446850.JPG', '2025-08-29 00:24:10', '2025-08-29 00:24:10');
 
 -- --------------------------------------------------------
 
@@ -1551,7 +1559,7 @@ CREATE TABLE `users` (
   `password` varchar(255) NOT NULL,
   `image` varchar(255) DEFAULT NULL,
   `mobile` varchar(255) DEFAULT NULL,
-  `role` enum('admin','user','builder') NOT NULL DEFAULT 'user',
+  `role` enum('Admin','User','Builder') NOT NULL DEFAULT 'User',
   `status` int(11) NOT NULL DEFAULT 1,
   `remember_token` varchar(100) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -1563,10 +1571,10 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `image`, `mobile`, `role`, `status`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Mukesh Bhavsar', 'mukeshbhavsar210@gmail.com', NULL, '$2y$12$Iy5Wh1TVAkCYAvaefrR71OEKD4QDjhnnWBxknqjwnioSSM6sAJMnO', '1-1755756872.jpeg', '9978835005', 'admin', 1, NULL, '2024-12-28 05:49:21', '2025-08-21 00:44:32'),
-(2, 'Sona Bhavsar', 'sona@gmail.com', NULL, '$2y$12$Iy5Wh1TVAkCYAvaefrR71OEKD4QDjhnnWBxknqjwnioSSM6sAJMnO', '', '9978835005', 'user', 1, NULL, '2024-12-28 05:49:21', '2025-01-10 23:42:25'),
-(3, 'Dhruv Bhavsar', 'dhruvbhavsar210@gmail.com', NULL, '$2y$12$Iy5Wh1TVAkCYAvaefrR71OEKD4QDjhnnWBxknqjwnioSSM6sAJMnO', '1-1755756872.jpeg', '9916235005', 'builder', 1, NULL, '2024-12-28 05:49:21', '2025-01-10 23:42:25'),
-(4, 'Gaurav', 'gaurav@gmail.com', NULL, '$2y$12$1SpADjHEpzBJ2OTXEQkwd.GNrM1Hrn.vGo7NyPsqXiaYBGTZwj3.C', '4-1736168601.png', '9978812345', 'builder', 1, NULL, '2024-12-28 05:51:32', '2025-01-06 07:33:21');
+(1, 'Mukesh Bhavsar', 'mukeshbhavsar210@gmail.com', NULL, '$2y$12$Iy5Wh1TVAkCYAvaefrR71OEKD4QDjhnnWBxknqjwnioSSM6sAJMnO', '1-1755756872.jpeg', '9978835005', 'Admin', 1, NULL, '2024-12-28 05:49:21', '2025-08-21 00:44:32'),
+(2, 'Sona Bhavsar', 'sona@gmail.com', NULL, '$2y$12$Iy5Wh1TVAkCYAvaefrR71OEKD4QDjhnnWBxknqjwnioSSM6sAJMnO', '', '9978835005', 'User', 1, NULL, '2024-12-28 05:49:21', '2025-01-10 23:42:25'),
+(3, 'Dhruv Bhavsar', 'dhruvbhavsar210@gmail.com', NULL, '$2y$12$Iy5Wh1TVAkCYAvaefrR71OEKD4QDjhnnWBxknqjwnioSSM6sAJMnO', '3-1756448900.JPG', '9916235005', 'Builder', 1, NULL, '2024-12-28 05:49:21', '2025-08-29 07:00:36'),
+(4, 'Gaurav', 'gaurav@gmail.com', NULL, '$2y$12$1SpADjHEpzBJ2OTXEQkwd.GNrM1Hrn.vGo7NyPsqXiaYBGTZwj3.C', '4-1736168601.png', '9978812345', 'Builder', 1, NULL, '2024-12-28 05:51:32', '2025-01-06 07:33:21');
 
 --
 -- Indexes for dumped tables
@@ -1748,7 +1756,7 @@ ALTER TABLE `saved_properties`
 -- AUTO_INCREMENT for table `temp_images`
 --
 ALTER TABLE `temp_images`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=200;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=210;
 
 --
 -- AUTO_INCREMENT for table `users`

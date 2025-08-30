@@ -20,8 +20,7 @@ class HomeController extends Controller {
         $areas = Area::where('status',1)->get();                
         $featuredJobs = Property::where('status',1)->orderBy('created_at','DESC')->take(6)->get();
         $latestJobs = Property::where('status',1)->orderBy('created_at','DESC')->take(6)->get();
-        $properties = Property::where('status',1);
-        $jobTypes = Builder::where('status',1)->get();        
+        $properties = Property::where('status',1);              
 
         //Filter using keyword
         // if(!empty($request->keyword)){
@@ -48,7 +47,6 @@ class HomeController extends Controller {
         $data = [
             'cities' => $cities,
             'areas' => $areas,
-            'jobTypes' => $jobTypes,
             'properties' => $properties,  
             'featuredJobs' => $featuredJobs,
             'latestJobs' => $latestJobs,            

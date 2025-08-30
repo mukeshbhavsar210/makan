@@ -604,6 +604,7 @@ header { position: fixed; width: 100%; top:0; left: 0; z-index: 99; background-c
 .center .slick-slide { height: 100% !important; }
 .modal-xl { max-width: 100% !important; height: 100vh !important; margin: 0 !important; background-color:#000 !important; border-radius: 0 !important;}
 .modal-xl .modal-content { background-color:#000 !important; color: var(--white); }
+.modal-xl .modal-content .btn-close { position: absolute; top:10px; right:25px; color: #fff; z-index: 99; opacity: 1;}
 
 .gallery-title { margin-bottom: 20px;}
 .gallery-title .title { display: flex; justify-content: space-between; }

@@ -44,14 +44,17 @@ class AccountController extends Controller {
         $user = User::where('id',$id)->first();
 
         $builders = $user->builders()->latest()->paginate(10);
+        $developer = Builder::where('user_id', $id)->first();
         $counts = Builder::count();
 
         $data['user'] = $user;
         $data['builders'] = $builders;
+        $data['developer'] = $developer;
         $data['counts'] = $counts;
 
         return view('admin.account.profile', $data);
     }
+
 
     public function registration(){
         return view('front.account.registration');
@@ -122,6 +125,68 @@ class AccountController extends Controller {
         ]);
     }
 
+
+
+
+    public function update_builder(Request $request) {
+        $id = Auth::id();
+
+        if (!$id) {
+            return response()->json([
+                'status' => false,
+                'errors' => ['auth' => ['User not authenticated']]
+            ], 401);
+        }
+
+        $rules = [
+            'developer_name'     => 'required|string|max:100',
+            'developer_email'    => 'required|email',
+            'developer_landline' => 'nullable|string|max:20',
+            'developer_mobile'   => 'required|string|max:20',
+            'developer_whatsapp' => 'nullable|string|max:20',
+            'address'            => 'required|string|max:255',
+            'image'              => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors()
+            ]);
+        }
+
+        $data = [
+            'developer_name'     => $request->developer_name,
+            'developer_email'    => $request->developer_email,
+            'developer_landline' => $request->developer_landline,
+            'developer_mobile'   => $request->developer_mobile,
+            'developer_whatsapp' => $request->developer_whatsapp,
+            'address'            => $request->address,
+        ];
+
+        // 👇 Handle Image Upload
+        if ($request->hasFile('image')) {
+            $image      = $request->file('image');
+            $imageName  = $id . '-' . time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('uploads/builder/'), $imageName);
+
+            $data['image'] = $imageName;
+        }
+
+        // Save builder
+        $builder = Builder::updateOrCreate(
+            ['user_id' => $id],
+            $data
+        );
+
+        return response()->json([
+            'status'  => true,
+            'message' => 'Builder details saved successfully.',
+            'builder' => $builder
+        ]);
+    }
 
 
     public function processRegistration(Request $request) {

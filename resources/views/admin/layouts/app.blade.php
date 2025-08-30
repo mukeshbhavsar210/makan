@@ -14,8 +14,6 @@
 <link href="{{ asset('admin-assets/css/datetimepicker.css') }}" rel="stylesheet" >
 <link href="{{ asset('admin-assets/plugins/dropzone/min/dropzone.min.css') }}" rel="stylesheet" >
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-
-
 <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 
@@ -61,13 +59,11 @@
                                         <small class="text-muted mb-0"></small>
                                     </div>
                                 </div>
-                                <div class="dropdown-divider mt-0"></div>
+                                
 								@if( Auth::user()->role == 'admin')
 									<a class="dropdown-item" href=""><i class="las la-user fs-18 me-1 align-text-bottom"></i> User</a>
 								@endif	
-                                <a class="dropdown-item" href="{{ route('profile.index') }}"><i class="las la-user fs-18 me-1 align-text-bottom"></i> Profile</a>
-                                <a class="dropdown-item" href=""><i class="las la-cog fs-18 me-1 align-text-bottom"></i> Settings</a>
-                                <div class="dropdown-divider mb-0"></div>
+                                <a class="dropdown-item" href="{{ route('profile.index') }}"><i class="las la-user fs-18 me-1 align-text-bottom"></i> Profile</a>                                                                
                                 <a class="dropdown-item text-danger" href="{{ route('account.logout') }}"><i class="las la-power-off fs-18 me-1 align-text-bottom"></i> Logout</a>
                             </div>
                         </li>
