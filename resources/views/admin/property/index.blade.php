@@ -84,7 +84,7 @@
 
                                         @if(!empty($roomsArray))
                                             @foreach($roomsArray as $room)                                                         
-                                                {{ isset($room['title']) ? strtoupper(str_replace('_', ' ', $room['title'])) : '' }}<br />                                                                                                   
+                                                {{ isset($room['title']) ? strtoupper(str_replace('_', ' ', $room['title'])) : '' }} - {{ isset($room['size']) ? strtoupper(str_replace('_', ' ', $room['size'])) : '' }} sq.ft.<br />
                                             @endforeach
                                         @endif                                        
                                     </td>

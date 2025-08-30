@@ -53,6 +53,26 @@
                 @foreach ($properties as $value)      
                     <div class="propery-listings">                        
                         <div class="picture">
+                            @php
+                                $created = \Carbon\Carbon::parse($value->created_at);
+                                $now = \Carbon\Carbon::now();
+
+                                $diffInDays = $created->diffInDays($now);
+                                $diffInWeeks = $created->diffInWeeks($now);
+                                $diffInMonths = $created->diffInMonths($now);
+
+                                if ($diffInMonths > 0) {
+                                    $timeAgo = $diffInMonths . 'm';
+                                } elseif ($diffInWeeks > 0) {
+                                    $timeAgo = $diffInWeeks . 'w';
+                                } elseif ($diffInDays > 0) {
+                                    $timeAgo = $diffInDays . 'd';
+                                } else {
+                                    $timeAgo = 'Today';
+                                }
+                            @endphp
+
+                            <p class="posted-status">{{ $timeAgo }} ago</p>
                             <div class="media-overlay" data-bs-toggle="modal" data-bs-target="#big-modal_{{ $value->id }}"></div>
                             <div class="listing-gallery" >                                
                                 @if ($value->property_images && $value->property_images->count())
@@ -74,20 +94,26 @@
                                                 <img class="icon" src="{{ asset('front-assets/images/tick.svg') }}" /> RERA
                                             </div>
                                         </h3>                                                                            
-                                        <p>
+                                        <h5>
                                             @php                                       
                                                 $roomsArray = json_decode($value->rooms, true) ?? [];
                                             @endphp
 
                                             @if(!empty($roomsArray))
                                                 @foreach($roomsArray as $room)
-                                                    {{ isset($room['title']) ? strtoupper(str_replace('_', ' ', $room['title'])) : '' }},
+                                                    {{ isset($room['title']) ? preg_replace('/[^0-9]/', '', $room['title']) : '' }},
                                                 @endforeach
                                             @endif
-                                            in {{ $value->area->name }}.
-                                        </p>
+                                            BHK 
+                                            @php
+                                                $types = json_decode($value->property_types, true) ?? [];
+                                            @endphp
+                                            {{ implode(', ', array_map('ucwords', $types)) }}, {{ $value->area->name }}.
+                                        </h5>
                                     </div>
                                     <div class="right">
+                                        
+
                                         @if ($value->category == 'Rent')
                                             <span class="rh-ultra-featured">{{ $value->category }}</span>
                                         @else
@@ -115,7 +141,7 @@
                                     @if(!empty($roomsArray))
                                         @foreach($roomsArray as $room)
                                             <div class="room-item">
-                                                <p>{{ isset($room['title']) ? strtoupper(str_replace('_', ' ', $room['title'])) : '' }}</p>
+                                                <p>{{ isset($room['title']) ? strtoupper(str_replace('_', ' ', $room['title'])) : '' }} ({{ isset($room['size']) ? strtoupper(str_replace('_', ' ', $room['size'])) : '' }} sq.ft.)</p>
                                                 @if(!empty($room['price']))
                                                     <p class="price">₹{{ $formatPrice($room['price']) }}</p>
                                                 @endif
@@ -125,7 +151,56 @@
                                 </div>
 
                                 <div class="third-group">
-                                    <p>Sizes: {{ $value->size }} sq.yd. {{ $value->handover_status }} Possession: {{ \Carbon\Carbon::parse($value->possession_date)->format('M, Y') }}</p>
+                                    <p>
+                                       @php
+                                            $roomsArray = json_decode($value->rooms, true) ?? [];
+                                            $totalPrice = 0;
+                                            $totalSize  = 0;
+
+                                            foreach ($roomsArray as $room) {
+                                                $price = isset($room['price']) ? (float) $room['price'] : 0;
+                                                $size  = isset($room['size']) ? (float) $room['size'] : 0;
+
+                                                $totalPrice += $price;
+                                                $totalSize  += $size;
+                                            }
+
+                                            $overallPricePerSqft = ($totalPrice > 0 && $totalSize > 0)
+                                                ? round($totalPrice / $totalSize, 2)
+                                                : 0;
+                                        @endphp
+
+                                        @if($overallPricePerSqft > 0)
+                                            Avg. Price: ₹{{ number_format($overallPricePerSqft) }}/sq.ft.
+                                        @endif
+
+                                        • Sizes: 
+                                        @php                                       
+                                            $roomsArray = json_decode($value->rooms, true) ?? [];
+                                        @endphp
+
+                                        @if(!empty($roomsArray))
+                                            @foreach($roomsArray as $room)
+                                                {{ isset($room['size']) ? strtoupper(str_replace('_', ' ', $room['size'])) : '' }} -
+                                            @endforeach
+                                            sq.ft.
+                                        @endif                                        
+
+                                        @php
+                                            $constructionLabels = [
+                                                'under' => 'Under Construction',
+                                                'ready' => 'Ready to Move',                                                
+                                            ];
+                                        @endphp
+
+                                        • {{ $constructionLabels[$value->construction_types] ?? ucfirst($value->construction_types) }}
+
+                                        • {{ $value->handover_status }} Possession: 
+                                        @php
+                                            $date = \Carbon\Carbon::parse($value->possession_date);
+                                        @endphp
+                                        {{ $date->year == now()->year ? $date->format('M') : $date->format('M, Y') }}
+                                    </p>
                                 </div>                        
                             </a>
 

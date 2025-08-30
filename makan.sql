@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 30, 2025 at 10:04 AM
+-- Generation Time: Aug 30, 2025 at 04:17 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -313,14 +313,14 @@ CREATE TABLE `properties` (
 --
 
 INSERT INTO `properties` (`id`, `title`, `slug`, `category`, `property_types`, `sale_types`, `construction_types`, `rooms`, `bathrooms`, `user_id`, `builder_id`, `property_age`, `facings`, `city_id`, `area_id`, `view_id`, `description`, `keywords`, `location`, `size`, `rera`, `year_build`, `total_area`, `related_properties`, `amenities`, `possession_date`, `status`, `created_at`, `updated_at`, `is_featured`) VALUES
-(44, 'Shlok Heights', 'shlok-heights', 'buy', '[\"apartment\",\"independent_house\",\"plot\"]', 'resale', 'under', '[{\"id\":1,\"title\":\"2_bhk\",\"price\":\"7500000\"},{\"id\":2,\"title\":\"3_bhk\",\"price\":\"9500000\"}]', '[\"2_baths\",\"3_baths\",\"4_baths\"]', 3, 34, '6_years', '[\"north\",\"south\"]', 1, 1, NULL, 'Shlok Heights', '3 BHK Apartment', 'Mansarovar Road', '13', '13', NULL, '13', '[\"50\",\"51\",\"52\",\"53\",\"55\"]', '[]', '2027-08-31', 1, '2025-01-06 05:12:07', '2025-08-28 00:25:53', 'Yes'),
-(50, 'Global Techie Town', 'global-techie-town', 'buy', '[]', 'new', 'under', '[{\"id\":1,\"title\":\"2_bhk\",\"price\":\"7500000\"},{\"id\":2,\"title\":\"3_bhk\",\"price\":\"9500000\"}]', '[]', 4, 34, '1_year', '[]', 2, 2, NULL, 'Details', '3 BHK Apartment', 'Electronic City', '1800', '123', '0000-00-00', '20000', '[]', '[]', '2027-08-31', 1, '2025-01-10 23:30:34', '2025-08-27 07:25:27', 'No'),
+(44, 'Shlok Heights', 'shlok-heights', 'buy', '[\"apartment\"]', 'resale', 'under', '[{\"id\":1,\"title\":\"2_bhk\",\"price\":\"7500000\",\"size\":\"1200\"},{\"id\":2,\"title\":\"3_bhk\",\"price\":\"9500000\",\"size\":\"1500\"}]', '[\"2_baths\",\"3_baths\",\"4_baths\"]', 3, 34, '6_years', '[\"north\",\"south\"]', 1, 1, NULL, 'Shlok Heights', '3 BHK Apartment', 'Mansarovar Road', '13', '13', NULL, '13', '[\"50\",\"51\",\"53\",\"55\"]', '[]', '2025-12-31', 1, '2025-01-06 05:12:07', '2025-08-30 06:44:57', 'Yes'),
+(50, 'Global Techie Town', 'global-techie-town', 'buy', '[]', 'new', 'under', '[{\"id\":1,\"title\":\"2_bhk\",\"price\":\"7500000\"},{\"id\":2,\"title\":\"3_bhk\",\"price\":\"9500000\"}]', '[]', 4, 34, '1_year', '[]', 2, 2, NULL, 'Details', '3 BHK Apartment', 'Electronic City', '1800', '123', NULL, '20000', '[]', '[]', '2027-08-31', 1, '2025-01-10 23:30:34', '2025-08-30 06:37:48', 'Yes'),
 (51, 'Samarthya Status', 'samarthya_status', 'rent', NULL, 'new', 'under', NULL, NULL, 2, NULL, '1_year', NULL, 1, 1, NULL, 'Shlok Heights', '3 BHK Apartment', 'Ahmedabad', '1000', NULL, NULL, NULL, '', '', NULL, 1, '2025-01-06 05:12:07', '2025-01-08 06:19:22', 'Yes'),
-(53, 'Swastik Marvella', 'swastik_marvella', 'buy', '[\"apartment\",\"studio\"]', 'resale', 'ready', '[\r\n    {\"id\": 4, \"title\": \"3_bhk\", \"price\": \"9500000\"},\r\n    {\"id\": 5, \"title\": \"4_bhk\", \"price\": \"10000000\"}\r\n]', '[\"3_baths\",\"4_baths\"]', 4, 42, '5_years', '[\"west\",\"east\"]', 1, 1, 1, 'Swastik Marvella', '3 BHK Apartment', 'IOC Road', '1000', NULL, NULL, NULL, '', '[\"gym\",\"security\"]', NULL, 1, '2025-01-06 05:12:07', '2025-01-08 06:19:22', 'Yes'),
-(55, 'Sattva', 'sattva', 'buy', NULL, 'new', 'under', '[{\"id\":1,\"title\":\"2_bhk\",\"price\":\"7500000\"},{\"id\":2,\"title\":\"3_bhk\",\"price\":\"9500000\"}]', NULL, 3, 42, '1_year', NULL, 2, 12, NULL, 'Shlok Heights', '3 BHK Apartment', 'Ahmedabad', '1000', NULL, NULL, NULL, '', '', NULL, 1, '2025-01-06 05:12:07', '2025-01-08 06:19:22', 'Yes'),
-(57, 'Navami Funique', 'navami_funique', 'buy', NULL, 'new', 'under', '[{\"id\":1,\"title\":\"2_bhk\",\"price\":\"7500000\"},{\"id\":2,\"title\":\"3_bhk\",\"price\":\"9500000\"}]', NULL, 3, 43, '1_year', NULL, 2, 2, NULL, 'Shlok Heights', '3 BHK Apartment', 'Ahmedabad', '1000', NULL, NULL, NULL, '', '', NULL, 1, '2025-01-06 05:12:07', '2025-01-08 06:19:22', 'Yes'),
+(53, 'Swastik Marvella', 'swastik_marvella', 'buy', '[\"apartment\",\"studio\"]', 'resale', 'ready', '[\r\n    {\"id\": 4, \"title\": \"3_bhk\", \"price\": \"9500000\"},\r\n    {\"id\": 5, \"title\": \"4_bhk\", \"price\": \"10000000\"}\r\n]', '[\"3_baths\",\"4_baths\"]', 4, 42, '5_years', '[\"west\",\"east\"]', 1, 1, 1, 'Swastik Marvella', '3 BHK Apartment', 'IOC Road', '1000', NULL, NULL, NULL, '', '[\"gym\",\"security\"]', '2026-08-01', 1, '2025-01-06 05:12:07', '2025-01-08 06:19:22', 'Yes'),
+(55, 'Sattva', 'sattva', 'buy', '[]', 'new', 'under', '[{\"id\":1,\"title\":\"2_bhk\",\"price\":\"7500000\",\"size\":\"1200\"},{\"id\":2,\"title\":\"3_bhk\",\"price\":\"9500000\",\"size\":\"1500\"}]', '[]', 3, 42, '1_year', '[]', 2, 12, NULL, 'Shlok Heights', '3 BHK Apartment', 'Ahmedabad', '1000', NULL, NULL, NULL, '[]', '[]', NULL, 1, '2025-01-06 05:12:07', '2025-08-30 07:13:54', 'Yes'),
+(57, 'Navami Funique', 'navami_funique', 'buy', '[]', 'new', 'under', '[{\"id\":1,\"title\":\"2_bhk\",\"price\":\"7500000\",\"size\":\"1000\"},{\"id\":2,\"title\":\"3_bhk\",\"price\":\"9500000\",\"size\":\"1500\"}]', '[]', 3, 43, '1_year', '[]', 1, 1, NULL, 'Shlok Heights', '3 BHK Apartment', 'Ahmedabad', '1000', NULL, NULL, NULL, '[]', '[]', NULL, 1, '2025-08-16 05:12:07', '2025-08-30 07:13:26', 'Yes'),
 (58, 'Swastik Harmony', 'swastik_harmony', 'buy', NULL, 'new', '', NULL, NULL, 4, NULL, '1_year', NULL, 1, 11, 2, 'Swastik Harmony', '3 BHK Apartment', 'IOC Road', '1000', NULL, NULL, NULL, '', '', NULL, 1, '2025-01-06 05:12:07', '2025-01-08 06:19:22', 'Yes'),
-(61, 'Dharti Exotica', 'dharti-exotica', 'buy', '[\"apartment\"]', 'new', 'ready', '[{\"id\":1,\"title\":\"2_bhk\",\"price\":\"4520000\"},{\"id\":2,\"title\":\"3_bhk\",\"price\":\"6500000\"}]', '[]', 1, 34, '1_year', '[\"east\"]', 1, 1, NULL, 'hello', '3 BHK Apartment', 'Mansarovar Road', '1800', NULL, NULL, '20000', '[\"44\"]', '[\"1\",\"2\"]', NULL, 1, '2025-08-28 00:42:09', '2025-08-28 00:42:09', 'Yes');
+(61, 'Dharti Exotica', 'dharti-exotica', 'buy', '[\"apartment\"]', 'new', 'ready', '[{\"id\":1,\"title\":\"1_bhk\",\"price\":\"\",\"size\":\"\"},{\"id\":2,\"title\":\"2_bhk\",\"price\":\"8500000\",\"size\":\"850\"},{\"id\":3,\"title\":\"3_bhk\",\"price\":\"9500000\",\"size\":\"950\"}]', '[]', 1, 34, '1_year', '[\"east\"]', 1, 1, NULL, 'hello', '3 BHK Apartment', 'Mansarovar Road', '1800', NULL, NULL, '20000', '[\"44\"]', '[\"1\",\"2\"]', NULL, 1, '2025-08-28 00:42:09', '2025-08-30 07:24:30', 'Yes');
 
 -- --------------------------------------------------------
 
@@ -1289,7 +1289,26 @@ INSERT INTO `property_images` (`id`, `property_id`, `image`, `label`, `sort_orde
 (997, 61, '61-Dharti Exotica-1756361535.JPG', 'Balcony', NULL, '2025-08-28 00:42:15', '2025-08-28 00:42:15'),
 (998, 61, '61-Dharti Exotica-1756361537.JPG', 'Amenities', NULL, '2025-08-28 00:42:17', '2025-08-28 00:42:17'),
 (999, 61, '61-Dharti Exotica-1756361539.JPG', 'Floor', NULL, '2025-08-28 00:42:19', '2025-08-28 00:42:19'),
-(1000, 61, '61-Dharti Exotica-1756361541.JPG', 'Location', NULL, '2025-08-28 00:42:21', '2025-08-28 00:42:21');
+(1000, 61, '61-Dharti Exotica-1756361541.JPG', 'Location', NULL, '2025-08-28 00:42:21', '2025-08-28 00:42:21'),
+(1001, 50, '50-Global Techie Town-1756555668.JPG', 'Main', NULL, '2025-08-30 06:37:48', '2025-08-30 06:37:48'),
+(1002, 44, '44-Shlok Heights-1756556055.JPG', 'Main', NULL, '2025-08-30 06:44:15', '2025-08-30 06:44:15'),
+(1003, 44, '44-Shlok Heights-1756556057.jpg', 'Main', NULL, '2025-08-30 06:44:17', '2025-08-30 06:44:17'),
+(1004, 44, '44-Shlok Heights-1756556058.jpg', 'Main', NULL, '2025-08-30 06:44:18', '2025-08-30 06:44:18'),
+(1005, 44, '44-Shlok Heights-1756556058.jpg', 'Main', NULL, '2025-08-30 06:44:18', '2025-08-30 06:44:18'),
+(1006, 44, '44-Shlok Heights-1756556059.JPG', 'Main', NULL, '2025-08-30 06:44:19', '2025-08-30 06:44:19'),
+(1007, 44, '44-Shlok Heights-1756556060.JPG', 'Main', NULL, '2025-08-30 06:44:20', '2025-08-30 06:44:20'),
+(1008, 44, '44-Shlok Heights-1756556061.JPG', 'Main', NULL, '2025-08-30 06:44:21', '2025-08-30 06:44:21'),
+(1009, 44, '44-Shlok Heights-1756556062.JPG', 'Main', NULL, '2025-08-30 06:44:22', '2025-08-30 06:44:22'),
+(1010, 44, '44-Shlok Heights-1756556062.JPG', 'Main', NULL, '2025-08-30 06:44:22', '2025-08-30 06:44:22'),
+(1011, 44, '44-Shlok Heights-1756556097.JPG', 'Main', NULL, '2025-08-30 06:44:57', '2025-08-30 06:44:57'),
+(1012, 44, '44-Shlok Heights-1756556099.jpg', 'Main', NULL, '2025-08-30 06:44:59', '2025-08-30 06:44:59'),
+(1013, 44, '44-Shlok Heights-1756556099.jpg', 'Main', NULL, '2025-08-30 06:44:59', '2025-08-30 06:44:59'),
+(1014, 44, '44-Shlok Heights-1756556100.jpg', 'Main', NULL, '2025-08-30 06:45:00', '2025-08-30 06:45:00'),
+(1015, 44, '44-Shlok Heights-1756556101.JPG', 'Main', NULL, '2025-08-30 06:45:00', '2025-08-30 06:45:01'),
+(1016, 44, '44-Shlok Heights-1756556102.JPG', 'Main', NULL, '2025-08-30 06:45:02', '2025-08-30 06:45:02'),
+(1017, 44, '44-Shlok Heights-1756556103.JPG', 'Main', NULL, '2025-08-30 06:45:03', '2025-08-30 06:45:03'),
+(1018, 44, '44-Shlok Heights-1756556103.JPG', 'Main', NULL, '2025-08-30 06:45:03', '2025-08-30 06:45:03'),
+(1019, 44, '44-Shlok Heights-1756556104.JPG', 'Main', NULL, '2025-08-30 06:45:04', '2025-08-30 06:45:04');
 
 -- --------------------------------------------------------
 
@@ -1571,7 +1590,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `image`, `mobile`, `role`, `status`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Mukesh Bhavsar', 'mukeshbhavsar210@gmail.com', NULL, '$2y$12$Iy5Wh1TVAkCYAvaefrR71OEKD4QDjhnnWBxknqjwnioSSM6sAJMnO', '1-1755756872.jpeg', '9978835005', 'Admin', 1, NULL, '2024-12-28 05:49:21', '2025-08-21 00:44:32'),
+(1, 'Mukesh Bhavsar', 'mukeshbhavsar210@gmail.com', NULL, '$2y$12$Iy5Wh1TVAkCYAvaefrR71OEKD4QDjhnnWBxknqjwnioSSM6sAJMnO', '1-1756555979.webp', '9978835005', 'Admin', 1, NULL, '2024-12-28 05:49:21', '2025-08-30 06:43:00'),
 (2, 'Sona Bhavsar', 'sona@gmail.com', NULL, '$2y$12$Iy5Wh1TVAkCYAvaefrR71OEKD4QDjhnnWBxknqjwnioSSM6sAJMnO', '', '9978835005', 'User', 1, NULL, '2024-12-28 05:49:21', '2025-01-10 23:42:25'),
 (3, 'Dhruv Bhavsar', 'dhruvbhavsar210@gmail.com', NULL, '$2y$12$Iy5Wh1TVAkCYAvaefrR71OEKD4QDjhnnWBxknqjwnioSSM6sAJMnO', '3-1756448900.JPG', '9916235005', 'Builder', 1, NULL, '2024-12-28 05:49:21', '2025-08-29 07:00:36'),
 (4, 'Gaurav', 'gaurav@gmail.com', NULL, '$2y$12$1SpADjHEpzBJ2OTXEQkwd.GNrM1Hrn.vGo7NyPsqXiaYBGTZwj3.C', '4-1736168601.png', '9978812345', 'Builder', 1, NULL, '2024-12-28 05:51:32', '2025-01-06 07:33:21');
@@ -1744,7 +1763,7 @@ ALTER TABLE `property_applications`
 -- AUTO_INCREMENT for table `property_images`
 --
 ALTER TABLE `property_images`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1001;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1020;
 
 --
 -- AUTO_INCREMENT for table `saved_properties`

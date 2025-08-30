@@ -57,26 +57,29 @@
                                                 <span id="image-error" class="text-danger"></span>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="{{ $user->role == 'Admin' ? 'col-md-6' : 'col-md-3' }}">
                                             <div class="form-group">
                                                 <label for="" class="mb-1">Mobile<span class="req">*</span></label>
                                                 <input type="text" name="mobile" class="form-control" value="{{ Auth::user()->mobile }}">
                                                 <span id="mobile-error" class="text-danger"></span>
                                             </div>
-                                        </div>                                        
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label for="role" class="mb-2">Are you?<span class="req">*</span></label><br />
-                                                <div class="btn-group" role="group" aria-label="Is Role Switch">
-                                                    <input type="radio" class="btn-check" name="role" id="is_role_agent" value="user" autocomplete="off" checked="" 
-                                                    {{ old('role', $user->role ?? 'Agent') == 'Agent' ? 'checked' : '' }} >
-                                                    <label class="btn btn-outline-primary" for="is_role_agent">Agent</label>
-                                                    <input type="radio" class="btn-check" name="role" id="is_role_developer" value="builder" autocomplete="off"
-                                                    {{ old('role', $user->role ?? 'Builder') == 'Builder' ? 'checked' : '' }} >
-                                                    <label class="btn btn-outline-primary" for="is_role_developer">Developer</label>
-                                                </div> 
+                                        </div>   
+                                        @if($user->role == 'Admin')
+                                            @else
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label for="role" class="mb-2">Are you?<span class="req">*</span></label><br />
+                                                    <div class="btn-group" role="group" aria-label="Is Role Switch">
+                                                        <input type="radio" class="btn-check" name="role" id="is_role_agent" value="user" autocomplete="off" checked="" 
+                                                        {{ old('role', $user->role ?? 'Agent') == 'Agent' ? 'checked' : '' }} >
+                                                        <label class="btn btn-outline-primary" for="is_role_agent">Agent</label>
+                                                        <input type="radio" class="btn-check" name="role" id="is_role_developer" value="builder" autocomplete="off"
+                                                        {{ old('role', $user->role ?? 'Builder') == 'Builder' ? 'checked' : '' }} >
+                                                        <label class="btn btn-outline-primary" for="is_role_developer">Developer</label>
+                                                    </div> 
+                                                </div>
                                             </div>
-                                        </div>
+                                        @endif                                                                             
                                     </div>
                                     <button type="submit" class="btn btn-primary">Update</button>
                                 </form>                                 

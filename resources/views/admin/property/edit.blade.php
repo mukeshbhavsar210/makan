@@ -202,10 +202,9 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div class="col-md-3 col-12">                                                        
+                        <div class="col-md-3 col-12">
                             <div class="form-group">
-                                <label for="room" id="roomCounts" class="mb-1">BHK<span class="req">*</span></label>
+                                <label for="room" id="roomCounts" class="mb-1">BHK, Price and Sq ft<span class="req">*</span></label>
                                 <div class="dropdown">
                                     <button class="btn btn-outline-primary dropdown-toggle w-100" type="button" id="roomDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                                         Select BHK
@@ -214,19 +213,26 @@
                                     @php
                                         $selectedRooms = json_decode($property->rooms, true) ?? [];
                                         $selectedRoomTitles = array_column($selectedRooms, 'title');
-                                        $roomPrices = collect($selectedRooms)->mapWithKeys(fn($item) => [$item['title'] => $item['price']])->toArray();
+                                        $roomPrices = collect($selectedRooms)->mapWithKeys(fn($item) => [
+                                            $item['title'] => $item['price'] ?? ''
+                                        ])->toArray();
+
+                                        $roomSizes = collect($selectedRooms)->mapWithKeys(fn($item) => [
+                                            $item['title'] => $item['size'] ?? ''
+                                        ])->toArray();
                                     @endphp
 
                                     <ul class="dropdown-menu overflow-y w-100" aria-labelledby="roomDropdown">
                                         @foreach (['1_rk'=>'1 RK','1_bhk'=>'1 BHK','2_bhk'=>'2 BHK','3_bhk'=>'3 BHK','4_bhk'=>'4 BHK','5_bhk'=>'5 BHK'] as $key => $label)
                                             <li>
-                                                <label class="dropdown-item d-flex justify-content-between align-items-center">
+                                                <label class="dropdown-item addingCheckbox ">
                                                     <div>
                                                         <input type="checkbox" class="room-option" name="rooms[]" value="{{ $key }}"
-                                                            {{ in_array($key, $selectedRoomTitles) ? 'checked' : '' }}> 
+                                                            {{ in_array($key, $selectedRoomTitles) ? 'checked' : '' }}>
                                                         {{ $label }}
                                                     </div>
-                                                    <input type="text" class="form-control showCheck" placeholder="Price" data-title="{{ $key }}" value="{{ $roomPrices[$key] ?? '' }}">
+                                                    <div><input type="text" class="form-control price showCheck" placeholder="Price" data-title="{{ $key }}" data-field="price" value="{{ $roomPrices[$key] ?? '' }}"></div>
+                                                    <div><input type="text" class="form-control size showCheck" placeholder="Sq Ft" data-title="{{ $key }}" data-field="size" value="{{ $roomSizes[$key] ?? '' }}"></div>
                                                 </label>
                                             </li>
                                         @endforeach
@@ -254,7 +260,7 @@
                                     </ul>
                                 </div>
                                 <input type="hidden" name="bathrooms_json" id="bathrooms_json">
-                            </div>                                    
+                            </div>    
                             <div class="form-group">
                                 <label for="property_types" id="propertyTypesCounts" class="mb-1">Property Type<span class="req">*</span></label>
                                 <div class="dropdown">
@@ -279,7 +285,8 @@
                                     </ul>
                                 </div>
                                 <input type="hidden" name="property_types_json" id="property_types_json">                                                            
-                            </div>
+                            </div>                                
+                           
                             <div class="form-group">
                                 <label id="amenitiesCounts">Amenities <span class="req">*</span></label>
                                 <div class="dropdown">
@@ -398,12 +405,10 @@
     $(document).ready(function(){
         $("form").on("submit", function(){
             let btn = $("#updateBtn");
-            btn.prop("disabled", true);              // disable button
-            btn.text("Updating Data...");            // change label
+            btn.prop("disabled", true); 
+            btn.text("Updating Data..."); 
         });
-
-       
-
+    
         //Multiselect Checkbox
         function handleMultiSelect(optionsClass, dropdownId, labelId, hiddenInputId, defaultText) {
             $(optionsClass).on("change", function() {
@@ -450,18 +455,22 @@
 
             $('.room-option:checked').each(function() {
                 var title = $(this).val();
-                var price = $('.showCheck[data-title="' + title + '"]').val() || '';
+
+                var price = $('.showCheck[data-title="' + title + '"][data-field="price"]').val() || '';
+                var size  = $('.showCheck[data-title="' + title + '"][data-field="size"]').val() || '';
 
                 data.push({
                     id: idCounter,
                     title: title,
-                    price: price
+                    price: price,
+                    size: size
                 });
                 idCounter++;
             });
 
             $('#rooms_json').val(JSON.stringify(data));
         }
+
 
         $('.room-option').change(function() {
             var title = $(this).val();
@@ -511,22 +520,7 @@
             clearBtn: true          // show clear button
         });
     });
-   
-    //Similar property
-    $('.relatedProperty').select2({
-        ajax: {
-            url: '{{ route('property.properties') }}',
-            dataType: 'json',
-            tags: true,
-            multiple: true,
-            minimumInputLength: 3,
-            processResults: function (data) {
-                return {
-                    results: data.tags
-                };
-            }
-        }
-    });
+       
 
     $('#title').change(function(){
         element = $(this);
@@ -562,15 +556,11 @@
                 $("button[type='submit']").prop('disabled',false);
 
                 if (response['status'] == true) {
-
                     $(".error").removeClass('invalid-feedback').html('');
                     $("input[type='text'], select, input[type='number']").removeClass('is-invalid');
-
                     window.location.href="{{ route('properties.index') }}";
-
                 } else {
                     var errors = response['errors'];
-
                     $(".error").removeClass('invalid-feedback').html('');
                     $("input[type='text'], select, input[type='number']").removeClass('is-invalid');
 
