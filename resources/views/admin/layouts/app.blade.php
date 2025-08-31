@@ -148,7 +148,7 @@
         <script src="{{ asset('admin-assets/plugins/select2/js/select2.min.js') }}"></script>
         <script src="{{ asset('admin-assets/js/datetimepicker.js') }}"></script>
 		<!-- AdminLTE for demo purposes -->
-		<script src="{{ asset('admin-assets/js/demo.js') }}"></script>
+		{{-- <script src="{{ asset('admin-assets/js/demo.js') }}"></script> --}}
         <script type="text/javascript">
             $.ajaxSetup({
                 headers: {

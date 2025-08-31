@@ -115,7 +115,8 @@ Route::group(['prefix' => 'account'], function(){
         Route::get('/get-properties',[PropertyController::class,'getProducts'])->name('properties.getProducts');
 
         //Delete Product Images Route
-        Route::post('/property-images/update', [PropertyImageController::class, 'update'])->name('property-images.update');
+        Route::post('/uploadTempImage', [TempImagesController::class, 'create'])->name('temp-images.create');
+        Route::post('/property-images/update', [PropertyImageController::class, 'update'])->name('property-images.update');        
         Route::delete('/property-images', [PropertyImageController::class, 'destroy'])->name('property-images.destroy');   
         Route::get('/get-properties',[PropertyController::class,'similar_properties'])->name('property.properties');
 
@@ -127,6 +128,6 @@ Route::group(['prefix' => 'account'], function(){
         //Setting Route
         //Route::get('/change-password', [SettingController::class, 'showChangePasswordForm'])->name('admin.showChangePasswordForm');
         //Route::post('/process-change-password', [SettingController::class, 'processChangePassword'])->name('admin.processChangePassword');
-        Route::post('/uploadTempImage', [TempImagesController::class, 'create'])->name('temp-images.create');        
+                
     });
 });
