@@ -21,7 +21,7 @@
                                     <div class="form-group">
                                         <label for="title" class="mb-1">Property name<span class="req">*</span></label>
                                         <input type="text" placeholder="Title" id="title" name="title" class="form-control">
-                                        <input type="text" readonly name="slug" id="slug" class="form-control d-none" placeholder="Slug">
+                                        <input type="text" readonly name="slug" id="slug" class="form-control" placeholder="Slug">
                                         <p></p>
                                     </div>                                    
                                 </div>

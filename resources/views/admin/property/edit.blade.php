@@ -22,9 +22,9 @@
                                         <input type="text" value="{{ $property->title}}" id="title" name="title" class="form-control">
                                         <p></p>
                                     </div>
-                                    <div class="form-group d-none">
+                                    <div class="form-group">
                                         <label for="slug">Slug</label>
-                                        <input type="text" value="{{ $property->slug}}"  readonly name="slug" id="slug" class="form-control" >
+                                        <input type="text" value="{{ $property->slug}}"  name="slug" id="slug" class="form-control" >
                                         <p class="error"></p>
                                     </div>
                                 </div>
@@ -370,7 +370,41 @@
                             <br>Drop files here or click to upload.<br><br>
                         </div>
                     </div>
+
                     <div id="product-gallery">
+                        <div class="row">
+                            @foreach ($propertyImage as $image)
+                                <div class="col-md-3 mt-3" id="image-row-{{ $image->id }}">
+                                    <div class="card p-2">
+                                        <input type="hidden" name="image_array[{{ $image->id }}][id]" value="{{ $image->id }}">
+
+                                        <img src="{{ asset('uploads/property/small/'.$image->image ) }}" class="img-fluid" />
+
+                                        <!-- Label selection -->
+                                        <select name="image_array[{{ $image->id }}][label]" class="form-control mt-2 image-label">
+                                            <option value="">Select Label</option>
+                                            <option value="Main" {{ $image->label == 'Main' ? 'selected' : '' }}>Main</option>
+                                            <option value="Video" {{ $image->label == 'Video' ? 'selected' : '' }}>Video</option>
+                                            <option value="Elevation" {{ $image->label == 'Elevation' ? 'selected' : '' }}>Elevation</option>
+                                            <option value="Bedroom" {{ $image->label == 'Bedroom' ? 'selected' : '' }}>Bedroom</option>
+                                            <option value="Living" {{ $image->label == 'Living' ? 'selected' : '' }}>Living</option>
+                                            <option value="Balcony" {{ $image->label == 'Balcony' ? 'selected' : '' }}>Balcony</option>
+                                            <option value="Amenities" {{ $image->label == 'Amenities' ? 'selected' : '' }}>Amenities</option>
+                                            <option value="Floor" {{ $image->label == 'Floor' ? 'selected' : '' }}>Floor</option>
+                                            <option value="Location" {{ $image->label == 'Location' ? 'selected' : '' }}>Location</option>
+                                            <option value="Cluster" {{ $image->label == 'Cluster' ? 'selected' : '' }}>Cluster</option>
+                                        </select>
+
+                                        <!-- Delete button -->
+                                        <a href="javascript:void(0)" onclick="deleteImage({{ $image->id }})" 
+                                        class="deleteCardImg btn btn-sm btn-danger mt-2">Remove</a>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    {{-- <div id="product-gallery">
                         @if ($propertyImage->isNotEmpty())
                             <div class="row">
                                 @foreach ($propertyImage->unique('label') as $image)
@@ -387,7 +421,7 @@
                                 @endforeach
                             </div>
                         @endif
-                    </div>                                
+                    </div>                                 --}}
                 </div>
 
                 <div class="card-footer">
@@ -512,26 +546,19 @@
     });
 
 
-    $(function() {
-        $('#datepicker').datepicker({
-            format: "yyyy-mm-dd",   // date format
-            todayHighlight: true,   // highlight today
-            autoclose: true,        // close picker on selection
-            clearBtn: true          // show clear button
-        });
-    });
+   
        
 
     $('#title').change(function(){
         element = $(this);
-        $("button[type=submit]").prop('disabled', true);
+        //$("button[type=submit]").prop('disabled', true);
         $.ajax({
             url: '{{ route("getSlug") }}',
             type: 'get',
             data: {title: element.val()},
             dataType: 'json',
             success: function(response){
-                $("button[type=submit]").prop('disabled', false);
+                //$("button[type=submit]").prop('disabled', false);
                 if(response["status"] == true){
                     $("#slug").val(response["slug"]);
                 }
@@ -580,37 +607,97 @@
     });
 
 
-
-
     //File image uplaod
     Dropzone.autoDiscover = false;
-        const dropzone = $("#image").dropzone({
-            url:  "{{ route('property-images.update') }}",
-            maxFiles: 10,
-            paramName: 'image',
-            params: {'property_id' : '{{ $property->id }}'},
-            addRemoveLinks: true,
-            acceptedFiles: "image/jpeg,image/png,image/gif",
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }, success: function(file, response){
-                $("#image_id").val(response.image_id);
-                console.log(response)
+const dropzone = $("#image").dropzone({
+    url: "{{ route('property-images.update') }}",
+    maxFiles: 10,
+    paramName: 'image',
+    params: { 'property_id': '{{ $property->id }}' },
+    addRemoveLinks: false, // we use our own remove button
+    acceptedFiles: "image/jpeg,image/png,image/gif",
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    },
+    success: function (file, response) {
+        console.log(response);
 
-               var html = `<div class="col-md-2" id="image-row-${response.image_id}">
-                    <div class="card">
-                        <input type="hidden" name="image_array[]" value="${response.image_id}" >
-                        <img src="${response.ImagePath}" />
-                        <a href="javascript:void(0)" onclick="deleteImage(${response.image_id})" class="deleteCardImg">X</a>
+        if (response.status === true) {
+            // Build custom card UI
+            var html = `
+                <div class="col-md-3 mt-3" id="image-row-${response.image_id}">
+                    <div class="card p-2">
+                        <input type="hidden" name="image_array[${response.image_id}][id]" value="${response.image_id}">
+                        
+                        <img src="${response.ImagePath}" class="img-fluid" />
+
+                        <!-- Label selection -->
+                        <select name="image_array[${response.image_id}][label]" 
+                                class="form-control mt-2 image-label">
+                            <option value="">Select Label</option>
+                            <option value="Main">Main</option>
+                            <option value="Video">Video</option>
+                            <option value="Elevation">Elevation</option>
+                            <option value="Bedroom">Bedroom</option>
+                            <option value="Living">Living</option>
+                            <option value="Balcony">Balcony</option>
+                            <option value="Amenities">Amenities</option>
+                            <option value="Floor">Floor</option>
+                            <option value="Location">Location</option>
+                            <option value="Cluster">Cluster</option>                        
+                        </select>
+
+                        <!-- Delete button -->
+                        <a href="javascript:void(0)" onclick="deleteImage(${response.image_id})" 
+                        class="deleteCardImg btn btn-sm btn-danger mt-2">Remove</a>
                     </div>
                 </div>`;
 
-                $("#product-gallery").append(html);
-            },
-            complete: function(file){
-                this.removeFile(file);
+            $("#product-gallery").append(html);
+
+            // Attach event after adding select
+            $(".image-label").off("change").on("change", function () {
+                enforceUniqueLabels();
+            });
+
+            enforceUniqueLabels();
+        } else {
+            alert("Image upload failed.");
+        }
+    },
+    complete: function (file) {
+        // Remove Dropzone’s default preview
+        this.removeFile(file);
+    }
+});
+
+// Function to enforce unique labels
+function enforceUniqueLabels() {
+    let selectedLabels = [];
+
+    // Collect all selected labels
+    $(".image-label").each(function () {
+        let val = $(this).val();
+        if (val) {
+            selectedLabels.push(val);
+        }
+    });
+
+    // Reset all options first
+    $(".image-label option").prop("disabled", false);
+
+    // Disable already selected labels in other dropdowns
+    $(".image-label").each(function () {
+        let currentVal = $(this).val();
+        selectedLabels.forEach(label => {
+            if (label !== currentVal) {
+                $(this).find("option[value='" + label + "']").prop("disabled", true);
             }
         });
+    });
+}
+
+
 
 
         //Delete Images
