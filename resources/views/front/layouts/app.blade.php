@@ -61,6 +61,36 @@
 	</header>	
 @endif
 
+@if(Route::is('properties') || Route::is('properties.show'))
+<header class="control-header">
+    <div id="pageLoader" class="page-loader">
+        <img src="{{ asset('front-assets/images/loader.gif') }}" />    
+    </div>
+
+    <div class="strip">
+        <a class="navbar-brand" href="{{ route('front.home') }}"><img src="{{ asset('front-assets/images/logo.png') }}" /></a>
+        <a class="toggleHeader toggleControl">
+            @if(!empty($categoryWord))
+				{{ $categoryWord }}
+			@endif
+
+			@if(!empty($citySelected))
+				in {{ $citySelected->name }}
+			@endif
+            
+            <i class="fa-solid fa-angle-down down-arrow"></i>
+            <i class="fa-solid fa-angle-up up-arrow"></i>            
+        </a>  
+
+        @include('front.home.results.search') 
+        @include('front.home.results.login')
+        @include('front.home.results.search_slide')
+		
+        <div class="overlay"></div>
+    </div>
+</header>
+@endif
+
 @yield('main')
 
 <footer>

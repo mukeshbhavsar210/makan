@@ -20,10 +20,11 @@
   border: 2px dashed rgb(0, 135, 247) !important;
   }
 .select2-container { width:100% !important;}
-.image-container { position: relative; max-width: 200px;}
+.image-container { position: relative; border: 1px #ccc solid; padding: 8px; border-radius: 5px; margin-bottom: 30px;}
+.image-container:hover { border-color: #666;}
 .image-container .image_flex { margin-top: 7px;}
 .image-container .photo_number {  background-color: var(--white);}
-.image-container .deleteCardImg { background-color: red; border-radius: 100px; padding:2px; height:30px; width: 30px; color:#fff; font-size: 13px; position: absolute; top:5%; right:10%;}
+.image-container .deleteCardImg { background-color: red; border-radius: 5px; padding:2px; height:20px; width: 20px; color:#fff; font-size: 11px; position: absolute; top:13px; right:13px; text-align: center;}
 .image-container .deleteCardImg:hover { background-color: #000; color: #fff;}
 .alert { position: absolute; top:-46px; left:40%; z-index:9999; width: 400px; padding:8px 13px;}
 .alert .close { padding:7px 10px;}
@@ -257,6 +258,14 @@ input:checked + .slider { box-shadow:0 0 0 2px #007bff,0 0 2px #007bff;}
 
 .small-font { font-size: 13px; margin-top: 4px; margin-bottom: 3px; }
 .btn { border-radius: 4px; }
+
+.tick-icon { font-size: 20px;}
+.tick-icon-active { font-size: 20px; color: green;}
+.fa-pencil { font-size: 15px; color: #666; }
+.fa-trash { font-size: 15px; color: #666; }
+.fa-arrow-rotate-right { font-size: 18px; color: #666; }
+
+.card-media {}
 
 .overflow-y {  height: 120px; overflow-y: auto;}
 .modal{

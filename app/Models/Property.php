@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 
 class Property extends Model {
     use HasFactory;
-
+   
     protected $fillable = [ 'views', ];
 
     protected static function booted() {
@@ -18,7 +18,7 @@ class Property extends Model {
     }
 
     public function getUrlAttribute() {
-        return route('properties.show', [
+        return route('properties.details', [
             'propertyUrl' => $this->category . '-' . Str::slug($this->title) . '-' . $this->id . '-' . Str::slug($this->area->name) . '-' . Str::slug($this->city->name)
         ]);
     }
@@ -26,6 +26,10 @@ class Property extends Model {
     public function property_images(){
         return $this->hasMany(PropertyImage::class);
     }    
+
+    public function property_details_images() {
+        return $this->hasMany(PropertyImage::class, 'property_id', 'id');
+    }
 
     public function city() {
         return $this->belongsTo(\App\Models\City::class, 'city_id'); 
@@ -65,6 +69,19 @@ class Property extends Model {
 
     public function visitedUsers() {
         return $this->hasMany(\App\Models\VisitedProperty::class, 'property_id');
+    }
+
+
+    public function mainImage() {
+        return $this->hasOne(PropertyImage::class)->where('label', 'main');
+    }
+
+    public function videoImage() {
+        return $this->hasOne(PropertyImage::class)->where('label', 'video');
+    }
+
+    public function elevationImage() {
+        return $this->hasOne(PropertyImage::class)->where('label', 'elevation');
     }
 
 

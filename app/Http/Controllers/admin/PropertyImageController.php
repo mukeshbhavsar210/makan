@@ -4,18 +4,18 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\ProductImage;
 use App\Models\PropertyImage;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\Facades\Image;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
 
 class PropertyImageController extends Controller
 {
-    public function update(Request $request){
-
-        $image = $request->image;
+    public function update(Request $request) {
+        $image = $request->file('image');
         $ext = $image->getClientOriginalExtension();
-        $sourcePath = $image->getPathName();
+        $sourcePath = $image->getPathname();
 
         $propertyImage = new PropertyImage();
         $propertyImage->product_id = $request->product_id;
@@ -26,20 +26,20 @@ class PropertyImageController extends Controller
         $propertyImage->image = $imageName;
         $propertyImage->save();
 
-        //Generate Product Thumbnails
-        //Large Image
-        $destPath = public_path().'/uploads/property/large/'.$imageName;
-        $image = Image::make($sourcePath);
-        $image->resize(1000, null, function ($constraint) {
-            $constraint->aspectRatio();
-        });
-        $image->save($destPath);
+        // Init Image Manager (GD or Imagick driver)
+        $manager = new ImageManager(new Driver());
 
-        //Small Image
-        // $destPath = public_path().'/uploads/product/small/'.$imageName;
-        // $image = Image::make($sourcePath);
-        // $image->fit(300,300);
-        // $image->save($destPath);
+        // === Large Image ===
+        $destPath = public_path('uploads/property/large/'.$imageName);
+        $large = $manager->read($sourcePath);
+        $large->scale(width: 1000); // keeps aspect ratio
+        $large->save($destPath);
+
+        // === Small Thumbnail ===
+        $destPath = public_path('uploads/product/small/'.$imageName);
+        $thumb = $manager->read($sourcePath);
+        $thumb->cover(300, 300); // crop/cover to fit exactly 300x300
+        $thumb->save($destPath);
 
         return response()->json([
             'status' => true,

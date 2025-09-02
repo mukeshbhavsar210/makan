@@ -367,8 +367,6 @@
                                 <input type="hidden" name="facings_json" id="facings_json">
                             </div>
 
-                            
-
                             <div class="row">                                    
                                 <div class="col-md-6">
                                     <div class="form-group">
@@ -633,90 +631,39 @@
     });
 
     //File image uplaod
+     //File image uplaod
     Dropzone.autoDiscover = false;
         const dropzone = $("#image").dropzone({
-            url: "{{ route('temp-images.create') }}",
+            url:  "{{ route('temp-images.create') }}",
             maxFiles: 10,
             paramName: 'image',
             addRemoveLinks: true,
             acceptedFiles: "image/jpeg,image/png,image/gif",
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            success: function(file, response) {
+            }, success: function(file, response){
                 $("#image_id").val(response.image_id);
-                console.log(response);
+                console.log(response)
 
-                // Build HTML with label dropdown
-                var html = `
-                    <div class="col-md-3 mt-3" id="image-row-${response.image_id}">
-                        <div class="card p-2">
-                            <input type="hidden" name="image_array[${response.image_id}][id]" value="${response.image_id}">
-                            
-                            <img src="${response.ImagePath}" class="img-fluid" />
-
-                            <!-- Label selection -->
-                            <select name="image_array[${response.image_id}][label]" class="form-control mt-2 image-label">
-                                <option value="">Select Label</option>
-                                <option value="Main">Main</option>
-                                <option value="Video">Video</option>
-                                <option value="Elevation">Elevation</option>
-                                <option value="Bedroom">Bedroom</option>
-                                <option value="Living">Living</option>
-                                <option value="Balcony">Balcony</option>
-                                <option value="Amenities">Amenities</option>
-                                <option value="Floor">Floor</option>
-                                <option value="Location">Location</option>
-                                <option value="Cluster">Cluster</option>                        
-                            </select>
-
-                            <!-- Delete button -->
-                            <a href="javascript:void(0)" onclick="deleteImage(${response.image_id})" 
-                            class="deleteCardImg btn btn-sm btn-danger mt-2">Remove</a>
-                        </div>
-                    </div>`;
+               var html = `<div class="col-md-2" id="image-row-${response.image_id}">
+                    <div class="card">
+                        <input type="hidden" name="image_array[]" value="${response.image_id}" >
+                        <img src="${response.ImagePath}" />
+                        <a href="javascript:void(0)" onclick="deleteImage(${response.image_id})" class="deleteCardImg">X</a>
+                    </div>
+                </div>`;
 
                 $("#product-gallery").append(html);
-
-                // Attach event after adding select
-                $(".image-label").off("change").on("change", function() {
-                    enforceUniqueLabels();
-                });
             },
-            complete: function(file) {
+            complete: function(file){
                 this.removeFile(file);
             }
         });
 
-        // Function to enforce unique labels
-        function enforceUniqueLabels() {
-            let selectedLabels = [];
-
-            // Collect all selected labels
-            $(".image-label").each(function() {
-                let val = $(this).val();
-                if (val) {
-                    selectedLabels.push(val);
-                }
-            });
-
-            // Reset all options first
-            $(".image-label option").prop("disabled", false);
-
-            // Disable already selected labels in other dropdowns
-            $(".image-label").each(function() {
-                let currentVal = $(this).val();
-                selectedLabels.forEach(label => {
-                    if (label !== currentVal) {
-                        $(this).find("option[value='" + label + "']").prop("disabled", true);
-                    }
-                });
-            });
-        }
-        //Delete image
         function deleteImage(id){
             $("#image-row-"+id).remove();
         }
+   
 </script>
 
 @endsection
