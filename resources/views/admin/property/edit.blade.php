@@ -20,13 +20,9 @@
                                     <div class="form-group">
                                         <label for="title" class="mb-1">Property details<span class="req">*</span></label>
                                         <input type="text" value="{{ $property->title}}" id="title" name="title" class="form-control">
+                                        <input type="text" value="{{ $property->slug}}" name="slug" id="slug" class="form-control d-none" >
                                         <p></p>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="slug">Slug</label>
-                                        <input type="text" value="{{ $property->slug}}"  name="slug" id="slug" class="form-control" >
-                                        <p class="error"></p>
-                                    </div>
+                                    </div>                                    
                                 </div>
                                 <div class="col-md-2 col-12">
                                     <div class="form-group">
@@ -96,26 +92,6 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label>Construction Type <span class="req">*</span></label> <br />                                  
-                                        <div class="btn-group" role="group" aria-label="Construction Type Switch">
-                                            <input type="radio" class="btn-check" name="construction_types" id="construction_under" value="under" autocomplete="off"
-                                                {{ isset($property) && $property->construction_types == 'under' ? 'checked' : '' }}>
-                                            <label class="btn btn-outline-primary" for="construction_under">Under Construction</label>
-                                            <input type="radio" class="btn-check" name="construction_types" id="construction_ready" value="ready" autocomplete="off"
-                                                {{ isset($property) && $property->construction_types == 'ready' ? 'checked' : '' }}>
-                                            <label class="btn btn-outline-primary" for="construction_ready">Ready to Move</label>
-                                        </div>
-                                        <p class="error"></p>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="size" class="mb-1">Size (in Sq.ft.)<span class="req">*</span></label>
-                                        <input type="text" value="{{ $property->size}}" id="size" name="size" class="form-control">                            
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="total_area" class="mb-1">Total Area (in Sq.ft.)<span class="req">*</span></label>
-                                        <input type="text" value="{{ $property->total_area}}" id="total_area" name="total_area" class="form-control">                            
-                                    </div>
-                                    <div class="form-group">
                                         <label for="property_age" class="mb-1">Property Age<span class="req">*</span></label>
                                         <select name="property_age" id="property_age" class="form-select">
                                             <option value="">Select Property Age</option>
@@ -124,7 +100,32 @@
                                             <option value="5_years" {{ (isset($property) && $property->property_age == '5_years') ? 'selected' : '' }}>Less than 5 years</option>
                                             <option value="6_years" {{ (isset($property) && $property->property_age == '6_years') ? 'selected' : '' }}>More than 5 years</option>
                                         </select>
-                                    </div>                                     
+                                    </div> 
+                                    <div class="form-group">
+                                        <label for="size" class="mb-1">Size (in Sq.ft.)<span class="req">*</span></label>
+                                        <input type="text" value="{{ $property->size}}" id="size" name="size" class="form-control">                            
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="total_area" class="mb-1">Total Area (in Sq.ft.)<span class="req">*</span></label>
+                                        <input type="text" value="{{ $property->total_area}}" id="total_area" name="total_area" class="form-control">                            
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 col-6">
+                                            <div class="form-group">
+                                                <label for="towers" class="mb-1">Tower</label>
+                                                <input type="text" value="{{ $property->towers}}" id="towers" name="towers" class="form-control">                                        
+                                                <p></p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-6">
+                                            <div class="form-group">
+                                                <label for="units" class="mb-1">Units</label>
+                                                <input type="text" value="{{ $property->units}}" id="units" name="units" class="form-control">                                        
+                                                <p></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                                                        
                                 </div>
                             </div>
                                 
@@ -203,6 +204,19 @@
                             </div>
                         </div>
                         <div class="col-md-3 col-12">
+                            <div class="form-group">
+                                <label>Construction Type <span class="req">*</span></label> <br />                                  
+                                <div class="btn-group" role="group" aria-label="Construction Type Switch">
+                                    <input type="radio" class="btn-check" name="construction_types" id="construction_under" value="under" autocomplete="off"
+                                        {{ isset($property) && $property->construction_types == 'under' ? 'checked' : '' }}>
+                                    <label class="btn btn-outline-primary" for="construction_under">Under Construction</label>
+                                    <input type="radio" class="btn-check" name="construction_types" id="construction_ready" value="ready" autocomplete="off"
+                                        {{ isset($property) && $property->construction_types == 'ready' ? 'checked' : '' }}>
+                                    <label class="btn btn-outline-primary" for="construction_ready">Ready to Move</label>
+                                </div>
+                                <p class="error"></p>
+                            </div>
+
                             <div class="form-group">
                                 <label for="room" id="roomCounts" class="mb-1">BHK, Price and Sq ft<span class="req">*</span></label>
                                 <div class="dropdown">
@@ -551,14 +565,14 @@
 
     $('#title').change(function(){
         element = $(this);
-        //$("button[type=submit]").prop('disabled', true);
+        $("button[type=submit]").prop('disabled', true);
         $.ajax({
             url: '{{ route("getSlug") }}',
             type: 'get',
             data: {title: element.val()},
             dataType: 'json',
             success: function(response){
-                //$("button[type=submit]").prop('disabled', false);
+                $("button[type=submit]").prop('disabled', false);
                 if(response["status"] == true){
                     $("#slug").val(response["slug"]);
                 }

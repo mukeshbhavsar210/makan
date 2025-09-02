@@ -21,7 +21,7 @@
                                     <div class="form-group">
                                         <label for="title" class="mb-1">Property name<span class="req">*</span></label>
                                         <input type="text" placeholder="Title" id="title" name="title" class="form-control">
-                                        <input type="text" readonly name="slug" id="slug" class="form-control" placeholder="Slug">
+                                        <input type="text" readonly name="slug" id="slug" class="form-control d-none" placeholder="Slug">
                                         <p></p>
                                     </div>                                    
                                 </div>
@@ -88,27 +88,6 @@
                                 </div> 
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label>Constructions Type?</label><br />
-                                        <div class="btn-group" role="group" aria-label="Is Construction Switch">
-                                            <input type="radio" class="btn-check" name="construction_types" id="is_construction_under" value="under" autocomplete="off"
-                                                {{ (isset($property) && $property->construction_types == 'under') ? 'checked' : (!isset($property) ? 'checked' : '') }}>
-                                            <label class="btn btn-outline-primary" for="is_construction_under">Under Construction</label>
-
-                                            <input type="radio" class="btn-check" name="construction_types" id="is_construction_ready" value="ready" autocomplete="off"
-                                                {{ (isset($property) && $property->construction_types == 'ready') ? 'checked' : '' }}>
-                                            <label class="btn btn-outline-primary" for="is_construction_ready">Ready to Move</label>
-                                        </div>
-                                        <p class="error"></p>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="size" class="mb-1">Size (in Sq.ft.)<span class="req">*</span></label>
-                                        <input type="text" placeholder="Size" id="size" name="size" class="form-control">                            
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="total_area" class="mb-1">Total Area (in Sq.ft.)<span class="req">*</span></label>
-                                        <input type="text" placeholder="Total area" id="total_area" name="total_area" class="form-control">                            
-                                    </div>
-                                    <div class="form-group">
                                         <label for="property_age" class="mb-1">Property Age<span class="req">*</span></label>
                                         <select name="property_age" id="property_age" class="form-select">
                                             <option value="">Select Property Age</option>
@@ -117,21 +96,38 @@
                                             <option value="5_years">Less than 5 years</option>
                                             <option value="6_years">More than 5 years</option>
                                         </select>
-                                    </div> 
+                                    </div>                                     
+                                    <div class="form-group">
+                                        <label for="total_area" class="mb-1">Total Area (in Sq.ft.)</label>
+                                        <input type="text" placeholder="Total area" id="total_area" name="total_area" class="form-control">                            
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="property_age" class="mb-1">Tower</label>
+                                        <input type="property_age" placeholder="Tower" id="towers" name="towers" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="property_age" class="mb-1">Units</label>
+                                        <input type="property_age" placeholder="Units" id="units" name="units" class="form-control">
+                                    </div>
                                 </div>
 
                                 <h4 class="mt-3">Builder details</h4>
                                 <div class="col-md-8">
                                     <div class="form-group">   
                                         <label>Select Builder</label>   
-                                        <select name="builder" id="builder" class="form-select">                                                                  
-                                            <option value="">Select a Developer</option>
-                                            @if ($builders->isNotEmpty())
-                                                @foreach ($builders as $value)
-                                                    <option value="{{ $value->id }}">{{ $value->developer_name }}</option>
-                                                @endforeach
-                                            @endif
-                                        </select>                            
+                                        @if ($user->role === 'Admin' || $user->role === 'User')
+                                            <select name="builder" id="builder" class="form-select">
+                                                <option value="">Select a Developer</option>
+                                                @forelse ($builders as $b)
+                                                    <option value="{{ $b->id }}">{{ $b->developer_name }}</option>
+                                                @empty
+                                                    <option value="">No builders available</option>
+                                                @endforelse
+                                            </select>
+                                        @elseif ($user->role === 'Builder' && $builder)
+                                            <input type="text" class="form-control" value="{{ $builder->developer_name }}" readonly>
+                                            <input type="hidden" name="builder" value="{{ $builder->id }}">
+                                        @endif
                                     </div>   
                                 </div>
                                 <div class="col-md-4 col-12">
@@ -196,6 +192,20 @@
                         </div>
 
                         <div class="col-md-3 col-12">
+                            <div class="form-group">
+                                <label>Constructions Type?</label><br />
+                                <div class="btn-group" role="group" aria-label="Is Construction Switch">
+                                    <input type="radio" class="btn-check" name="construction_types" id="is_construction_under" value="under" autocomplete="off"
+                                        {{ (isset($property) && $property->construction_types == 'under') ? 'checked' : (!isset($property) ? 'checked' : '') }}>
+                                    <label class="btn btn-outline-primary" for="is_construction_under">Under Construction</label>
+
+                                    <input type="radio" class="btn-check" name="construction_types" id="is_construction_ready" value="ready" autocomplete="off"
+                                        {{ (isset($property) && $property->construction_types == 'ready') ? 'checked' : '' }}>
+                                    <label class="btn btn-outline-primary" for="is_construction_ready">Ready to Move</label>
+                                </div>
+                                <p class="error"></p>
+                            </div>
+
                             <div class="form-group">
                                 <label for="room" id="roomCounts" class="mb-1">BHK, Price and Sq ft<span class="req">*</span></label>
                                 <div class="dropdown">
@@ -394,9 +404,9 @@
                         </div>
                     </div>
 
-                    <div class="row">
+                    <div class="row mt-3">
                         <div class="col-md-9">
-                            <h5>Photos</h5>
+                            <h4>Photos</h4>
                             <div id="image" class="dropzone dz-clickable">
                                 <div class="dz-message needsclick">
                                     <br>Drop files here or click to upload.<br><br>
@@ -556,22 +566,6 @@
         });
     })
 
-    //Similar property
-    $('.relatedProperty').select2({
-        ajax: {
-            url: '{{ route('property.properties') }}',
-            dataType: 'json',
-            tags: true,
-            multiple: true,
-            minimumInputLength: 3,
-            processResults: function (data) {
-                return {
-                    results: data.tags
-                };
-            }
-        }
-    });   
-
    
     //Slug automatically add
     $('#title').change(function(){
@@ -628,13 +622,13 @@
                     });
                 }
             },
-            // error: function(){
-            //     console.log("Something went wrong")
-            // }
-            error: function(xhr, status, error){
-                console.log("AJAX Error:", status, error);
-                console.log("Response:", xhr.responseText);
+            error: function(){
+                console.log("Something went wrong")
             }
+            // error: function(xhr, status, error){
+            //     console.log("AJAX Error:", status, error);
+            //     console.log("Response:", xhr.responseText);
+            // }
         });
     });
 
@@ -662,8 +656,7 @@
                             <img src="${response.ImagePath}" class="img-fluid" />
 
                             <!-- Label selection -->
-                            <select name="image_array[${response.image_id}][label]" 
-                                    class="form-control mt-2 image-label">
+                            <select name="image_array[${response.image_id}][label]" class="form-control mt-2 image-label">
                                 <option value="">Select Label</option>
                                 <option value="Main">Main</option>
                                 <option value="Video">Video</option>
@@ -720,49 +713,9 @@
                 });
             });
         }
-
-
-
         //Delete image
         function deleteImage(id){
             $("#image-row-"+id).remove();
-        }
-
-
-    //Document image uplaod
-    Dropzone.autoDiscover = false;
-        const dropzone2 = $("#document").dropzone({
-            url:  "{{ route('temp-images.create') }}",
-            maxFiles: 3,
-            paramName: 'pdf',            
-            addRemoveLinks: true,
-            acceptedFiles: "application/pdf",
-
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }, success: function(file, response){
-                $("#document_id").val(response.document_id);
-                console.log(response)
-               var html = `<div class="col-md-3 mt-3" id="document-row-${response.document_id}">
-                    <div class="card">
-                        <input type="hidden" name="document_array[]" value="${response.document_id}" >
-                        <img src="https://play-lh.googleusercontent.com/kXHLqzBASXjDuVVEVPRuFvdLRDU2GAiS7BBA9uOLB-uiKByzt4-YDhmBfuLaWIV_7xJ6=w240-h480-rw" />
-                        <a href="javascript:void(0)" onclick="deleteDocument(${response.document_id})" class="deleteCardImg">X</a>
-                    </div>
-                </div>`;
-
-                $("#document-gallery").append(html);
-            },
-
-
-            complete: function(file){
-                this.removeFile(file);
-            }
-        });
-
-        //Delete document
-        function deleteDocument(id){
-            $("#document-row-"+id).remove();
         }
 </script>
 

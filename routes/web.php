@@ -25,9 +25,11 @@ Route::get('/get-areas/{city_id}', [HomeController::class, 'getAreas']);
 Route::get('/properties/{category?}', [HomeController::class, 'properties'])->name('properties');
 
 //Route::get("/properties",[HomeController::class, 'properties'])->name('properties');
-Route::get("/details/{id}",[HomeController::class, 'propertyDetails'])->name('propertyDetails');
+Route::get('/properties-{propertyUrl}', [HomeController::class, 'show'])->name('properties.show');
 Route::post("/apply-property",[HomeController::class, 'applyProperty'])->name('applyProperty');
 Route::post("/save-property",[HomeController::class, 'saveProperty'])->name('saveProperty');
+Route::post("/visited-property",[HomeController::class, 'visitedProperty'])->name('visitedProperty');
+
 
 Route::get("/forgot-password",[AccountController::class, 'forgotPassword'])->name('account.forgotPassword');
 Route::post("/process-forgot-password",[AccountController::class, 'processForgotPassword'])->name('account.processForgotPassword');
@@ -61,24 +63,7 @@ Route::group(['prefix' => 'admin','middleware' => 'checkRole'], function(){
     Route::get('/areas/{id}/edit', [AreaController::class, 'edit'])->name('areas.edit');
     Route::put('/areas/{id}', [AreaController::class, 'update'])->name('areas.update');
     Route::delete('/areas/{id}', [AreaController::class, 'destroy'])->name('areas.delete');
-      
-    //Get area name parent city
-    Route::get('/areaSub', [CityController::class, 'areaSub'])->name('areaSub.index');
-   
-    
-    
-    Route::get('/getSlug', function(Request $request){
-        $slug = '';
-        if (!empty($request->title)) {
-            $slug = Str::slug($request->title);
-        }
-        return response()->json([
-            'status' => true,
-            'slug' => $slug
-        ]);
-    })->name('getSlug');
 });
-
 
 Route::group(['prefix' => 'account'], function(){
     //Guest routes
@@ -125,9 +110,22 @@ Route::group(['prefix' => 'account'], function(){
         Route::post("/removePropertyInterested",[PropertyController::class, 'removeProperty'])->name('account.removeProperties');
         Route::get("/interested",[PropertyController::class, 'interested'])->name('account.myPropertyApplications');
 
+        //Get area name parent city
+        Route::get('/areaSub', [CityController::class, 'areaSub'])->name('areaSub.index');
+
+        Route::get('/getSlug', function(Request $request){
+            $slug = '';
+            if (!empty($request->title)) {
+                $slug = Str::slug($request->title);
+            }
+            return response()->json([
+                'status' => true,
+                'slug' => $slug
+            ]);
+        })->name('getSlug');
+
         //Setting Route
         //Route::get('/change-password', [SettingController::class, 'showChangePasswordForm'])->name('admin.showChangePasswordForm');
         //Route::post('/process-change-password', [SettingController::class, 'processChangePassword'])->name('admin.processChangePassword');
-                
     });
 });

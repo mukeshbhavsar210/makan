@@ -16,20 +16,9 @@
             @if($citySelected)
                 in {{ $citySelected->name }}
             @endif
-            <span class="down-arrow">
-                <?xml version="1.0" encoding="utf-8"?>
-                <svg width="15px" height="15px" viewBox="0 0 1024 1024" class="icon"  version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M903.232 256l56.768 50.432L512 768 64 306.432 120.768 256 512 659.072z" fill="#ffffff" /></svg>
-            </span>
-            <span class="up-arrow">
-                <?xml version="1.0" encoding="iso-8859-1"?>
-                <svg fill="#ffffff" height="15px" width="15px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
-                    viewBox="0 0 512.01 512.01" xml:space="preserve"><g>
-                    <g><path d="M505.755,358.256L271.088,123.589c-8.341-8.341-21.824-8.341-30.165,0L6.256,358.256c-8.341,8.341-8.341,21.824,0,30.165
-                            s21.824,8.341,30.165,0l219.584-219.584l219.584,219.584c4.16,4.16,9.621,6.251,15.083,6.251c5.462,0,10.923-2.091,15.083-6.251
-                            C514.096,380.08,514.096,366.597,505.755,358.256z"/></g>
-                    </g>
-                </svg>
-            </span>                
+            
+            <i class="fa-solid fa-angle-down down-arrow"></i>
+            <i class="fa-solid fa-angle-up up-arrow"></i>            
         </a>  
 
         @include('front.home.results.search') 
@@ -86,9 +75,9 @@
                         @include('front.home.results.modal')
                         
                         <div class="details">
-                            <a href="{{ route('propertyDetails', $value->id) }}" class="product-link">
-                                <div class="first-group">
-                                    <div class="left">                                        
+                            <div class="first-group">
+                                <div class="left">         
+                                    <a href="{{ $value->url }}" onclick="visitedProperty({{ $value->id }})" class="product-link" target="_blank">
                                         <h3 class="title">{{ $value->title }}
                                             <div class="rera" style="{{ empty($value->rera) ? 'display:none;' : '' }}">
                                                 <img class="icon" src="{{ asset('front-assets/images/tick.svg') }}" /> RERA
@@ -110,100 +99,115 @@
                                             @endphp
                                             {{ implode(', ', array_map('ucwords', $types)) }}, {{ $value->area->name }}.
                                         </h5>
-                                    </div>
-                                    <div class="right">
-                                        
-
-                                        @if ($value->category == 'Rent')
-                                            <span class="rh-ultra-featured">{{ $value->category }}</span>
+                                    </a>
+                                </div>
+                                <div class="right">
+                                    @if(Auth::check())
+                                        @if(isset($saveCount[$value->id]) && $saveCount[$value->id])
+                                            <i class="fa-solid fa-heart saved"></i>
                                         @else
-                                            <span class="rh-ultra-hot">{{ $value->category }}</span>
+                                            <a href="javascript:void(0)" onclick="saveProperty({{ $value->id }})" class="favorite add-to-favorite user_not_logged_in rh-ui-tooltip" title="Add to favorites">
+                                                <i class="fa-regular fa-heart save-icon"></i>
+                                            </a> 
+                                            <div id="notification" class="notification">Saved</div>                 
                                         @endif
-                                    </div>                                                                                                 
-                                </div>  
+                                    @else
+                                        <a href="http://127.0.0.1:8000/account/login" data-bs-toggle="modal" data-bs-target="#exampleModal" >
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                                <path class="rh-ultra-light" d="M2.7 12.8C1.6 11.7 1 10.3 1 8.7s0.6-3 1.7-4.1C3.8 3.6 5.2 3 6.8 3c1.5 0 3 0.6 4.1 1.7 0.1 0.1 0.5 0.5 1.2 0.5 0.4 0 0.9-0.2 1.2-0.6 1.1-1.1 2.5-1.7 4-1.7s3 0.6 4.1 1.7C22.4 5.8 23 7.2 23 8.7s-0.6 3-1.7 4.1L12 21.6 2.7 12.8z"></path>
+                                                <path class="rh-ultra-dark" d="M17.3 4c1.3 0 2.5 0.5 3.4 1.4C21.5 6.3 22 7.5 22 8.7c0 1.3-0.5 2.4-1.4 3.3L12 20.2l-8.6-8.2C2.5 11.2 2 10 2 8.7c0-1.3 0.5-2.5 1.4-3.4C4.3 4.5 5.5 4 6.7 4 8 4 9.2 4.5 10.1 5.4 10.3 5.6 11 6.2 12 6.2c0.7 0 1.4-0.3 1.9-0.8C14.8 4.5 16 4 17.3 4M17.3 2c-1.7 0-3.5 0.7-4.8 2 -0.2 0.2-0.3 0.2-0.5 0.2 -0.3 0-0.5-0.2-0.5-0.2 -1.3-1.3-3-2-4.8-2S3.3 2.7 2 4c-2.6 2.6-2.6 6.9 0 9.5L12 23l10-9.5c2.6-2.6 2.6-6.9 0-9.5C20.7 2.7 19 2 17.3 2L17.3 2z"></path>
+                                            </svg>
+                                        </a>
+                                    @endif
+                                    {{-- @if ($value->category == 'Rent')
+                                        <span class="rh-ultra-featured">{{ $value->category }}</span>
+                                    @else
+                                        <span class="rh-ultra-hot">{{ $value->category }}</span>
+                                    @endif --}}
+                                </div>                                                                                                 
+                            </div>  
 
-                                <div class="second-group">
+                            <div class="second-group">
+                                @php                                       
+                                    $roomsArray = json_decode($value->rooms, true) ?? [];
+                                    $propertyTypes = json_decode($value->property_types, true) ?? [];
+
+                                    $formatPrice = function ($price) {
+                                        if ($price >= 10000000) {
+                                            return number_format($price / 10000000, 1) . ' Cr';
+                                        } elseif ($price >= 100000) {
+                                            return number_format($price / 100000, 1) . ' Lacs';
+                                        } else {
+                                            return number_format($price);
+                                        }
+                                    };
+                                @endphp
+
+                                @if(!empty($roomsArray))
+                                    @foreach($roomsArray as $room)
+                                        <div class="room-item">
+                                            <p>{{ isset($room['title']) ? strtoupper(str_replace('_', ' ', $room['title'])) : '' }} ({{ isset($room['size']) ? strtoupper(str_replace('_', ' ', $room['size'])) : '' }} sq.ft.)</p>
+                                            @if(!empty($room['price']))
+                                                <p class="price">₹{{ $formatPrice($room['price']) }}</p>
+                                            @endif
+                                        </div>
+                                    @endforeach
+                                @endif
+                            </div>
+
+                            <div class="third-group">
+                                <p>
+                                    @php
+                                        $roomsArray = json_decode($value->rooms, true) ?? [];
+                                        $totalPrice = 0;
+                                        $totalSize  = 0;
+
+                                        foreach ($roomsArray as $room) {
+                                            $price = isset($room['price']) ? (float) $room['price'] : 0;
+                                            $size  = isset($room['size']) ? (float) $room['size'] : 0;
+
+                                            $totalPrice += $price;
+                                            $totalSize  += $size;
+                                        }
+
+                                        $overallPricePerSqft = ($totalPrice > 0 && $totalSize > 0)
+                                            ? round($totalPrice / $totalSize, 2)
+                                            : 0;
+                                    @endphp
+
+                                    @if($overallPricePerSqft > 0)
+                                        Avg. Price: ₹{{ number_format($overallPricePerSqft) }}/sq.ft.
+                                    @endif
+
+                                    • Sizes: 
                                     @php                                       
                                         $roomsArray = json_decode($value->rooms, true) ?? [];
-                                        $propertyTypes = json_decode($value->property_types, true) ?? [];
-
-                                        $formatPrice = function ($price) {
-                                            if ($price >= 10000000) {
-                                                return number_format($price / 10000000, 1) . ' Cr';
-                                            } elseif ($price >= 100000) {
-                                                return number_format($price / 100000, 1) . ' Lacs';
-                                            } else {
-                                                return number_format($price);
-                                            }
-                                        };
                                     @endphp
 
                                     @if(!empty($roomsArray))
                                         @foreach($roomsArray as $room)
-                                            <div class="room-item">
-                                                <p>{{ isset($room['title']) ? strtoupper(str_replace('_', ' ', $room['title'])) : '' }} ({{ isset($room['size']) ? strtoupper(str_replace('_', ' ', $room['size'])) : '' }} sq.ft.)</p>
-                                                @if(!empty($room['price']))
-                                                    <p class="price">₹{{ $formatPrice($room['price']) }}</p>
-                                                @endif
-                                            </div>
+                                            {{ isset($room['size']) ? strtoupper(str_replace('_', ' ', $room['size'])) : '' }} -
                                         @endforeach
-                                    @endif
-                                </div>
+                                        sq.ft.
+                                    @endif                                        
 
-                                <div class="third-group">
-                                    <p>
-                                       @php
-                                            $roomsArray = json_decode($value->rooms, true) ?? [];
-                                            $totalPrice = 0;
-                                            $totalSize  = 0;
+                                    @php
+                                        $constructionLabels = [
+                                            'under' => 'Under Construction',
+                                            'ready' => 'Ready to Move',                                                
+                                        ];
+                                    @endphp
 
-                                            foreach ($roomsArray as $room) {
-                                                $price = isset($room['price']) ? (float) $room['price'] : 0;
-                                                $size  = isset($room['size']) ? (float) $room['size'] : 0;
+                                    • {{ $constructionLabels[$value->construction_types] ?? ucfirst($value->construction_types) }}
 
-                                                $totalPrice += $price;
-                                                $totalSize  += $size;
-                                            }
-
-                                            $overallPricePerSqft = ($totalPrice > 0 && $totalSize > 0)
-                                                ? round($totalPrice / $totalSize, 2)
-                                                : 0;
-                                        @endphp
-
-                                        @if($overallPricePerSqft > 0)
-                                            Avg. Price: ₹{{ number_format($overallPricePerSqft) }}/sq.ft.
-                                        @endif
-
-                                        • Sizes: 
-                                        @php                                       
-                                            $roomsArray = json_decode($value->rooms, true) ?? [];
-                                        @endphp
-
-                                        @if(!empty($roomsArray))
-                                            @foreach($roomsArray as $room)
-                                                {{ isset($room['size']) ? strtoupper(str_replace('_', ' ', $room['size'])) : '' }} -
-                                            @endforeach
-                                            sq.ft.
-                                        @endif                                        
-
-                                        @php
-                                            $constructionLabels = [
-                                                'under' => 'Under Construction',
-                                                'ready' => 'Ready to Move',                                                
-                                            ];
-                                        @endphp
-
-                                        • {{ $constructionLabels[$value->construction_types] ?? ucfirst($value->construction_types) }}
-
-                                        • {{ $value->handover_status }} Possession: 
-                                        @php
-                                            $date = \Carbon\Carbon::parse($value->possession_date);
-                                        @endphp
-                                        {{ $date->year == now()->year ? $date->format('M') : $date->format('M, Y') }}
-                                    </p>
-                                </div>                        
-                            </a>
-
+                                    • {{ $value->handover_status }} Possession: 
+                                    @php
+                                        $date = \Carbon\Carbon::parse($value->possession_date);
+                                    @endphp
+                                    {{ $date->year == now()->year ? $date->format('M') : $date->format('M, Y') }}
+                                </p>
+                            </div>                        
+                            
                             <div class="developer">
                                 <div class="branding">
                                     @if ($value->builder && $value->builder->image)
@@ -287,17 +291,6 @@
         });
     }
 
-    function saveProperty(id){
-        $.ajax({
-            url: '{{ route("saveProperty") }}',
-            type: 'post',
-            data: {id:id},
-            dataType: 'json',
-            success: function(response){
-                window.location.href = "{{ url()->current() }}";
-            }
-        });
-    }
 
 function updateDropdownLabel(dropdownId, inputSelector, defaultText) {
     var checked = $(inputSelector + ':checked');
@@ -353,19 +346,61 @@ function updateDropdownLabel(dropdownId, checkboxSelector, defaultLabel) {
 
 
 
-$('.custom-radio-label input[name="saletype"]').on('change', function () {
-    var name = $(this).attr('name');
+    $('.custom-radio-label input[name="saletype"]').on('change', function () {
+        var name = $(this).attr('name');
 
-    // Remove active from all radios in the group
-    $('input[name="' + name + '"]').closest('.custom-radio-label').removeClass('active');
+        // Remove active from all radios in the group
+        $('input[name="' + name + '"]').closest('.custom-radio-label').removeClass('active');
 
-    // Add active to the selected one
-    if ($(this).is(':checked')) {
-        $(this).closest('.custom-radio-label').addClass('active');
+        // Add active to the selected one
+        if ($(this).is(':checked')) {
+            $(this).closest('.custom-radio-label').addClass('active');
+        }
+
+        // Update only the Sale Type dropdown label
+        updateDropdownLabel('#saletypeDropdown', 'input[name="saletype"]', 'Sale Type');
+    });
+
+
+    function visitedProperty(id) {
+        $.post('{{ route("visitedProperty") }}', {
+            id: id,
+            _token: '{{ csrf_token() }}'
+        });    
     }
 
-    // Update only the Sale Type dropdown label
-    updateDropdownLabel('#saletypeDropdown', 'input[name="saletype"]', 'Sale Type');
-});
+    function saveProperty(propertyId) {
+        $.ajax({
+            url: '/save-property', // your route
+            type: 'POST',
+            data: {
+                property_id: propertyId,
+                _token: '{{ csrf_token() }}'
+            },
+            success: function(response) {
+                if (response.status === 'saved') {
+                    showNotification('Saved', 'success');
+                } else if (response.status === 'removed') {
+                   
+                }
+                setTimeout(() => {
+                    location.reload();
+                }, 500);
+            },
+            error: function(xhr) {
+                alert('Something went wrong!');
+            }
+        });
+    }   
+    
+    function showNotification(message, type = 'success') {
+        let notification = $('#notification');
+        notification.removeClass('success info error').addClass(type).text(message).fadeIn();
+
+        setTimeout(() => {
+            notification.fadeOut();
+        }, 1000); 
+    }
+
 </script>
 @endsection

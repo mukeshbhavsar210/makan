@@ -32,13 +32,13 @@ class PropertyController extends Controller {
             $properties = Property::query()
                 ->where('status', 1)
                 ->orderBy('created_at','DESC');
-            $counts = Property::where('status', 1)->count(); // all active properties
+            $counts = Property::withCount('visitedUsers')->where('status', 1)->count(); // all active properties
         } else {
             $properties = Property::query()
                 ->where('user_id', $user->id)
                 ->where('status', 1)
                 ->orderBy('created_at','DESC');
-            $counts = Property::where('user_id', $user->id)
+            $counts = Property::withCount('visitedUsers')->where('user_id', $user->id)
                 ->where('status', 1)
                 ->count(); // only this user's active properties
         }
@@ -59,18 +59,35 @@ class PropertyController extends Controller {
     }
 
 
+
+
+
     //CREATE PROPERTY
     public function create(){
+        $user = auth()->user();
+
+        if ($user->role === 'User' || $user->role === 'Admin') {
+            $builders = Builder::orderBy('developer_name','ASC')->get();
+            $builder = null;
+        } elseif ($user->role === 'Builder') {
+            $builders = collect(); 
+            $builder = Builder::where('user_id', $user->id)->first();
+        } else {
+            $builders = collect();
+            $builder = null;
+        }
+
         $data = [];
+        $user = auth()->user();
         $cities = City::orderBy('name','ASC')->where('status',1)->get();
         $areas = Area::orderBy('name','ASC')->where('status',1)->get();
-        $builders = Builder::orderBy('developer_name','ASC')->get();
-        $relatedProperties = Property::where('status',1)->get();
-        $builder = Builder::where('user_id', Auth::id())->first();
+        $relatedProperties = Property::where('status',1)->get();        
 
         $data = [ 
+            'user' => $user,
             'cities' => $cities,
             'areas' => $areas,            
+            'builder' => $builder,
             'builders' => $builders,
             'relatedProperties' => $relatedProperties,
 
@@ -109,6 +126,8 @@ class PropertyController extends Controller {
             $property->rera = $request->rera;  
             $property->year_build = $request->year_build;  
             $property->total_area = $request->total_area;
+            $property->towers = $request->towers;
+            $property->units = $request->units;
             $property->is_featured = $request->is_featured;            
             $property->status = $request->status;  
 

@@ -4,9 +4,24 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Property extends Model {
     use HasFactory;
+
+    protected $fillable = [ 'views', ];
+
+    protected static function booted() {
+        static::creating(function ($property) {
+            $property->slug = Str::slug($property->title);
+        });
+    }
+
+    public function getUrlAttribute() {
+        return route('properties.show', [
+            'propertyUrl' => $this->category . '-' . Str::slug($this->title) . '-' . $this->id . '-' . Str::slug($this->area->name) . '-' . Str::slug($this->city->name)
+        ]);
+    }
 
     public function property_images(){
         return $this->hasMany(PropertyImage::class);
@@ -47,5 +62,10 @@ class Property extends Model {
     public function savedUsers() {
         return $this->hasMany(\App\Models\SavedProperty::class, 'property_id');
     }
+
+    public function visitedUsers() {
+        return $this->hasMany(\App\Models\VisitedProperty::class, 'property_id');
+    }
+
 
 }

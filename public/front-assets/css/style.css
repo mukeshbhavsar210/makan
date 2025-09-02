@@ -349,14 +349,17 @@ header { position: fixed; width: 100%; top:0; left: 0; z-index: 99; background-c
 .propery-listings .picture .thumb { border-radius: 7px; width: 100%; height: 100%; }
 .propery-listings .details { padding:10px; width: 70%;}
 .propery-listings .details .product-link { color: var(--black); text-decoration: none;}
-.propery-listings .details .first-group { margin-bottom: 15px; display: flex; justify-content: space-between;}
+.propery-listings .details .first-group { margin-bottom: 15px; position: relative;; }
 .propery-listings .details .first-group .left { width: 90%;}
 .propery-listings .details .first-group .left .title { font-size: 16px; margin:0; padding: 0; font-weight: bold; display: flex;}
 .propery-listings .details .first-group .left h5 { font-size: 15px; margin-top: 5px; }
 .propery-listings .details .first-group .left .title .rera { border: 1px solid #d8d8d8; margin-left: 10px; font-size: 10px; padding: 3px 3px 4px 3px; border-radius: 4px; font-weight: normal;}
 .propery-listings .details .first-group .left .title .rera .icon { height: 13px; }
 
-.propery-listings .details .first-group .right { width: 10%; text-align: right;}
+.propery-listings .details .first-group .right { position: absolute; right: 0px; top:0px;}
+.saved { font-size: 23px; color: red;}
+.save-icon { font-size: 23px; color: #666666;}
+
 .propery-listings .details .second-group { margin-bottom: 10px; margin-top: 10px; display: flex; }
 .propery-listings .details .second-group .room-item { color: #656565; padding-right: 20px; margin-right: 20px; border-right:1px #ccc solid;}
 .propery-listings .details .second-group .room-item p { font-size: 12px; }
@@ -386,7 +389,7 @@ header { position: fixed; width: 100%; top:0; left: 0; z-index: 99; background-c
 .modal-builder .logo-details .details-modal { width: 80%; }
 .modal-builder .logo-details .details-modal h4 { padding: 0; margin: 0; font-size: 16px; font-weight: bold;}
 
-.property-individuals { margin-top: 50px;}
+.property-individuals { margin-top: 20px;}
 .property-individuals p { margin: 0;}
 .property-individuals .first { margin-bottom: 20px; }
 .property-individuals .first .link { text-transform: uppercase; font-size: 13px;}
@@ -645,3 +648,22 @@ header { position: fixed; width: 100%; top:0; left: 0; z-index: 99; background-c
 .tag { width: 500px; color: var(--black); margin: 0 10px; border-radius: 5px; opacity: 0.5; }
 .tag .img-fluid { height: auto; width: 100%;;}
 .tag.div-active { opacity: 1; }
+
+
+.notification {    
+    background: #000; 
+    color: #fff; font-size: 12px; position:absolute; right:25px; top:-1px;
+    padding: 2px 6px;
+    border-radius: 3px;    
+    display: none;    
+}
+
+.notification-details {    
+    background: #000; 
+    color: #fff; font-size: 12px; position:absolute; left:25px; top:-1px;
+    padding: 2px 6px;
+    border-radius: 3px;    
+    display: none;    
+}
+
+.wrapper { margin-top: 55px;}
