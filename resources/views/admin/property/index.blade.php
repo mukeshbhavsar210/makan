@@ -14,11 +14,11 @@
                             <div class="input-group input-group" style="width: 250px;">
                                 <input value="{{ Request::get('keyword') }}" type="text" name="keyword" class="form-control float-right" placeholder="Search">
                                 <div class="input-group-append">
-                                    <button type="submit" class="btn btn-primary icon-btn"><i class="iconoir-search"></i></button>
+                                    <button type="submit" class="btn btn-primary icon-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
                                 </div>
                             </div>
                             
-                            <button type="button" onclick="window.location.href='{{ route('properties.index') }}'" class="btn icon-btn"><i class="las la-undo-alt"></i></button>
+                            <button type="button" onclick="window.location.href='{{ route('properties.index') }}'" class="btn icon-btn"><i class="fa-solid fa-arrow-rotate-right"></i></button>
                         </div>
                     </form>
 
@@ -60,7 +60,7 @@
                                 <tr>
                                     <td class="px-0">
                                         <div class="d-flex align-items-center">
-                                            <a href="{{ route('propertyDetails', $value->id) }}" target="_blank" class="thumb">
+                                            <a href="{{ $value->url }}" class="thumb" target="_blank">                                          
                                                 @if( Auth::user()->role == 'Admin')
                                                     <span class="property-id">{{ $value->id }}</span>
                                                 @endif
@@ -180,18 +180,14 @@
                                     <td>{{ \Carbon\Carbon::parse($value->created_at)->format('M, Y') }}</td>                                                                          
                                     <td>
                                         @if ($value->is_featured == 'Yes')
-                                            <svg class="text-success-500 h-6 w-6 text-success" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                            </svg>
+                                            <i class="fa-solid fa-circle-check tick-icon-active"></i>
                                         @else
-                                            <svg class="text-danger h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                            </svg>
+                                            <i class="fa-solid fa-circle-check tick-icon"></i>
                                         @endif
                                     </td>
                                     <td>                                         
-                                        <a href="{{ route('properties.edit', $value->id) }}"><i class="las la-pen text-secondary fs-18"></i></a>
-                                        <a href="#" onclick="deleteProperty( {{ $value->id }} )"><i class="las la-trash-alt text-secondary fs-18"></i></a>
+                                        <a href="{{ route('properties.edit', $value->id) }}"><i class="fa-solid fa-pencil"></i></a>
+                                        <a href="#" onclick="deleteProperty( {{ $value->id }} )"><i class="fa-solid fa-trash"></i></a>
                                     </td>
                                 </tr>
                             @endforeach

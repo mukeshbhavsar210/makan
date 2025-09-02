@@ -23,9 +23,7 @@ Route::get("/",[HomeController::class, 'index'])->name('front.home');
 Route::get('/get-areas/{city_id}', [HomeController::class, 'getAreas']);
 
 Route::get('/properties/{category?}', [HomeController::class, 'properties'])->name('properties');
-
-//Route::get("/properties",[HomeController::class, 'properties'])->name('properties');
-Route::get('/properties-{propertyUrl}', [HomeController::class, 'show'])->name('properties.show');
+Route::get('/properties-{propertyUrl}', [HomeController::class, 'details'])->name('properties.details');
 Route::post("/apply-property",[HomeController::class, 'applyProperty'])->name('applyProperty');
 Route::post("/save-property",[HomeController::class, 'saveProperty'])->name('saveProperty');
 Route::post("/visited-property",[HomeController::class, 'visitedProperty'])->name('visitedProperty');
@@ -100,7 +98,7 @@ Route::group(['prefix' => 'account'], function(){
         Route::get('/get-properties',[PropertyController::class,'getProducts'])->name('properties.getProducts');
 
         //Delete Product Images Route
-        Route::post('/uploadTempImage', [TempImagesController::class, 'create'])->name('temp-images.create');
+        Route::post('/uploadTempImage', [TempImagesController::class, 'create'])->name('temp-images.create');        
         Route::post('/property-images/update', [PropertyImageController::class, 'update'])->name('property-images.update');        
         Route::delete('/property-images', [PropertyImageController::class, 'destroy'])->name('property-images.destroy');   
         Route::get('/get-properties',[PropertyController::class,'similar_properties'])->name('property.properties');

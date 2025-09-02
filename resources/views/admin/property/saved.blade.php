@@ -53,7 +53,7 @@
                                             @php
                                                 $PropertyImage = $value->property->property_images->first();
                                             @endphp
-                                            <a href="{{ route('propertyDetails', $value->property_id) }}" class="thumb">
+                                            <a href="{{ route('property.details', $value->property_id) }}" class="thumb">
                                                 <span class="property-id">{{ $value->id }}</span>
                                                 @if ($PropertyImage && !empty($PropertyImage->image))
                                                     <img src="{{ asset('uploads/property/small/' . $PropertyImage->image) }}"  height="100" width="100" class="me-2 align-self-center rounded" >

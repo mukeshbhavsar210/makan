@@ -2,8 +2,6 @@
 
 @section('hideHeader') @endsection
 
-@include('front.layouts.header')
-
 @section('main')
 
 <div class="wrapper">
@@ -23,8 +21,6 @@
                 <div class="first">
                     <h2>{{ $property->title }}</h2>
                     <p>By <a href="#" class="link">{{ $property->builder->developer_name }}</a></p>
-
-                    
                     <p class="address">{{ $property->location }},  {{ $property->area->name }}, {{ $property->city->name }}.</p>
                     
                      @if(Auth::check())
@@ -142,18 +138,35 @@
 
         <div class="media">
             <div class="row">
-                <div class="col-md-7 col-12">
+                @if ($property->property_details_images->count())
+                    @php
+                        $displayed = $property->property_details_images->count();
+                        $total = (int) $property->total_property_images;
+                        $remaining = max($total - $displayed, 0);
+                    @endphp
+                   
+                    @if ($property->property_details_images->first())
+                        <div class="col-md-8 col-12">
+                            <div class="image-wrapper position-relative">
+                                <img src="{{ asset('uploads/property/large/'.$property->property_details_images->first()->image) }}" alt="Image" width="100%">
+                            </div>
+                        </div>
+                    @endif
 
-                </div>
-                <div class="col-md-5 col-12">
-                    <div class="propertyMedia">
-                        {{-- @if ($properties->property_images)
-                            @foreach ($properties->property_images as $key => $propertyImage)
-                                <img src="{{ asset('uploads/property/large/'.$propertyImage->image) }}" alt="Image">    
-                            @endforeach
-                        @endif   --}}
-                    </div>
-                </div>
+                    <div class="col-md-4 col-12 d-flex flex-column gap-2">
+                        @foreach ($property->property_details_images->slice(1, 2) as $propertyImage)
+                            <div class="image-wrapper position-relative">
+                                <img src="{{ asset('uploads/property/large/'.$propertyImage->image) }}" alt="Image" width="100%">
+                                
+                                @if ($loop->last && $remaining > 0)
+                                    <div class="overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center bg-dark bg-opacity-50 text-white fw-bold fs-5">
+                                        +{{ $remaining }} more
+                                    </div>
+                                @endif
+                            </div>
+                        @endforeach
+                    </div>                   
+                @endif
             </div>
         </div>
 
@@ -161,15 +174,21 @@
             <div class="row">
                 <div class="col-md-3 col-6">
                     <div class="center">
-                        {{-- <p>
-                            @if(!empty($property->room->title))
-                                {{ $property->room->title }}
-                            @endif 
-                            @if(!empty($property->category->type))
-                                {{ $property->category->type }}
-                            @endif 
-                            <br />Configuration
-                        </p> --}}
+                        @php                                       
+                            $roomsArray = json_decode($property->rooms, true) ?? [];
+                        @endphp
+
+                        @if(!empty($roomsArray))
+                            @foreach($roomsArray as $room)
+                                {{ isset($room['title']) ? preg_replace('/[^0-9]/', '', $room['title']) : '' }},
+                            @endforeach
+                        @endif
+                        BHK 
+                        @php
+                            $types = json_decode($property->property_types, true) ?? [];
+                        @endphp
+                        {{ implode(', ', array_map('ucwords', $types)) }}, 
+                        Configurations
                     </div>                    
                 </div>
                 <div class="col-md-3 col-6">
@@ -180,19 +199,43 @@
                 </div>
                 <div class="col-md-3 col-6">
                     <div class="center">
-                        Price on request <br />Avg. Price
+                        @php
+                            $roomsArray = json_decode($property->rooms, true) ?? [];
+                            $totalPrice = 0;
+                            $totalSize  = 0;
+
+                            foreach ($roomsArray as $room) {
+                                $price = isset($room['price']) ? (float) $room['price'] : 0;
+                                $size  = isset($room['size']) ? (float) $room['size'] : 0;
+
+                                $totalPrice += $price;
+                                $totalSize  += $size;
+                            }
+
+                            $overallPricePerSqft = ($totalPrice > 0 && $totalSize > 0)
+                                ? round($totalPrice / $totalSize, 2)
+                                : 0;
+                        @endphp
+
+                        @if($overallPricePerSqft > 0)
+                            ₹{{ number_format($overallPricePerSqft) }}/sq.ft.
+                        @endif
+                        <br />Avg. Price
                     </div>
                 </div>
                 <div class="col-md-3 col-6">
                     <div class="center">
-                        <p>
-                            @if(!empty($property->size))
-                                {{ $property->size }} sq.yd.
-                            @endif
-                            @if(!empty($property->total_area))
-                                {{ $property->total_area }}
-                            @endif
-                        </p>
+                        @php                                       
+                            $roomsArray = json_decode($property->rooms, true) ?? [];
+                        @endphp
+
+                        @if(!empty($roomsArray))
+                            @foreach($roomsArray as $room)
+                                {{ isset($room['size']) ? strtoupper(str_replace('_', ' ', $room['size'])) : '' }} -
+                            @endforeach
+                            sq.ft.
+                        @endif  
+                        <p class="m-0">(Super Builtup Area) <br />Sizes</p>
                     </div>
                 </div>
             </div>
@@ -237,7 +280,7 @@
         @endif   
        </div>
     </div>
-    {{-- @include('front.propertyDetails.similarProperty')       --}}
+    {{-- @include('front.property.dDetails.similarProperty')       --}}
 @endsection
 
 @section('customJs')

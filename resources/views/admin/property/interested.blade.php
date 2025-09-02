@@ -55,7 +55,7 @@
                                                     $PropertyImage = $value->property->property_images->first();
                                                 @endphp
 
-                                                <a href="{{ route('propertyDetails', $value->property_id) }}" class="thumb" target="_blank">
+                                                <a href="{{ route('property.dDetails', $value->property_id) }}" class="thumb" target="_blank">
                                                     @if(Auth::user()->role == 'Admin')
                                                         <span class="property-id">{{ $value->id }}</span>
                                                     @endif

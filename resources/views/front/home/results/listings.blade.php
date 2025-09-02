@@ -2,7 +2,7 @@
 
 @section('hideHeader') @endsection
 
-<header class="control-header">
+{{-- <header class="control-header">
     <div id="pageLoader" class="page-loader">
         <img src="{{ asset('front-assets/images/loader.gif') }}" />    
     </div>
@@ -27,7 +27,7 @@
                     
         <div class="overlay"></div>
     </div>
-</header>
+</header> --}}
 
 @section('main')
 
@@ -66,7 +66,7 @@
                             <div class="listing-gallery" >                                
                                 @if ($value->property_images && $value->property_images->count())
                                     @foreach ($value->property_images->take(4) as $propertyImage)
-                                        <img src="{{ asset('uploads/property/large/'.$propertyImage->image) }}" alt="Image">
+                                        <img src="{{ asset('uploads/property/small/'.$propertyImage->image) }}" alt="Image">
                                     @endforeach
                                 @endif                               
                             </div>
@@ -279,18 +279,17 @@
 @section('customJs')
 
 <script type="text/javascript">
-    function applyProperty(id){
-        $.ajax({
-            url: '{{ route("applyProperty") }}',
-            type: 'post',
-            data: {id:id},
-            dataType: 'json',
-            success: function(response){
-                window.location.href = "{{ url()->current() }}";
-            }
-        });
-    }
-
+    // function applyProperty(id){
+    //     $.ajax({
+    //         url: '{{ route("applyProperty") }}',
+    //         type: 'post',
+    //         data: {id:id},
+    //         dataType: 'json',
+    //         success: function(response){
+    //             window.location.href = "{{ url()->current() }}";
+    //         }
+    //     });
+    // }
 
 function updateDropdownLabel(dropdownId, inputSelector, defaultText) {
     var checked = $(inputSelector + ':checked');

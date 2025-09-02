@@ -199,7 +199,7 @@
                                                                                     @php
                                                                                         $PropertyImage = $property->property_images->first();
                                                                                     @endphp  
-                                                                                    <a href="{{ route('propertyDetails', $property->id) }}" target="_blank">
+                                                                                    <a href="{{ route('property.details', $property->id) }}" target="_blank">
                                                                                         @if (!empty($PropertyImage->image))
                                                                                             <img src="{{ asset('uploads/property/small/'.$PropertyImage->image) }}" class="img-responsive" />
                                                                                         @else

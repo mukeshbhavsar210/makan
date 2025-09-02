@@ -20,6 +20,8 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
+use Illuminate\Support\Str;
+
 
 
 class PropertyController extends Controller {
@@ -96,116 +98,104 @@ class PropertyController extends Controller {
     }
 
     //STORE PROPERTY
-    public function store(Request $request){
+    public function store(Request $request) {
         $rules = [
-            'title' => 'required',            
+            'title' => 'required',
         ];
 
-        $validator = Validator::make($request->all(),$rules);
-        if ($validator->passes()) {
-            $property = new Property;
-            $property->user_id = Auth::user()->id;
+        $validator = Validator::make($request->all(), $rules);
 
-            // also check if logged user has a builder profile
-            $builder = Builder::where('user_id', Auth::id())->first();
-            if ($builder) {
-                $property->builder_id = $builder->id;
-            }
-
-            $property->title = $request->title;
-            $property->slug = $request->slug;            
-            $property->category = $request->category;
-            $property->sale_types = $request->sale_types;            
-            $property->construction_types = $request->construction_types;
-            $property->city_id = $request->city;   
-            $property->area_id = $request->area;  
-            $property->description = $request->description;  
-            $property->keywords = $request->keywords;
-            $property->location = $request->location;
-            $property->size = $request->size;
-            $property->rera = $request->rera;  
-            $property->year_build = $request->year_build;  
-            $property->total_area = $request->total_area;
-            $property->towers = $request->towers;
-            $property->units = $request->units;
-            $property->is_featured = $request->is_featured;            
-            $property->status = $request->status;  
-
-            $fields = [
-                'rooms_json'             => 'rooms',
-                'bathrooms_json'         => 'bathrooms',
-                'property_types_json'    => 'property_types',
-                'amenities_json'         => 'amenities',
-                'facings_json'           => 'facings',
-                'related_properties_json'=> 'related_properties',
-            ];
-
-            foreach ($fields as $requestKey => $propertyKey) {
-                $property->$propertyKey = $request->filled($requestKey) 
-                    ? $request->$requestKey 
-                    : null;
-            }
-            
-            $property->save();
-
-            if (!empty($request->image_array)) {
-                foreach ($request->image_array as $imageData) {
-                    // $imageData now contains ['id' => temp_image_id, 'label' => 'Main/Bedroom/Elevation']
-                    $temp_image_id = $imageData['id'] ?? null;
-                    $label = $imageData['label'] ?? null;
-
-                    if ($temp_image_id) {
-                        $tempImageInfo = TempImage::find($temp_image_id);
-                        if (!$tempImageInfo) {
-                            continue; // skip if not found
-                        }
-
-                        $extArray = explode('.', $tempImageInfo->name);
-                        $ext = last($extArray);
-
-                        $propertyImage = new PropertyImage();
-                        $propertyImage->property_id = $property->id;
-                        $propertyImage->image = "NULL";
-                        $propertyImage->label = $label; // save enum label
-                        $propertyImage->save();
-
-                        $imageName = $property->id . '-' . $property->title . '-' . time() . '.' . $ext;
-                        $propertyImage->image = $imageName;
-                        $propertyImage->save();
-
-                        // Large Image
-                        $sourcePath = public_path() . '/temp/' . $tempImageInfo->name;
-                        $destPath = public_path() . '/uploads/property/large/' . $imageName;
-                        $manager = new ImageManager(new Driver());
-                        $image = $manager->read($sourcePath);
-                        $image->resize(1300, 731, function ($constraint) {
-                            $constraint->aspectRatio();
-                        });
-                        $image->save($destPath);
-
-                        // Thumbnail
-                        $destPath = public_path() . '/uploads/property/small/' . $imageName;
-                        $manager = new ImageManager(new Driver());
-                        $image = $manager->read($sourcePath);
-                        $image->cover(488, 326);
-                        $image->save($destPath);
-                    }
-                }
-            }
-
-        $request->session()->flash('success','Property added successfully');
-
-        return response()->json([
-            'status' => true,
-            'message' => 'Property added successfully'
-        ]);
-
-        } else {
+        if (!$validator->passes()) {
             return response()->json([
                 'status' => false,
                 'errors' => $validator->errors()
             ]);
         }
+
+        $property = new Property;
+        $property->user_id = Auth::id();
+
+        // Assign builder if exists
+        if ($builder = Builder::where('user_id', Auth::id())->first()) {
+            $property->builder_id = $builder->id;
+        }
+
+        $property->title = $request->title;
+        $property->slug = $request->slug ?: Str::slug($request->title) . '-' . time();
+        $property->category = $request->category;
+        $property->sale_types = $request->sale_types;
+        $property->construction_types = $request->construction_types;
+        $property->city_id = $request->city;
+        $property->area_id = $request->area;
+        $property->builder_id = $request->builder;
+        $property->description = $request->description;
+        $property->keywords = $request->keywords;
+        $property->location = $request->location;
+        $property->total_area = $request->total_area;
+        $property->rera = $request->rera;
+        $property->year_build = $request->year_build;
+        $property->total_area = $request->total_area;
+        $property->towers = $request->towers;
+        $property->units = $request->units;
+        $property->is_featured = $request->is_featured;
+        $property->status = $request->status;
+
+        // handle JSON fields
+        $fields = [
+            'rooms_json'             => 'rooms',
+            'bathrooms_json'         => 'bathrooms',
+            'property_types_json'    => 'property_types',
+            'amenities_json'         => 'amenities',
+            'facings_json'           => 'facings',
+            'related_properties_json'=> 'related_properties',
+        ];
+
+        foreach ($fields as $requestKey => $propertyKey) {
+            $property->$propertyKey = $request->filled($requestKey) ? $request->$requestKey : null;
+        }
+
+        $property->save();
+        
+        if (!empty($request->image_array)) {
+            foreach ($request->image_array as $temp_image_id) {
+                $tempImageInfo = TempImage::find($temp_image_id);
+                $extArray = explode('.',$tempImageInfo->name);
+                $ext = last($extArray);
+
+                $productImage = new PropertyImage();
+                $productImage->product_id = $property->id;
+                $productImage->image = "NULL";
+                $productImage->save();
+
+                $imageName = $property->id.'-'.$productImage->id.'-'.time().'.'.$ext;
+                $productImage->image = $imageName;
+                $productImage->save();
+
+                //Large Image
+                $sourcePath = public_path().'/temp/'.$tempImageInfo->name;
+                $destPath = public_path().'/uploads/property/large/'.$imageName;
+                $manager = new ImageManager(new Driver());
+                $image = $manager->read($sourcePath);
+                $image->resize(1000, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                });
+                $image->save($destPath);
+
+                //Generate Thumnail
+                $destPath = public_path().'/uploads/property/small/'.$imageName;
+                $manager = new ImageManager(new Driver());
+                $image = $manager->read($sourcePath);
+                $image->cover(300,300);
+                $image->save($destPath);
+            }
+        }
+
+        $request->session()->flash('success', 'Property added successfully');
+
+        return response()->json([
+            'status'  => true,
+            'message' => 'Property added successfully'
+        ]);
     }
 
     //EDIT PROPERTY
@@ -234,113 +224,99 @@ class PropertyController extends Controller {
         $data['propertyImage'] = $propertyImage;
         $data['relatedProperties'] = $relatedProperties; 
     
-
         return view('admin.property.edit',$data);
     }
 
 
 
-    public function update($id, Request $request){
-        $property = Property::find($id);
+
+    public function update($id, Request $request) {
+        $property = Property::findOrFail($id);
+
         $rules = [
-            'title' => 'required',
-            'slug' => 'required|unique:properties,slug,'.$property->id.',id',
+            'title'       => 'required',
+            'slug'        => 'required|unique:properties,slug,'.$property->id,
             'is_featured' => 'required|in:Yes,No',
         ];
-      
-        $validator = Validator::make($request->all(),$rules);
-        $propertyImage = PropertyImage::where('property_id',$property->id)->get();   
 
-        if ($validator->passes()) {
-            $property->title = $request->title;
-            $property->slug = $request->slug;            
-            $property->category = $request->category;
-            $property->sale_types = $request->sale_types;
-            $property->construction_types = $request->construction_types;
-            $property->property_age = $request->property_age;
-            $property->city_id = $request->city;   
-            $property->area_id = $request->area;  
-            $property->description = $request->description;  
-            $property->keywords = $request->keywords;
-            $property->location = $request->location;
-            $property->size = $request->size;
-            $property->rera = $request->rera;  
-            $property->year_build = $request->year_build;  
-            $property->total_area = $request->total_area;
-            $property->is_featured = $request->is_featured;            
-            $property->status = $request->status;  
+        $validator = Validator::make($request->all(), $rules);
 
-            $fields = [
-                'rooms_json'             => 'rooms',
-                'bathrooms_json'         => 'bathrooms',
-                'property_types_json'    => 'property_types',
-                'amenities_json'         => 'amenities',
-                'facings_json'           => 'facings',
-                'related_properties_json'=> 'related_properties',
-            ];
-
-            foreach ($fields as $requestKey => $propertyKey) {
-                if ($request->has($requestKey)) {
-                    $property->$propertyKey = $request->$requestKey;
-                }
-            }
-
-
-            // foreach ($fields as $requestKey => $propertyKey) {
-            //     $property->$propertyKey = $request->filled($requestKey) 
-            //         ? $request->$requestKey 
-            //         : null;
-            // }
-            
-            $property->save();
-
-            if (!empty($request->image_array)) {
-                foreach ($request->image_array as $temp_image_id) {
-                    $tempImageInfo = TempImage::find($temp_image_id);
-                    $extArray = explode('.',$tempImageInfo->name);
-                    $ext = last($extArray);
-    
-                    $propertyImage = new PropertyImage();
-                    $propertyImage->property_id = $property->id;
-                    $propertyImage->image = "NULL";
-                    $propertyImage->save();
-    
-                    $imageName = $property->id.'-'.$property->title.'-'.time().'.'.$ext;
-                    $propertyImage->image = $imageName;
-                    $propertyImage->save();
-    
-                    //Large Image
-                    $sourcePath = public_path().'/temp/'.$tempImageInfo->name;
-                    $destPath = public_path().'/uploads/property/large/'.$imageName;
-                    $manager = new ImageManager(new Driver());
-                    $image = $manager->read($sourcePath);
-                    $image->resize(1300,731, function ($constraint) {
-                        $constraint->aspectRatio();
-                    });
-                    $image->save($destPath);
-    
-                    //Generate Thumnail
-                    $destPath = public_path().'/uploads/property/small/'.$imageName;
-                    $manager = new ImageManager(new Driver());
-                    $image = $manager->read($sourcePath);
-                    $image->cover(488,326);
-                    $image->save($destPath);
-                }
-            }
-
-        $request->session()->flash('success','Property updated successfully');
-
-        return response()->json([
-            'status' => true,
-            'message' => 'Property updated successfully'
-        ]);
-        } else {
+        if (!$validator->passes()) {
             return response()->json([
                 'status' => false,
                 'errors' => $validator->errors()
             ]);
         }
+
+        // update main fields
+        $property->fill($request->only([
+            'title','slug','category','sale_types','construction_types','property_age',
+            'city_id','area_id','description','keywords','location','size','rera',
+            'year_build','total_area','is_featured','status'
+        ]));
+
+        // handle json fields
+        $jsonFields = [
+            'rooms_json'              => 'rooms',
+            'bathrooms_json'          => 'bathrooms',
+            'property_types_json'     => 'property_types',
+            'amenities_json'          => 'amenities',
+            'facings_json'            => 'facings',
+            'related_properties_json' => 'related_properties',
+        ];
+        foreach ($jsonFields as $requestKey => $propertyKey) {
+            if ($request->has($requestKey)) {
+                $property->$propertyKey = $request->$requestKey;
+            }
+        }
+        $property->save();
+
+        // ✅ Handle new uploaded images
+        if (!empty($request->image_array)) {
+            foreach ($request->image_array as $imageData) {
+
+                // if Dropzone sent nested array like [id => , label => ]
+                $tempImageId = is_array($imageData) ? $imageData['id'] ?? null : $imageData;
+                if (!$tempImageId) continue;
+
+                $tempImage = TempImage::find($tempImageId);
+                if (!$tempImage) continue;
+
+                $ext = pathinfo($tempImage->name, PATHINFO_EXTENSION);
+
+                $propertyImage = new PropertyImage();
+                $propertyImage->property_id = $property->id;
+                $propertyImage->label = $imageData['label'] ?? null;
+                $propertyImage->save();
+
+                $imageName = $property->id.'-'.$propertyImage->id.'-'.time().'.'.$ext;
+                $propertyImage->image = $imageName;
+                $propertyImage->save();
+
+                $sourcePath = public_path('temp/'.$tempImage->name);               
+
+                $manager = new ImageManager(new Driver());
+
+                // Large
+                $large = $manager->read($sourcePath);
+                $large->scale(width: 1000); 
+                $large->save(public_path('uploads/property/large/'.$imageName));
+
+                // Small
+                $small = $manager->read($sourcePath);
+                $small->cover(300, 300);
+                $small->save(public_path('uploads/property/small/'.$imageName));
+            }
+        }
+
+        $request->session()->flash('success', 'Property updated successfully');
+
+        return response()->json([
+            'status'  => true,
+            'message' => 'Property updated successfully'
+        ]);
     }
+
 
     //DELETE PROPERTY
     public function destroy($id, Request $request){

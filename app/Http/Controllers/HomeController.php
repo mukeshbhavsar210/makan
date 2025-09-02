@@ -60,58 +60,33 @@ class HomeController extends Controller {
         $areas = Area::where('city_id', $city_id)->get(['id', 'name', 'slug']); 
         return response()->json($areas);
     }
-    
-
-
+       
     
     public function properties(Request $request) {
-        $cities = City::where('status',1)->get();
-        $areas = Area::where('status',1)->get();    
-        $users = User::select('id', 'name', 'role')->get();                    
-        $cityId = $request->get('city');
-        $areaId = $request->get('area');
-        $roomIds = $request->get('room', []);
+        $users = User::select('id', 'name', 'role')->get();                            
         $properties = Property::with('property_images')->where('status',1);                    
-        $citySelected = $request->filled('city') ? \App\Models\City::where('slug', $request->city)->first() : null;
-        $areaSelected = $request->filled('area') ? \App\Models\Area::where('slug', $request->area)->first() : null;
-        $selectedAreas = $request->filled('area') ? \App\Models\Area::where('slug', $request->area)->first() : null;
-        $categoryWord = null;
 
-        $city = null;
-        $areas = collect();
-        $area = null;
+        // if ($request->filled('city')) {
+        //     $city = \App\Models\City::where('slug', strtolower($request->city))->first();
+        // }
 
-        if ($request->filled('city')) {
-            $city = \App\Models\City::where('slug', strtolower($request->city))->first();
-        }
-
-        if ($request->filled('area')) {
-            $areaSlugs = (array) $request->area;
-            $areas = \App\Models\Area::whereIn('slug', array_map('strtolower', $areaSlugs))->get();
-        }
-
-        if ($cityId) {
-            $city = City::find($cityId);
-        }
-
-        if ($areaId) {
-            $area = Area::find($areaId);
-        }
-        
-        
+        // if ($request->filled('area')) {
+        //     $areaSlugs = (array) $request->area;
+        //     $areas = \App\Models\Area::whereIn('slug', array_map('strtolower', $areaSlugs))->get();
+        // }
 
         //Filter using category               
-         if (!empty($request->category)) {
+        if (!empty($request->category)) {
             $properties = $properties->where('category', $request->category);
         }
 
         //Filter using city
-        if ($request->city) {
-            $city = City::where('slug', strtolower($request->city))->first();
-            if ($city) {
-                $properties = $properties->where('city_id', $city->id);
-            }
-        }
+        // if ($request->city) {
+        //     $city = City::where('slug', strtolower($request->city))->first();
+        //     if ($city) {
+        //         $properties = $properties->where('city_id', $city->id);
+        //     }
+        // }
 
         //Filter using areas
         if ($request->filled('area')) {
@@ -162,7 +137,6 @@ class HomeController extends Controller {
                 }
             });
         }
-
 
         //Filter using Facings working
         if (!empty($request->facing) && is_array($request->facing)) {
@@ -223,16 +197,7 @@ class HomeController extends Controller {
             } else {
                 $properties = $properties->whereBetween('price',[intval($request->get('price_min')),intval($request->get('price_max'))]);
             }
-        }
-
-        // Size range working
-        if($request->get('size_max') != '' && $request->get('size_min') != '') {
-            if($request->get('size_max') == 1000){
-                $properties = $properties->whereBetween('size',[intval($request->get('size_min')),1000]);
-            } else {
-                $properties = $properties->whereBetween('size',[intval($request->get('size_min')),intval($request->get('size_max'))]);
-            }
-        }               
+        }                     
                
         $savedPropertyIds = [];
         if (Auth::check()) {
@@ -244,7 +209,7 @@ class HomeController extends Controller {
         $data['priceMax'] = (intval($request->get('price_max')) == 0 ? 1000 : $request->get('price_max'));
         $data['priceMin'] = intval($request->get('price_min'));     
         
-        $properties = $properties->paginate(10);    
+        $properties = $properties->paginate(10);
         
         $saveCount = [];
         if (Auth::check()) {
@@ -258,14 +223,7 @@ class HomeController extends Controller {
             
         $data = [
             'properties' => $properties,   
-            'cities' => $cities,
-            'areas' => $areas,
             'users' => $users,
-            'citySelected' => $citySelected,
-            'areaSelected' => $areaSelected,
-            'selectedAreas' => $selectedAreas,
-            'area' => $area,
-            'categoryWord' => $categoryWord,
             'savedPropertyIds' => $savedPropertyIds,
             'saveCount' => $saveCount,
         ];        
@@ -275,14 +233,9 @@ class HomeController extends Controller {
 
 
 
-    public function show($propertyUrl, Request $request) {
-        $cities = City::where('status',1)->get();
-        $areas = Area::where('status',1)->get();    
-        $citySelected = $request->filled('city') ? \App\Models\City::where('slug', $request->city)->first() : null;
-        $areaSelected = $request->filled('area') ? \App\Models\Area::where('slug', $request->area)->first() : null;
-        $selectedAreas = $request->filled('area') ? \App\Models\Area::where('slug', $request->area)->first() : null;
+    public function details($propertyUrl, Request $request) {
         $categoryWord = null;
-
+        $citySelected = $property->city ?? null;
         $parts = explode('-', $propertyUrl);
 
         if(count($parts) < 4){
@@ -300,13 +253,28 @@ class HomeController extends Controller {
         $area = Area::where('slug', $areaSlug)->firstOrFail();
 
         // Fetch property
-        $property = Property::with(['city','area','property_images'])
+        $property = Property::with(['city','area',
+                    'property_details_images' => function ($q) use ($id) {
+                        $q->where('property_id', $id)   // ensure images only for this property
+                        ->latest()
+                        ->take(3);
+                    },
+            ])
+             ->withCount([
+                    'property_details_images as total_property_images' => function ($q) use ($id) {
+                        $q->where('property_id', $id);
+                    }
+                ])
             ->where('id', $id)
             ->where('slug', $slug)
             ->where('category', $category)
             ->where('city_id', $city->id)
             ->where('area_id', $area->id)
             ->firstOrFail();
+
+        $citySelected = $property->city;
+        $selectedAreas = $property->area;
+        $areaSelected = $property->area;
 
         // Saved property
         $saveCount = 0;
@@ -344,11 +312,7 @@ class HomeController extends Controller {
             'saveCount',
             'interestedCount',
             'applications',
-            'cities',
-            'areas',
             'citySelected',
-            'selectedAreas',
-            'categoryWord'
         ));
     }
 

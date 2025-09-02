@@ -6,14 +6,13 @@
 <title>Housing.com</title>
 
 <link href="{{ asset('admin-assets/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css">
-<link href="{{ asset('admin-assets/css/icons.min.css') }}" rel="stylesheet" type="text/css">
 <link href="{{ asset('admin-assets/css/app.min.css') }}" rel="stylesheet" type="text/css">
 <link href="{{ asset('admin-assets/css/custom.css') }}" rel="stylesheet" type="text/css">
 <link href="{{ asset('admin-assets/plugins/summernote/summernote-bs4.min.css') }}" rel="stylesheet" type="text/css" >
 <link href="{{ asset('admin-assets/plugins/select2/css/select2.min.css') }}" rel="stylesheet" >
 <link href="{{ asset('admin-assets/css/datetimepicker.css') }}" rel="stylesheet" >
 <link href="{{ asset('admin-assets/plugins/dropzone/min/dropzone.min.css') }}" rel="stylesheet" >
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" rel="stylesheet">
 <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 

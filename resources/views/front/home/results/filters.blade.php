@@ -9,18 +9,17 @@
                     <ul class="dropdown-menu" aria-labelledby="propertyTypeDropdown">
                         @php
                             $propertyTypes = [
-                                ['id' => 1, 'title' => 'Apartment'],
-                                ['id' => 2, 'title' => 'Independent House'],
-                                ['id' => 3, 'title' => 'Independent Floor'],
-                                ['id' => 4, 'title' => 'Plot'],
-                                ['id' => 6, 'title' => 'Studio'],
-                                ['id' => 7, 'title' => 'Duplex'],
-                                ['id' => 8, 'title' => 'Pent House'],
-                                ['id' => 9, 'title' => 'Villa'],
-                                ['id' => 10, 'title' => 'Agricultural Land'],
+                                ['title' => 'Apartment'],
+                                ['title' => 'Independent House'],
+                                ['title' => 'Independent Floor'],
+                                ['title' => 'Plot'],
+                                ['title' => 'Studio'],
+                                ['title' => 'Duplex'],
+                                ['title' => 'Pent House'],
+                                ['title' => 'Villa'],
+                                ['title' => 'Agricultural Land'],
                             ];
                         @endphp
-
                          @foreach ($propertyTypes as $value)
                             <li>
                                 @php
@@ -49,26 +48,26 @@
                     <ul class="dropdown-menu" aria-labelledby="roomDropdown" >
                         @php
                             $rooms = [
-                                ['id' => 1, 'title' => '1 RK', 'price' => ''],
-                                ['id' => 2, 'title' => '1 BHK', 'price' => ''],
-                                ['id' => 3, 'title' => '2 BHK', 'price' => '7500000'],
-                                ['id' => 4, 'title' => '3 BHK', 'price' => '9500000'],
-                                ['id' => 5, 'title' => '4 BHK', 'price' => ''],
-                                ['id' => 6, 'title' => '5 BHK', 'price' => '']
+                                ['title' => '1_rk', 'label' => '1 RK'],
+                                ['title' => '1_bhk', 'label' => '1 BHK'],
+                                ['title' => '2_bhk', 'label' => '2 BHK'],
+                                ['title' => '3_bhk', 'label' => '3 BHK'],
+                                ['title' => '4_bhk', 'label' => '4 BHK'],
+                                ['title' => '5_bhk', 'label' => '5 BHK'],
                             ];
                         @endphp
 
                         @foreach ($rooms as $value)
-                            @php
-                                $roomValue = strtolower(str_replace(' ', '_', $value['title']));
-                            @endphp
-
                             <li>
-                                <label class="dropdown-item custom-checkbox-label {{ is_array(request('room')) && in_array($roomValue, request('room')) ? 'active' : '' }}">
-                                    <input type="checkbox" name="room[]" value="{{ $roomValue }}" data-label="{{ $value['title'] }}" {{ is_array(request('room')) && in_array($roomValue, request('room')) ? 'checked' : '' }}>
+                                <label class="dropdown-item custom-checkbox-label {{ is_array(request('room')) && in_array($value['title'], request('room')) ? 'active' : '' }}">
+                                    <input type="checkbox" 
+                                        name="room[]" 
+                                        value="{{ $value['title'] }}" 
+                                        data-label="{{ $value['label'] }}"
+                                        {{ is_array(request('room')) && in_array($value['title'], request('room')) ? 'checked' : '' }}>
                                     <span class="checkmark"></span>
-                                    {{ strtoupper(str_replace('_', ' ', $roomValue)) }}
                                     
+                                    {{ $value['label'] }}
                                     <svg fill="#ffffff" width="14px" height="14px" viewBox="-3.5 0 19 19" xmlns="http://www.w3.org/2000/svg" class="cf-icon-svg">
                                         <path d="M11.383 13.644A1.03 1.03 0 0 1 9.928 15.1L6 11.172 2.072 15.1a1.03 1.03 0 1 1-1.455-1.456l3.928-3.928L.617 5.79a1.03 1.03 0 1 1 1.455-1.456L6 8.261l3.928-3.928a1.03 1.03 0 0 1 1.455 1.456L7.455 9.716z"></path>
                                     </svg>
@@ -329,11 +328,11 @@
                                         <h6>Bathrooms</h6>
                                         @php
                                             $bathrooms = [
-                                                ['id' => 1, 'title' => '1 Bath'],
-                                                ['id' => 2, 'title' => '2 Baths'],
-                                                ['id' => 3, 'title' => '3 Baths'],
-                                                ['id' => 4, 'title' => '4 Baths'],
-                                                ['id' => 5, 'title' => '5 Baths'],
+                                                ['title' => '1 Bath'],
+                                                ['title' => '2 Baths'],
+                                                ['title' => '3 Baths'],
+                                                ['title' => '4 Baths'],
+                                                ['title' => '5 Baths'],
                                             ];
                                         @endphp
 
