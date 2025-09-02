@@ -38,7 +38,7 @@
                 <table class="table mb-0">
                     <thead class="table-light">
                         <tr>
-                            <th class="border-top-0">Project Name</th>
+                            <th class="border-top-0">Project Name</th>                            
                             <th class="border-top-0">BHK</th>
                             <th class="border-top-0">Price</th>
                             @if(Auth::user()->role == 'Admin')
@@ -71,12 +71,18 @@
                                                 @endif                                                
                                             </a>
                                             <div class="flex-grow-1 text-truncate"> 
-                                                <h4 class="m-0">{{ $value->title }} <span class="badge rounded text-blue bg-blue-subtle">{{ $value->applications->count() > 0 ? $value->applications->count() : '' }}</span></h4>
+                                                <h4 class="m-0">{{ $value->title }} 
+                                                    @if($value->visitedUsers->count())
+                                                        <span class="badge rounded text-blue bg-blue-subtle">{{ $value->visitedUsers->count() }}</span>    
+                                                    @endif
+                                                    {{-- <span class="badge rounded text-blue bg-blue-subtle">{{ $value->applications->count() > 0 ? $value->applications->count() : '' }}</span> --}}
+                                                </h4>
                                                 <p class="m-0">{{ $value->location }}</p>
                                                 <p class="m-0">{{ $value->area->name }}, {{ $value->city->name }}.</p>
                                             </div>
                                         </div>
                                     </td>
+                                    
                                     <td>                                        
                                         @php
                                             $roomsArray = json_decode($value->rooms, true) ?? [];

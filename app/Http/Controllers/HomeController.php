@@ -13,6 +13,7 @@ use App\Models\JobApplication;
 use App\Models\PropertyApplication;
 use App\Models\SavedProperty;
 use App\Models\User;
+use App\Models\VisitedProperty;
 
 class HomeController extends Controller {
     public function index(Request $request){        
@@ -41,7 +42,6 @@ class HomeController extends Controller {
             $properties = $properties->whereIn('area_id', $request->area);
         }        
         
-
         $properties = $properties->paginate(10);
 
         $data = [
@@ -75,6 +75,7 @@ class HomeController extends Controller {
         $citySelected = $request->filled('city') ? \App\Models\City::where('slug', $request->city)->first() : null;
         $areaSelected = $request->filled('area') ? \App\Models\Area::where('slug', $request->area)->first() : null;
         $selectedAreas = $request->filled('area') ? \App\Models\Area::where('slug', $request->area)->first() : null;
+        $categoryWord = null;
 
         $city = null;
         $areas = collect();
@@ -97,7 +98,7 @@ class HomeController extends Controller {
             $area = Area::find($areaId);
         }
         
-        $categoryWord = null;
+        
 
         //Filter using category               
          if (!empty($request->category)) {
@@ -121,15 +122,6 @@ class HomeController extends Controller {
                 $properties = $properties->whereIn('area_id', $areas);
             }
         }
-
-
-        // if ($request->filled('area')) {
-        //     if (is_array($request->area)) {
-        //         $properties->whereIn('area_id', $request->area);
-        //     } else {
-        //         $properties->where('area_id', $request->area);
-        //     }
-        // }
 
         //Filter using keyword
         if (!empty($request->keyword)) {
@@ -188,13 +180,7 @@ class HomeController extends Controller {
                     $query->orWhereJsonContains('amenities', strtolower($amenity));
                 }
             });
-        }
-      
-
-        //Filter using Listed Types working
-        // if (!empty($request->listed_type) && is_array($request->listed_type)) {
-        //     $properties = $properties->whereIn('listed_type_id', $request->listed_type);
-        // } 
+        }     
        
         //Filter using Sale Types
         if (!empty($request->saletype)) {
@@ -258,7 +244,17 @@ class HomeController extends Controller {
         $data['priceMax'] = (intval($request->get('price_max')) == 0 ? 1000 : $request->get('price_max'));
         $data['priceMin'] = intval($request->get('price_min'));     
         
-        $properties = $properties->paginate(10);       
+        $properties = $properties->paginate(10);    
+        
+        $saveCount = [];
+        if (Auth::check()) {
+            $savedProperties = SavedProperty::where('user_id', Auth::id())
+                ->pluck('property_id')
+                ->toArray();
+            foreach ($properties as $property) {
+                $saveCount[$property->id] = in_array($property->id, $savedProperties) ? 1 : 0;
+            }
+        }
             
         $data = [
             'properties' => $properties,   
@@ -270,7 +266,8 @@ class HomeController extends Controller {
             'selectedAreas' => $selectedAreas,
             'area' => $area,
             'categoryWord' => $categoryWord,
-            'savedPropertyIds' => $savedPropertyIds,            
+            'savedPropertyIds' => $savedPropertyIds,
+            'saveCount' => $saveCount,
         ];        
 
         return view('front.home.results.listings', $data);
@@ -278,67 +275,83 @@ class HomeController extends Controller {
 
 
 
-    public function propertyDetails($id){
-        $properties = Property::with('property_images')->first();
-        $property = Property::where([
-            'id' => $id,
-            'status' => 1,
-        ])->first();
-        
-        if($property == null){
+    public function show($propertyUrl, Request $request) {
+        $cities = City::where('status',1)->get();
+        $areas = Area::where('status',1)->get();    
+        $citySelected = $request->filled('city') ? \App\Models\City::where('slug', $request->city)->first() : null;
+        $areaSelected = $request->filled('area') ? \App\Models\Area::where('slug', $request->area)->first() : null;
+        $selectedAreas = $request->filled('area') ? \App\Models\Area::where('slug', $request->area)->first() : null;
+        $categoryWord = null;
+
+        $parts = explode('-', $propertyUrl);
+
+        if(count($parts) < 4){
             abort(404);
         }
 
+        $category = array_shift($parts);   // first = buy
+        $citySlug = array_pop($parts);     // last = ahmedabad
+        $areaSlug = array_pop($parts);     // second last = chandkheda
+        $id = array_pop($parts);           // third last = 44
+        $slug = implode('-', $parts);      // remaining = shlok-heights
+
+        // Fetch city & area
+        $city = City::where('slug', $citySlug)->firstOrFail();
+        $area = Area::where('slug', $areaSlug)->firstOrFail();
+
+        // Fetch property
+        $property = Property::with(['city','area','property_images'])
+            ->where('id', $id)
+            ->where('slug', $slug)
+            ->where('category', $category)
+            ->where('city_id', $city->id)
+            ->where('area_id', $area->id)
+            ->firstOrFail();
+
+        // Saved property
         $saveCount = 0;
-        if(Auth::user()){
-            $saveCount = SavedProperty::where([
-                'user_id' => Auth::user()->id,
-                'property_id' => $id,
-            ])->count();
+        if(Auth::check()){
+            $saveCount = SavedProperty::where('user_id', Auth::id())
+                ->where('property_id', $property->id)
+                ->exists() ? 1 : 0;
         }
 
+        // Interested count
         $interestedCount = 0;
-        if(Auth::user()){
+        if(Auth::check()){
             $interestedCount = PropertyApplication::where([
-                'user_id' => Auth::user()->id,
-                'property_id' => $id,
+                'user_id'=>Auth::id(),
+                'property_id'=>$id
             ])->count();
         }
 
-        //Fetch applicants
+        // Applicants
         $applications = PropertyApplication::where('property_id',$id)->with('user')->get();
 
-        //Related properties
+        // Related properties
         $relatedProperties = [];
-        if ($property->related_properties != '') {
+        if($property->related_properties != ''){
             $propertyArray = explode(',',$property->related_properties);
-            $relatedProperties = Property::whereIn('id',$propertyArray)->where('status',1)->with('property_images')->get();
+            $relatedProperties = Property::whereIn('id',$propertyArray)
+                ->where('status',1)
+                ->with('property_images')
+                ->get();
         }
-        //Amenities
-        // $relatedAmenities = [];
-        // if ($property->related_amenities != '') {
-        //     $amenityArray = explode(',',$property->related_amenities);
-        //     $relatedAmenities = Amenity::whereIn('id',$amenityArray)->where('status',1)->get();
-        // }
-       
-        //Rooms
-        // $relatedFacings = [];
-        // if ($property->related_facings != '') {
-        //     $facingsArray = explode(',',$property->related_facings);
-        //     $relatedFacings = View::whereIn('id',$facingsArray)->where('status',1)->get();
-        // }
 
-        $data['property'] = $property;
-        $data['relatedProperties'] = $relatedProperties;
-        //$data['relatedAmenities'] = $relatedAmenities;
-        //$data['relatedFacings'] = $relatedFacings;
-        $data['properties'] = $properties;
-        $data['applications'] = $applications;
-        $data['saveCount'] = $saveCount; 
-        $data['interestedCount'] = $interestedCount; 
-
-        return view('front.home.details.index',$data);       
+        return view('front.home.details.index', compact(
+            'property',
+            'relatedProperties',
+            'saveCount',
+            'interestedCount',
+            'applications',
+            'cities',
+            'areas',
+            'citySelected',
+            'selectedAreas',
+            'categoryWord'
+        ));
     }
+
 
 
     //Apply Property
@@ -369,12 +382,12 @@ class HomeController extends Controller {
         }
 
         //You can not apply more than one time
-        $jobApplicationCount = JobApplication::where([
+        $popertyApplicationCount = PropertyApplication::where([
             'user_id' => Auth::user()->id,
             'property_id' => $id,
         ])->count();
 
-        if($jobApplicationCount > 0){
+        if($popertyApplicationCount > 0){
             $message = 'You already applied on this property.';
             session()->flash('success', $message);
             return response()->json([
@@ -410,43 +423,70 @@ class HomeController extends Controller {
 
 
     //SAVE PROPERTY
-    public function saveProperty(Request $request){
-        $id = $request->id;
+    public function saveProperty(Request $request) {
+        if (!Auth::check()) {
+            return response()->json(['status' => 'unauthenticated'], 401);
+        }
 
+        $propertyId = $request->property_id;
+        $userId = Auth::id();
+
+        $saved = SavedProperty::where('user_id', $userId)
+            ->where('property_id', $propertyId)
+            ->first();
+
+        if ($saved) {
+            $saved->delete();
+            return response()->json(['status' => 'removed']);
+        }
+
+        SavedProperty::create([
+            'user_id' => $userId,
+            'property_id' => $propertyId,
+        ]);
+
+        return response()->json(['status' => 'saved']);
+    }
+
+
+
+
+
+
+    //VISITED PROPERTY
+    public function visitedProperty(Request $request) {
+        $id = $request->id;
         $property = Property::find($id);
 
-        if($property == null) {
-            $message = 'Property not found';
-            session()->flash('error', $message);
-
+        if (!$property) {
             return response()->json([
                 'status' => false,
-                'message' => $message
+                'message' => 'Property not found'
             ]);
         }
 
-        //Check if user already saved the job
-        $count = SavedProperty::where([
-            'user_id' => Auth::user()->id,
-            'property_id' => Auth::user()->id,
+        // Check if user already visited this property
+        $count = VisitedProperty::where([
+            'user_id' => Auth::id(),
+            'property_id' => $id,
         ])->count();
 
-        if($count > 0) {
-            session()->flash('error', 'You already saved this property.');
+        if ($count > 0) {
             return response()->json([
-                'status' => false
+                'status' => false,
+                'message' => 'You already visited this property.'
             ]);
         }
 
-        $savedJob = new SavedProperty;
-        $savedJob->property_id = $id;
-        $savedJob->user_id = Auth::user()->id;
-        $savedJob->save();
-
-        session()->flash('success', 'You have successfully saved this property.');
+        $visit = new VisitedProperty();
+        $visit->property_id = $id;
+        $visit->user_id = Auth::id();
+        $visit->save();
 
         return response()->json([
-            'status' => true
+            'status' => true,
+            'message' => 'You have visited this property.'
         ]);
     }
+
 }

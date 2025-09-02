@@ -1,11 +1,10 @@
 $(document).ready(function(){
+
+    $('[data-bs-toggle="tooltip"]').tooltip();
     
     setTimeout(function() {
         $('.alert').fadeOut('fast');
     }, 1500);   
-
-   
-
 
     $('.tagNav .nav-link').on('click', function(e) {
         e.preventDefault();

@@ -96,7 +96,7 @@
                                     $selectedUnique = collect($selectedAreas)->unique();
                                 @endphp
 
-                                 <ul class="added-btm" style="{{ $selectedUnique->count() > 1 ? '' : 'display:none;' }}">                    
+                                 {{-- <ul class="added-btm" style="{{ $selectedUnique->count() > 1 ? '' : 'display:none;' }}">                    
                                     @foreach($selectedAreas as $index => $areaId)
                                         @if($areaId != $firstAreaId && !in_array($areaId, $rendered))
                                             @php 
@@ -118,9 +118,9 @@
                                             @endif
                                         @endif
                                     @endforeach
-                                </ul>                               
+                                </ul>                                --}}
 
-                                <div class="listing-areas-btm" style="display:none;">
+                                {{-- <div class="listing-areas-btm" style="display:none;">
                                     <ul id="area_old">
                                         @foreach($areas as $index => $area)
                                             @if(!in_array($area->id, $selectedAreas) && !(!$selectedAreas && $index == 0))
@@ -135,7 +135,7 @@
                                     
                                     <ul id="areas_dynamic" >
                                     </ul>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>                        
 

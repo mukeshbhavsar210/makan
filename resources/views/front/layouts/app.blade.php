@@ -11,6 +11,7 @@
 <link rel="stylesheet" type="text/css" href="{{ asset('front-assets/css/slick.css') }}" />
 <link rel="stylesheet" type="text/css" href="{{ asset('front-assets/css/slick-theme.css') }}" />
 <link rel="stylesheet" type="text/css" href="{{ asset('front-assets/css/bootstrap.min.css') }}" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" rel="stylesheet">
 
 <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>

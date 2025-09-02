@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 30, 2025 at 04:17 PM
+-- Generation Time: Sep 02, 2025 at 07:01 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -82,8 +82,8 @@ CREATE TABLE `builders` (
 --
 
 INSERT INTO `builders` (`id`, `developer_name`, `related_properties`, `developer_email`, `developer_landline`, `developer_mobile`, `developer_whatsapp`, `image`, `address`, `property_id`, `created_at`, `updated_at`, `user_id`) VALUES
-(34, 'Keerthi Estate', '46,44', 'keerthi@gmail.com', '9999911111', '9999911111', '9999911111', '3-1756536979.png', 'Hyderabad, India', NULL, '2025-01-04 03:58:23', '2025-08-30 01:26:19', 3),
-(42, 'Dobariya & Company', '46,44', 'info@dobariya.com', '089-1234567', '9978812345', '9978812345', '41_Sanghani Infrastructure.png', 'Vejalpur', NULL, '2025-01-10 23:28:06', '2025-08-14 05:23:53', 3),
+(34, 'Keerthi Estate', '46,44', 'keerthi@gmail.com', '9999911111', '9999911111', '9999911111', '3-1756536979.png', 'Hyderabad, India', NULL, '2025-01-04 03:58:23', '2025-08-30 01:26:19', 4),
+(42, 'Dobariya & Company', '46,44', 'info@dobariya.com', '089-1234567', '9978812345', '9978812345', '41_Sanghani Infrastructure.png', 'Vejalpur', NULL, '2025-01-10 23:28:06', '2025-08-14 05:23:53', 2),
 (43, 'Swastik Group', '46,44', 'info@dobariya.com', '089-1234567', '9978812345', '9978812345', '41_Sanghani Infrastructure.png', 'Vejalpur', NULL, '2025-01-10 23:28:06', '2025-08-14 05:23:53', 3);
 
 -- --------------------------------------------------------
@@ -229,7 +229,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (56, '2025_08_25_132510_remove_old_foreignid_from_properties_table', 48),
 (57, '2025_08_26_103835_remove_old_foreignid_from_properties_table', 49),
 (58, '2025_08_28_070218_add_user_id_to_builders_table', 50),
-(59, '2025_08_28_082917_add_builder_id_to_propeties_table', 51);
+(59, '2025_08_28_082917_add_builder_id_to_propeties_table', 51),
+(60, '2025_09_01_085703_create_visited_properties_table', 52);
 
 -- --------------------------------------------------------
 
@@ -283,22 +284,23 @@ CREATE TABLE `properties` (
   `property_types` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
   `sale_types` enum('new','resale') NOT NULL DEFAULT 'new',
   `construction_types` enum('under','ready') NOT NULL DEFAULT 'under',
-  `rooms` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`rooms`)),
-  `bathrooms` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`bathrooms`)),
+  `rooms` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT '2_bhks',
+  `bathrooms` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT '2_baths',
   `user_id` bigint(20) UNSIGNED DEFAULT NULL,
   `builder_id` bigint(20) UNSIGNED DEFAULT NULL,
   `property_age` enum('1_year','3_years','5_years','6_years') DEFAULT '1_year',
-  `facings` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `facings` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT 'east',
   `city_id` bigint(20) UNSIGNED DEFAULT NULL,
   `area_id` bigint(20) UNSIGNED DEFAULT NULL,
   `view_id` bigint(20) UNSIGNED DEFAULT NULL,
   `description` text DEFAULT NULL,
   `keywords` text DEFAULT NULL,
   `location` varchar(255) DEFAULT NULL,
-  `size` varchar(255) DEFAULT NULL,
   `rera` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
   `year_build` text DEFAULT NULL,
   `total_area` varchar(50) DEFAULT NULL,
+  `towers` int(20) DEFAULT 1,
+  `units` int(20) DEFAULT 1,
   `related_properties` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
   `amenities` longtext NOT NULL,
   `possession_date` date DEFAULT NULL,
@@ -312,15 +314,14 @@ CREATE TABLE `properties` (
 -- Dumping data for table `properties`
 --
 
-INSERT INTO `properties` (`id`, `title`, `slug`, `category`, `property_types`, `sale_types`, `construction_types`, `rooms`, `bathrooms`, `user_id`, `builder_id`, `property_age`, `facings`, `city_id`, `area_id`, `view_id`, `description`, `keywords`, `location`, `size`, `rera`, `year_build`, `total_area`, `related_properties`, `amenities`, `possession_date`, `status`, `created_at`, `updated_at`, `is_featured`) VALUES
-(44, 'Shlok Heights', 'shlok-heights', 'buy', '[\"apartment\"]', 'resale', 'under', '[{\"id\":1,\"title\":\"2_bhk\",\"price\":\"7500000\",\"size\":\"1200\"},{\"id\":2,\"title\":\"3_bhk\",\"price\":\"9500000\",\"size\":\"1500\"}]', '[\"2_baths\",\"3_baths\",\"4_baths\"]', 3, 34, '6_years', '[\"north\",\"south\"]', 1, 1, NULL, 'Shlok Heights', '3 BHK Apartment', 'Mansarovar Road', '13', '13', NULL, '13', '[\"50\",\"51\",\"53\",\"55\"]', '[]', '2025-12-31', 1, '2025-01-06 05:12:07', '2025-08-30 06:44:57', 'Yes'),
-(50, 'Global Techie Town', 'global-techie-town', 'buy', '[]', 'new', 'under', '[{\"id\":1,\"title\":\"2_bhk\",\"price\":\"7500000\"},{\"id\":2,\"title\":\"3_bhk\",\"price\":\"9500000\"}]', '[]', 4, 34, '1_year', '[]', 2, 2, NULL, 'Details', '3 BHK Apartment', 'Electronic City', '1800', '123', NULL, '20000', '[]', '[]', '2027-08-31', 1, '2025-01-10 23:30:34', '2025-08-30 06:37:48', 'Yes'),
-(51, 'Samarthya Status', 'samarthya_status', 'rent', NULL, 'new', 'under', NULL, NULL, 2, NULL, '1_year', NULL, 1, 1, NULL, 'Shlok Heights', '3 BHK Apartment', 'Ahmedabad', '1000', NULL, NULL, NULL, '', '', NULL, 1, '2025-01-06 05:12:07', '2025-01-08 06:19:22', 'Yes'),
-(53, 'Swastik Marvella', 'swastik_marvella', 'buy', '[\"apartment\",\"studio\"]', 'resale', 'ready', '[\r\n    {\"id\": 4, \"title\": \"3_bhk\", \"price\": \"9500000\"},\r\n    {\"id\": 5, \"title\": \"4_bhk\", \"price\": \"10000000\"}\r\n]', '[\"3_baths\",\"4_baths\"]', 4, 42, '5_years', '[\"west\",\"east\"]', 1, 1, 1, 'Swastik Marvella', '3 BHK Apartment', 'IOC Road', '1000', NULL, NULL, NULL, '', '[\"gym\",\"security\"]', '2026-08-01', 1, '2025-01-06 05:12:07', '2025-01-08 06:19:22', 'Yes'),
-(55, 'Sattva', 'sattva', 'buy', '[]', 'new', 'under', '[{\"id\":1,\"title\":\"2_bhk\",\"price\":\"7500000\",\"size\":\"1200\"},{\"id\":2,\"title\":\"3_bhk\",\"price\":\"9500000\",\"size\":\"1500\"}]', '[]', 3, 42, '1_year', '[]', 2, 12, NULL, 'Shlok Heights', '3 BHK Apartment', 'Ahmedabad', '1000', NULL, NULL, NULL, '[]', '[]', NULL, 1, '2025-01-06 05:12:07', '2025-08-30 07:13:54', 'Yes'),
-(57, 'Navami Funique', 'navami_funique', 'buy', '[]', 'new', 'under', '[{\"id\":1,\"title\":\"2_bhk\",\"price\":\"7500000\",\"size\":\"1000\"},{\"id\":2,\"title\":\"3_bhk\",\"price\":\"9500000\",\"size\":\"1500\"}]', '[]', 3, 43, '1_year', '[]', 1, 1, NULL, 'Shlok Heights', '3 BHK Apartment', 'Ahmedabad', '1000', NULL, NULL, NULL, '[]', '[]', NULL, 1, '2025-08-16 05:12:07', '2025-08-30 07:13:26', 'Yes'),
-(58, 'Swastik Harmony', 'swastik_harmony', 'buy', NULL, 'new', '', NULL, NULL, 4, NULL, '1_year', NULL, 1, 11, 2, 'Swastik Harmony', '3 BHK Apartment', 'IOC Road', '1000', NULL, NULL, NULL, '', '', NULL, 1, '2025-01-06 05:12:07', '2025-01-08 06:19:22', 'Yes'),
-(61, 'Dharti Exotica', 'dharti-exotica', 'buy', '[\"apartment\"]', 'new', 'ready', '[{\"id\":1,\"title\":\"1_bhk\",\"price\":\"\",\"size\":\"\"},{\"id\":2,\"title\":\"2_bhk\",\"price\":\"8500000\",\"size\":\"850\"},{\"id\":3,\"title\":\"3_bhk\",\"price\":\"9500000\",\"size\":\"950\"}]', '[]', 1, 34, '1_year', '[\"east\"]', 1, 1, NULL, 'hello', '3 BHK Apartment', 'Mansarovar Road', '1800', NULL, NULL, '20000', '[\"44\"]', '[\"1\",\"2\"]', NULL, 1, '2025-08-28 00:42:09', '2025-08-30 07:24:30', 'Yes');
+INSERT INTO `properties` (`id`, `title`, `slug`, `category`, `property_types`, `sale_types`, `construction_types`, `rooms`, `bathrooms`, `user_id`, `builder_id`, `property_age`, `facings`, `city_id`, `area_id`, `view_id`, `description`, `keywords`, `location`, `rera`, `year_build`, `total_area`, `towers`, `units`, `related_properties`, `amenities`, `possession_date`, `status`, `created_at`, `updated_at`, `is_featured`) VALUES
+(44, 'Shlok Heights', 'shlok-heights', 'buy', '[\"apartment\"]', 'resale', 'under', '[{\"id\":1,\"title\":\"2_bhk\",\"price\":\"7500000\",\"size\":\"1200\"},{\"id\":2,\"title\":\"3_bhk\",\"price\":\"9500000\",\"size\":\"1500\"}]', '[\"2_baths\",\"3_baths\",\"4_baths\"]', 1, 34, '6_years', '[\"north\",\"south\"]', 1, 1, NULL, 'Shlok Heights', '3 BHK Apartment', 'Mansarovar Road', '13', NULL, '13', NULL, NULL, '[\"51\",\"53\",\"55\"]', '[]', '2025-12-31', 1, '2025-01-06 05:12:07', '2025-09-01 03:18:36', 'Yes'),
+(51, 'Samarthya Status', 'samarthya_status', 'rent', '[]', 'new', 'under', '[]', '[]', 2, NULL, '1_year', '[]', 1, 1, NULL, 'Shlok Heights', '3 BHK Apartment', 'Ahmedabad', NULL, NULL, NULL, NULL, NULL, '[]', '[]', NULL, 1, '2025-01-06 05:12:07', '2025-08-31 01:39:01', 'Yes'),
+(55, 'Sattva', 'sattva', 'buy', '[]', 'new', 'under', '[{\"id\":1,\"title\":\"2_bhk\",\"price\":\"7500000\",\"size\":\"1200\"},{\"id\":2,\"title\":\"3_bhk\",\"price\":\"9500000\",\"size\":\"1500\"}]', '[]', 3, 42, '1_year', '[]', 2, 12, NULL, 'Shlok Heights', '3 BHK Apartment', 'Ahmedabad', NULL, NULL, NULL, NULL, NULL, '[]', '[]', NULL, 1, '2025-01-06 05:12:07', '2025-08-31 01:39:37', 'Yes'),
+(57, 'Navami Funique', 'navami-funique', 'rent', '[]', 'new', 'under', '[{\"id\":1,\"title\":\"2_bhk\",\"price\":\"7500000\",\"size\":\"1000\"},{\"id\":2,\"title\":\"3_bhk\",\"price\":\"9500000\",\"size\":\"1500\"}]', '[]', 3, 43, '1_year', '[]', 1, 1, NULL, 'Shlok Heights', '3 BHK Apartment', 'Ahmedabad', NULL, NULL, NULL, 5, 300, '[]', '[]', NULL, 1, '2025-08-16 05:12:07', '2025-09-01 01:46:49', 'Yes'),
+(63, 'Shlok 99 - Gota', 'shlok-99-gota', 'buy', '[\"apartment\"]', 'resale', 'under', '[{\"id\":1,\"title\":\"2_bhk\",\"price\":\"7500000\",\"size\":\"1200\"},{\"id\":2,\"title\":\"3_bhk\",\"price\":\"9500000\",\"size\":\"1500\"}]', '[\"2_baths\",\"3_baths\",\"4_baths\"]', 1, 34, '6_years', '[\"north\",\"south\"]', 1, 1, NULL, 'Shlok Heights', '3 BHK Apartment', 'Mansarovar Road', '13', NULL, '13', NULL, NULL, '[\"51\",\"53\",\"55\"]', '[]', '2025-12-31', 1, '2025-01-06 05:12:07', '2025-09-01 03:18:36', 'Yes'),
+(64, 'Om Elegance', 'om-elegance', 'buy', '[\"apartment\"]', 'resale', 'under', '[{\"id\":1,\"title\":\"2_bhk\",\"price\":\"7500000\",\"size\":\"1200\"},{\"id\":2,\"title\":\"3_bhk\",\"price\":\"9500000\",\"size\":\"1500\"}]', '[\"2_baths\",\"3_baths\",\"4_baths\"]', 1, 34, '6_years', '[\"north\",\"south\"]', 1, 1, NULL, 'Shlok Heights', '3 BHK Apartment', 'Mansarovar Road', '13', NULL, '13', NULL, NULL, '[\"51\",\"53\",\"55\"]', '[]', '2025-12-31', 1, '2025-01-06 05:12:07', '2025-09-01 03:18:36', 'Yes'),
+(65, 'Swastik Marvella', 'swastik-marvella', 'buy', 'swastik-marvella', 'resale', 'under', '[{\"id\":1,\"title\":\"2_bhk\",\"price\":\"7500000\",\"size\":\"1200\"},{\"id\":2,\"title\":\"3_bhk\",\"price\":\"9500000\",\"size\":\"1500\"}]', '[\"2_baths\",\"3_baths\",\"4_baths\"]', 3, 42, '6_years', '[\"north\",\"south\"]', 1, 1, NULL, 'Shlok Heights', '3 BHK Apartment', 'Mansarovar Road', '13', NULL, '13', NULL, NULL, '[\"51\",\"53\",\"55\"]', '[]', '2025-12-31', 1, '2025-01-06 05:12:07', '2025-09-01 03:18:36', 'Yes');
 
 -- --------------------------------------------------------
 
@@ -372,43 +373,8 @@ INSERT INTO `property_images` (`id`, `property_id`, `image`, `label`, `sort_orde
 (64, 44, '44-ShlokHeights-Bedroom.avif', 'Bedroom', NULL, '2025-01-08 06:27:25', '2025-01-08 06:27:25'),
 (71, 44, '44-ShlokHeights-Living.avif', 'Living', NULL, '2025-01-08 06:43:44', '2025-01-08 06:43:44'),
 (72, 44, '44-Shlok Heights-1736338426.jpg', 'Amenities', NULL, '2025-01-08 06:43:46', '2025-01-08 06:43:46'),
-(80, 50, '50-Shayamal Row House-1736571634.jpg', 'Elevation', NULL, '2025-01-10 23:30:34', '2025-01-10 23:30:34'),
-(81, 50, '50-Shayamal Row House-1736571635.jpg', 'Elevation', NULL, '2025-01-10 23:30:35', '2025-01-10 23:30:35'),
-(82, 50, '50-Shayamal Row House-1736571636.jpg', 'Elevation', NULL, '2025-01-10 23:30:35', '2025-01-10 23:30:36'),
-(83, 50, '50-Shayamal Row House-1736571636.jpg', 'Elevation', NULL, '2025-01-10 23:30:36', '2025-01-10 23:30:36'),
-(84, 50, '50-Shayamal Row House-1736574384.JPG', 'Elevation', NULL, '2025-01-11 00:16:24', '2025-01-11 00:16:24'),
-(85, 50, '50-Shayamal Row House-1736574385.JPG', 'Elevation', NULL, '2025-01-11 00:16:25', '2025-01-11 00:16:25'),
-(86, 50, '50-Shayamal Row House-1736574387.JPG', 'Elevation', NULL, '2025-01-11 00:16:27', '2025-01-11 00:16:27'),
-(87, 50, '50-Shayamal Row House-1736574389.JPG', 'Elevation', NULL, '2025-01-11 00:16:29', '2025-01-11 00:16:29'),
-(88, 50, '50-Shayamal Row House-1736574459.JPG', 'Elevation', NULL, '2025-01-11 00:17:39', '2025-01-11 00:17:39'),
-(89, 50, '50-Shayamal Row House-1736574460.JPG', 'Elevation', NULL, '2025-01-11 00:17:40', '2025-01-11 00:17:40'),
-(90, 50, '50-Shayamal Row House-1736574462.JPG', 'Elevation', NULL, '2025-01-11 00:17:42', '2025-01-11 00:17:42'),
-(91, 50, '50-Shayamal Row House-1736574464.JPG', 'Elevation', NULL, '2025-01-11 00:17:44', '2025-01-11 00:17:44'),
-(92, 50, '50-Shayamal Row House-1736574465.JPG', 'Elevation', NULL, '2025-01-11 00:17:45', '2025-01-11 00:17:45'),
-(93, 50, '50-Shayamal Row House-1736574466.JPG', 'Elevation', NULL, '2025-01-11 00:17:46', '2025-01-11 00:17:46'),
-(94, 50, '50-Shayamal Row House-1736574468.JPG', 'Elevation', NULL, '2025-01-11 00:17:48', '2025-01-11 00:17:48'),
-(95, 50, '50-Shayamal Row House-1736574469.JPG', 'Elevation', NULL, '2025-01-11 00:17:49', '2025-01-11 00:17:49'),
-(96, 50, '50-Shayamal Row House-1737091154.JPG', 'Elevation', NULL, '2025-01-16 23:49:14', '2025-01-16 23:49:14'),
-(97, 50, '50-Shayamal Row House-1737091155.JPG', 'Elevation', NULL, '2025-01-16 23:49:15', '2025-01-16 23:49:15'),
-(98, 50, '50-Shayamal Row House-1737091157.JPG', 'Elevation', NULL, '2025-01-16 23:49:17', '2025-01-16 23:49:17'),
-(99, 50, '50-Shayamal Row House-1737091158.JPG', 'Elevation', NULL, '2025-01-16 23:49:18', '2025-01-16 23:49:18'),
-(100, 50, '50-Shayamal Row House-1737091160.JPG', 'Elevation', NULL, '2025-01-16 23:49:20', '2025-01-16 23:49:20'),
-(101, 50, '50-Shayamal Row House-1737091161.JPG', 'Elevation', NULL, '2025-01-16 23:49:21', '2025-01-16 23:49:21'),
-(102, 50, '50-Shayamal Row House-1737091163.JPG', 'Elevation', NULL, '2025-01-16 23:49:23', '2025-01-16 23:49:23'),
-(103, 50, '50-Shayamal Row House-1737091164.JPG', 'Elevation', NULL, '2025-01-16 23:49:24', '2025-01-16 23:49:24'),
-(104, 50, '50-Shayamal Row House-1737091167.JPG', 'Elevation', NULL, '2025-01-16 23:49:27', '2025-01-16 23:49:27'),
-(105, 50, '50-Shayamal Row House-1737091168.JPG', 'Elevation', NULL, '2025-01-16 23:49:28', '2025-01-16 23:49:28'),
-(106, 50, '50-Shayamal Row House-1737091169.JPG', 'Elevation', NULL, '2025-01-16 23:49:29', '2025-01-16 23:49:29'),
-(107, 50, '50-Shayamal Row House-1737091171.JPG', 'Elevation', NULL, '2025-01-16 23:49:31', '2025-01-16 23:49:31'),
-(108, 50, '50-Shayamal Row House-1737091173.JPG', 'Elevation', NULL, '2025-01-16 23:49:33', '2025-01-16 23:49:33'),
-(109, 50, '50-Shayamal Row House-1737091174.JPG', 'Elevation', NULL, '2025-01-16 23:49:34', '2025-01-16 23:49:34'),
-(110, 50, '50-Shayamal Row House-1737091175.JPG', 'Elevation', NULL, '2025-01-16 23:49:35', '2025-01-16 23:49:35'),
-(111, 50, '50-Shayamal Row House-1737091176.JPG', 'Elevation', NULL, '2025-01-16 23:49:36', '2025-01-16 23:49:36'),
 (112, 44, '44-Shlok Heights-1736337438.JPG', 'Video', NULL, '2025-01-08 06:27:18', '2025-01-08 06:27:18'),
 (113, 44, '44-ShlokHeights-Elevation.avif', 'Elevation', NULL, '2025-01-08 06:43:44', '2025-01-08 06:43:44'),
-(115, 44, '44-Shlok Heights-1736337438.JPG', 'Floor', NULL, '2025-01-08 06:27:18', '2025-01-08 06:27:18'),
-(116, 44, '44-ShlokHeights-Location.avif', 'Location', NULL, '2025-01-08 06:43:44', '2025-01-08 06:43:44'),
-(117, 44, '44-ShlokHeights-Cluster.avif', 'Cluster', NULL, '2025-01-08 06:27:18', '2025-01-08 06:27:18'),
 (118, 44, '44-Shlok Heights-1755950903.JPG', 'Main', NULL, '2025-08-23 06:38:23', '2025-08-23 06:38:23'),
 (119, 44, '44-Shlok Heights-1755950908.jpg', 'Main', NULL, '2025-08-23 06:38:28', '2025-08-23 06:38:28'),
 (120, 44, '44-Shlok Heights-1755950909.jpg', 'Main', NULL, '2025-08-23 06:38:29', '2025-08-23 06:38:29'),
@@ -841,8 +807,7 @@ INSERT INTO `property_images` (`id`, `property_id`, `image`, `label`, `sort_orde
 (549, 44, '44-Shlok Heights-1755952125.JPG', 'Main', NULL, '2025-08-23 06:58:45', '2025-08-23 06:58:45'),
 (550, 44, '44-Shlok Heights-1755952126.JPG', 'Main', NULL, '2025-08-23 06:58:46', '2025-08-23 06:58:46'),
 (551, 44, '44-Shlok Heights-1755952127.JPG', 'Main', NULL, '2025-08-23 06:58:46', '2025-08-23 06:58:47'),
-(552, 44, '44-Shlok Heights-1755952127.JPG', 'Main', NULL, '2025-08-23 06:58:47', '2025-08-23 06:58:47');
-INSERT INTO `property_images` (`id`, `property_id`, `image`, `label`, `sort_order`, `created_at`, `updated_at`) VALUES
+(552, 44, '44-Shlok Heights-1755952127.JPG', 'Main', NULL, '2025-08-23 06:58:47', '2025-08-23 06:58:47'),
 (553, 44, '44-Shlok Heights-1755952147.JPG', 'Main', NULL, '2025-08-23 06:59:07', '2025-08-23 06:59:07'),
 (554, 44, '44-Shlok Heights-1755952149.jpg', 'Main', NULL, '2025-08-23 06:59:09', '2025-08-23 06:59:09'),
 (555, 44, '44-Shlok Heights-1755952150.jpg', 'Main', NULL, '2025-08-23 06:59:10', '2025-08-23 06:59:10'),
@@ -880,7 +845,8 @@ INSERT INTO `property_images` (`id`, `property_id`, `image`, `label`, `sort_orde
 (587, 44, '44-Shlok Heights-1755952272.JPG', 'Main', NULL, '2025-08-23 07:01:12', '2025-08-23 07:01:12'),
 (588, 44, '44-Shlok Heights-1755952274.JPG', 'Main', NULL, '2025-08-23 07:01:14', '2025-08-23 07:01:14'),
 (589, 44, '44-Shlok Heights-1755952274.JPG', 'Main', NULL, '2025-08-23 07:01:14', '2025-08-23 07:01:14'),
-(590, 44, '44-Shlok Heights-1755952275.JPG', 'Main', NULL, '2025-08-23 07:01:15', '2025-08-23 07:01:15'),
+(590, 44, '44-Shlok Heights-1755952275.JPG', 'Main', NULL, '2025-08-23 07:01:15', '2025-08-23 07:01:15');
+INSERT INTO `property_images` (`id`, `property_id`, `image`, `label`, `sort_order`, `created_at`, `updated_at`) VALUES
 (591, 44, '44-Shlok Heights-1755952276.JPG', 'Main', NULL, '2025-08-23 07:01:16', '2025-08-23 07:01:16'),
 (592, 44, '44-Shlok Heights-1755952276.JPG', 'Main', NULL, '2025-08-23 07:01:16', '2025-08-23 07:01:16'),
 (593, 44, '44-Shlok Heights-1755952497.JPG', 'Main', NULL, '2025-08-23 07:04:57', '2025-08-23 07:04:57'),
@@ -1183,7 +1149,6 @@ INSERT INTO `property_images` (`id`, `property_id`, `image`, `label`, `sort_orde
 (891, 44, '44-Shlok Heights-1756298116.JPG', 'Main', NULL, '2025-08-27 07:05:16', '2025-08-27 07:05:16'),
 (892, 44, '44-Shlok Heights-1756298116.JPG', 'Main', NULL, '2025-08-27 07:05:16', '2025-08-27 07:05:16'),
 (893, 44, '44-Shlok Heights-1756298117.JPG', 'Main', NULL, '2025-08-27 07:05:17', '2025-08-27 07:05:17'),
-(894, 50, '50-Global Techie Town-1756299327.JPG', 'Main', NULL, '2025-08-27 07:25:27', '2025-08-27 07:25:27'),
 (895, 44, '44-Shlok Heights3-1756351500.JPG', 'Main', NULL, '2025-08-27 21:55:00', '2025-08-27 21:55:00'),
 (896, 44, '44-Shlok Heights3-1756351506.jpg', 'Main', NULL, '2025-08-27 21:55:06', '2025-08-27 21:55:06'),
 (897, 44, '44-Shlok Heights3-1756351506.jpg', 'Main', NULL, '2025-08-27 21:55:06', '2025-08-27 21:55:06'),
@@ -1282,15 +1247,6 @@ INSERT INTO `property_images` (`id`, `property_id`, `image`, `label`, `sort_orde
 (990, 44, '44-Shlok Heights-1756360561.JPG', 'Main', NULL, '2025-08-28 00:26:01', '2025-08-28 00:26:01'),
 (991, 44, '44-Shlok Heights-1756360562.JPG', 'Main', NULL, '2025-08-28 00:26:02', '2025-08-28 00:26:02'),
 (992, 44, '44-Shlok Heights-1756360563.JPG', 'Main', NULL, '2025-08-28 00:26:03', '2025-08-28 00:26:03'),
-(993, 61, '61-Dharti Exotica-1756361529.JPG', 'Main', NULL, '2025-08-28 00:42:09', '2025-08-28 00:42:09'),
-(994, 61, '61-Dharti Exotica-1756361530.JPG', 'Elevation', NULL, '2025-08-28 00:42:10', '2025-08-28 00:42:10'),
-(995, 61, '61-Dharti Exotica-1756361532.JPG', 'Bedroom', NULL, '2025-08-28 00:42:12', '2025-08-28 00:42:12'),
-(996, 61, '61-Dharti Exotica-1756361533.JPG', 'Living', NULL, '2025-08-28 00:42:13', '2025-08-28 00:42:13'),
-(997, 61, '61-Dharti Exotica-1756361535.JPG', 'Balcony', NULL, '2025-08-28 00:42:15', '2025-08-28 00:42:15'),
-(998, 61, '61-Dharti Exotica-1756361537.JPG', 'Amenities', NULL, '2025-08-28 00:42:17', '2025-08-28 00:42:17'),
-(999, 61, '61-Dharti Exotica-1756361539.JPG', 'Floor', NULL, '2025-08-28 00:42:19', '2025-08-28 00:42:19'),
-(1000, 61, '61-Dharti Exotica-1756361541.JPG', 'Location', NULL, '2025-08-28 00:42:21', '2025-08-28 00:42:21'),
-(1001, 50, '50-Global Techie Town-1756555668.JPG', 'Main', NULL, '2025-08-30 06:37:48', '2025-08-30 06:37:48'),
 (1002, 44, '44-Shlok Heights-1756556055.JPG', 'Main', NULL, '2025-08-30 06:44:15', '2025-08-30 06:44:15'),
 (1003, 44, '44-Shlok Heights-1756556057.jpg', 'Main', NULL, '2025-08-30 06:44:17', '2025-08-30 06:44:17'),
 (1004, 44, '44-Shlok Heights-1756556058.jpg', 'Main', NULL, '2025-08-30 06:44:18', '2025-08-30 06:44:18'),
@@ -1308,7 +1264,61 @@ INSERT INTO `property_images` (`id`, `property_id`, `image`, `label`, `sort_orde
 (1016, 44, '44-Shlok Heights-1756556102.JPG', 'Main', NULL, '2025-08-30 06:45:02', '2025-08-30 06:45:02'),
 (1017, 44, '44-Shlok Heights-1756556103.JPG', 'Main', NULL, '2025-08-30 06:45:03', '2025-08-30 06:45:03'),
 (1018, 44, '44-Shlok Heights-1756556103.JPG', 'Main', NULL, '2025-08-30 06:45:03', '2025-08-30 06:45:03'),
-(1019, 44, '44-Shlok Heights-1756556104.JPG', 'Main', NULL, '2025-08-30 06:45:04', '2025-08-30 06:45:04');
+(1019, 44, '44-Shlok Heights-1756556104.JPG', 'Main', NULL, '2025-08-30 06:45:04', '2025-08-30 06:45:04'),
+(1020, 44, '44-Shlok Heights 3-1756622680.JPG', 'Main', NULL, '2025-08-31 01:14:39', '2025-08-31 01:14:40'),
+(1021, 44, '44-Shlok Heights 3-1756622685.jpg', 'Main', NULL, '2025-08-31 01:14:45', '2025-08-31 01:14:45'),
+(1022, 44, '44-Shlok Heights 3-1756622686.jpg', 'Main', NULL, '2025-08-31 01:14:46', '2025-08-31 01:14:46'),
+(1023, 44, '44-Shlok Heights 3-1756622687.jpg', 'Main', NULL, '2025-08-31 01:14:47', '2025-08-31 01:14:47'),
+(1024, 44, '44-Shlok Heights 3-1756622687.JPG', 'Main', NULL, '2025-08-31 01:14:47', '2025-08-31 01:14:47'),
+(1025, 44, '44-Shlok Heights 3-1756622689.JPG', 'Main', NULL, '2025-08-31 01:14:49', '2025-08-31 01:14:49'),
+(1026, 44, '44-Shlok Heights 3-1756622690.JPG', 'Main', NULL, '2025-08-31 01:14:50', '2025-08-31 01:14:50'),
+(1027, 44, '44-Shlok Heights 3-1756622690.JPG', 'Main', NULL, '2025-08-31 01:14:50', '2025-08-31 01:14:50'),
+(1028, 44, '44-Shlok Heights 3-1756622691.JPG', 'Main', NULL, '2025-08-31 01:14:51', '2025-08-31 01:14:51'),
+(1031, 44, '44-Shlok Heights-1756622935.JPG', 'Main', NULL, '2025-08-31 01:18:55', '2025-08-31 01:18:55'),
+(1032, 44, '44-Shlok Heights-1756622937.jpg', 'Main', NULL, '2025-08-31 01:18:57', '2025-08-31 01:18:57'),
+(1033, 44, '44-Shlok Heights-1756622938.jpg', 'Main', NULL, '2025-08-31 01:18:58', '2025-08-31 01:18:58'),
+(1034, 44, '44-Shlok Heights-1756622938.jpg', 'Main', NULL, '2025-08-31 01:18:58', '2025-08-31 01:18:58'),
+(1035, 44, '44-Shlok Heights-1756622939.JPG', 'Main', NULL, '2025-08-31 01:18:59', '2025-08-31 01:18:59'),
+(1036, 44, '44-Shlok Heights-1756622941.JPG', 'Main', NULL, '2025-08-31 01:19:01', '2025-08-31 01:19:01'),
+(1037, 44, '44-Shlok Heights-1756622942.JPG', 'Main', NULL, '2025-08-31 01:19:01', '2025-08-31 01:19:02'),
+(1038, 44, '44-Shlok Heights-1756622942.JPG', 'Main', NULL, '2025-08-31 01:19:02', '2025-08-31 01:19:02'),
+(1039, 44, '44-Shlok Heights-1756622943.JPG', 'Main', NULL, '2025-08-31 01:19:03', '2025-08-31 01:19:03'),
+(1041, 44, '44-Shlok Heights 3-1756623102.JPG', 'Main', NULL, '2025-08-31 01:21:42', '2025-08-31 01:21:42'),
+(1042, 44, '44-Shlok Heights 3-1756623104.jpg', 'Main', NULL, '2025-08-31 01:21:44', '2025-08-31 01:21:44'),
+(1043, 44, '44-Shlok Heights 3-1756623105.jpg', 'Main', NULL, '2025-08-31 01:21:45', '2025-08-31 01:21:45'),
+(1044, 44, '44-Shlok Heights 3-1756623105.jpg', 'Main', NULL, '2025-08-31 01:21:45', '2025-08-31 01:21:45'),
+(1045, 44, '44-Shlok Heights 3-1756623106.JPG', 'Main', NULL, '2025-08-31 01:21:46', '2025-08-31 01:21:46'),
+(1046, 44, '44-Shlok Heights 3-1756623107.JPG', 'Main', NULL, '2025-08-31 01:21:47', '2025-08-31 01:21:47'),
+(1047, 44, '44-Shlok Heights 3-1756623108.JPG', 'Main', NULL, '2025-08-31 01:21:48', '2025-08-31 01:21:48'),
+(1048, 44, '44-Shlok Heights 3-1756623109.JPG', 'Main', NULL, '2025-08-31 01:21:49', '2025-08-31 01:21:49'),
+(1049, 44, '44-Shlok Heights 3-1756623109.JPG', 'Main', NULL, '2025-08-31 01:21:49', '2025-08-31 01:21:49'),
+(1051, 44, '44-Shlok Heights-1756623792.JPG', 'Main', NULL, '2025-08-31 01:33:12', '2025-08-31 01:33:12'),
+(1052, 44, '44-Shlok Heights-1756623794.jpg', 'Main', NULL, '2025-08-31 01:33:14', '2025-08-31 01:33:14'),
+(1053, 44, '44-Shlok Heights-1756623795.jpg', 'Main', NULL, '2025-08-31 01:33:15', '2025-08-31 01:33:15'),
+(1054, 44, '44-Shlok Heights-1756623795.jpg', 'Main', NULL, '2025-08-31 01:33:15', '2025-08-31 01:33:15'),
+(1055, 44, '44-Shlok Heights-1756623796.JPG', 'Main', NULL, '2025-08-31 01:33:16', '2025-08-31 01:33:16'),
+(1056, 44, '44-Shlok Heights-1756623798.JPG', 'Main', NULL, '2025-08-31 01:33:18', '2025-08-31 01:33:18'),
+(1057, 44, '44-Shlok Heights-1756623798.JPG', 'Main', NULL, '2025-08-31 01:33:18', '2025-08-31 01:33:18'),
+(1058, 44, '44-Shlok Heights-1756623799.JPG', 'Main', NULL, '2025-08-31 01:33:19', '2025-08-31 01:33:19'),
+(1059, 44, '44-Shlok Heights-1756623800.JPG', 'Main', NULL, '2025-08-31 01:33:20', '2025-08-31 01:33:20'),
+(1062, 44, '44-Shlok Heights 5-1756624201.JPG', 'Main', NULL, '2025-08-31 01:40:00', '2025-08-31 01:40:01'),
+(1063, 44, '44-Shlok Heights 5-1756624203.jpg', 'Main', NULL, '2025-08-31 01:40:02', '2025-08-31 01:40:03'),
+(1064, 44, '44-Shlok Heights 5-1756624203.jpg', 'Main', NULL, '2025-08-31 01:40:03', '2025-08-31 01:40:03'),
+(1065, 44, '44-Shlok Heights 5-1756624204.jpg', 'Main', NULL, '2025-08-31 01:40:04', '2025-08-31 01:40:04'),
+(1066, 44, '44-Shlok Heights 5-1756624204.JPG', 'Main', NULL, '2025-08-31 01:40:04', '2025-08-31 01:40:04'),
+(1067, 44, '44-Shlok Heights 5-1756624206.JPG', 'Main', NULL, '2025-08-31 01:40:06', '2025-08-31 01:40:06'),
+(1068, 44, '44-Shlok Heights 5-1756624206.JPG', 'Main', NULL, '2025-08-31 01:40:06', '2025-08-31 01:40:06'),
+(1069, 44, '44-Shlok Heights 5-1756624207.JPG', 'Main', NULL, '2025-08-31 01:40:07', '2025-08-31 01:40:07'),
+(1070, 44, '44-Shlok Heights 5-1756624208.JPG', 'Main', NULL, '2025-08-31 01:40:08', '2025-08-31 01:40:08'),
+(1071, 44, '44-Shlok Heights-1756624216.JPG', 'Main', NULL, '2025-08-31 01:40:16', '2025-08-31 01:40:16'),
+(1072, 44, '44-Shlok Heights-1756624218.jpg', 'Main', NULL, '2025-08-31 01:40:18', '2025-08-31 01:40:18'),
+(1073, 44, '44-Shlok Heights-1756624219.jpg', 'Main', NULL, '2025-08-31 01:40:19', '2025-08-31 01:40:19'),
+(1074, 44, '44-Shlok Heights-1756624220.jpg', 'Main', NULL, '2025-08-31 01:40:20', '2025-08-31 01:40:20'),
+(1075, 44, '44-Shlok Heights-1756624220.JPG', 'Main', NULL, '2025-08-31 01:40:20', '2025-08-31 01:40:20'),
+(1076, 44, '44-Shlok Heights-1756624222.JPG', 'Main', NULL, '2025-08-31 01:40:22', '2025-08-31 01:40:22'),
+(1077, 44, '44-Shlok Heights-1756624222.JPG', 'Main', NULL, '2025-08-31 01:40:22', '2025-08-31 01:40:22'),
+(1078, 44, '44-Shlok Heights-1756624223.JPG', 'Main', NULL, '2025-08-31 01:40:23', '2025-08-31 01:40:23'),
+(1079, 44, '44-Shlok Heights-1756624224.JPG', 'Main', NULL, '2025-08-31 01:40:23', '2025-08-31 01:40:24');
 
 -- --------------------------------------------------------
 
@@ -1329,12 +1339,7 @@ CREATE TABLE `saved_properties` (
 --
 
 INSERT INTO `saved_properties` (`id`, `property_id`, `user_id`, `created_at`, `updated_at`) VALUES
-(45, 44, 2, '2025-08-18 06:08:57', '2025-08-18 06:08:57'),
-(51, 44, 1, '2025-08-18 07:47:19', '2025-08-18 07:47:19'),
-(52, 55, 3, '2025-08-18 08:11:46', '2025-08-18 08:11:46'),
-(53, 44, 3, '2025-08-18 08:17:26', '2025-08-18 08:17:26'),
-(54, 50, 3, '2025-08-18 08:17:26', '2025-08-18 08:17:26'),
-(55, 50, 2, '2025-08-18 08:17:26', '2025-08-18 08:17:26');
+(118, 44, 3, '2025-09-01 07:53:39', '2025-09-01 07:53:39');
 
 -- --------------------------------------------------------
 
@@ -1562,7 +1567,44 @@ INSERT INTO `temp_images` (`id`, `name`, `created_at`, `updated_at`) VALUES
 (206, '1756446148.JPG', '2025-08-29 00:12:28', '2025-08-29 00:12:28'),
 (207, '1756446698.JPG', '2025-08-29 00:21:38', '2025-08-29 00:21:38'),
 (208, '1756446721.JPG', '2025-08-29 00:22:01', '2025-08-29 00:22:01'),
-(209, '1756446850.JPG', '2025-08-29 00:24:10', '2025-08-29 00:24:10');
+(209, '1756446850.JPG', '2025-08-29 00:24:10', '2025-08-29 00:24:10'),
+(210, '1756627011.JPG', '2025-08-31 02:26:51', '2025-08-31 02:26:51'),
+(211, '1756627013.JPG', '2025-08-31 02:26:53', '2025-08-31 02:26:53'),
+(212, '1756627015.JPG', '2025-08-31 02:26:55', '2025-08-31 02:26:55'),
+(213, '1756627060.JPG', '2025-08-31 02:27:40', '2025-08-31 02:27:40'),
+(214, '1756627062.JPG', '2025-08-31 02:27:42', '2025-08-31 02:27:42'),
+(215, '1756627065.JPG', '2025-08-31 02:27:45', '2025-08-31 02:27:45'),
+(216, '1756627067.JPG', '2025-08-31 02:27:47', '2025-08-31 02:27:47'),
+(217, '1756627141.JPG', '2025-08-31 02:29:01', '2025-08-31 02:29:01'),
+(218, '1756627143.JPG', '2025-08-31 02:29:03', '2025-08-31 02:29:03'),
+(219, '1756627145.JPG', '2025-08-31 02:29:05', '2025-08-31 02:29:05'),
+(220, '1756627207.JPG', '2025-08-31 02:30:07', '2025-08-31 02:30:07'),
+(221, '1756627209.JPG', '2025-08-31 02:30:09', '2025-08-31 02:30:09'),
+(222, '1756627211.JPG', '2025-08-31 02:30:11', '2025-08-31 02:30:11'),
+(223, '1756627264.JPG', '2025-08-31 02:31:04', '2025-08-31 02:31:04'),
+(224, '1756627266.JPG', '2025-08-31 02:31:06', '2025-08-31 02:31:06'),
+(225, '1756627268.JPG', '2025-08-31 02:31:08', '2025-08-31 02:31:08'),
+(226, '1756627309.JPG', '2025-08-31 02:31:49', '2025-08-31 02:31:49'),
+(227, '1756627310.JPG', '2025-08-31 02:31:50', '2025-08-31 02:31:50'),
+(228, '1756703718.JPG', '2025-08-31 23:45:18', '2025-08-31 23:45:18'),
+(229, '1756703724.JPG', '2025-08-31 23:45:24', '2025-08-31 23:45:24'),
+(230, '1756703726.JPG', '2025-08-31 23:45:26', '2025-08-31 23:45:26'),
+(231, '1756711072.JPG', '2025-09-01 01:47:52', '2025-09-01 01:47:52'),
+(232, '1756711077.JPG', '2025-09-01 01:47:57', '2025-09-01 01:47:57'),
+(233, '1756711079.JPG', '2025-09-01 01:47:59', '2025-09-01 01:47:59'),
+(234, '1756711118.JPG', '2025-09-01 01:48:38', '2025-09-01 01:48:38'),
+(235, '1756711120.JPG', '2025-09-01 01:48:40', '2025-09-01 01:48:40'),
+(236, '1756711122.JPG', '2025-09-01 01:48:42', '2025-09-01 01:48:42'),
+(237, '1756713529.JPG', '2025-09-01 02:28:49', '2025-09-01 02:28:49'),
+(238, '1756713531.JPG', '2025-09-01 02:28:51', '2025-09-01 02:28:51'),
+(239, '1756713533.JPG', '2025-09-01 02:28:53', '2025-09-01 02:28:53'),
+(240, '1756713868.JPG', '2025-09-01 02:34:28', '2025-09-01 02:34:28'),
+(241, '1756713870.JPG', '2025-09-01 02:34:30', '2025-09-01 02:34:30'),
+(242, '1756713872.JPG', '2025-09-01 02:34:32', '2025-09-01 02:34:32'),
+(243, '1756713985.JPG', '2025-09-01 02:36:25', '2025-09-01 02:36:25'),
+(244, '1756713987.JPG', '2025-09-01 02:36:27', '2025-09-01 02:36:27'),
+(245, '1756713991.JPG', '2025-09-01 02:36:31', '2025-09-01 02:36:31'),
+(246, '1756713993.JPG', '2025-09-01 02:36:33', '2025-09-01 02:36:33');
 
 -- --------------------------------------------------------
 
@@ -1592,8 +1634,37 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `image`, `mobile`, `role`, `status`, `remember_token`, `created_at`, `updated_at`) VALUES
 (1, 'Mukesh Bhavsar', 'mukeshbhavsar210@gmail.com', NULL, '$2y$12$Iy5Wh1TVAkCYAvaefrR71OEKD4QDjhnnWBxknqjwnioSSM6sAJMnO', '1-1756555979.webp', '9978835005', 'Admin', 1, NULL, '2024-12-28 05:49:21', '2025-08-30 06:43:00'),
 (2, 'Sona Bhavsar', 'sona@gmail.com', NULL, '$2y$12$Iy5Wh1TVAkCYAvaefrR71OEKD4QDjhnnWBxknqjwnioSSM6sAJMnO', '', '9978835005', 'User', 1, NULL, '2024-12-28 05:49:21', '2025-01-10 23:42:25'),
-(3, 'Dhruv Bhavsar', 'dhruvbhavsar210@gmail.com', NULL, '$2y$12$Iy5Wh1TVAkCYAvaefrR71OEKD4QDjhnnWBxknqjwnioSSM6sAJMnO', '3-1756448900.JPG', '9916235005', 'Builder', 1, NULL, '2024-12-28 05:49:21', '2025-08-29 07:00:36'),
+(3, 'Dhruv Bhavsar', 'dhruvbhavsar210@gmail.com', NULL, '$2y$12$Iy5Wh1TVAkCYAvaefrR71OEKD4QDjhnnWBxknqjwnioSSM6sAJMnO', '3-1756448900.JPG', '9916235005', 'User', 1, NULL, '2024-12-28 05:49:21', '2025-08-29 07:00:36'),
 (4, 'Gaurav', 'gaurav@gmail.com', NULL, '$2y$12$1SpADjHEpzBJ2OTXEQkwd.GNrM1Hrn.vGo7NyPsqXiaYBGTZwj3.C', '4-1736168601.png', '9978812345', 'Builder', 1, NULL, '2024-12-28 05:51:32', '2025-01-06 07:33:21');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `visited_properties`
+--
+
+CREATE TABLE `visited_properties` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `property_id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `visited_properties`
+--
+
+INSERT INTO `visited_properties` (`id`, `property_id`, `user_id`, `created_at`, `updated_at`) VALUES
+(8, 44, 1, '2025-09-01 04:01:29', '2025-09-01 04:01:29'),
+(10, 44, 3, '2025-09-01 04:02:29', '2025-09-01 04:02:29'),
+(13, 51, 3, '2025-09-01 07:52:20', '2025-09-01 07:52:20'),
+(14, 57, 3, '2025-09-01 07:52:31', '2025-09-01 07:52:31'),
+(15, 44, NULL, '2025-09-01 08:26:37', '2025-09-01 08:26:37'),
+(16, 63, NULL, '2025-09-01 08:28:33', '2025-09-01 08:28:33'),
+(18, 64, NULL, '2025-09-01 08:30:26', '2025-09-01 08:30:26'),
+(20, 65, NULL, '2025-09-01 08:33:12', '2025-09-01 08:33:12'),
+(21, 63, 3, '2025-09-01 23:28:50', '2025-09-01 23:28:50');
 
 --
 -- Indexes for dumped tables
@@ -1661,7 +1732,6 @@ ALTER TABLE `properties`
   ADD KEY `properties_user_id_foreign` (`user_id`),
   ADD KEY `properties_city_id_foreign` (`city_id`),
   ADD KEY `properties_area_id_foreign` (`area_id`),
-  ADD KEY `properties_view_id_foreign` (`view_id`) USING BTREE,
   ADD KEY `properties_builder_id_foreign` (`builder_id`);
 
 --
@@ -1702,6 +1772,14 @@ ALTER TABLE `users`
   ADD UNIQUE KEY `users_email_unique` (`email`);
 
 --
+-- Indexes for table `visited_properties`
+--
+ALTER TABLE `visited_properties`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `visited_properties_property_id_foreign` (`property_id`),
+  ADD KEY `visited_properties_user_id_foreign` (`user_id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -1739,7 +1817,7 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
@@ -1751,7 +1829,7 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `properties`
 --
 ALTER TABLE `properties`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
 
 --
 -- AUTO_INCREMENT for table `property_applications`
@@ -1763,25 +1841,31 @@ ALTER TABLE `property_applications`
 -- AUTO_INCREMENT for table `property_images`
 --
 ALTER TABLE `property_images`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1020;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1080;
 
 --
 -- AUTO_INCREMENT for table `saved_properties`
 --
 ALTER TABLE `saved_properties`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=119;
 
 --
 -- AUTO_INCREMENT for table `temp_images`
 --
 ALTER TABLE `temp_images`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=210;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=247;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `visited_properties`
+--
+ALTER TABLE `visited_properties`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- Constraints for dumped tables
@@ -1830,6 +1914,13 @@ ALTER TABLE `property_images`
 ALTER TABLE `saved_properties`
   ADD CONSTRAINT `saved_properties_property_id_foreign` FOREIGN KEY (`property_id`) REFERENCES `properties` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `saved_properties_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `visited_properties`
+--
+ALTER TABLE `visited_properties`
+  ADD CONSTRAINT `visited_properties_property_id_foreign` FOREIGN KEY (`property_id`) REFERENCES `properties` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `visited_properties_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
