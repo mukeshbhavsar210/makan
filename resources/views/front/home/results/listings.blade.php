@@ -2,7 +2,7 @@
 
 @section('hideHeader') @endsection
 
-{{-- <header class="control-header">
+<header class="control-header">
     <div id="pageLoader" class="page-loader">
         <img src="{{ asset('front-assets/images/loader.gif') }}" />    
     </div>
@@ -27,7 +27,7 @@
                     
         <div class="overlay"></div>
     </div>
-</header> --}}
+</header>
 
 @section('main')
 

@@ -63,17 +63,38 @@ class HomeController extends Controller {
        
     
     public function properties(Request $request) {
-        $users = User::select('id', 'name', 'role')->get();                            
+        $cities = City::where('status',1)->get();
+        $areas = Area::where('status',1)->get();    
+        $users = User::select('id', 'name', 'role')->get();                    
+        $cityId = $request->get('city');
+        $areaId = $request->get('area');
+        $roomIds = $request->get('room', []);
         $properties = Property::with('property_images')->where('status',1);                    
+        $citySelected = $request->filled('city') ? \App\Models\City::where('slug', $request->city)->first() : null;
+        $areaSelected = $request->filled('area') ? \App\Models\Area::where('slug', $request->area)->first() : null;
+        $selectedAreas = $request->filled('area') ? \App\Models\Area::where('slug', $request->area)->first() : null;
+        $categoryWord = null;
+        
+        $city = null;
+        $areas = collect();
+        $area = null;
 
-        // if ($request->filled('city')) {
-        //     $city = \App\Models\City::where('slug', strtolower($request->city))->first();
-        // }
+        if ($request->filled('city')) {
+            $city = \App\Models\City::where('slug', strtolower($request->city))->first();
+        }
 
-        // if ($request->filled('area')) {
-        //     $areaSlugs = (array) $request->area;
-        //     $areas = \App\Models\Area::whereIn('slug', array_map('strtolower', $areaSlugs))->get();
-        // }
+        if ($request->filled('area')) {
+            $areaSlugs = (array) $request->area;
+            $areas = \App\Models\Area::whereIn('slug', array_map('strtolower', $areaSlugs))->get();
+        }
+
+        if ($cityId) {
+            $city = City::find($cityId);
+        }
+
+        if ($areaId) {
+            $area = Area::find($areaId);
+        }
 
         //Filter using category               
         if (!empty($request->category)) {
@@ -81,12 +102,12 @@ class HomeController extends Controller {
         }
 
         //Filter using city
-        // if ($request->city) {
-        //     $city = City::where('slug', strtolower($request->city))->first();
-        //     if ($city) {
-        //         $properties = $properties->where('city_id', $city->id);
-        //     }
-        // }
+        if ($request->city) {
+            $city = City::where('slug', strtolower($request->city))->first();
+            if ($city) {
+                $properties = $properties->where('city_id', $city->id);
+            }
+        }
 
         //Filter using areas
         if ($request->filled('area')) {
@@ -223,7 +244,14 @@ class HomeController extends Controller {
             
         $data = [
             'properties' => $properties,   
+            'cities' => $cities,
+            'areas' => $areas,
             'users' => $users,
+            'citySelected' => $citySelected,
+            'areaSelected' => $areaSelected,
+            'selectedAreas' => $selectedAreas,
+            'area' => $area,
+            'categoryWord' => $categoryWord,
             'savedPropertyIds' => $savedPropertyIds,
             'saveCount' => $saveCount,
         ];        
