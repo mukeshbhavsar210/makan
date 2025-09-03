@@ -61,7 +61,7 @@
 	</header>	
 @endif
 
-@if(Route::is('properties') || Route::is('properties.show'))
+{{-- @if(Route::is('properties') || Route::is('properties.show'))
 <header class="control-header">
     <div id="pageLoader" class="page-loader">
         <img src="{{ asset('front-assets/images/loader.gif') }}" />    
@@ -89,7 +89,7 @@
         <div class="overlay"></div>
     </div>
 </header>
-@endif
+@endif --}}
 
 @yield('main')
 
