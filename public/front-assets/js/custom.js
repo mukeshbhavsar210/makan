@@ -614,3 +614,9 @@ $(document).on("click", ".remove-area", function (e) {
     window.location.href = window.location.pathname + "?" + params.toString();
 });
 
+
+$(function() {
+  $(".heart").on("click", function() {
+    $(this).toggleClass("is-active");
+  });
+});

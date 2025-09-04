@@ -61,14 +61,19 @@
                                 }
                             @endphp
 
-                            <p class="posted-status">{{ $timeAgo }} ago</p>
+                            <p class="posted-status">
+                                {{ $timeAgo }} @if($timeAgo !== 'Today') ago @endif
+                            </p>
+
                             <div class="media-overlay" data-bs-toggle="modal" data-bs-target="#big-modal_{{ $value->id }}"></div>
                             <div class="listing-gallery" >                                
-                                @if ($value->property_images && $value->property_images->count())
-                                    @foreach ($value->property_images->take(4) as $propertyImage)
-                                        <img src="{{ asset('uploads/property/small/'.$propertyImage->image) }}" alt="Image">
+                               @if ($value->property_images && $value->property_images->count())
+                                    @foreach ($value->property_images->whereIn('label', ['Main', 'Video', 'Elevation', 'Bedroom']) as $propertyImage)
+                                        <img src="{{ asset('uploads/property/thumb/'.$propertyImage->image) }}" alt="{{ $propertyImage->label }}" height="100" width="100">
                                     @endforeach
-                                @endif                               
+                                @else
+                                    <img src="{{ asset('admin-assets/img/default-150x150.png') }}" alt="Default" height="100" width="100">
+                                @endif
                             </div>
                         </div>
 
@@ -97,17 +102,27 @@
                                             @php
                                                 $types = json_decode($value->property_types, true) ?? [];
                                             @endphp
-                                            {{ implode(', ', array_map('ucwords', $types)) }}, {{ $value->area->name }}.
+                                            {{ implode(', ', array_map('ucwords', $types)) }}
+
+                                            @if ($value->category == 'buy')
+                                                <span class="rh-ultra-featured">Sale</span>
+                                            @else
+                                                <span class="rh-ultra-hot">Rent</span>
+                                            @endif
+
+                                            in {{ $value->area->name }}.
                                         </h5>
                                     </a>
                                 </div>
                                 <div class="right">
                                     @if(Auth::check())
-                                        @if(isset($saveCount[$value->id]) && $saveCount[$value->id])
+                                        @if(isset($saveCount[$value->id]) && $saveCount[$value->id])                                            
                                             <i class="fa-solid fa-heart saved"></i>
                                         @else
                                             <a href="javascript:void(0)" onclick="saveProperty({{ $value->id }})" class="favorite add-to-favorite user_not_logged_in rh-ui-tooltip" title="Add to favorites">
-                                                <i class="fa-regular fa-heart save-icon"></i>
+                                                <div class="stage">
+                                                    <div class="heart"></div>
+                                                </div>
                                             </a> 
                                             <div id="notification" class="notification">Saved</div>                 
                                         @endif
@@ -119,11 +134,6 @@
                                             </svg>
                                         </a>
                                     @endif
-                                    {{-- @if ($value->category == 'Rent')
-                                        <span class="rh-ultra-featured">{{ $value->category }}</span>
-                                    @else
-                                        <span class="rh-ultra-hot">{{ $value->category }}</span>
-                                    @endif --}}
                                 </div>                                                                                                 
                             </div>  
 
@@ -211,7 +221,7 @@
                             <div class="developer">
                                 <div class="branding">
                                     @if ($value->builder && $value->builder->image)
-                                        <img src="{{ asset('uploads/builder/' . $value->builder->image) }}" class="logo" >
+                                        <img src="{{ asset('uploads/developer/' . $value->builder->image) }}" class="logo" >
                                         <div class="name">
                                             <p class="builder_name">{{ $value->builder->developer_name }}</p>
                                             <p>{{ $value->user->role }}</p>  

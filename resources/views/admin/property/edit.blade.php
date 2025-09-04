@@ -1,13 +1,18 @@
 @extends('admin.layouts.app')
 
 @section('content')
+    
     <section class="content-header">
-        <div class="title-icon">
-            <a href="{{ route('properties.index') }}" class="icon-arrow"><i class="las la-arrow-circle-left"></i></a>
-            <h1>Edit Property</h1>
+        <div class="row">
+            <div class="col-md-9 col-6">
+                <h1>Edit Property</h1>
+            </div>
+            <div class="col-md-3 col-6">
+                <a href="{{ route('properties.index') }}" class="btn btn-primary pull-right">Back</a>            
+            </div>
         </div>
     </section>
-
+    
     <section>
         <form action="" method="post" id="updateJobForm" name="updateJobForm">
             <div class="card">
@@ -378,45 +383,75 @@
                     </div>
 
                     <h4 class="mt-3">Media</h4>
-                    <div id="image" class="dropzone dz-clickable mb-3">
+
+                    <div id="image" class="dropzone dz-clickable mb-4">
                         <div class="dz-message needsclick">
                             <br>Drop files here or click to upload.<br><br>
                         </div>
                     </div>
-
                     <div id="product-gallery">
+                        @php
+                            $imageCount = $propertyImage->count();
+                        @endphp
+
+                        @if ($imageCount > 0)
+                            <h4>Uploaded images <span class="badge rounded text-blue bg-blue-subtle">{{ $imageCount }}</span> </h4>
+                        @endif
+
                         @if ($propertyImage->isNotEmpty())
-                        <h6>Uploaded images</h6>
-                        <div class="row">
-                            @foreach ( $propertyImage as $image)
-                                <div class="col-md-2" id="image-row-{{ $image->id }}">
-                                    <div class="card">
-                                        <input type="hidden" name="image_array[{{ $image->id }}][id]" value="{{ $image->id }}">
-                                        <select name="image_array[{{ $image->id }}][label]" class="form-select image-label">
+                            @php
+                                $usedLabels = $propertyImage->pluck('label')->filter()->toArray(); 
+                                $labelOptions = [
+                                    'Main'      => 1,
+                                    'Video'     => 2,
+                                    'Elevation' => 3,
+                                    'Bedroom'   => 4,
+                                    'Living'    => 5,
+                                    'Balcony'   => 6,
+                                    'Amenities' => 7,
+                                    'Floor'     => 8,
+                                    'Location'  => 9,
+                                    'Cluster'   => 10,
+                                ];
+
+                                // Sort images by label mapping (default large number if no label)
+                                $sortedImages = $propertyImage->sortBy(function ($img) use ($labelOptions) {
+                                    return $labelOptions[$img->label] ?? 999; // unlabeled go to end
+                                });
+                            @endphp
+
+                            @foreach ($sortedImages as $image)
+                                <div class="media" id="image-row-{{ $image->id }}">
+                                    <input type="hidden" name="image_array[]" value="{{ $image->id }}">
+
+                                    <img src="{{ asset('uploads/property/thumb/'.$image->image) }}" class="thumb" />
+                                    
+                                    <div class="overlay">
+                                        <div class="field">
+                                            @if ($image->label && isset($labelOptions[$image->label]))
+                                                <span class="order">{{ $labelOptions[$image->label] }}</span>
+                                            @endif
+                                            <select name="image_array[{{ $image->id }}][label]" class="form-select">
                                             <option value="">Select Label</option>
-                                            <option value="Main">Main</option>
-                                            <option value="Video">Video</option>
-                                            <option value="Elevation">Elevation</option>
-                                            <option value="Bedroom">Bedroom</option>
-                                            <option value="Living">Living</option>
-                                            <option value="Balcony">Balcony</option>
-                                            <option value="Amenities">Amenities</option>
-                                            <option value="Floor">Floor</option>
-                                            <option value="Location">Location</option>
-                                            <option value="Cluster">Cluster</option> 
-                                        </select>
-                                        <img src="{{ asset('uploads/property/small/'.$image->image ) }}" />
-                                        <a href="javascript:void(0)" onclick="deleteImage({{ $image->id }})" class="deleteCardImg">X</a>
+                                                @foreach ($labelOptions as $option => $order)
+                                                    <option value="{{ $option }}"
+                                                        {{ $image->label == $option ? 'selected' : '' }}
+                                                        {{ in_array($option, $usedLabels) && $image->label !== $option ? 'disabled' : '' }}>
+                                                        {{ $option }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            <a href="javascript:void(0)" onclick="deleteImage({{ $image->id }})" class="deleteCardImg">X</a>
+                                        </div>
                                     </div>
                                 </div>
                             @endforeach
-                            </div>
                         @endif
-                    </div>                    
+                    </div>
                 </div>
 
                 <div class="card-footer">
-                    <div class="pull-right mb-3">
+                    <div class="pull-right">
                         <a href="{{ route('properties.index') }}" class="btn m-1 btn-outline-dark">Cancel</a>
                         <button type="submit" id="updateBtn" class="btn btn-primary m-1">Update</button>                         
                     </div>
@@ -536,10 +571,6 @@
         bindJsonUpdater("related_properties", "related_properties_json");
     });
 
-
-   
-       
-
     $('#title').change(function(){
         element = $(this);
         $("button[type=submit]").prop('disabled', true);
@@ -601,85 +632,69 @@
     //File image uplaod
     Dropzone.autoDiscover = false;
         const dropzone = $("#image").dropzone({
-            url: "{{ route('property-images.update') }}",
+            url:  "{{ route('property-images.update') }}",
             maxFiles: 10,
             paramName: 'image',
             params: {'property_id' : '{{ $property->id }}'},
             addRemoveLinks: true,
-            acceptedFiles: "image/jpeg,image/png,image/gif",
+            acceptedFiles: "image/jpeg,image/png,image/gif,image/avif",
+
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            success: function(file, response) {
+            }, success: function(file, response){
                 $("#image_id").val(response.image_id);
-                console.log(response);
+                console.log(response)
 
-                // Build HTML with label dropdown
-                var html = `<div class="col-md-2" id="image-row-${response.image_id}">
-                        <div class="image-container">
-                            <input type="hidden" name="image_array[${response.image_id}][id]" value="${response.image_id}">
-                            
-                            <img src="${response.ImagePath}" class="img-fluid" />
+               var html = `<div class="media" id="image-row-${response.image_id}">
+                                <input type="hidden" name="image_array[]" value="${response.image_id}" >
+                                <img src="${response.ImagePath}" class="thumb" />
 
-                            <!-- Label selection -->
-                            <select name="image_array[${response.image_id}][label]" class="form-select image-label">
-                                <option value="">Select Label</option>
-                                <option value="Main">Main</option>
-                                <option value="Video">Video</option>
-                                <option value="Elevation">Elevation</option>
-                                <option value="Bedroom">Bedroom</option>
-                                <option value="Living">Living</option>
-                                <option value="Balcony">Balcony</option>
-                                <option value="Amenities">Amenities</option>
-                                <option value="Floor">Floor</option>
-                                <option value="Location">Location</option>
-                                <option value="Cluster">Cluster</option>                        
-                            </select>
-
-                            <a href="javascript:void(0)" onclick="deleteImage(${response.image_id})" class="deleteCardImg">X</a>
-                        </div>
-                    </div>`;
+                                <div class="overlay">
+                                    <div class="field">
+                                        <select name="image_array[${response.image_id}][label]" class="form-control mt-2 image-label">
+                                            <option value="">Select Label</option>
+                                            <option value="Main">Main</option>
+                                            <option value="Video">Video</option>
+                                            <option value="Elevation">Elevation</option>
+                                            <option value="Bedroom">Bedroom</option>
+                                            <option value="Living">Living</option>
+                                            <option value="Balcony">Balcony</option>
+                                            <option value="Amenities">Amenities</option>
+                                            <option value="Floor">Floor</option>
+                                            <option value="Location">Location</option>
+                                            <option value="Cluster">Cluster</option>                        
+                                        </select>
+                                        <a href="javascript:void(0)" onclick="deleteImage(${response.image_id})" class="deleteCardImg">X</a>
+                                    </div>
+                                </div>
+                            </div>`;
 
                 $("#product-gallery").append(html);
-
-                // Attach event after adding select
-                $(".image-label").off("change").on("change", function() {
-                    enforceUniqueLabels();
-                });
             },
-            complete: function(file) {
+            complete: function(file){
                 this.removeFile(file);
             }
         });
 
-        // Function to enforce unique labels
-        function enforceUniqueLabels() {
-            let selectedLabels = [];
 
-            // Collect all selected labels
-            $(".image-label").each(function() {
-                let val = $(this).val();
-                if (val) {
-                    selectedLabels.push(val);
-                }
-            });
-
-            // Reset all options first
-            $(".image-label option").prop("disabled", false);
-
-            // Disable already selected labels in other dropdowns
-            $(".image-label").each(function() {
-                let currentVal = $(this).val();
-                selectedLabels.forEach(label => {
-                    if (label !== currentVal) {
-                        $(this).find("option[value='" + label + "']").prop("disabled", true);
-                    }
-                });
-            });
-        }
-        //Delete image
+        //Delete Images
         function deleteImage(id){
             $("#image-row-"+id).remove();
+
+            if (confirm("Are you sure you want to delete image?")) {
+                $.ajax({
+                    url: '{{ route("property-images.destroy") }}',
+                    type: 'delete',
+                    data: {id:id},
+                        success: function(response) {
+                            if(response.status == true){
+                                //alert(response.message);
+                            } else {
+                                alert(response.message);
+                            }
+                        }
+                })
+            }
         }
 </script>
 @endsection

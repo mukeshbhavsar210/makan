@@ -19,24 +19,29 @@
         <div class="row">
             <div class="col-md-8 col-12">
                 <div class="first">
-                    <h2>{{ $property->title }}</h2>
+                    <h2>{{ $property->title }}
+                        @if(Auth::check())
+                            @if($saveCount)
+                                <i class="fa-solid fa-heart saved"></i>
+                            @else
+                                <a href="javascript:void(0)" onclick="saveProperty({{ $property->id }})" class="favorite add-to-favorite user_not_logged_in rh-ui-tooltip"  title="Add to favorites">
+                                    <div class="stage">
+                                        <div class="heart"></div>
+                                    </div>
+                                </a>      
+                                <div id="notification" class="notification">Saved</div>                                         
+                            @endif
+                        @else
+                            <a href="http://127.0.0.1:8000/account/login" data-bs-toggle="modal" data-bs-target="#exampleModal" >
+                                <div class="stage">
+                                    <div class="heart"></div>
+                                </div>
+                            </a>
+                        @endif
+                    </h2>
+
                     <p>By <a href="#" class="link">{{ $property->builder->developer_name }}</a></p>
                     <p class="address">{{ $property->location }},  {{ $property->area->name }}, {{ $property->city->name }}.</p>
-                    
-                     @if(Auth::check())
-                        @if($saveCount)
-                            <i class="fa-solid fa-heart saved"></i>
-                        @else
-                            <a href="javascript:void(0)" onclick="saveProperty({{ $property->id }})" class="favorite add-to-favorite user_not_logged_in rh-ui-tooltip"  title="Add to favorites">
-                                <i class="fa-regular fa-heart save-icon"></i>
-                            </a>      
-                            <div id="notification" class="notification">Saved</div>                                         
-                        @endif
-                    @else
-                        <a href="http://127.0.0.1:8000/account/login" data-bs-toggle="modal" data-bs-target="#exampleModal" >
-                            <i class="bi bi-heart" style="color: black; font-size: 20px;"></i>
-                        </a>
-                    @endif
                 </div>
             </div>             
 
@@ -144,19 +149,19 @@
                         $total = (int) $property->total_property_images;
                         $remaining = max($total - $displayed, 0);
                     @endphp
-                   
-                    @if ($property->property_details_images->first())
-                        <div class="col-md-8 col-12">
-                            <div class="image-wrapper position-relative">
-                                <img src="{{ asset('uploads/property/large/'.$property->property_details_images->first()->image) }}" alt="Image" width="100%">
-                            </div>
+                    
+                    <div class="col-md-8 col-12">
+                        <div class="image-wrapper position-relative">
+                            @if ($property->property_details_images->first())
+                                <img src="{{ asset('uploads/property/thumb/'.$property->property_details_images->first()->image) }}" alt="Image" width="100%">
+                            @endif
                         </div>
-                    @endif
+                    </div>
 
                     <div class="col-md-4 col-12 d-flex flex-column gap-2">
                         @foreach ($property->property_details_images->slice(1, 2) as $propertyImage)
                             <div class="image-wrapper position-relative">
-                                <img src="{{ asset('uploads/property/large/'.$propertyImage->image) }}" alt="Image" width="100%">
+                                <img src="{{ asset('uploads/property/thumb/'.$propertyImage->image) }}" alt="Image" width="100%">
                                 
                                 @if ($loop->last && $remaining > 0)
                                     <div class="overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center bg-dark bg-opacity-50 text-white fw-bold fs-5">

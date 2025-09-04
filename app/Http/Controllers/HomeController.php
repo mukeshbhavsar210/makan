@@ -269,7 +269,6 @@ class HomeController extends Controller {
         $selectedAreas = $request->filled('area') ? \App\Models\Area::where('slug', $request->area)->first() : null;
         $categoryWord = null;
         
-
         $parts = explode('-', $propertyUrl);
 
         if(count($parts) < 4){
@@ -287,11 +286,8 @@ class HomeController extends Controller {
         $area = Area::where('slug', $areaSlug)->firstOrFail();
 
         // Fetch property
-        $property = Property::with(['city','area',
-                    'property_details_images' => function ($q) use ($id) {
-                        $q->where('property_id', $id)   // ensure images only for this property
-                        ->latest()
-                        ->take(3);
+        $property = Property::with(['city','area','property_details_images' => function ($q) use ($id) {
+                        $q->where('property_id', $id)->latest()->take(3);
                     },
             ])
              ->withCount([
@@ -353,6 +349,55 @@ class HomeController extends Controller {
             'categoryWord'
         ));
     }
+
+
+    //   public function propertyDetails($id){
+    //     $properties = Property::with('property_images')->first();
+    //     $property = Property::where([
+    //         'id' => $id,
+    //         'status' => 1,
+    //     ])->first();
+        
+    //     if($property == null){
+    //         abort(404);
+    //     }
+
+    //     $saveCount = 0;
+    //     if(Auth::user()){
+    //         $saveCount = SavedProperty::where([
+    //             'user_id' => Auth::user()->id,
+    //             'property_id' => $id,
+    //         ])->count();
+    //     }
+
+    //     $interestedCount = 0;
+    //     if(Auth::user()){
+    //         $interestedCount = PropertyApplication::where([
+    //             'user_id' => Auth::user()->id,
+    //             'property_id' => $id,
+    //         ])->count();
+    //     }
+
+    //     //Fetch applicants
+    //     $applications = PropertyApplication::where('property_id',$id)->with('user')->get();
+
+    //     //Related properties
+    //     $relatedProperties = [];
+    //     if ($property->related_properties != '') {
+    //         $propertyArray = explode(',',$property->related_properties);
+    //         $relatedProperties = Property::whereIn('id',$propertyArray)->where('status',1)->with('property_images')->get();
+    //     }
+      
+
+    //     $data['property'] = $property;
+    //     $data['relatedProperties'] = $relatedProperties;
+    //     $data['properties'] = $properties;
+    //     $data['applications'] = $applications;
+    //     $data['saveCount'] = $saveCount; 
+    //     $data['interestedCount'] = $interestedCount; 
+
+    //     return view('front.home.details.index',$data);       
+    // }
 
 
 
