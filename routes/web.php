@@ -28,7 +28,6 @@ Route::post("/apply-property",[HomeController::class, 'applyProperty'])->name('a
 Route::post("/save-property",[HomeController::class, 'saveProperty'])->name('saveProperty');
 Route::post("/visited-property",[HomeController::class, 'visitedProperty'])->name('visitedProperty');
 
-
 Route::get("/forgot-password",[AccountController::class, 'forgotPassword'])->name('account.forgotPassword');
 Route::post("/process-forgot-password",[AccountController::class, 'processForgotPassword'])->name('account.processForgotPassword');
 Route::get("/reset-password/{token}",[AccountController::class, 'resetPassword'])->name('account.resetPassword');
@@ -80,13 +79,6 @@ Route::group(['prefix' => 'account'], function(){
         Route::post('account/builders/save', [AccountController::class, 'update_builder'])->name('builder.save');
         Route::post("/update-password",[AccountController::class, 'update_password'])->name('password.update');
         Route::get("/logout",[AccountController::class, 'logout'])->name('account.logout');                
-
-        //Route::get('/builders', [AccountController::class, 'index_builder'])->name('builders.index');
-        Route::get('/builders/create', [AccountController::class, 'create_builder'])->name('developer.create');
-        Route::post('/builders', [AccountController::class, 'store_builder'])->name('developer.store');
-        Route::get('/builders/{id}/edit', [AccountController::class, 'edit_builder'])->name('developer.edit');
-        Route::put('/builders/{id}', [AccountController::class, 'update_builder'])->name('developer.update');
-        Route::delete('/builders/{id}', [AccountController::class, 'destroy_builder'])->name('developer.delete');
                
         //Product Route
         Route::get('/properties', [PropertyController::class, 'index'])->name('properties.index');

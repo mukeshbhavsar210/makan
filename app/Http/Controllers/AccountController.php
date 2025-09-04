@@ -3,29 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Mail\ResetPasswordEmail;
-use App\Models\Amenity;
-use App\Models\Area;
-use App\Models\Bath;
-use App\Models\Bathroom;
-use App\Models\bhk_type;
-use App\Models\Category;
-use App\Models\City;
 use App\Models\Builder;
-use App\Models\Facing;
-use App\Models\Job;
-use App\Models\JobApplication;
-use App\Models\JobType;
-use App\Models\Property;
-use App\Models\PropertyApplication;
-use App\Models\PropertyImage;
-use App\Models\PropertyType;
-use App\Models\Room;
-use App\Models\SaleType;
-use App\Models\SavedJob;
-use App\Models\SavedProperty;
-use App\Models\TempImage;
 use App\Models\User;
-use App\Models\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -36,7 +15,6 @@ use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
 use Illuminate\Support\Str;
 use Spatie\Permission\Traits\HasRoles;
-use Intervention\Image\Facades\Image;
 
 class AccountController extends Controller {
     public function index(){
@@ -69,6 +47,7 @@ class AccountController extends Controller {
             'name'   => 'required|min:5|max:30',
             'email'  => 'required|email|unique:users,email,'.$id.',id',
             'mobile' => 'required|digits:10',
+            //'image' => 'image|mimes:jpg,jpeg,png,webp|max:5120',
         ];
 
         if ($request->hasFile('image')) {
@@ -94,22 +73,23 @@ class AccountController extends Controller {
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $ext = $image->getClientOriginalExtension();
-            $imageName = $id.'-'.time().'.'.$ext;
+            $username = Str::slug($request->name);
+            $imageName = $id.'-'.$username.'-'.time().'.'.$ext;
 
             // Save main image
-            $image->move(public_path('/profile_pic/'), $imageName);
+            $image->move(public_path('/uploads/profile/'), $imageName);
 
             // Create thumbnail
-            $sourcePath = public_path('/profile_pic/'.$imageName);
+            $sourcePath = public_path('/uploads/profile/'.$imageName);
             $manager = new ImageManager(Driver::class);
             $img = $manager->read($sourcePath);
             $img->cover(150, 150);
-            $img->toPng()->save(public_path('/profile_pic/thumb/'.$imageName));
+            $img->toPng()->save(public_path('/uploads/profile/thumb/'.$imageName));
 
             // Delete old profile pic if exists
             if ($user->image) {
-                File::delete(public_path('/profile_pic/thumb/'.$user->image));
-                File::delete(public_path('/profile_pic/'.$user->image));
+                File::delete(public_path('/uploads/profile/thumb/'.$user->image));
+                File::delete(public_path('/uploads/profile/thumb/'.$user->image));
             }
 
             $user->image = $imageName;
@@ -155,31 +135,47 @@ class AccountController extends Controller {
                 'status' => false,
                 'errors' => $validator->errors()
             ]);
-        }
+        }        
 
-        $data = [
-            'developer_name'     => $request->developer_name,
-            'developer_email'    => $request->developer_email,
-            'developer_landline' => $request->developer_landline,
-            'developer_mobile'   => $request->developer_mobile,
-            'developer_whatsapp' => $request->developer_whatsapp,
-            'address'            => $request->address,
-        ];
+         // Fetch or create builder
+        $builder = Builder::firstOrNew(['user_id' => $id]);
 
-        // 👇 Handle Image Upload
+        $builder->developer_name     = $request->developer_name;
+        $builder->developer_email    = $request->developer_email;
+        $builder->developer_landline = $request->developer_landline;
+        $builder->developer_mobile   = $request->developer_mobile;
+        $builder->developer_whatsapp = $request->developer_whatsapp;
+        $builder->address            = $request->address;
+
+        // If new profile pic uploaded
         if ($request->hasFile('image')) {
-            $image      = $request->file('image');
-            $imageName  = $id . '-' . time() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('uploads/builder/'), $imageName);
+            $image     = $request->file('image');
+            $ext       = $image->getClientOriginalExtension();
+            $name      = Str::slug($request->developer_name);
+            $imageName = $id.'-'.$name.'-'.time().'.'.$ext;
 
-            $data['image'] = $imageName;
+            // Save original
+            $image->move(public_path('/uploads/developer/'), $imageName);
+
+            // Create thumbnail
+            $sourcePath = public_path('/uploads/developer/'.$imageName);
+            $manager = new ImageManager(Driver::class);
+            $img = $manager->read($sourcePath);
+            $img->cover(150, 150);
+            $img->toJpeg(80)->save(public_path('/uploads/developer/thumb/'.$imageName));
+
+            // Delete old logo if exists
+            if ($builder->image) {
+                File::delete(public_path('/uploads/developer/'.$builder->image));
+                File::delete(public_path('/uploads/developer/thumb/'.$builder->image));
+            }
+
+            // Save new logo
+            $builder->image = $imageName;
         }
 
-        // Save builder
-        $builder = Builder::updateOrCreate(
-            ['user_id' => $id],
-            $data
-        );
+        $builder->user_id = $id;
+        $builder->save();
 
         return response()->json([
             'status'  => true,

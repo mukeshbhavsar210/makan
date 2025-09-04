@@ -24,7 +24,7 @@
                         <div class="row">
                             <div class="col-md-2 mt-2">
                                 @if (Auth::user()->image != '')
-                                    <img src="{{ asset('profile_pic/thumb/'.Auth::user()->image) }}" alt="avatar" class="rounded-circle img-fluid" style="width: 200px;">
+                                    <img src="{{ asset('uploads/profile/thumb/'.Auth::user()->image) }}" alt="avatar" class="rounded-circle img-fluid" style="width: 200px;">
                                 @else
                                     <img src="{{ asset('assets/images/avatar7.png') }}" alt="avatar"  class="rounded-circle img-fluid" style="width: 50px;">
                                 @endif 
@@ -91,7 +91,7 @@
                             <div class="row">
                                 <div class="col-md-2">
                                     @if(!empty($developer) && $developer->image)
-                                        <img src="{{ asset('uploads/builder/'.$developer->image) }}" alt="Builder Image" width="120" style="display:block; margin-bottom:10px;">
+                                        <img src="{{ asset('uploads/developer/thumb/'.$developer->image) }}" alt="Builder Image" width="120" style="display:block; margin-bottom:10px;">
                                     @endif 
                                 </div>
 
@@ -313,108 +313,9 @@
 
 
 
-      //Similar property
-     $('.relatedProperty').select2({
-        ajax: {
-            url: '{{ route('property.properties') }}',
-            dataType: 'json',
-            tags: true,
-            multiple: true,
-            minimumInputLength: 3,
-            processResults: function (data) {
-                return {
-                    results: data.tags
-                };
-            }
-        }
-    });
-
-    $("#builderForm").submit(function(event){
-        event.preventDefault();
-        var element = $(this);
-        $("button[type=submit]").prop('disabled', true);
-        $.ajax({
-            url: '{{ route("developer.store") }}',
-            type: 'post',
-            data: element.serializeArray(),
-            dataType: 'json',
-            success: function(response){
-                $("button[type=submit]").prop('disabled', false);
-
-                if(response["status"] == true){
-
-                    window.location.href="{{ route('profile.index') }}"
-
-                    $('#name').removeClass('is-invalid')
-                    .siblings('p')
-                    .removeClass('invalid-feedback').html("");
-
-                } else {
-                    var errors = response['errors']
-                    if(errors['name']){
-                        $('#name').addClass('is-invalid')
-                        .siblings('p')
-                        .addClass('invalid-feedback').html(errors['name']);
-                    } else {
-                        $('#name').removeClass('is-invalid')
-                        .siblings('p')
-                        .removeClass('invalid-feedback').html("");
-                    }
-
-                }
-
-            }, error: function(jqXHR, exception) {
-                console.log("Something event wrong");
-            }
-        })
-    });
-
-
-    function deleteDeveloper(id){
-        var url = '{{ route("developer.delete","ID") }}'
-        var newUrl = url.replace("ID",id)
-
-        if(confirm("Are you sure you want to delete?")){
-            $.ajax({
-                url: newUrl,
-                type: 'delete',
-                data: {},
-                dataType: 'json',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function(response){
-                    if(response["status"]){
-                        window.location.href="{{ route('profile.index') }}"
-                    }
-                }
-            });
-        }
-    }
 
 
 
-    Dropzone.autoDiscover = false;
-    const dropzone = $("#image").dropzone({
-        init: function() {
-            this.on('addedfile', function(file) {
-                if (this.files.length > 1) {
-                    this.removeFile(this.files[0]);
-                }
-            });
-        },
-        url:  "{{ route('temp-images.create') }}",
-        maxFiles: 1,
-        paramName: 'image',
-        addRemoveLinks: true,
-        acceptedFiles: "image/jpeg,image/png,image/gif",
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }, success: function(file, response){
-            $("#image_id").val(response.image_id);
-            //console.log(response)
-        }
-    });
 
 </script>
 @endsection

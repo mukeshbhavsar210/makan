@@ -9,8 +9,6 @@ use Illuminate\Support\Str;
 class Property extends Model {
     use HasFactory;
    
-    protected $fillable = [ 'views', ];
-
     protected static function booted() {
         static::creating(function ($property) {
             $property->slug = Str::slug($property->title);

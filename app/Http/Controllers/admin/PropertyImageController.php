@@ -6,12 +6,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\PropertyImage;
 use Illuminate\Support\Facades\File;
-use Intervention\Image\Facades\Image;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
 
-class PropertyImageController extends Controller
-{
+class PropertyImageController extends Controller {
     public function update(Request $request) {
         $image = $request->file('image');
         $ext = $image->getClientOriginalExtension();
@@ -30,13 +28,13 @@ class PropertyImageController extends Controller
         $manager = new ImageManager(new Driver());
 
         // === Large Image ===
-        $destPath = public_path('uploads/property/large/'.$imageName);
+        $destPath = public_path('uploaded_media/property/large/'.$imageName);
         $large = $manager->read($sourcePath);
         $large->scale(width: 1000); // keeps aspect ratio
         $large->save($destPath);
 
         // === Small Thumbnail ===
-        $destPath = public_path('uploads/product/small/'.$imageName);
+        $destPath = public_path('uploaded_media/property/thumb/'.$imageName);
         $thumb = $manager->read($sourcePath);
         $thumb->cover(300, 300); // crop/cover to fit exactly 300x300
         $thumb->save($destPath);
@@ -44,7 +42,7 @@ class PropertyImageController extends Controller
         return response()->json([
             'status' => true,
             'image_id' => $propertyImage->id,
-            'ImagePath' => asset('uploads/product/small/'.$propertyImage->image),
+            'ImagePath' => asset('uploaded_media/property/thumb/'.$propertyImage->image),
             'message' => 'Image saved successfully'
         ]);
     }
@@ -61,8 +59,8 @@ class PropertyImageController extends Controller
         }
 
         //Delete images from folder
-        File::delete(public_path('uploads/property/large/'.$propertyImage->image));
-        File::delete(public_path('uploads/property/small/'.$propertyImage->image));
+        File::delete(public_path('uploaded_media/property/'.$propertyImage->image));
+        File::delete(public_path('uploaded_media/property/thumb/'.$propertyImage->image));
 
         //Delete images from database
         $propertyImage->delete();
@@ -72,4 +70,6 @@ class PropertyImageController extends Controller
             'message' => 'Image deleted successfully'
         ]);
     }
+
+
 }

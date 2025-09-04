@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 02, 2025 at 03:20 PM
+-- Generation Time: Sep 04, 2025 at 07:30 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -84,7 +84,7 @@ CREATE TABLE `builders` (
 INSERT INTO `builders` (`id`, `developer_name`, `related_properties`, `developer_email`, `developer_landline`, `developer_mobile`, `developer_whatsapp`, `image`, `address`, `property_id`, `created_at`, `updated_at`, `user_id`) VALUES
 (34, 'Keerthi Estate', '46,44', 'keerthi@gmail.com', '9999911111', '9999911111', '9999911111', '3-1756536979.png', 'Hyderabad, India', NULL, '2025-01-04 03:58:23', '2025-08-30 01:26:19', 4),
 (42, 'Dobariya & Company', '46,44', 'info@dobariya.com', '089-1234567', '9978812345', '9978812345', '41_Sanghani Infrastructure.png', 'Vejalpur', NULL, '2025-01-10 23:28:06', '2025-08-14 05:23:53', 2),
-(43, 'Swastik Group', '46,44', 'info@dobariya.com', '089-1234567', '9978812345', '9978812345', '41_Sanghani Infrastructure.png', 'Vejalpur', NULL, '2025-01-10 23:28:06', '2025-08-14 05:23:53', 3);
+(43, 'Swastik Group', '46,44', 'info@dobariya.com', '089-1234567', '9978812345', '9978812345', '3-swastik-group-1756906031.png', 'Vejalpur', NULL, '2025-01-10 23:28:06', '2025-09-03 07:57:11', 3);
 
 -- --------------------------------------------------------
 
@@ -231,7 +231,9 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (58, '2025_08_28_070218_add_user_id_to_builders_table', 50),
 (59, '2025_08_28_082917_add_builder_id_to_propeties_table', 51),
 (60, '2025_09_01_085703_create_visited_properties_table', 52),
-(61, '2025_09_02_123106_add_property_id_to_temp_images_table', 53);
+(61, '2025_09_02_123106_add_property_id_to_temp_images_table', 53),
+(62, '2025_09_03_095244_create_building_images_table', 54),
+(63, '2025_09_03_100520_create_property_images_table', 55);
 
 -- --------------------------------------------------------
 
@@ -320,10 +322,7 @@ INSERT INTO `properties` (`id`, `title`, `slug`, `category`, `property_types`, `
 (57, 'Navami Funique', 'navami-funique', 'rent', '[]', 'new', 'under', '[{\"id\":1,\"title\":\"2_bhk\",\"price\":\"7500000\",\"size\":\"1000\"},{\"id\":2,\"title\":\"3_bhk\",\"price\":\"9500000\",\"size\":\"1500\"}]', '[]', 3, 43, '1_year', '[]', 1, 1, NULL, 'Shlok Heights', '3 BHK Apartment', 'Ahmedabad', NULL, NULL, NULL, 5, 300, '[]', '[]', NULL, 1, '2025-08-16 05:12:07', '2025-09-01 01:46:49', 'Yes'),
 (63, 'Shlok 99 - Gota', 'shlok-99-gota', 'buy', '[\"apartment\"]', 'resale', 'under', '[{\"id\":1,\"title\":\"2_bhk\",\"price\":\"7500000\",\"size\":\"1200\"},{\"id\":2,\"title\":\"3_bhk\",\"price\":\"9500000\",\"size\":\"1500\"}]', '[\"2_baths\",\"3_baths\",\"4_baths\"]', 1, 34, '6_years', '[\"north\",\"south\"]', 1, 20, NULL, 'Shlok Heights', '3 BHK Apartment', 'Mansarovar Road', '13', NULL, '13', NULL, NULL, '[\"51\",\"53\",\"55\"]', '[]', '2025-12-31', 1, '2025-01-06 05:12:07', '2025-09-01 03:18:36', 'Yes'),
 (64, 'Om Elegance', 'om-elegance', 'buy', '[\"apartment\"]', 'resale', 'under', '[{\"id\":1,\"title\":\"2_bhk\",\"price\":\"7500000\",\"size\":\"1200\"},{\"id\":2,\"title\":\"3_bhk\",\"price\":\"9500000\",\"size\":\"1500\"}]', '[\"2_baths\",\"3_baths\",\"4_baths\"]', 1, 34, '6_years', '[\"north\",\"south\"]', 1, 1, NULL, 'Shlok Heights', '3 BHK Apartment', 'Mansarovar Road', '13', NULL, '13', NULL, NULL, '[\"51\",\"53\",\"55\"]', '[]', '2025-12-31', 1, '2025-01-06 05:12:07', '2025-09-01 03:18:36', 'Yes'),
-(65, 'Swastik Marvella', 'swastik-marvella', 'buy', '[\"apartment\"]', 'resale', 'under', '[{\"id\":1,\"title\":\"2_bhk\",\"price\":\"7500000\",\"size\":\"1200\"},{\"id\":2,\"title\":\"3_bhk\",\"price\":\"9500000\",\"size\":\"1500\"}]', '[\"2_baths\",\"3_baths\",\"4_baths\"]', 3, 42, '6_years', '[\"north\",\"south\"]', 1, 1, NULL, 'Shlok Heights', '3 BHK Apartment', 'Mansarovar Road', '13', NULL, '13', NULL, NULL, '[\"51\",\"53\",\"55\"]', '[]', '2025-12-31', 1, '2025-01-06 05:12:07', '2025-09-01 03:18:36', 'Yes'),
-(76, 'Samarthya Status', 'samarthya-status', 'buy', '[\"apartment\"]', 'new', 'under', '[{\"id\":1,\"title\":\"1_bhk\",\"price\":\"\",\"size\":\"\"},{\"id\":2,\"title\":\"2_bhk\",\"price\":\"\",\"size\":\"\"}]', '[\"1_bath\",\"2_baths\"]', 1, 42, '1_year', '[\"east\"]', 1, 1, NULL, 'test', '3 BHK Apartment', 'Mansarovar Road', 'Yes', '200', '124567', 5, 300, '[\"44\",\"57\"]', '[\"3\"]', NULL, 1, '2025-09-02 06:39:16', '2025-09-02 07:33:30', 'Yes'),
-(84, 'testing 112', 'testing-112', 'buy', '[]', 'new', 'under', '[]', '[]', 1, 42, '1_year', '[]', 1, 19, NULL, 'test', '3 BHK Apartment', 'Mansarovar Road', NULL, NULL, NULL, NULL, NULL, '[\"44\"]', '[]', NULL, 1, '2025-09-02 07:40:15', '2025-09-02 07:40:15', 'Yes'),
-(85, 'testes', 'testes', 'buy', '[]', 'new', 'under', '[]', '[]', 1, 42, '1_year', '[]', 1, 11, NULL, 'etst', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '[\"44\"]', '[]', NULL, 1, '2025-09-02 07:49:04', '2025-09-02 07:49:04', 'Yes');
+(65, 'Swastik Marvella', 'swastik-marvella', 'buy', '[\"apartment\"]', 'resale', 'under', '[{\"id\":1,\"title\":\"2_bhk\",\"price\":\"7500000\",\"size\":\"1200\"},{\"id\":2,\"title\":\"3_bhk\",\"price\":\"9500000\",\"size\":\"1500\"}]', '[\"2_baths\",\"3_baths\",\"4_baths\"]', 3, 42, '6_years', '[\"north\",\"south\"]', 1, 1, NULL, 'Shlok Heights', '3 BHK Apartment', 'Mansarovar Road', '13', NULL, '13', NULL, NULL, '[\"51\",\"53\",\"55\"]', '[]', '2025-12-31', 1, '2025-01-06 05:12:07', '2025-09-01 03:18:36', 'Yes');
 
 -- --------------------------------------------------------
 
@@ -404,10 +403,9 @@ CREATE TABLE `temp_images` (
 --
 
 INSERT INTO `temp_images` (`id`, `name`, `created_at`, `updated_at`) VALUES
-(264, '1756819103.JPG', '2025-09-02 07:48:23', '2025-09-02 07:48:23'),
-(265, '1756819105.JPG', '2025-09-02 07:48:25', '2025-09-02 07:48:25'),
-(266, '1756819108.JPG', '2025-09-02 07:48:28', '2025-09-02 07:48:28'),
-(267, '1756819110.JPG', '2025-09-02 07:48:30', '2025-09-02 07:48:30');
+(313, '1756905675.JPG', '2025-09-03 07:51:15', '2025-09-03 07:51:15'),
+(314, '1756905675.JPG', '2025-09-03 07:51:15', '2025-09-03 07:51:15'),
+(315, '1756905684.JPG', '2025-09-03 07:51:24', '2025-09-03 07:51:24');
 
 -- --------------------------------------------------------
 
@@ -437,7 +435,7 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `image`, `mobile`, `role`, `status`, `remember_token`, `created_at`, `updated_at`) VALUES
 (1, 'Mukesh Bhavsar', 'mukeshbhavsar210@gmail.com', NULL, '$2y$12$Iy5Wh1TVAkCYAvaefrR71OEKD4QDjhnnWBxknqjwnioSSM6sAJMnO', '1-1756555979.webp', '9978835005', 'Admin', 1, NULL, '2024-12-28 05:49:21', '2025-08-30 06:43:00'),
 (2, 'Sona Bhavsar', 'sona@gmail.com', NULL, '$2y$12$Iy5Wh1TVAkCYAvaefrR71OEKD4QDjhnnWBxknqjwnioSSM6sAJMnO', '', '9978835005', 'User', 1, NULL, '2024-12-28 05:49:21', '2025-01-10 23:42:25'),
-(3, 'Dhruv Bhavsar', 'dhruvbhavsar210@gmail.com', NULL, '$2y$12$Iy5Wh1TVAkCYAvaefrR71OEKD4QDjhnnWBxknqjwnioSSM6sAJMnO', '3-1756448900.JPG', '9916235005', 'User', 1, NULL, '2024-12-28 05:49:21', '2025-08-29 07:00:36'),
+(3, 'Dhruv Bhavsar', 'dhruvbhavsar210@gmail.com', NULL, '$2y$12$Iy5Wh1TVAkCYAvaefrR71OEKD4QDjhnnWBxknqjwnioSSM6sAJMnO', '3-dhruv-bhavsar-1756905892.JPG', '9916235005', 'Builder', 1, NULL, '2024-12-28 05:49:21', '2025-09-03 07:54:53'),
 (4, 'Gaurav', 'gaurav@gmail.com', NULL, '$2y$12$1SpADjHEpzBJ2OTXEQkwd.GNrM1Hrn.vGo7NyPsqXiaYBGTZwj3.C', '4-1736168601.png', '9978812345', 'Builder', 1, NULL, '2024-12-28 05:51:32', '2025-01-06 07:33:21');
 
 -- --------------------------------------------------------
@@ -619,7 +617,7 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
@@ -631,7 +629,7 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `properties`
 --
 ALTER TABLE `properties`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=86;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=109;
 
 --
 -- AUTO_INCREMENT for table `property_applications`
@@ -643,7 +641,7 @@ ALTER TABLE `property_applications`
 -- AUTO_INCREMENT for table `property_images`
 --
 ALTER TABLE `property_images`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1083;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1105;
 
 --
 -- AUTO_INCREMENT for table `saved_properties`
@@ -655,7 +653,7 @@ ALTER TABLE `saved_properties`
 -- AUTO_INCREMENT for table `temp_images`
 --
 ALTER TABLE `temp_images`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=268;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=316;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -692,7 +690,9 @@ ALTER TABLE `builders`
 ALTER TABLE `properties`
   ADD CONSTRAINT `properties_area_id_foreign` FOREIGN KEY (`area_id`) REFERENCES `areas` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `properties_builder_id_foreign` FOREIGN KEY (`builder_id`) REFERENCES `builders` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `properties_city_id_foreign` FOREIGN KEY (`city_id`) REFERENCES `cities` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `properties_city_id_foreign` FOREIGN KEY (`city_id`) REFERENCES `cities` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `properties_facing_id_foreign` FOREIGN KEY (`view_id`) REFERENCES `views` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `properties_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `property_applications`

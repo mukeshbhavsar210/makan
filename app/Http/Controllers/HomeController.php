@@ -262,8 +262,14 @@ class HomeController extends Controller {
 
 
     public function details($propertyUrl, Request $request) {
+        $cities = City::where('status',1)->get();
+        $areas = Area::where('status',1)->get();    
+        $citySelected = $request->filled('city') ? \App\Models\City::where('slug', $request->city)->first() : null;
+        $areaSelected = $request->filled('area') ? \App\Models\Area::where('slug', $request->area)->first() : null;
+        $selectedAreas = $request->filled('area') ? \App\Models\Area::where('slug', $request->area)->first() : null;
         $categoryWord = null;
-        $citySelected = $property->city ?? null;
+        
+
         $parts = explode('-', $propertyUrl);
 
         if(count($parts) < 4){
@@ -340,7 +346,11 @@ class HomeController extends Controller {
             'saveCount',
             'interestedCount',
             'applications',
+            'cities',
+            'areas',
             'citySelected',
+            'selectedAreas',
+            'categoryWord'
         ));
     }
 
