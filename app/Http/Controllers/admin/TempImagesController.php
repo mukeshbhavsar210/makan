@@ -31,6 +31,7 @@ class TempImagesController extends Controller
             $image = $manager->read($sourcePath);
             $image->cover(300,300);
             $image->save($destPath);
+            $image->toJpeg(80)->save($destPath);
 
             return response()->json([
                 'status' => true,

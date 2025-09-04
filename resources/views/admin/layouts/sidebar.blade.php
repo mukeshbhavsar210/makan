@@ -1,19 +1,19 @@
 <ul class="navbar-nav mb-auto w-100">
     <li class="nav-item">
         <a href="{{ route('properties.index') }}" class="nav-link">
-            <i class="iconoir-view-grid menu-icon"></i>
+            <i class="fa-regular fa-house side-icon"></i>
             <span>Property</span>
         </a>
     </li>
     <li class="nav-item">
         <a href="{{ route('account.myPropertyApplications') }}" class="nav-link {{ (\Request::route()->getName() == 'account.myPropertyApplications') ? 'active' : '' }}">
-            <i class="iconoir-trophy menu-icon"></i>
+            <i class="fa-regular fa-house side-icon"></i>
             <span>Interested</span>
         </a>
     </li>
     <li class="nav-item">
         <a href="{{ route('property.savedProperties') }}" class="nav-link {{ (\Request::route()->getName() == 'property.savedProperties') ? 'active' : '' }}">
-            <i class="iconoir-peace-hand menu-icon"></i>
+            <i class="fa-regular fa-floppy-disk side-icon"></i>
             <span>Saved Property</span>
         </a>
     </li> 

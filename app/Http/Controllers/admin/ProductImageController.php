@@ -4,7 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\ProductImage;
+use App\Models\PropertyImage;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
@@ -16,17 +16,17 @@ class ProductImageController extends Controller {
         $ext = $image->getClientOriginalExtension();
         $sourcePath = $image->getPathName();
 
-        $productImage = new ProductImage();
-        $productImage->product_id = $request->product_id;
+        $productImage = new PropertyImage();
+        $productImage->property_id = $request->property_id;
         $productImage->image = "NULL";
         $productImage->save();
 
-        $imageName = $request->product_id.'-'.$productImage->id.'-'.time().'.'.$ext;
+        $imageName = $request->property_id.'-'.$productImage->id.'-'.time().'.'.$ext;
         $productImage->image = $imageName;
         $productImage->save();
 
         //Large Image
-        $destPath = public_path().'/uploads/product/large/'.$imageName;
+        $destPath = public_path().'/uploads/property/'.$imageName;
         $manager = new ImageManager(new Driver());
         $image = $manager->read($sourcePath);
         $image->resize(1000, null, function ($constraint) {
@@ -35,7 +35,7 @@ class ProductImageController extends Controller {
         $image->save($destPath);
 
         //Generate Thumnail
-        $destPath = public_path().'/uploads/product/small/'.$imageName;
+        $destPath = public_path().'/uploads/property/thumb/'.$imageName;
         $manager = new ImageManager(new Driver());
         $image = $manager->read($sourcePath);
         $image->cover(300,300);
@@ -44,13 +44,13 @@ class ProductImageController extends Controller {
         return response()->json([
             'status' => true,
             'image_id' => $productImage->id,
-            'ImagePath' => asset('uploads/product/small/'.$productImage->image),
+            'ImagePath' => asset('uploads/property/thumb/'.$productImage->image),
             'message' => 'Image saved successfully'
         ]);
     }
 
     public function destroy(Request $request){
-        $productImage = ProductImage::find($request->id);
+        $productImage = PropertyImage::find($request->id);
 
         if (empty($productImage)){
             return response()->json([
@@ -60,8 +60,8 @@ class ProductImageController extends Controller {
         }
 
         //Delete images from folder
-        File::delete(public_path('uploads/product/large/'.$productImage->image));
-        File::delete(public_path('uploads/product/small/'.$productImage->image));
+        File::delete(public_path('uploads/property/'.$productImage->image));
+        File::delete(public_path('uploads/property/thumb/'.$productImage->image));
 
         //Delete images from database
         $productImage->delete();

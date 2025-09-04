@@ -2,7 +2,8 @@
     <ul class="breadcrumb">
         <li><a href="{{ route('front.home') }}">Home</a></li>                
         @php
-            $category = request()->get('category'); // keep current category
+            $category = request()->get('category');
+            $property_types = request()->get('property_types');
         @endphp
 
         @if($citySelected)
@@ -32,9 +33,13 @@
             @php
                 $category = ucfirst(request()->get('category', 'buy')); 
             @endphp
-            @if($category)
-                {{ $category }}
+
+            @if ($category == 'buy')
+                <span class="rh-ultra-featured">Rent</span>
+            @else
+                <span class="rh-ultra-hot">Sale</span>
             @endif
+            
             in 
             @if($areaSelected)
                 {{ $areaSelected->name }},    

@@ -30,9 +30,24 @@
                                         <div class="title">
                                             <div class="title-h4">
                                                 <h4>{{ $value->title }}</h4>
-                                                <ul class="share-save">
-                                                    <li><a href="#">Share</a></li>
-                                                    <li><a href="#">Save</a></li>
+
+                                                <ul class="share-save">                                                    
+                                                    @if(Auth::check())
+                                                        @if(isset($saveCount[$value->id]) && $saveCount[$value->id])                                            
+                                                            <li><a href="#">Share</a></li>
+                                                            <li><span class="btn btn-primary">Saved</span></li>
+                                                            <li><a href="javascript:void(0)" onclick="applyProperty({{ $value->id }})"  title="I'm Interested">I'm Interested</a></li>
+                                                        @else
+                                                            <li><a href="javascript:void(0)" onclick="saveProperty({{ $value->id }})" title="Save Property">Save</a></li>                                                            
+                                                        @endif
+                                                    @else
+                                                        <a href="http://127.0.0.1:8000/account/login" data-bs-toggle="modal" data-bs-target="#exampleModal" >
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                                                <path class="rh-ultra-light" d="M2.7 12.8C1.6 11.7 1 10.3 1 8.7s0.6-3 1.7-4.1C3.8 3.6 5.2 3 6.8 3c1.5 0 3 0.6 4.1 1.7 0.1 0.1 0.5 0.5 1.2 0.5 0.4 0 0.9-0.2 1.2-0.6 1.1-1.1 2.5-1.7 4-1.7s3 0.6 4.1 1.7C22.4 5.8 23 7.2 23 8.7s-0.6 3-1.7 4.1L12 21.6 2.7 12.8z"></path>
+                                                                <path class="rh-ultra-dark" d="M17.3 4c1.3 0 2.5 0.5 3.4 1.4C21.5 6.3 22 7.5 22 8.7c0 1.3-0.5 2.4-1.4 3.3L12 20.2l-8.6-8.2C2.5 11.2 2 10 2 8.7c0-1.3 0.5-2.5 1.4-3.4C4.3 4.5 5.5 4 6.7 4 8 4 9.2 4.5 10.1 5.4 10.3 5.6 11 6.2 12 6.2c0.7 0 1.4-0.3 1.9-0.8C14.8 4.5 16 4 17.3 4M17.3 2c-1.7 0-3.5 0.7-4.8 2 -0.2 0.2-0.3 0.2-0.5 0.2 -0.3 0-0.5-0.2-0.5-0.2 -1.3-1.3-3-2-4.8-2S3.3 2.7 2 4c-2.6 2.6-2.6 6.9 0 9.5L12 23l10-9.5c2.6-2.6 2.6-6.9 0-9.5C20.7 2.7 19 2 17.3 2L17.3 2z"></path>
+                                                            </svg>
+                                                        </a>
+                                                    @endif
                                                 </ul>
                                             </div>
 
@@ -118,7 +133,7 @@
                         @foreach ($sections as $id => $media)
                             @if ($media)
                                 <div id="{{ $id }}-{{ $value->id }}" class="tag flex-shrink-0 {{ $loop->first ? 'div-active' : '' }}">
-                                    <img src="{{ asset('uploads/property/large/' . $media->image) }}" class="img-fluid" alt="{{ $value->title ?? ucfirst($id) }}">
+                                    <img src="{{ asset('uploads/property/' . $media->image) }}" class="img-fluid" alt="{{ $value->title ?? ucfirst($id) }}">
                                 </div>
                             @endif
                         @endforeach

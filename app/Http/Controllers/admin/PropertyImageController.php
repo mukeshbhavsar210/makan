@@ -4,6 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Property;
 use App\Models\PropertyImage;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManager;
@@ -15,12 +16,16 @@ class PropertyImageController extends Controller {
         $ext = $image->getClientOriginalExtension();
         $sourcePath = $image->getPathname();
 
+        // Get property to fetch slug
+        $property = Property::findOrFail($request->property_id);
+
         $propertyImage = new PropertyImage();
-        $propertyImage->product_id = $request->product_id;
+        $propertyImage->property_id = $request->property_id;
         $propertyImage->image = "NULL";
         $propertyImage->save();
 
-        $imageName = $request->product_id.'-'.$propertyImage->id.'-'.time().'.'.$ext;
+        //$imageName = $request->property_id.'-'.$propertyImage->id.'-'.time().'.'.$ext;
+        $imageName = $property->slug . '_' . $property->id . '_' . time() . '.' . $ext;
         $propertyImage->image = $imageName;
         $propertyImage->save();
 
@@ -28,13 +33,14 @@ class PropertyImageController extends Controller {
         $manager = new ImageManager(new Driver());
 
         // === Large Image ===
-        $destPath = public_path('uploaded_media/property/large/'.$imageName);
+        $destPath = public_path('uploads/property/'.$imageName);
         $large = $manager->read($sourcePath);
-        $large->scale(width: 1000); // keeps aspect ratio
+        $large->cover(900, 600); // keeps aspect ratio
         $large->save($destPath);
+        $large->toJpeg(100)->save($destPath);
 
         // === Small Thumbnail ===
-        $destPath = public_path('uploaded_media/property/thumb/'.$imageName);
+        $destPath = public_path('uploads/property/thumb/'.$imageName);
         $thumb = $manager->read($sourcePath);
         $thumb->cover(300, 300); // crop/cover to fit exactly 300x300
         $thumb->save($destPath);
@@ -42,7 +48,7 @@ class PropertyImageController extends Controller {
         return response()->json([
             'status' => true,
             'image_id' => $propertyImage->id,
-            'ImagePath' => asset('uploaded_media/property/thumb/'.$propertyImage->image),
+            'ImagePath' => asset('uploads/property/thumb/'.$propertyImage->image),
             'message' => 'Image saved successfully'
         ]);
     }
@@ -59,8 +65,8 @@ class PropertyImageController extends Controller {
         }
 
         //Delete images from folder
-        File::delete(public_path('uploaded_media/property/'.$propertyImage->image));
-        File::delete(public_path('uploaded_media/property/thumb/'.$propertyImage->image));
+        File::delete(public_path('uploads/property/'.$propertyImage->image));
+        File::delete(public_path('uploads/property/thumb/'.$propertyImage->image));
 
         //Delete images from database
         $propertyImage->delete();

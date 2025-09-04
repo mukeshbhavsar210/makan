@@ -12,15 +12,11 @@ use App\Models\City;
 use App\Models\Area;
 use App\Models\Builder;
 use App\Models\PropertyApplication;
-use App\Models\PropertyDocument;
-use App\Models\View;
 use App\Models\SavedProperty;
-use App\Models\User;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
-use Illuminate\Support\Str;
 
 class PropertyController extends Controller {
 
@@ -40,7 +36,7 @@ class PropertyController extends Controller {
                 ->orderBy('created_at','DESC');
             $counts = Property::withCount('visitedUsers')->where('user_id', $user->id)
                 ->where('status', 1)
-                ->count(); // only this user's active properties
+                ->count(); 
         }
 
         // Search filter
@@ -57,7 +53,6 @@ class PropertyController extends Controller {
             'counts' => $counts,
         ]);
     }
-
 
     //CREATE PROPERTY
     public function create(){
@@ -174,10 +169,12 @@ class PropertyController extends Controller {
                         $destPath = public_path() . '/uploads/property/' . $imageName;
                         $manager = new ImageManager(new Driver());
                         $image = $manager->read($sourcePath);
-                        $image->resize(1000, 500, function ($constraint) {
+                        $image->resize(900, 600, function ($constraint) {
                             $constraint->aspectRatio();
+                            $constraint->upsize(); 
                         });
                         $image->save($destPath);
+                        $image->toJpeg(100)->save($destPath);
 
                         // Thumbnail
                         $destPath = public_path() . '/uploads/property/thumb/' . $imageName;
@@ -233,9 +230,6 @@ class PropertyController extends Controller {
         return view('admin.property.edit',$data);
     }
 
-
-
-
     public function update($id, Request $request) {
         $property = Property::findOrFail($id);
 
@@ -277,41 +271,34 @@ class PropertyController extends Controller {
         }
         $property->save();
 
-        // ✅ Handle new uploaded images
-        if (!empty($request->image_array)) {
-            foreach ($request->image_array as $imageData) {
+        //update image labels
+        $labelOrder = [
+            'Main'      => 1,
+            'Video'     => 2,
+            'Elevation' => 3,
+            'Bedroom'   => 4,
+            'Living'    => 5,
+            'Balcony'   => 6,
+            'Amenities' => 7,
+            'Floor'     => 8,
+            'Location'  => 9,
+            'Cluster'   => 10,
+        ];
 
-                // if Dropzone sent nested array like [id => , label => ]
-                $tempImageId = is_array($imageData) ? $imageData['id'] ?? null : $imageData;
-                if (!$tempImageId) continue;
+        if ($request->has('image_array')) {
+            foreach ($request->image_array as $id => $data) {
+                $propertyImage = PropertyImage::find($id);
+                if ($propertyImage) {
+                    $label = $data['label'] ?? null;
 
-                $tempImage = TempImage::find($tempImageId);
-                if (!$tempImage) continue;
+                    // Update only this image’s label + order
+                    $propertyImage->label = $label;
+                    if ($label && isset($labelOrder[$label])) {
+                        $propertyImage->order = $labelOrder[$label];
+                    }
 
-                $ext = pathinfo($tempImage->name, PATHINFO_EXTENSION);
-
-                $propertyImage = new PropertyImage();
-                $propertyImage->property_id = $property->id;
-                $propertyImage->label = $imageData['label'] ?? null;
-                $propertyImage->save();
-
-                $imageName = $property->id.'-'.$propertyImage->id.'-'.time().'.'.$ext;
-                $propertyImage->image = $imageName;
-                $propertyImage->save();
-
-                $sourcePath = public_path('temp/'.$tempImage->name);               
-
-                $manager = new ImageManager(new Driver());
-
-                // Large
-                $large = $manager->read($sourcePath);
-                $large->scale(width: 1000); 
-                $large->save(public_path('uploads/property/large/'.$imageName));
-
-                // Small
-                $small = $manager->read($sourcePath);
-                $small->cover(300, 300);
-                $small->save(public_path('uploads/property/small/'.$imageName));
+                    $propertyImage->save();
+                }
             }
         }
 
@@ -322,7 +309,6 @@ class PropertyController extends Controller {
             'message' => 'Property updated successfully'
         ]);
     }
-
 
     //DELETE PROPERTY
     public function destroy($id, Request $request){
@@ -352,7 +338,6 @@ class PropertyController extends Controller {
             'message' => 'Property deleted successfully',
         ]);
     }
-
 
     //Remove Saved Property
     public function removeSavedProperty(Request $request) {
@@ -453,7 +438,6 @@ class PropertyController extends Controller {
         ]);
     }
 
-
     public function getProducts(Request $request){
         $tempProduct = [];
         if($request->term != ""){
@@ -493,86 +477,5 @@ class PropertyController extends Controller {
             'status' => true,
         ]);
     }
-
-    //Similar Property show 
-    public function similar_amenities(Request $request){
-        $tempAmenity = [];
-        if($request->term != ""){
-            $amenities = Amenity::where('title','like','%'.$request->term.'%')->get();
-            if ($amenities != null){
-                foreach ($amenities as $value){
-                    $tempAmenity[] = array(
-                        'id' => $value->id,
-                        'text' => $value->title,
-                    );
-                }
-            }
-        }
-        return response()->json([
-            'tags' => $tempAmenity,
-            'status' => true,
-        ]);
-    }
-
-    //Similar Rooms 
-    public function similar_rooms(Request $request){
-        $tempRooms = [];
-        if($request->term != ""){
-            $rooms = Room::where('title','like','%'.$request->term.'%')->get();
-            if ($rooms != null){
-                foreach ($rooms as $value){
-                    $tempRooms[] = array(
-                        'id' => $value->id,
-                        'text' => $value->title,
-                    );
-                }
-            }
-        }
-        return response()->json([
-            'tags' => $tempRooms,
-            'status' => true,
-        ]);
-    }
-
-    //Similar Rooms 
-    public function similar_bathrooms(Request $request){
-        $tempBathrooms = [];
-        if($request->term != ""){
-            $bathrooms = Bathroom::where('title','like','%'.$request->term.'%')->get();
-            if ($bathrooms != null){
-                foreach ($bathrooms as $value){
-                    $tempBathrooms[] = array(
-                        'id' => $value->id,
-                        'text' => $value->title,
-                    );
-                }
-            }
-        }
-        return response()->json([
-            'tags' => $tempBathrooms,
-            'status' => true,
-        ]);
-    }
-
-    //Similar Facings 
-    public function similar_facings(Request $request){
-        $tempFacings = [];
-        if($request->term != ""){
-            $facings = View::where('title','like','%'.$request->term.'%')->get();
-            if ($facings != null){
-                foreach ($facings as $value){
-                    $tempFacings[] = array(
-                        'id' => $value->id,
-                        'text' => $value->title,
-                    );
-                }
-            }
-        }
-        return response()->json([
-            'tags' => $tempFacings,
-            'status' => true,
-        ]);
-    }
-
     
 }

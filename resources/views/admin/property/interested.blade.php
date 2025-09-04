@@ -55,12 +55,12 @@
                                                     $PropertyImage = $value->property->property_images->first();
                                                 @endphp
 
-                                                <a href="{{ route('property.dDetails', $value->property_id) }}" class="thumb" target="_blank">
+                                                <a href="{{ $value->url }}" class="thumb" target="_blank">
                                                     @if(Auth::user()->role == 'Admin')
                                                         <span class="property-id">{{ $value->id }}</span>
                                                     @endif
                                                     @if ($PropertyImage && !empty($PropertyImage->image))
-                                                        <img src="{{ asset('uploads/property/small/' . $PropertyImage->image) }}" height="100" width="100" class="me-2 align-self-center rounded" >                                                
+                                                        <img src="{{ asset('uploads/property/thumb/' . $PropertyImage->image) }}" height="100" width="100" class="me-2 align-self-center rounded" >                                                
                                                     @else
                                                         <img src="{{ asset('admin-assets/img/default-150x150.png') }}" alt="" height="100" class="me-2 align-self-center rounded"  />
                                                     @endif

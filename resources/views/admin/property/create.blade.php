@@ -1,13 +1,17 @@
 @extends('admin.layouts.app')
 
 @section('content')
+
     <section class="content-header">
-        <div class="title-icon">
-            <a href="{{ route('properties.index') }}" class="icon-arrow"><i class="las la-arrow-circle-left"></i></a>
-            <h1>Create Property</h1>                
-        </div>        
-    </section>
-    <!-- Main content -->
+        <div class="row">
+            <div class="col-md-9 col-6">
+                <h1>Create Property</h1>
+            </div>
+            <div class="col-md-3 col-6">
+                <a href="{{ route('properties.index') }}" class="btn btn-primary pull-right">Back</a>            
+            </div>
+        </div>
+    </section>    
 
         <form action="" method="post" id="createPropertyForm" name="createPropertyForm" >
             @csrf
@@ -639,7 +643,7 @@
                 // Build HTML with label dropdown
                 var html = `
                     <div class="col-md-3 mt-3" id="image-row-${response.image_id}">
-                        <div class="card p-2">
+                        <div class="media">
                             <input type="hidden" name="image_array[${response.image_id}][id]" value="${response.image_id}">
                             
                             <img src="${response.ImagePath}" class="img-fluid" />
@@ -661,7 +665,7 @@
 
                             <!-- Delete button -->
                             <a href="javascript:void(0)" onclick="deleteImage(${response.image_id})" 
-                            class="deleteCardImg btn btn-sm btn-danger mt-2">Remove</a>
+                            class="deleteCardImg btn btn-sm btn-danger mt-2">X</a>
                         </div>
                     </div>`;
 

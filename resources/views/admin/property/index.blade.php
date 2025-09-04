@@ -55,7 +55,8 @@
                         @if ($properties->isNotEmpty())
                             @foreach($properties as $value)
                                 @php
-                                    $PropertyImage = $value->property_images->first();
+                                    $PropertyImage = $value->property_images->where('label', 'Main')->first();
+                                    $totalImages = $value->property_images->count();
                                 @endphp
                                 <tr>
                                     <td class="px-0">
@@ -64,10 +65,13 @@
                                                 @if( Auth::user()->role == 'Admin')
                                                     <span class="property-id">{{ $value->id }}</span>
                                                 @endif
+
+                                                <span class="total-images">{{ $totalImages }}</span>
+                                                
                                                 @if (!empty($PropertyImage->image))
-                                                    <img src="{{ asset('uploads/property/small/'.$PropertyImage->image) }}" height="100" width="100" class="me-2 align-self-center rounded" >
+                                                    <img src="{{ asset('uploads/property/thumb/'.$PropertyImage->image) }}" height="120" width="120" class="me-2 align-self-center rounded" >
                                                 @else
-                                                    <img src="{{ asset('admin-assets/img/default-150x150.png') }}" alt="" height="100" class="me-2 align-self-center rounded"  />
+                                                    <img src="{{ asset('admin-assets/img/default-150x150.png') }}" alt="" height="120" class="me-2 align-self-center rounded"  />
                                                 @endif                                                
                                             </a>
                                             <div class="flex-grow-1 text-truncate"> 
