@@ -18,8 +18,8 @@
         </a>  
 
         @include('front.home.results.search') 
-        @include('front.home.results.login')
         @include('front.home.results.search_slide')
+        @include('front.home.results.login')
                     
         <div class="overlay"></div>
     </div>
