@@ -29,7 +29,7 @@
         </a>  
 
         @include('front.home.results.search') 
-        @include('front.home.results.login')
+        {{-- @include('front.home.results.login') --}}
         @include('front.home.results.search_slide')
                     
         <div class="overlay"></div>
