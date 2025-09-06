@@ -49,5 +49,9 @@ class User extends Authenticatable {
     public function builders() {
         return $this->hasMany(Builder::class);
     }
+
+    public function builder() {
+        return $this->hasOne(Builder::class, 'user_id'); 
+    }
      
 }

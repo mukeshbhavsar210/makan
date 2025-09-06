@@ -73,7 +73,8 @@ class PropertyController extends Controller {
         $user = auth()->user();
         $cities = City::orderBy('name','ASC')->where('status',1)->get();
         $areas = Area::orderBy('name','ASC')->where('status',1)->get();
-        $relatedProperties = Property::where('status',1)->get();        
+        $relatedProperties = Property::where('status',1)->get();   
+        
 
         $data = [ 
             'user' => $user,
@@ -82,6 +83,7 @@ class PropertyController extends Controller {
             'builder' => $builder,
             'builders' => $builders,
             'relatedProperties' => $relatedProperties,
+            
 
         ];
         return view('admin.property.create', $data);
@@ -120,6 +122,7 @@ class PropertyController extends Controller {
             $property->towers = $request->towers;
             $property->units = $request->units;
             $property->is_featured = $request->is_featured;            
+            $property->brokerage = $request->brokerage;
             $property->status = $request->status;  
 
             $fields = [
@@ -232,7 +235,7 @@ class PropertyController extends Controller {
 
     public function update($id, Request $request) {
         $property = Property::findOrFail($id);
-
+       
         $rules = [
             'title'       => 'required',
             'slug'        => 'required|unique:properties,slug,'.$property->id,
@@ -251,8 +254,8 @@ class PropertyController extends Controller {
         // update main fields
         $property->fill($request->only([
             'title','slug','category','sale_types','construction_types','property_age',
-            'city_id','area_id','description','keywords','location','size','rera',
-            'year_build','total_area','is_featured','status'
+            'city_id','area_id','description','keywords','location','rera',
+            'year_build','total_area','brokerage','is_featured','status'
         ]));
 
         // handle json fields
