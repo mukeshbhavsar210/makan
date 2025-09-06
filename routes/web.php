@@ -24,7 +24,7 @@ Route::get('/get-areas/{city_id}', [HomeController::class, 'getAreas']);
 
 Route::get('/properties/{category?}', [HomeController::class, 'properties'])->name('properties');
 Route::get('/properties-{propertyUrl}', [HomeController::class, 'details'])->name('properties.details');
-//Route::get("/details/{id}",[HomeController::class, 'propertyDetails'])->name('property.details.admin');
+Route::get('/properties/{category}-projects-by-{name}/{id}', [HomeController::class, 'userProperties'])->name('properties.user');
 Route::post("/apply-property",[HomeController::class, 'applyProperty'])->name('applyProperty');
 Route::post("/save-property",[HomeController::class, 'saveProperty'])->name('saveProperty');
 Route::post("/visited-property",[HomeController::class, 'visitedProperty'])->name('visitedProperty');

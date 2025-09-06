@@ -21,18 +21,19 @@
   }
 .select2-container { width:100% !important;}
 .media-row { display: flex; }
-.media { width: 18.3%; float: left; margin:10px; position: relative; }
+.media { position: relative; margin-bottom: 20px; }
 .media:hover { border-color: #666;}
 .media:hover .overlay { display: block;}
 .media .thumb { width: 100%; border-radius: 10px;}
 .media .image_flex { margin-top: 7px;}
 .media .photo_number {  background-color: var(--white);}
 .media .overlay { display: none; background: rgba(0, 0, 0, 0.5); border-radius: 10px; height:100%; width: 100%; color:#fff; font-size: 11px; position: absolute; top:0; left:0; text-align: center; padding: 15px;}
-.media .overlay .deleteCardImg { background-color: red; padding:5px 12px; border-radius: 0 5px 5px 0; color:#fff; font-size: 12px; text-align: center;}
+.media .overlay .deleteCardImg { background-color: red; padding:2px 7px; border-radius:5px; color:#fff; font-size: 11px; text-align: center; position: absolute; right:14px; top:14px;}
 .media .overlay .deleteCardImg:hover { background-color: #0d6efd; color: #fff;}
-.media .overlay .field { display: flex; position: absolute; bottom: 20px; width: 85%; }
-.media .overlay .field .order { background-color: #0d6efd; padding:5px 12px; color:#fff; font-size: 12px; text-align: center; z-index: 9; border-radius: 5px 0 0 5px;}
-.media .overlay .field .form-select {  padding: 5px 5px 5px 10px; border-radius: 0;}
+.media .overlay .new-image { background-color: #0d6efd; color: #fff; }
+.media .overlay .order { background-color: #000; padding:2px 7px; color:#fff; font-size: 11px; text-align: center; z-index: 9; border-radius:5px; position: absolute; left:14px; top:14px;}
+.media .overlay .field { display: flex; position: absolute; bottom: 15px; width: 85%; }
+.media .overlay .field .form-select { padding: 5px 5px 5px 10px; border-radius: 4px;}
 
 .side-icon { font-size: 20px;}
 

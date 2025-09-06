@@ -9,7 +9,11 @@ use Illuminate\Support\Str;
 class Property extends Model {
     use HasFactory;
 
-    protected $fillable = [ 'title', 'description', 'status', ];
+    protected $fillable = [
+        'title','slug','category','sale_types','construction_types','property_age',
+        'city_id','area_id','description','keywords','location','rera',
+        'year_build','total_area','brokerage','is_featured','status'
+    ];
    
     protected static function booted() {
         static::creating(function ($property) {
@@ -28,7 +32,7 @@ class Property extends Model {
     }    
 
     public function property_details_images() {
-        return $this->hasMany(PropertyImage::class, 'property_id', 'id')->orderBy('order', 'asc');
+        return $this->hasMany(PropertyImage::class, 'property_id', 'id')->orderBy('id', 'asc');;
     }
 
     public function city() {

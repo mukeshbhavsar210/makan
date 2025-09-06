@@ -7,7 +7,6 @@ use App\Models\City;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Area;
-use App\Models\Builder;
 use Illuminate\Support\Facades\Mail;
 use App\Models\JobApplication;
 use App\Models\PropertyApplication;
@@ -69,11 +68,12 @@ class HomeController extends Controller {
         $cityId = $request->get('city');
         $areaId = $request->get('area');
         $roomIds = $request->get('room', []);
-        $properties = Property::with('property_images')->where('status',1);                    
-        $citySelected = $request->filled('city') ? \App\Models\City::where('slug', $request->city)->first() : null;
-        $areaSelected = $request->filled('area') ? \App\Models\Area::where('slug', $request->area)->first() : null;
-        $selectedAreas = $request->filled('area') ? \App\Models\Area::where('slug', $request->area)->first() : null;
+        $properties = Property::with('property_images')->orderBy('created_at', 'desc')->where('status',1);                    
+        $citySelected = $request->filled('city') ? City::where('slug', $request->city)->first() : null;
+        $areaSelected = $request->filled('area') ? Area::where('slug', $request->area)->first() : null;
+        $selectedAreas = $request->filled('area') ? Area::where('slug', $request->area)->first() : null;
         $categoryWord = null;
+        $seenProperties = session('seen_properties', []); 
         
         $city = null;
         $areas = collect();
@@ -254,6 +254,7 @@ class HomeController extends Controller {
             'categoryWord' => $categoryWord,
             'savedPropertyIds' => $savedPropertyIds,
             'saveCount' => $saveCount,
+            'seenProperties' => $seenProperties,
         ];        
 
         return view('front.home.results.listings', $data);
@@ -264,10 +265,11 @@ class HomeController extends Controller {
     public function details($propertyUrl, Request $request) {
         $cities = City::where('status',1)->get();
         $areas = Area::where('status',1)->get();    
-        $citySelected = $request->filled('city') ? \App\Models\City::where('slug', $request->city)->first() : null;
-        $areaSelected = $request->filled('area') ? \App\Models\Area::where('slug', $request->area)->first() : null;
-        $selectedAreas = $request->filled('area') ? \App\Models\Area::where('slug', $request->area)->first() : null;
-        $categoryWord = null;
+        $properties = Property::with('property_images')->get();
+        $citySelected = $request->filled('city') ? City::where('slug', $request->city)->first() : null;
+        $areaSelected = $request->filled('area') ? Area::where('slug', $request->area)->first() : null;
+        $selectedAreas = $request->filled('area') ? Area::where('slug', $request->area)->first() : null;
+        $categoryWord = null;       
         
         $parts = explode('-', $propertyUrl);
 
@@ -301,6 +303,13 @@ class HomeController extends Controller {
             ->where('city_id', $city->id)
             ->where('area_id', $area->id)
             ->firstOrFail();
+
+        // ✅ Store seen properties in session
+        $seen = session()->get('seen_properties', []);
+        if (!in_array($property->id, $seen)) {
+            $seen[] = $property->id;
+            session()->put('seen_properties', $seen);
+        }
 
         $citySelected = $property->city;
         $selectedAreas = $property->area;
@@ -338,6 +347,7 @@ class HomeController extends Controller {
 
         return view('front.home.details.index', compact(
             'property',
+            'properties',
             'relatedProperties',
             'saveCount',
             'interestedCount',
@@ -345,59 +355,57 @@ class HomeController extends Controller {
             'cities',
             'areas',
             'citySelected',
+            'areaSelected',
             'selectedAreas',
             'categoryWord'
         ));
     }
 
 
-    //   public function propertyDetails($id){
-    //     $properties = Property::with('property_images')->first();
-    //     $property = Property::where([
-    //         'id' => $id,
-    //         'status' => 1,
-    //     ])->first();
-        
-    //     if($property == null){
-    //         abort(404);
-    //     }
+    public function userProperties($category, $name, $id, Request $request) {
+        $user = User::findOrFail($id);
 
-    //     $saveCount = 0;
-    //     if(Auth::user()){
-    //         $saveCount = SavedProperty::where([
-    //             'user_id' => Auth::user()->id,
-    //             'property_id' => $id,
-    //         ])->count();
-    //     }
+        // Get only this user's properties
+        $properties = Property::where('user_id', $id)->where('category', $category)->with('property_images')->latest()->paginate(12);
 
-    //     $interestedCount = 0;
-    //     if(Auth::user()){
-    //         $interestedCount = PropertyApplication::where([
-    //             'user_id' => Auth::user()->id,
-    //             'property_id' => $id,
-    //         ])->count();
-    //     }
+        // total property count
+        $propertyCount = Property::where('user_id', $id)->where('category', $category)->count();
 
-    //     //Fetch applicants
-    //     $applications = PropertyApplication::where('property_id',$id)->with('user')->get();
+        // Filters (if you need them later)
+        $cities = City::where('status',1)->get();
+        $areas = Area::where('status',1)->get();    
+        $citySelected = $request->filled('city') ? City::where('slug', $request->city)->first() : null;
+        $areaSelected = $request->filled('area') ? Area::where('slug', $request->area)->first() : null;
+        $selectedAreas = $request->filled('area') ? Area::where('slug', $request->area)->first() : null;
+        $categoryWord = null; 
 
-    //     //Related properties
-    //     $relatedProperties = [];
-    //     if ($property->related_properties != '') {
-    //         $propertyArray = explode(',',$property->related_properties);
-    //         $relatedProperties = Property::whereIn('id',$propertyArray)->where('status',1)->with('property_images')->get();
-    //     }
-      
+        $city = null;
+        $areas = collect();
+        $area = null;
 
-    //     $data['property'] = $property;
-    //     $data['relatedProperties'] = $relatedProperties;
-    //     $data['properties'] = $properties;
-    //     $data['applications'] = $applications;
-    //     $data['saveCount'] = $saveCount; 
-    //     $data['interestedCount'] = $interestedCount; 
+        if ($request->filled('city')) {
+            $city = \App\Models\City::where('slug', strtolower($request->city))->first();
+        }
 
-    //     return view('front.home.details.index',$data);       
-    // }
+        if ($request->filled('area')) {
+            $areaSlugs = (array) $request->area;
+            $areas = \App\Models\Area::whereIn('slug', array_map('strtolower', $areaSlugs))->get();
+        }
+
+        return view('front.home.results.user-listing', compact(
+            'user', 
+            'properties', 
+            'cities',
+            'areas',
+            'area',
+            'citySelected',
+            'areaSelected',
+            'selectedAreas',
+            'categoryWord',
+            'propertyCount',
+        ));
+    }
+
 
 
 
