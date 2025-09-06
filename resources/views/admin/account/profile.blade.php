@@ -65,6 +65,24 @@
                                             </div>
                                         </div>   
                                         @if($user->role == 'Admin')
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label for="role" class="mb-2">Are you?<span class="req">*</span></label><br />
+                                                    <div class="btn-group" role="group" aria-label="Is Role Switch">
+                                                        <input type="radio" class="btn-check" name="role" id="is_role_admin" value="user" autocomplete="off" checked="" 
+                                                        {{ old('role', $user->role ?? 'Admin') == 'Admin' ? 'checked' : '' }} >
+                                                        <label class="btn btn-outline-primary" for="is_role_admin">Admin</label>
+
+                                                        <input type="radio" class="btn-check" name="role" id="is_role_agent" value="user" autocomplete="off"  
+                                                        {{ old('role', $user->role ?? 'Agent') == 'Agent' ? 'checked' : '' }} >
+                                                        <label class="btn btn-outline-primary" for="is_role_agent">Agent</label>
+
+                                                        <input type="radio" class="btn-check" name="role" id="is_role_developer" value="builder" autocomplete="off"
+                                                        {{ old('role', $user->role ?? 'Builder') == 'Builder' ? 'checked' : '' }} >
+                                                        <label class="btn btn-outline-primary" for="is_role_developer">Developer</label>
+                                                    </div> 
+                                                </div>
+                                            </div>
                                             @else
                                             <div class="col-md-3">
                                                 <div class="form-group">

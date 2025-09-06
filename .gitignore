@@ -3,6 +3,11 @@
 /public/build
 /public/hot
 /public/storage
+/public/uploads
+/database/migrations
+/public.zip
+/PropertyTemplates
+/gallery_Building
 /storage/*.key
 /vendor
 .env.backup
