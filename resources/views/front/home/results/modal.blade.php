@@ -30,7 +30,6 @@
                                         <div class="title">
                                             <div class="title-h4">
                                                 <h4>{{ $value->title }}</h4>
-
                                                 <ul class="share-save">                                                    
                                                     @if(Auth::check())
                                                         @if(isset($saveCount[$value->id]) && $saveCount[$value->id])                                            
