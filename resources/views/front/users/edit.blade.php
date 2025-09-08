@@ -15,7 +15,7 @@
 
 <section class="section-5 bg-2">
     <div class="container-fluid">
-        @include('admin.layouts.message')
+        @include('front.layouts.message')
                 <div class="card">                    
                     <form action="" method="post" id="userFormAdmin" name="userFormAdmin">
                         <div class="card-body">

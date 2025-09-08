@@ -1,4 +1,4 @@
-@extends('admin.layouts.app')
+@extends('front.layouts.app')
 
 @section('main')
 <section class="section-5 bg-2">
@@ -6,11 +6,11 @@
         
         <div class="row">
             <div class="col-lg-3">
-                @include('admin.layouts.sidebar')
+                @include('front.layouts.sidebar')
             </div>
             <div class="col-lg-9">
 
-                @include('admin.layouts.message')
+                @include('front.layouts.message')
 
                 <div class="card border-0 shadow mb-4">
                     <form action="" method="post" id="userForm" name="userForm">

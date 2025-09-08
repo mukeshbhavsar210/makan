@@ -1,0 +1,344 @@
+@extends('front.layouts.app')
+
+@section('main')
+
+<section class="content-header">
+    <div class="container">           
+        <div class="row">
+            <div class="col-md-3 col-12">
+                @include('front.property.create.left')
+            </div>
+            <div class="col-md-9 col-12">
+                <div class="progress-right">
+                    <form action="" method="post" id="createPropertyForm" name="createPropertyForm" >
+                        @csrf
+                            <div class="tab-content" id="pills-tabContent">
+                                <div class="tab-pane fade show active" id="tab_01" role="tabpanel" aria-labelledby="pills-tab_01">
+                                    <div class="tab-content" id="pills-tabContent_2">
+                                        <div class="tab-pane fade show active" id="pills-basic" role="tabpanel" aria-labelledby="pills-tab_01">
+                                            @include('front.property.create.tab_01')                                        
+                                        </div>
+
+                                        <div class="tab-pane fade" id="pills-properties" role="tabpanel" aria-labelledby="pills-tab_02">
+                                            @include('front.property.create.tab_02')
+                                        </div>
+
+                                        <div class="tab-pane fade" id="pills-price" role="tabpanel" aria-labelledby="pills-tab_03">
+                                            @include('front.property.create.tab_03')
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+</section>
+@endsection
+
+@section('customJs')
+<script>
+    $(document).ready(function(){
+        $("form").on("submit", function(){
+            let btn = $("#createBtn");
+            btn.prop("disabled", true);              // disable button
+            btn.text("Updating Data...");            // change label
+        });
+
+
+        $(".property-types .nav-link").on("click", function () {
+            let value = $(this).data("value"); // residential or commercial
+            $("#residence_types").val(value);
+        });
+
+
+         // When clicking on Residential tab
+        $("#pills-tab_011").on("click", function () {
+            $("#is_residential").prop("checked", true).trigger("change");
+            $(".some-div").removeClass("d-none"); // remove deactive if residential
+        });
+
+        // When clicking on Commercial tab
+        $("#pills-tab_022").on("click", function () {            
+            $("#is_commercial").prop("checked", true).trigger("change");
+            $(".some-div").addClass("d-none"); // add deactive if commercial
+        });
+
+
+        $("#goToSecondTab").on("click", function(){
+            $("#pills-tab_02").tab("show"); // Open Properties tab
+        });
+
+        //Multiselect Checkbox
+        function handleMultiSelect(optionsClass, dropdownId, labelId, hiddenInputId, defaultText) {
+            $(optionsClass).on("change", function() {
+                let selectedLabels = [];
+                let selectedIds = [];
+
+                $(optionsClass + ":checked").each(function() {
+                    selectedLabels.push($(this).parent().text().trim());
+                    selectedIds.push($(this).val());
+                });
+
+                // Update dropdown button text (first 2 labels + '...' if more)
+                let displayText = "";
+                if (selectedLabels.length > 2) {
+                    displayText = selectedLabels.slice(0, 2).join(", ") + ", ...";
+                } else if (selectedLabels.length > 0) {
+                    displayText = selectedLabels.join(", ");
+                } else {
+                    displayText = defaultText;
+                }
+                $(dropdownId).text(displayText);
+
+                // Update label with count
+                $(labelId).text(selectedLabels.length ? defaultText.split(' ')[0] + " (" + selectedLabels.length + ")" : defaultText.split(' ')[0]);
+
+                // Store selected IDs in hidden input
+                $(hiddenInputId).val(selectedIds.join(","));
+            });
+        }
+
+        // Apply to your selects
+        handleMultiSelect(".room", "#room-label", "#roomCounts", "#room", "Select BHK");
+        handleMultiSelect(".bathroom", "#bathroom-label", "#bathroomCounts", "#bathroom", "Select Bathroom");
+        handleMultiSelect(".property-types", "#propertyTypes-label", "#propertyTypesCounts", "#property_types", "Select Property Types");
+        handleMultiSelect(".amenities", "#amenities-label", "#amenitiesCounts", "#amenities", "Select Amenities");
+        handleMultiSelect(".facings", "#facings-label", "#facingsCounts", "#facings", "Select Facings");
+        handleMultiSelect(".similar", "#similar-label", "#similarCounts", "#similar", "Similar Properties");
+
+
+        //Room json data
+        function updateRoomsJson() {
+            var data = [];
+            var idCounter = 1;
+
+            $('.room-option:checked').each(function() {
+                var title = $(this).val();
+                var price = $('.showCheck[data-title="' + title + '"]').val() || '';
+
+                data.push({
+                    id: idCounter,
+                    title: title,
+                    price: price
+                });
+                idCounter++;
+            });
+
+            $('#rooms_json').val(JSON.stringify(data));
+        }
+
+        $('.room-option').change(function() {
+            var title = $(this).val();
+            var input = $('.showCheck[data-title="' + title + '"]');
+            if ($(this).is(':checked')) {
+                input.show();
+            } else {
+                input.hide().val('');
+            }
+            updateRoomsJson();
+        });
+        $('.showCheck').on('input', updateRoomsJson);
+        // Initialize
+        $('.room-option').each(function() {
+            var input = $('.showCheck[data-title="' + $(this).val() + '"]');
+            $(this).is(':checked') ? input.show() : input.hide();
+        });
+        updateRoomsJson();
+
+
+        function bindJsonUpdater(checkboxClass, hiddenInputId) {
+            function updateJson() {
+                const data = $(`.${checkboxClass}:checked`).map(function () {
+                    return $(this).val();
+                }).get();
+                $(`#${hiddenInputId}`).val(JSON.stringify(data));
+            }
+
+            $(document).on("change", `.${checkboxClass}`, updateJson);
+            updateJson(); // initialize on page load
+        }
+
+        // Bind all
+        bindJsonUpdater("bathroom-option", "bathrooms_json");
+        bindJsonUpdater("property-types", "property_types_json");
+        bindJsonUpdater("amenities", "amenities_json");
+        bindJsonUpdater("facings", "facings_json");
+        bindJsonUpdater("related_properties", "related_properties_json");
+    });
+
+
+    $("#city").change(function(){
+        var city_id = $(this).val();
+        $.ajax({
+            url: '{{ route("areaSub.index") }}',            
+            type: 'get',
+            data: {city_id:city_id},
+            dataType: 'json',
+            success: function(response) {
+                $("#area").find("option").not(":first").remove();
+                $.each(response["subAreas"],function(key,item){
+                    $("#area").append(`<option value='${item.id}' >${item.name}</option>`)
+                })
+            },
+            error: function(){
+                console.log("Something went wrong")
+            }
+        });
+    })
+
+   
+    //Slug automatically add
+    $('#title').change(function(){
+        element = $(this);
+        $("button[type=submit]").prop('disabled', true);
+        $.ajax({
+            url: '{{ route("getSlug") }}',
+            type: 'get',
+            data: {title: element.val()},
+            dataType: 'json',
+            success: function(response){
+                $("button[type=submit]").prop('disabled', false);
+                if(response["status"] == true){
+                    $("#slug").val(response["slug"]);
+                }
+            }
+        });
+    })
+
+   //Product form add details in database
+    $("#createPropertyForm").submit(function(event){
+        event.preventDefault();
+
+        var formArray = $(this).serializeArray();
+        $("button[type='submit']").prop('disabled',true);
+
+        $.ajax({
+            url: '{{ route("properties.store") }}',
+            type: 'post',
+            data: formArray,
+            dataType: 'json',
+            success: function(response){
+
+                $("button[type='submit']").prop('disabled',false);
+
+                if (response['status'] == true) {
+
+                    $(".error").removeClass('invalid-feedback').html('');
+                    $("input[type='text'], select, input[type='number']").removeClass('is-invalid');
+
+                    window.location.href="{{ route('properties.index') }}";
+
+                } else {
+                    var errors = response['errors'];
+
+                    $(".error").removeClass('invalid-feedback').html('');
+                    $("input[type='text'], select, input[type='number']").removeClass('is-invalid');
+
+                    $.each(errors, function(key,value){
+                        $(`#${key}`).addClass('is-invalid')
+                        .siblings('p')
+                        .addClass('invalid-feedback')
+                        .html(value);
+                    });
+                }
+            },
+            error: function(){
+                console.log("Something went wrong")
+            }
+            // error: function(xhr, status, error){
+            //     console.log("AJAX Error:", status, error);
+            //     console.log("Response:", xhr.responseText);
+            // }
+        });
+    });
+
+    //File image uplaod
+    Dropzone.autoDiscover = false;
+        const dropzone = $("#image").dropzone({
+            url: "{{ route('temp-images.create') }}",
+            maxFiles: 10,
+            paramName: 'image',
+            addRemoveLinks: true,
+            acceptedFiles: "image/jpeg,image/png,image/gif",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(file, response) {
+                $("#image_id").val(response.image_id);
+                console.log(response);
+
+                // Build HTML with label dropdown
+                var html = `
+                    <div class="col-md-3 mt-3" id="image-row-${response.image_id}">
+                        <div class="media">
+                            <input type="hidden" name="image_array[${response.image_id}][id]" value="${response.image_id}">
+                            
+                            <img src="${response.ImagePath}" class="img-fluid" />
+
+                            <!-- Label selection -->
+                            <select name="image_array[${response.image_id}][label]" class="form-control mt-2 image-label">
+                                <option value="">Select Label</option>
+                                <option value="Main">Main</option>
+                                <option value="Video">Video</option>
+                                <option value="Elevation">Elevation</option>
+                                <option value="Bedroom">Bedroom</option>
+                                <option value="Living">Living</option>
+                                <option value="Balcony">Balcony</option>
+                                <option value="Amenities">Amenities</option>
+                                <option value="Floor">Floor</option>
+                                <option value="Location">Location</option>
+                                <option value="Cluster">Cluster</option>                        
+                            </select>
+
+                            <!-- Delete button -->
+                            <a href="javascript:void(0)" onclick="deleteImage(${response.image_id})" 
+                            class="deleteCardImg btn btn-sm btn-danger mt-2">X</a>
+                        </div>
+                    </div>`;
+
+                $("#product-gallery").append(html);
+
+                // Attach event after adding select
+                $(".image-label").off("change").on("change", function() {
+                    enforceUniqueLabels();
+                });
+            },
+            complete: function(file) {
+                this.removeFile(file);
+            }
+        });
+
+        // Function to enforce unique labels
+        function enforceUniqueLabels() {
+            let selectedLabels = [];
+
+            // Collect all selected labels
+            $(".image-label").each(function() {
+                let val = $(this).val();
+                if (val) {
+                    selectedLabels.push(val);
+                }
+            });
+
+            // Reset all options first
+            $(".image-label option").prop("disabled", false);
+
+            // Disable already selected labels in other dropdowns
+            $(".image-label").each(function() {
+                let currentVal = $(this).val();
+                selectedLabels.forEach(label => {
+                    if (label !== currentVal) {
+                        $(this).find("option[value='" + label + "']").prop("disabled", true);
+                    }
+                });
+            });
+        }
+        //Delete image
+        function deleteImage(id){
+            $("#image-row-"+id).remove();
+        }
+</script>
+
+@endsection

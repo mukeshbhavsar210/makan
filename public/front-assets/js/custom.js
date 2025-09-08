@@ -72,6 +72,7 @@ $('#big-modal').on('shown.bs.modal', function () {
     $('.center').slick('setPosition');
 });
 
+
 $('.carousalHome').slick({
     dots: false,
     infinite: true,
@@ -96,9 +97,23 @@ $('.propertyMedia').slick({
     arrows: false
 });
 
+$('.sidebar-gallery').slick({
+    centerMode: true,
+    centerPadding: '0',   // smaller padding
+    autoplay: true,
+    autoplaySpeed: 2000,
+    slidesToShow: 2,
+    slidesToScroll: 1,
+    arrows: true,
+    dots: true,
+    prevArrow: '<i class="icon-left-arrow right-arrow arrow"></i>',
+    nextArrow: '<i class="icon-right-arrow left-arrow arrow"></i>',
+    lazyLoad: 'progressive' 
+});
+
 $('.listing-gallery').slick({
     autoplay: true,
-    autoplaySpeed: 3000,
+    autoplaySpeed: 1000,
     dots: true,
     arrows: true,
 });
@@ -106,7 +121,7 @@ $('.listing-gallery').slick({
 $('.discoverProducts').slick({
     autoplay: true,
     autoplaySpeed: 2000,
-    slidesToShow: 3,
+    slidesToShow: 1,
     slidesToScroll: 1,
     arrows: true,
     prevArrow:'<i class="icon-left-arrow right-arrow arrow"></i>',

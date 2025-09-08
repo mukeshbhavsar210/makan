@@ -48,7 +48,7 @@ class PropertyController extends Controller {
         // Paginate
         $properties = $properties->paginate(10);
 
-        return view('admin.property.index', [
+        return view('front.property.index', [
             'properties' => $properties,
             'counts' => $counts,
         ]);
@@ -86,7 +86,7 @@ class PropertyController extends Controller {
             
 
         ];
-        return view('admin.property.create', $data);
+        return view('front.property.create.index', $data);
     }
 
     //STORE PROPERTY
@@ -109,7 +109,9 @@ class PropertyController extends Controller {
             $property->title = $request->title;
             $property->slug = $request->slug;            
             $property->category = $request->category;
-            $property->sale_types = $request->sale_types;            
+            $property->category = $request->category;
+            $property->sale_types = $request->sale_types;
+            $property->furnish_types = $request->furnish_types;
             $property->construction_types = $request->construction_types;
             $property->city_id = $request->city;   
             $property->area_id = $request->area;  
@@ -230,7 +232,7 @@ class PropertyController extends Controller {
         $data['propertyImage'] = $propertyImage;
         $data['relatedProperties'] = $relatedProperties; 
     
-        return view('admin.property.edit',$data);
+        return view('front.property.edit',$data);
     }
 
     public function update($id, Request $request) {
@@ -402,7 +404,7 @@ class PropertyController extends Controller {
 
         $savedProperties = $savedProperties->paginate(10);
         
-        return view('admin.property.saved',[
+        return view('front.property.saved',[
             'savedProperties' => $savedProperties,
             'counts' => $counts,            
         ]);
@@ -435,7 +437,7 @@ class PropertyController extends Controller {
         // ✅ apply paginate only once
         $interested = $interested->paginate(10);
 
-        return view('admin.property.interested', [
+        return view('front.property.interested', [
             'interested' => $interested,
             'counts'     => $counts,            
         ]);
