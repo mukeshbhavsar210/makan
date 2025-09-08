@@ -1,4 +1,4 @@
-@extends('admin.layouts.app')
+@extends('front.layouts.app')
 
 @section('content')
 
@@ -17,32 +17,320 @@
             @csrf
             <div class="card">                
                 <div class="card-body">
-                    <h4>Property</h4>
                     <div class="row">
-                        <div class="col-md-9 col-12">
-                            <div class="row">
-                                <div class="col-md-8 col-12">
-                                    <div class="form-group">
-                                        <label for="title" class="mb-1">Property name<span class="req">*</span></label>
-                                        <input type="text" placeholder="Title" id="title" name="title" class="form-control">
-                                        <input type="text" readonly name="slug" id="slug" class="form-control d-none" placeholder="Slug">
-                                        <p></p>
-                                    </div>                                    
+                        <div class="col-md-3 col-12">
+                            <div class="progress-left">
+                                <div class="card-body">
+                                    <h5>Post your property</h5>
+                                    <p>Sell or rent your property</p>
+                                    <ul class="nav nav-pills" id="pills-tab" role="tablist">
+                                        <li class="nav-item" role="presentation">
+                                            <a class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#tab_01" role="tab" aria-controls="pills-home" aria-selected="true">
+                                                <div class="status-details">
+                                                    <p class="tick"></p>
+                                                    <p class="title">Basic Details<br />
+                                                        <span class="status">Completed</span>
+                                                    </p>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <a class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#tab_02" role="tab" aria-controls="pills-profile" aria-selected="false">
+                                                <div class="status-details">
+                                                    <p class="tick"></p>
+                                                    <p class="title">Properties Details<br />
+                                                        <span class="status">Completed</span>
+                                                    </p>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <a class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#tab_03" role="tab" aria-controls="pills-contact" aria-selected="false">
+                                                <div class="status-details">
+                                                    <p class="tick"></p>
+                                                    <p class="title">Price Details<br />
+                                                        <span class="status">Completed</span>
+                                                        <span class="status">Pending</span>
+                                                    </p>
+                                                </div>                                                                                                
+                                            </a>
+                                        </li>
+                                    </ul>                                    
                                 </div>
-                                <div class="col-md-2">
-                                    <div class="form-group">
-                                        <label for="category" class="mb-1">Category<span class="req">*</span></label>
-                                        <div class="btn-group" role="group" aria-label="Is Category Switch">
-                                            <input type="radio" class="btn-check" name="category" id="is_category_buy" value="buy" autocomplete="off"
-                                                {{ (isset($property) && $property->category == 'buy') ? 'checked' : (!isset($property) ? 'checked' : '') }}>
-                                            <label class="btn btn-outline-primary" for="is_category_buy">Buy</label>
+                            </div>
+                        </div>
+                        <div class="col-md-9 col-12">
+                            <div class="tab-content" id="pills-tabContent">
+                                <div class="tab-pane fade show active" id="tab_01" role="tabpanel" aria-labelledby="pills-home-tab">
+                                    <div class="card border">
+                                        <div class="card-body p-5">
+                                            <h5 class="mb-4">Add Basic Details</h5>
 
-                                            <input type="radio" class="btn-check" name="category" id="is_category_rent" value="rent" autocomplete="off"
-                                                {{ (isset($property) && $property->category == 'rent') ? 'checked' : '' }}>
-                                            <label class="btn btn-outline-primary" for="is_category_rent">Rent</label>
-                                        </div> 
+                                            <p>Property Type</p>
+                                            <ul class="nav nav-pills property-types" id="pills-tab" role="tablist">
+                                                <li class="nav-item" role="presentation">
+                                                    <a class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Residential</a>
+                                                </li>
+                                                <li class="nav-item" role="presentation">
+                                                    <a class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Commercial</a>
+                                                </li>                                               
+                                            </ul>
+
+                                            <div class="tab-content" id="pills-tabContent">
+                                                <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                                                    <h2>Home</h2>
+                                                </div>
+
+                                                <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                                                    <h2>Profile</h2>                                                
+                                                </div>                                            
+                                            </div>
+                                                                                    
+                                            <div class="form-group">
+                                                <label for="category" class="mb-1">Looking to<span class="req">*</span></label><br />
+                                                <div class="btn-group" role="group" aria-label="Is Category Switch">
+                                                    <input type="radio" class="btn-check" name="category" id="is_category_buy" value="buy" autocomplete="off"
+                                                        {{ (isset($property) && $property->category == 'buy') ? 'checked' : (!isset($property) ? 'checked' : '') }}>
+                                                    <label class="btn btn-outline-primary" for="is_category_buy">Buy</label>
+
+                                                    <input type="radio" class="btn-check" name="category" id="is_category_rent" value="rent" autocomplete="off"
+                                                        {{ (isset($property) && $property->category == 'rent') ? 'checked' : '' }}>
+                                                    <label class="btn btn-outline-primary" for="is_category_rent">Rent</label>
+                                                </div> 
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="" class="mb-1">City<span class="req">*</span></label>
+                                                        <select name="city" id="city" class="form-select">
+                                                            <option value="">Select a City</option>
+                                                            @if ($cities->isNotEmpty())
+                                                                @foreach ($cities as $value)
+                                                                    <option value="{{ $value->id }}">{{ $value->name }}</option>
+                                                                @endforeach
+                                                            @endif
+                                                        </select>                            
+                                                    </div>
+                                                </div>  
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="" class="mb-1">Area<span class="req">*</span></label>
+                                                        <select name="area" id="area" class="form-select">
+                                                            <option value="">Select Area</option>
+                                                        </select>                        
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <a href="#" class="btn btn-primary w-100">Next, add property details</a>
+                                        </div>
                                     </div>
                                 </div>
+
+                                <div class="tab-pane fade" id="tab_02" role="tabpanel" aria-labelledby="pills-profile-tab">
+                                    <div class="card border">
+                                        <div class="card-body">
+                                            <h5>Add Property Details</h5>
+
+                                            <div class="form-group">
+                                                <label for="property_types" id="propertyTypesCounts" class="mb-1">Property Type<span class="req">*</span></label>
+
+                                                @php
+                                                    $selectedType = isset($property) ? $property->property_types : '';
+                                                @endphp
+
+                                                <div class="d-flex flex-wrap gap-2">
+                                                    <input type="radio" class="btn-check" name="property_types" id="type_apartment" value="apartment" {{ $selectedType == 'apartment' ? 'checked' : '' }}>
+                                                    <label class="btn btn-outline-primary" for="type_apartment">Apartment</label>
+
+                                                    <input type="radio" class="btn-check" name="property_types" id="type_independent_house" value="independent_house" {{ $selectedType == 'independent_house' ? 'checked' : '' }}>
+                                                    <label class="btn btn-outline-primary" for="type_independent_house">Independent<br /> House</label>
+
+                                                    <input type="radio" class="btn-check" name="property_types" id="type_independent_floor" value="independent_floor" {{ $selectedType == 'independent_floor' ? 'checked' : '' }}>
+                                                    <label class="btn btn-outline-primary" for="type_independent_floor">Independent<br /> Floor</label>
+
+                                                    <input type="radio" class="btn-check" name="property_types" id="type_plot" value="plot" {{ $selectedType == 'plot' ? 'checked' : '' }}>
+                                                    <label class="btn btn-outline-primary" for="type_plot">Plot</label>
+
+                                                    <input type="radio" class="btn-check" name="property_types" id="type_studio" value="studio" {{ $selectedType == 'studio' ? 'checked' : '' }}>
+                                                    <label class="btn btn-outline-primary" for="type_studio">Studio</label>
+
+                                                    <input type="radio" class="btn-check" name="property_types" id="type_duplex" value="duplex" {{ $selectedType == 'duplex' ? 'checked' : '' }}>
+                                                    <label class="btn btn-outline-primary" for="type_duplex">Duplex</label>
+
+                                                    <input type="radio" class="btn-check" name="property_types" id="type_pent_house" value="pent_house" {{ $selectedType == 'pent_house' ? 'checked' : '' }}>
+                                                    <label class="btn btn-outline-primary" for="type_pent_house">Pent<br /> House</label>
+
+                                                    <input type="radio" class="btn-check" name="property_types" id="type_villa" value="villa" {{ $selectedType == 'villa' ? 'checked' : '' }}>
+                                                    <label class="btn btn-outline-primary" for="type_villa">Villa</label>
+
+                                                    <input type="radio" class="btn-check" name="property_types" id="type_agricultural_land" value="agricultural_land" {{ $selectedType == 'agricultural_land' ? 'checked' : '' }}>
+                                                    <label class="btn btn-outline-primary" for="type_agricultural_land">Agricultural<br /> Land</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="title" class="mb-1">Property name<span class="req">*</span></label>
+                                                <input type="text" placeholder="Building/Project/Society" id="title" name="title" class="form-control">
+                                                <input type="text" readonly name="slug" id="slug" class="form-control d-none" placeholder="Slug">
+                                                <p></p>
+                                            </div> 
+
+                                            <div class="form-group">
+                                                <label for="location" class="mb-1">Property Location<span class="req">*</span></label>
+                                                <input type="text" placeholder="Location" id="location" name="location" class="form-control">                            
+                                            </div>
+
+                                             <div class="form-group">
+                                                <label for="room" id="roomCounts" class="mb-1">BHK, Price and Sq ft <span class="req">*</span></label>
+
+                                                @php
+                                                    $selectedRooms = isset($property) ? json_decode($property->rooms, true) ?? [] : [];
+                                                    $selectedRoomTitles = array_column($selectedRooms, 'title');
+                                                    $roomPrices = collect($selectedRooms)->mapWithKeys(fn($item) => [
+                                                        $item['title'] => $item['price'] ?? ''
+                                                    ])->toArray();
+                                                    $roomSizes = collect($selectedRooms)->mapWithKeys(fn($item) => [
+                                                        $item['title'] => $item['size'] ?? ''
+                                                    ])->toArray();
+                                                @endphp
+
+                                                <div class="row">
+                                                    @foreach (['1_rk'=>'1 RK','1_bhk'=>'1 BHK','2_bhk'=>'2 BHK','3_bhk'=>'3 BHK','4_bhk'=>'4 BHK','5_bhk'=>'5 BHK'] as $key => $label)
+                                                        <div class="col-md-3">
+                                                            <div class="card-bhk">
+                                                                <!-- Checkbox -->
+                                                                <div class="form-check">
+                                                                    <input type="checkbox" class="form-check-input room-option" id="room_{{ $key }}" name="rooms[]" value="{{ $key }}"
+                                                                        {{ in_array($key, $selectedRoomTitles) ? 'checked' : '' }}>
+                                                                    <label class="form-check-label" for="room_{{ $key }}">{{ $label }}</label>
+                                                                </div>
+
+                                                                <!-- Price input -->
+                                                                <div class="flex-grow-1">
+                                                                    <input type="text" class="form-control price showCheck"
+                                                                        placeholder="Price"
+                                                                        data-title="{{ $key }}"
+                                                                        data-field="price"
+                                                                        value="{{ $roomPrices[$key] ?? '' }}"
+                                                                        {{ in_array($key, $selectedRoomTitles) ? '' : 'disabled' }}>
+                                                                </div>
+
+                                                                <!-- Size input -->
+                                                                <div class="flex-grow-1">
+                                                                    <input type="text" class="form-control size showCheck"
+                                                                        placeholder="Sq Ft"
+                                                                        data-title="{{ $key }}"
+                                                                        data-field="size"
+                                                                        value="{{ $roomSizes[$key] ?? '' }}"
+                                                                        {{ in_array($key, $selectedRoomTitles) ? '' : 'disabled' }}>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+
+                                                <input type="hidden" name="rooms_json" id="rooms_json">
+                                            </div>
+
+                                                                            
+                                            <div class="form-group">
+                                                <label for="bathroom" id="bathroomCounts" class="mb-1">
+                                                    Bathroom <span class="req">*</span>
+                                                </label>
+                                                <div class="dropdown">
+                                                    <button class="btn btn-outline-primary dropdown-toggle w-100" type="button" id="bathroomDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        Select Bathroom
+                                                    </button>
+
+                                                    @php
+                                                        // Handle old form values or default empty
+                                                        $selectedBathrooms = old('bathrooms_json') ? json_decode(old('bathrooms_json'), true) : [];
+                                                    @endphp
+
+                                                    <ul class="dropdown-menu overflow-y w-100" aria-labelledby="bathroomDropdown">
+                                                        @foreach (['1_bath' => '1 Bath', '2_baths' => '2 Baths', '3_baths' => '3 Baths', '4_baths' => '4 Baths', '5_baths' => '5 Baths'] as $value => $label)
+                                                            <li>
+                                                                <label class="dropdown-item">
+                                                                    <input type="checkbox" class="bathroom-option" value="{{ $value }}"
+                                                                        {{ in_array($value, $selectedBathrooms) ? 'checked' : '' }}>
+                                                                    {{ $label }}
+                                                                </label>
+                                                            </li>
+                                                        @endforeach
+                                                    </ul>
+                                                </div>
+
+                                                {{-- Hidden field to hold JSON values --}}
+                                                <input type="hidden" name="bathrooms_json" id="bathrooms_json" value="{{ old('bathrooms_json') }}">
+                                            </div>
+
+                                            <div class="container">
+  <h2>Modal Example</h2>
+  <!-- Trigger the modal with a button -->
+<button id="btn" type="button"  class="btn btn-info btn-lg">Open Modal</button>
+  
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Modal Header</h4>
+          <div class="d-flex justify-content-end">
+      <button class="btn-close" aria_label="Close" data-bs-dismiss="modal" data-bs-title="Close window" data-bs-placement="right" data-bs-toggle="tooltip"></button>
+    </div>
+        </div>
+        <div class="modal-body">
+          <p>Some text in the modal.</p>
+        </div>
+        <div class="modal-footer">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+                
+                                            <div class="form-group">
+                                                <label id="amenitiesCounts">Amenities <span class="req">*</span></label>
+                                                <div class="dropdown">
+                                                    <button class="btn btn-outline-primary dropdown-toggle w-100" type="button" id="amenities-label" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        Select Amenities
+                                                    </button>
+
+                                                    @php
+                                                        // For create page, no amenities selected
+                                                        $selectedAmenities = old('amenities_json') ? json_decode(old('amenities_json'), true) : [];
+                                                    @endphp
+
+                                                    <ul class="dropdown-menu overflow-y w-100" aria-labelledby="amenities-label">
+                                                        <li><label class="dropdown-item"><input type="checkbox" class="amenities" value="1" {{ in_array("1",$selectedAmenities) ? 'checked' : '' }}> Gated Community</label></li>
+                                                        <li><label class="dropdown-item"><input type="checkbox" class="amenities" value="2" {{ in_array("2",$selectedAmenities) ? 'checked' : '' }}> Lift</label></li>
+                                                        <li><label class="dropdown-item"><input type="checkbox" class="amenities" value="3" {{ in_array("3",$selectedAmenities) ? 'checked' : '' }}> Swimming Pool</label></li>
+                                                        <li><label class="dropdown-item"><input type="checkbox" class="amenities" value="4" {{ in_array("4",$selectedAmenities) ? 'checked' : '' }}> Gym</label></li>
+                                                        <li><label class="dropdown-item"><input type="checkbox" class="amenities" value="5" {{ in_array("5",$selectedAmenities) ? 'checked' : '' }}> Security</label></li>
+                                                        <li><label class="dropdown-item"><input type="checkbox" class="amenities" value="6" {{ in_array("6",$selectedAmenities) ? 'checked' : '' }}> Parking</label></li>
+                                                        <li><label class="dropdown-item"><input type="checkbox" class="amenities" value="7" {{ in_array("7",$selectedAmenities) ? 'checked' : '' }}> Gas Pipeline</label></li>
+                                                    </ul>
+                                                </div>
+                                                <input type="hidden" name="amenities_json" id="amenities_json">
+                                            </div>
+
+                                            <a href="#" class="btn btn-primary">Next, add price details</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane fade" id="tab_03" role="tabpanel" aria-labelledby="pills-contact-tab">
+                                    <h2>Contact</h2>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                
+                               
                                 <div class="col-md-2">
                                     <div class="form-group">
                                         <label for="saletype" class="mb-1">Sale Type<span class="req">*</span></label>
@@ -58,33 +346,8 @@
                                     </div>
                                 </div>
                                 <div class="col-md-8">
-                                    <div class="form-group">
-                                        <label for="location" class="mb-1">Property Location<span class="req">*</span></label>
-                                        <input type="text" placeholder="Location" id="location" name="location" class="form-control">                            
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label for="" class="mb-1">City<span class="req">*</span></label>
-                                                <select name="city" id="city" class="form-select">
-                                                    <option value="">Select a City</option>
-                                                    @if ($cities->isNotEmpty())
-                                                        @foreach ($cities as $value)
-                                                            <option value="{{ $value->id }}">{{ $value->name }}</option>
-                                                        @endforeach
-                                                    @endif
-                                                </select>                            
-                                            </div>
-                                        </div>  
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label for="" class="mb-1">Area<span class="req">*</span></label>
-                                                <select name="area" id="area" class="form-select">
-                                                    <option value="">Select Area</option>
-                                                </select>                        
-                                            </div>
-                                        </div>
-                                    </div>
+                                    
+                                    
                                     <div class="form-group">
                                         <label for="" class="mb-1">Description<span class="req">*</span></label>
                                         <textarea class="form-control" name="description" id="description" cols="5" rows="5" placeholder="Description"></textarea>                            
@@ -193,9 +456,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="col-md-3 col-12">
+                        
                             <div class="form-group">
                                 <label>Constructions Type?</label><br />
                                 <div class="btn-group" role="group" aria-label="Is Construction Switch">
@@ -210,129 +471,7 @@
                                 <p class="error"></p>
                             </div>
 
-                            <div class="form-group">
-                                <label for="room" id="roomCounts" class="mb-1">BHK, Price and Sq ft<span class="req">*</span></label>
-                                <div class="dropdown">
-                                    <button class="btn btn-outline-primary dropdown-toggle w-100" type="button" id="roomDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Select BHK
-                                    </button>
-
-                                    @php
-                                        $selectedRooms = isset($property) ? json_decode($property->rooms, true) ?? [] : [];
-                                        $selectedRoomTitles = array_column($selectedRooms, 'title');
-                                        $roomPrices = collect($selectedRooms)->mapWithKeys(fn($item) => [
-                                            $item['title'] => $item['price'] ?? ''
-                                        ])->toArray();
-
-                                        $roomSizes = collect($selectedRooms)->mapWithKeys(fn($item) => [
-                                            $item['title'] => $item['size'] ?? ''
-                                        ])->toArray();
-                                    @endphp
-
-                                    <ul class="dropdown-menu overflow-y w-100" aria-labelledby="roomDropdown">
-                                        @foreach (['1_rk'=>'1 RK','1_bhk'=>'1 BHK','2_bhk'=>'2 BHK','3_bhk'=>'3 BHK','4_bhk'=>'4 BHK','5_bhk'=>'5 BHK'] as $key => $label)
-                                            <li>
-                                                <label class="dropdown-item addingCheckbox ">
-                                                    <div>
-                                                        <input type="checkbox" class="room-option" name="rooms[]" value="{{ $key }}"
-                                                            {{ in_array($key, $selectedRoomTitles) ? 'checked' : '' }}>
-                                                        {{ $label }}
-                                                    </div>
-                                                    <div><input type="text" class="form-control price showCheck" placeholder="Price" data-title="{{ $key }}" data-field="price" value="{{ $roomPrices[$key] ?? '' }}"></div>
-                                                    <div><input type="text" class="form-control size showCheck" placeholder="Sq Ft" data-title="{{ $key }}" data-field="size" value="{{ $roomSizes[$key] ?? '' }}"></div>
-                                                </label>
-                                            </li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                                <input type="hidden" name="rooms_json" id="rooms_json">                            
-                            </div>
-                                                               
-                            <div class="form-group">
-                                <label for="bathroom" id="bathroomCounts" class="mb-1">
-                                    Bathroom <span class="req">*</span>
-                                </label>
-                                <div class="dropdown">
-                                    <button class="btn btn-outline-primary dropdown-toggle w-100" type="button" id="bathroomDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Select Bathroom
-                                    </button>
-
-                                    @php
-                                        // Handle old form values or default empty
-                                        $selectedBathrooms = old('bathrooms_json') ? json_decode(old('bathrooms_json'), true) : [];
-                                    @endphp
-
-                                    <ul class="dropdown-menu overflow-y w-100" aria-labelledby="bathroomDropdown">
-                                        @foreach (['1_bath' => '1 Bath', '2_baths' => '2 Baths', '3_baths' => '3 Baths', '4_baths' => '4 Baths', '5_baths' => '5 Baths'] as $value => $label)
-                                            <li>
-                                                <label class="dropdown-item">
-                                                    <input type="checkbox" class="bathroom-option" value="{{ $value }}"
-                                                        {{ in_array($value, $selectedBathrooms) ? 'checked' : '' }}>
-                                                    {{ $label }}
-                                                </label>
-                                            </li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-
-                                {{-- Hidden field to hold JSON values --}}
-                                <input type="hidden" name="bathrooms_json" id="bathrooms_json" value="{{ old('bathrooms_json') }}">
-                            </div>
-  
-                            <div class="form-group">
-                                <label for="property_types" id="propertyTypesCounts" class="mb-1">
-                                    Property Type<span class="req">*</span>
-                                </label>
-                                <div class="dropdown">
-                                    <button class="btn btn-outline-primary dropdown-toggle w-100" type="button" id="propertyTypes-label" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Select Property Type
-                                    </button>
-
-                                    @php
-                                        $selectedTypes = isset($property) 
-                                            ? json_decode($property->property_types, true) ?? [] 
-                                            : [];
-                                    @endphp
-
-                                    <ul class="dropdown-menu overflow-y w-100" aria-labelledby="propertyTypes-label">
-                                        <li><label class="dropdown-item"><input type="checkbox" class="property-types" value="apartment" {{ in_array('apartment', $selectedTypes) ? 'checked' : '' }}> Apartment</label></li>
-                                        <li><label class="dropdown-item"><input type="checkbox" class="property-types" value="independent_house" {{ in_array('independent_house', $selectedTypes) ? 'checked' : '' }}> Independent House</label></li>
-                                        <li><label class="dropdown-item"><input type="checkbox" class="property-types" value="independent_floor" {{ in_array('independent_floor', $selectedTypes) ? 'checked' : '' }}> Independent Floor</label></li>
-                                        <li><label class="dropdown-item"><input type="checkbox" class="property-types" value="plot" {{ in_array('plot', $selectedTypes) ? 'checked' : '' }}> Plot</label></li>
-                                        <li><label class="dropdown-item"><input type="checkbox" class="property-types" value="studio" {{ in_array('studio', $selectedTypes) ? 'checked' : '' }}> Studio</label></li>
-                                        <li><label class="dropdown-item"><input type="checkbox" class="property-types" value="duplex" {{ in_array('duplex', $selectedTypes) ? 'checked' : '' }}> Duplex</label></li>
-                                        <li><label class="dropdown-item"><input type="checkbox" class="property-types" value="pent_house" {{ in_array('pent_house', $selectedTypes) ? 'checked' : '' }}> Pent House</label></li>
-                                        <li><label class="dropdown-item"><input type="checkbox" class="property-types" value="villa" {{ in_array('villa', $selectedTypes) ? 'checked' : '' }}> Villa</label></li>
-                                        <li><label class="dropdown-item"><input type="checkbox" class="property-types" value="agricultural_land" {{ in_array('agricultural_land', $selectedTypes) ? 'checked' : '' }}> Agricultural Land</label></li>
-                                    </ul>
-                                </div>
-                                <input type="hidden" name="property_types_json" id="property_types_json">
-                            </div>
-
-                            <div class="form-group">
-                                <label id="amenitiesCounts">Amenities <span class="req">*</span></label>
-                                <div class="dropdown">
-                                    <button class="btn btn-outline-primary dropdown-toggle w-100" type="button" id="amenities-label" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Select Amenities
-                                    </button>
-
-                                    @php
-                                        // For create page, no amenities selected
-                                        $selectedAmenities = old('amenities_json') ? json_decode(old('amenities_json'), true) : [];
-                                    @endphp
-
-                                    <ul class="dropdown-menu overflow-y w-100" aria-labelledby="amenities-label">
-                                        <li><label class="dropdown-item"><input type="checkbox" class="amenities" value="1" {{ in_array("1",$selectedAmenities) ? 'checked' : '' }}> Gated Community</label></li>
-                                        <li><label class="dropdown-item"><input type="checkbox" class="amenities" value="2" {{ in_array("2",$selectedAmenities) ? 'checked' : '' }}> Lift</label></li>
-                                        <li><label class="dropdown-item"><input type="checkbox" class="amenities" value="3" {{ in_array("3",$selectedAmenities) ? 'checked' : '' }}> Swimming Pool</label></li>
-                                        <li><label class="dropdown-item"><input type="checkbox" class="amenities" value="4" {{ in_array("4",$selectedAmenities) ? 'checked' : '' }}> Gym</label></li>
-                                        <li><label class="dropdown-item"><input type="checkbox" class="amenities" value="5" {{ in_array("5",$selectedAmenities) ? 'checked' : '' }}> Security</label></li>
-                                        <li><label class="dropdown-item"><input type="checkbox" class="amenities" value="6" {{ in_array("6",$selectedAmenities) ? 'checked' : '' }}> Parking</label></li>
-                                        <li><label class="dropdown-item"><input type="checkbox" class="amenities" value="7" {{ in_array("7",$selectedAmenities) ? 'checked' : '' }}> Gas Pipeline</label></li>
-                                    </ul>
-                                </div>
-                                <input type="hidden" name="amenities_json" id="amenities_json">
-                            </div>
+                           
 
                             <div class="form-group">
                                 <label id="facingsCounts">Facings <span class="req">*</span></label>

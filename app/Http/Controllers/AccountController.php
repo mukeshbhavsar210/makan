@@ -30,7 +30,7 @@ class AccountController extends Controller {
         $data['developer'] = $developer;
         $data['counts'] = $counts;
 
-        return view('admin.account.profile', $data);
+        return view('front.account.profile', $data);
     }
 
 
@@ -188,7 +188,7 @@ class AccountController extends Controller {
     public function processRegistration(Request $request) {
         $validator = Validator::make($request->all(),[
             'name' => 'required',
-            'email' => 'required|email',
+            'email' => 'required|email',            
             'password' => 'required|min:5|same:confirm_password',
             'confirm_password' => 'required|min:5',
         ]);
@@ -198,6 +198,7 @@ class AccountController extends Controller {
             $user->name = $request->name;
             $user->email = $request->email;
             $user->password = Hash::make($request->password);
+            $user->role = $request->role;
             $user->save();
 
             session()->flash('success','You have registed successfully.');

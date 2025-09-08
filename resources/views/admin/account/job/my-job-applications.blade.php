@@ -1,4 +1,4 @@
-@extends('admin.layouts.app')
+@extends('front.layouts.app')
 
 @section('content')
 <section class="section-5 bg-2">

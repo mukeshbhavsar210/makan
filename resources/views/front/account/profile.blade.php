@@ -1,21 +1,15 @@
 @extends('front.layouts.app')
 
-@section('content')
+@section('main')
+
 <section class="content-header">
-    <div class="container-fluid">
+    <div class="container">
         <div class="row">
             <div class="col-sm-6">
                 <h1>Profile</h1>
-            </div>
-            <div class="col-sm-6 text-right">
-                
-            </div>
+            </div>            
         </div>
-    </div>
-</section>
-
-<section>
-    <div class="container-fluid">
+    
         @include('front.layouts.message')
         <div class="row">
             <div class="col-md-9 col-12">

@@ -22,8 +22,9 @@
         </a>  
 
         @include('front.home.results.search') 
-        @include('front.home.results.login')
         @include('front.home.results.search_slide')
+
+        @include('front.layouts.login')
                     
         <div class="overlay"></div>
     </div>
@@ -41,7 +42,7 @@
     </ul>
 
     <div class="property-individuals">
-        @include('admin.layouts.message')  
+        @include('front.layouts.message')  
 
         <div class="row">
             <div class="col-md-8 col-12">

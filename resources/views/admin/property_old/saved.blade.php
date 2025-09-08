@@ -1,4 +1,4 @@
-@extends('admin.layouts.app')
+@extends('front.layouts.app')
 
 @section('content')
 
@@ -56,7 +56,7 @@
                                             <a href="{{ $value->url }}" class="thumb">
                                                 <span class="property-id">{{ $value->id }}</span>
                                                 @if ($PropertyImage && !empty($PropertyImage->image))
-                                                    <img src="{{ asset('uploads/property/small/' . $PropertyImage->image) }}"  height="100" width="100" class="me-2 align-self-center rounded" >
+                                                    <img src="{{ asset('uploads/property/thumb/' . $PropertyImage->image) }}"  height="100" width="100" class="me-2 align-self-center rounded" >
                                                 @else
                                                     <img src="{{ asset('admin-assets/img/default-150x150.png') }}" height="100" width="100" class="me-2 align-self-center rounded" >
                                                 @endif
