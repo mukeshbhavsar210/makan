@@ -58,7 +58,7 @@ class PropertyController extends Controller {
     public function create(){
         $user = auth()->user();
 
-        if ($user->role === 'User' || $user->role === 'Admin') {
+        if ($user->role === 'User' || $user->role === 'Agent' || $user->role === 'Admin') {
             $builders = Builder::orderBy('developer_name','ASC')->get();
             $builder = null;
         } elseif ($user->role === 'Builder') {
@@ -75,7 +75,6 @@ class PropertyController extends Controller {
         $areas = Area::orderBy('name','ASC')->where('status',1)->get();
         $relatedProperties = Property::where('status',1)->get();   
         
-
         $data = [ 
             'user' => $user,
             'cities' => $cities,
@@ -83,8 +82,6 @@ class PropertyController extends Controller {
             'builder' => $builder,
             'builders' => $builders,
             'relatedProperties' => $relatedProperties,
-            
-
         ];
         return view('front.property.create.index', $data);
     }
@@ -123,15 +120,14 @@ class PropertyController extends Controller {
             $property->total_area = $request->total_area;
             $property->towers = $request->towers;
             $property->units = $request->units;
-            $property->is_featured = $request->is_featured;            
-            $property->brokerage = $request->brokerage;
-            $property->status = $request->status;  
+            $property->brokerage = $request->brokerage;            
 
             $fields = [
                 'rooms_json'             => 'rooms',
                 'bathrooms_json'         => 'bathrooms',
                 'property_types_json'    => 'property_types',
                 'amenities_json'         => 'amenities',
+                'furnishing_json'        => 'furnishing',
                 'facings_json'           => 'facings',
                 'related_properties_json'=> 'related_properties',
             ];
@@ -208,6 +204,7 @@ class PropertyController extends Controller {
 
     //EDIT PROPERTY
     public function edit($id, Request $request){
+        $user = auth()->user();
         $property = Property::find($id);        
 
         if (empty($property)) {
@@ -218,22 +215,38 @@ class PropertyController extends Controller {
 
         //Fetch Product Images
         $propertyImage = PropertyImage::where('property_id',$property->id)->get()->unique('label');   
-        $areas = Area::where('city_id',$property->city_id)->get();        
+        $areas = Area::where('city_id',$property->city_id)->get();    
+        
+        if ($user->role === 'User' || $user->role === 'Agent' || $user->role === 'Admin') {
+            $builders = Builder::orderBy('developer_name','ASC')->get();
+            $builder = null;
+        } elseif ($user->role === 'Builder') {
+            $builders = collect(); 
+            $builder = Builder::where('user_id', $user->id)->first();
+        } else {
+            $builders = collect();
+            $builder = null;
+        }
 
         $data = [];
+        $user = auth()->user();
         $cities = City::orderBy('name','ASC')->get();
         $areas = Area::orderBy('name','ASC')->get();        
         $builders = Builder::orderBy('developer_name','ASC')->get();
 
+        $data['user'] = $user;
         $data['cities'] = $cities;
         $data['areas'] = $areas;
         $data['builders'] = $builders;
+        $data['builder'] = $builder;
         $data['property'] = $property;
         $data['propertyImage'] = $propertyImage;
         $data['relatedProperties'] = $relatedProperties; 
     
-        return view('front.property.edit',$data);
+        return view('front.property.edit.index',$data);
     }
+
+
 
     public function update($id, Request $request) {
         $property = Property::findOrFail($id);
@@ -241,7 +254,6 @@ class PropertyController extends Controller {
         $rules = [
             'title'       => 'required',
             'slug'        => 'required|unique:properties,slug,'.$property->id,
-            'is_featured' => 'required|in:Yes,No',
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -251,21 +263,37 @@ class PropertyController extends Controller {
                 'status' => false,
                 'errors' => $validator->errors()
             ]);
-        }
+        }        
 
         // update main fields
         $property->fill($request->only([
-            'title','slug','category','sale_types','construction_types','property_age',
-            'city_id','area_id','description','keywords','location','rera',
-            'year_build','total_area','brokerage','is_featured','status'
+            'title','slug','residence_types','category','property_types','furnish_types','sale_types','construction_types','rooms','bathrooms',
+            'user_id','property_age','facings', 'city_id','area_id','description','keywords','location','rera',
+            'year_build','total_area','towers','units','related_properties','amenities','furnishing','possession_date','brokerage','status'            
         ]));
+
+        // Handle builder separately
+        if (Auth::user()->role === 'Builder') {
+            // Always force logged-in builder
+            $builder = Builder::where('user_id', Auth::id())->first();
+            if ($builder) {
+                $property->builder_id = $builder->id;
+            }
+        } else {
+            // Admin, User, Agent → use selected dropdown value
+            if ($request->filled('builder')) {
+                $property->builder_id = $request->builder;
+            } else {
+                $property->builder_id = null; // if none selected
+            }
+        }
 
         // handle json fields
         $jsonFields = [
             'rooms_json'              => 'rooms',
             'bathrooms_json'          => 'bathrooms',
-            'property_types_json'     => 'property_types',
             'amenities_json'          => 'amenities',
+            'furnishing_json'         => 'furnishing',
             'facings_json'            => 'facings',
             'related_properties_json' => 'related_properties',
         ];
@@ -314,6 +342,8 @@ class PropertyController extends Controller {
             'message' => 'Property updated successfully'
         ]);
     }
+
+
 
     //DELETE PROPERTY
     public function destroy($id, Request $request){

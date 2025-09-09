@@ -896,33 +896,63 @@ header { position: fixed; width: 100%; top:0; left: 0; z-index: 99; background-c
 
 
 
-.progress-left { background-color: #fff; border-radius: 10px; border: 1px #ccc solid; padding: 20px 25px;}
+.progress-left { background-color: #fff; border-radius: 10px; border: 1px #ccc solid; padding: 20px 25px; position: sticky; top: 95px;}
 .progress-left .nav-pills { width: 100%;}
 .progress-left .nav-pills .nav-item { width: 100%; font-size: 13px; margin: 5px 0; }
 .progress-left .nav-pills .nav-item .nav-link { width: 100%; padding: 0; margin: 0; cursor: pointer;}
 .progress-left .nav-pills .nav-item .nav-link:hover { background: none; }
 .progress-left .nav-pills .nav-item .nav-link.active { width: 100%; background: none; }
-.progress-left .nav-pills .nav-item .nav-link.active .status-details .tick { background: rgb(54, 201, 145); }
+.progress-left .nav-pills .nav-item .nav-link.active .status-details .tick { position: relative;  }
+.progress-left .nav-pills .nav-item .nav-link.active .status-details .tick::after { background: rgb(54, 201, 145); border-color: green; position: absolute; content:""; height: 32px; width: 32px; border-radius: 100px; top:3px; left:3px; }
+.progress-left .nav-pills .status-details { display: flex; margin: 5px 0; }
+.progress-left .nav-pills .status-details .title { font-size: 13px; color: #000; margin: 0;}
+.progress-left .nav-pills .status-details .title .name { font-size: 13px; color: #000; margin: 0 0 3px 0;}
+/* .progress-left .nav-pills .status-details .title .status { font-size: 11px; color: rgb(54, 201, 145); background: rgb(213, 243, 232); border: 0px; padding:3px 10px; border-radius: 100px;} */
+.progress-left .nav-pills .status-details .tick { background-color: #fff; border: 1px #666 solid; border-radius: 100px; height: 40px; width: 40px; margin-right: 15px; margin-top: 3px;}
 
-.progress-left .nav-pills .status-details { display: flex; }
-.progress-left .nav-pills .status-details .title { margin-bottom: 5px; font-size: 13px; color: #000;}
-.progress-left .nav-pills .status-details .status { font-size: 11px; color: rgb(54, 201, 145); background: rgb(213, 243, 232); border: 0px; padding:4px 6px; border-radius: 100px;}
-.progress-left .nav-pills .status-details .tick { background-color: #ccc; border-radius: 100px; height: 35px; width: 35px; margin-right: 15px; margin-top: 3px;}
-
-.progress-right { background-color: #fff; border-radius: 10px; border: 1px #ccc solid; padding: 40px 90px;}
+.progress-right { background-color: #fff; border-radius: 10px; border: 1px #ccc solid; padding: 30px 60px;}
 .progress-right h5 { font-size: 16px; margin-bottom: 30px; font-weight: bold;}
-.progress-right .light-label { font-size: 13px; color: rgb(118, 118, 118); margin-bottom: 10px;}
+.progress-right .light-label { font-size: 13px; color: rgb(118, 118, 118); margin-bottom: 7px;}
 .progress-right .property-types { margin-bottom: 20px;}
-.progress-right .big-btn { padding: 15px; width: 100%; margin-top: 40px;}
+.progress-right .big-btn { padding: 12px; width: 100%; margin-top: 40px;}
 .progress-right .form-control, .progress-right .form-select { padding: 10px 14px; font-size: 14px;}
 .progress-right .custom .nav-link { padding: 10px 30px; border: 1px #ccc solid; margin-right: 20px; color: #666;}
-.progress-right .custom .nav-link.active { border-color: #007bff; color: #fff;}
-.progress-right .custom-radio .btn-radio { padding: 9px 30px 11px 30px; border: 1px #ccc solid; margin-right: 15px; color: #666; font-weight: normal; font-size: 14px; border-radius: 6px; cursor: pointer; }
-.progress-right .custom-radio .btn-check:checked + .btn-radio { border-color: #007bff; color: #fff; background-color: #007bff; font-weight: normal; }
+.progress-right .custom .nav-link.active { border-color: #0d6efd; color: #0d6efd;  background-color: #cfe2ff;}
+.progress-right .custom-radio .btn-radio { padding: 7px 20px 9px 20px; border: 1px #e5e5e5 solid; margin-right: 5px; color: #666; font-weight: normal; font-size: 14px; border-radius: 5px; cursor: pointer; }
+.progress-right .custom-radio .btn-radio:hover, .progress-right .custom-radio-square .btn-radio:hover { border-color: #ccc; color: #000; background-color: #f3f3f3;}
+.progress-right .custom-radio .btn-check:checked + .btn-radio { border-color: #0d6efd; color: #0d6efd; background-color: #cfe2ff; font-weight: normal; }
 .progress-right .custom-radio-square { display: flex; flex-wrap: wrap; gap: 10px; }
-.progress-right .custom-radio-square .btn-radio { display: flex; font-size: 14px; justify-content: center; text-align: center; align-items: center; min-width: 120px; min-height: 60px; padding: 10px; border: 1px solid #ccc; border-radius: 6px; cursor: pointer; line-height: 1.2; }
-.progress-right .custom-radio-square .btn-check:checked + .btn-radio { background-color: #0d6efd; color: #fff; border-color: #0d6efd; }
+.progress-right .custom-radio-square .btn-radio { display: flex; font-size: 14px; justify-content: center; text-align: center; align-items: center; min-height: 60px; padding: 5px 25px; border: 1px solid #ccc; border-radius: 5px; cursor: pointer; line-height: 1.2; color: #666; }
+.progress-right .custom-radio-square .btn-check:checked + .btn-radio { background-color: #cfe2ff; color: #0d6efd; border-color: #0d6efd; }
+.progress-right .room-wrapper .title { display: flex;}
+.progress-right .room-wrapper .custom-checkbox { margin-right: 10px;}
+.progress-right .room-wrapper .child-wrapper { border: 1px #ccc solid; padding:5px 15px; border-radius: 5px; margin-top: 5px; margin-bottom: 20px;} 
+.progress-right .room-wrapper .child-wrapper .flex-details { display: flex; margin: 8px 0;  }
+.progress-right .room-wrapper .child-wrapper .flex-details .room-title {  min-width: 45px; margin-top: 10px; font-size: 14px; color: #666;  }
+.progress-right .room-wrapper .child-wrapper .flex-details .price-details { margin-left: 10px; margin-right: 10px; }
+.progress-right .room-wrapper .title .custom-checkbox-group.active .btn-checkbox { background-color: rgb(213, 243, 232); color: green; border-color: rgb(54, 201, 145); }
 
+.progress-right .basic-link { color: #007bff; text-decoration: none; margin: 20px 0; display: block;}
+.progress-right .basic-link:hover { color: #000000; }
+.progress-right .form-group { margin-bottom: 20px;}
+
+
+.media { position: relative; margin-bottom: 20px; }
+.media:hover { border-color: #666;}
+.media:hover .overlay { display: block;}
+.media .thumb { width: 100%; border-radius: 10px;}
+.media .image_flex { margin-top: 7px;}
+.media .photo_number {  background-color: var(--white);}
+.media .overlay { display: none; background: rgba(0, 0, 0, 0.5); border-radius: 10px; height:100%; width: 100%; color:#fff; font-size: 11px; position: absolute; top:0; left:0; text-align: center; padding: 15px;}
+.media .overlay .deleteCardImg { background-color: red; padding:2px 7px; border-radius:5px; color:#fff; font-size: 11px; text-align: center; position: absolute; right:14px; top:14px;}
+.media .overlay .deleteCardImg:hover { background-color: #0d6efd; color: #fff;}
+.media .overlay .new-image { background-color: #0d6efd; color: #fff; }
+.media .overlay .order { background-color: #000; padding:2px 7px; color:#fff; font-size: 11px; text-align: center; z-index: 9; border-radius:5px; position: absolute; left:14px; top:14px;}
+.media .overlay .field { display: flex; position: absolute; bottom: 15px; width: 85%; }
+.media .overlay .field .form-select { padding: 5px 5px 5px 10px; border-radius: 4px;}
+
+.child-div { display: none; }
+.child-div.active { display: block; }
 /* Custom box */
 .custom-checkbox .checkmark {
   position: absolute;
@@ -967,7 +997,7 @@ header { position: fixed; width: 100%; top:0; left: 0; z-index: 99; background-c
 .custom-checkbox {
     position: relative;
     display: inline-block;
-    margin: 5px;
+    margin-right:5px;
     cursor: pointer;
 }
 
@@ -975,21 +1005,19 @@ header { position: fixed; width: 100%; top:0; left: 0; z-index: 99; background-c
     display: none; /* Hide default checkbox */
 }
 
-.btn-checkbox {
-    display: inline-block;
-    padding: 8px 16px;
-    border: 1px solid #cccccc;
-    border-radius: 6px;
-    background: #fff;
-    color: #666666;
-    font-size: 14px;
-    font-weight: 500;
-    transition: all 0.2s ease-in-out;
-}
+.btn-checkbox { display: inline-block; padding: 8px 16px; border: 1px solid #e5e5e5; border-radius: 5px; background: #fff; color: #666666; font-size: 14px; font-weight: 500; transition: all 0.2s ease-in-out;}
+.btn-checkbox:hover { border-color: #ccc; background-color: #f3f3f3; color: #000;}
 
 /* Checked (active) state */
 .custom-checkbox input[type="checkbox"]:checked + .btn-checkbox {
-    background: #007bff; border-color: #007bff;
-    color: #fff;
+    background: #cfe2ff; border-color: #007bff;
+    color: #007bff;
 }
 
+
+/* .status { background-color: rgb(213, 243, 232); color: green; border: 1px solid rgb(54, 201, 145); display: inline-block; padding: 2px 8px 4px 8px; border-radius: 3px; font-size: 12px;} */
+
+
+.progress-left .step-bar li.pending .status-details .status { background: #e0e0e0; color: #555; }
+.progress-left .step-bar li.in-progress .status-details .status { background: #ffc107; color: #000; }
+.progress-left .step-bar li.completed .status-details .status { background: #28a745; color: #fff; }

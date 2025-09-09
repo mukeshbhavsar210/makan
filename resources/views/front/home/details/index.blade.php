@@ -142,7 +142,7 @@
                                     <h3>Contact Seller</h3>
                                         <div class="logo-details">
                                             <div class="logo">
-                                                <img alt="" src="{{ asset('uploads/builder/'.$property->builder->logo) }}" >
+                                                <img alt="" src="{{ asset('uploads/developer/thumb/'.$property->builder->logo) }}" >
                                             </div>
                                             <div class="details-modal">
                                                 <h4>{{ $property->builder->name }}</h4>
