@@ -1,5 +1,130 @@
 $(document).ready(function(){
 
+    //Progress bar
+    function isFilled(el) {
+        let $el = $(el);
+        let type = $el.attr("type");
+        let tag = $el.prop("tagName").toLowerCase();
+
+        if (tag === "textarea" || type === "text" || type === "email" || type === "number") {
+            return $el.val().trim() !== "";
+        }
+        if (tag === "select") {
+            return $el.val() !== "" && $el.val() !== null;
+        }
+        if (type === "radio" || type === "checkbox") {
+            let name = $el.attr("name");
+            return $("input[name='" + name + "']:checked").length > 0;
+        }
+        return false;
+    }
+
+    function updateProgress() {
+        let totalSteps = $(".form-section").length;
+        let completedSteps = 0;
+
+        $(".form-section").each(function () {
+            let step = $(this).data("step");
+            let inputs = $(this).find(".required-field");
+            let groups = $(this).find(".required-group");
+            let filledCount = 0;
+
+            // Count filled fields
+            inputs.each(function () {
+                if (isFilled(this)) filledCount++;
+            });
+
+            // Count groups with at least one checked
+            groups.each(function () {
+                if ($(this).find("input:checked").length > 0) filledCount++;
+            });
+
+            // Step-bar class update
+            if (filledCount === 0) {
+                $("#step-" + step).removeClass().addClass("pending");
+            } else if (filledCount < inputs.length + groups.length) {
+                $("#step-" + step).removeClass().addClass("in-progress");
+            } else {
+                $("#step-" + step).removeClass().addClass("completed");
+            }
+
+            // Increment completedSteps if section has at least one filled
+            if (filledCount > 0) completedSteps++;
+        });
+
+        // Dropzone files count (if any)
+        if (typeof dropzone !== "undefined" && dropzone[0].dropzone.files.length > 0) {
+            completedSteps++;
+        }
+
+        // Percentage calculation
+        let percent = (completedSteps / totalSteps) * 100;
+        $(".progress-bar").css("width", percent + "%").text(Math.round(percent) + "%");
+    }
+
+    // Bind inputs to update progress dynamically
+    $(document).on("input change", ".required-field, .required-group input", updateProgress);
+
+    // Initial call on page load to account for pre-selected/default fields
+    updateProgress();
+
+
+
+
+
+
+
+
+        
+        $(".property-types .nav-link").on("click", function () {
+            let value = $(this).data("value"); // residential or commercial
+            $("#residence_types").val(value);
+        });
+
+
+       $("input[name='residence_types']").on("change", function (e) {
+            e.preventDefault();   // stop form submission
+            e.stopPropagation();  // stop bubbling if any parent is listening
+
+            if ($(this).val() === "residential") {
+                $(".residenceProperty").removeClass("d-none");
+                $(".commercialProperty").addClass("d-none");
+            } else {
+                $(".residenceProperty").addClass("d-none");
+                $(".commercialProperty").removeClass("d-none");
+            }
+        });
+
+        //BHK on
+        $(document).on("change", ".room-option", function () {
+            let target = $($(this).data("target"));
+            if ($(this).is(":checked")) {
+                target.addClass("active");
+                $(".child-wrapper").removeClass("d-none");
+            } else {
+                target.removeClass("active");
+            }
+        });
+
+        $(document).on("input", ".price, .size", function () {
+            let key = $(this).data("title"); // e.g. 1_bhk
+            let parentGroup = $("#heading_" + key); // parent checkbox group
+            let priceVal = $(".price[data-title='" + key + "']").val().trim();
+            let sizeVal  = $(".size[data-title='" + key + "']").val().trim();
+
+            if (priceVal !== "" || sizeVal !== "") {
+                parentGroup.addClass("active");
+                $("#room_" + key).prop("checked", true); // ✅ also check the box automatically
+            } else {
+                parentGroup.removeClass("active");
+                $("#room_" + key).prop("checked", false); // ✅ uncheck if both empty
+            }
+        });
+
+        
+
+
+
     $('[data-bs-toggle="tooltip"]').tooltip();
     
     setTimeout(function() {
@@ -480,11 +605,12 @@ filters.forEach(f => {
 });
 
 //Main filters
-$(document).on('change', 'input[name="saletype"], input[name="posted_by"], input[name="construction"], input[name="age"], input[name="property_type[]"], input[name="room[]"], input[name="bathroom[]"], input[name="listed_type[]"], input[name="area[]"], input[name="amenities[]"], input[name="facing[]"]', function () {
+$(document).on('change', 'input[name="saletype"], input[name="residence_types"],  input[name="posted_by"], input[name="construction"], input[name="age"], input[name="property_type[]"], input[name="room[]"], input[name="bathroom[]"], input[name="listed_type[]"], input[name="area[]"], input[name="amenities[]"], input[name="furnishing[]"], input[name="facing[]"]', function () {
     let params = new URLSearchParams(window.location.search);
 
     // Clear old params (so unchecked values don’t remain in URL)
     params.delete('saletype');
+    params.delete('residence_types');
     params.delete('construction');
     params.delete('age');
     params.delete('property_type[]');
@@ -493,12 +619,16 @@ $(document).on('change', 'input[name="saletype"], input[name="posted_by"], input
     params.delete('listed_type[]');    
     params.delete('area[]');
     params.delete('facing[]');
-    params.delete('amenities[]');    
+    params.delete('amenities[]');
+    params.delete('furnishing[]');
     params.delete('posted_by');
 
     // ✅ Single-select fields
     let saleTypeChecked = $('input[name="saletype"]:checked');
     if (saleTypeChecked.length) params.set('saletype', saleTypeChecked.val());
+
+    let residenceTypeChecked = $('input[name="residence_types"]:checked');
+    if (saleTypeChecked.length) params.set('residence_types', residenceTypeChecked.val());
 
     let constructionChecked = $('input[name="construction"]:checked');
     if (constructionChecked.length) params.set('construction', constructionChecked.val());
@@ -538,6 +668,10 @@ $(document).on('change', 'input[name="saletype"], input[name="posted_by"], input
 
     $('input[name="amenities[]"]:checked').each(function () {
         params.append('amenities[]', $(this).val());
+    });
+
+    $('input[name="furnishing[]"]:checked').each(function () {
+        params.append('furnishing[]', $(this).val());
     });
 
     $("#pageLoader").fadeIn(200);

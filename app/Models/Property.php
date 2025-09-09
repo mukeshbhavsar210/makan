@@ -10,9 +10,11 @@ class Property extends Model {
     use HasFactory;
 
     protected $fillable = [
-        'title','slug','category','sale_types','construction_types','property_age',
+        'title','slug','residence_types','category','property_types','furnish_types','sale_types',
+        'construction_types','rooms','bathrooms','user_id','builder_id','property_age','facings',
         'city_id','area_id','description','keywords','location','rera',
-        'year_build','total_area','brokerage','is_featured','status'
+        'year_build','total_area','towers','units','related_properties','amenities','furnishing',
+        'possession_date','brokerage','status'
     ];
    
     protected static function booted() {

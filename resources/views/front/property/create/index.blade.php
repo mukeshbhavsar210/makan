@@ -46,24 +46,35 @@
             btn.text("Updating Data...");            // change label
         });
 
+        //By default Ahmedabad area selected
+        function loadAreas(cityId) {
+            if (!cityId) return;
 
-        $(".property-types .nav-link").on("click", function () {
-            let value = $(this).data("value"); // residential or commercial
-            $("#residence_types").val(value);
+            $.ajax({
+                url: "/get-areas/" + cityId,
+                type: "GET",
+                success: function (res) {
+                    let areaSelect = $("#area");
+                    areaSelect.empty().append('<option value="">Select Area</option>');
+                    $.each(res, function (key, value) {
+                        areaSelect.append('<option value="' + value.id + '">' + value.name + '</option>');
+                    });
+                }
+            });
+        }
+        
+
+        // When city changes
+        $("#city").on("change", function () {
+            loadAreas($(this).val());
         });
 
+        // 🚀 On page load: auto-load areas of default (Ahmedabad)
+        let defaultCityId = $("#city").val();
+        if (defaultCityId) {
+            loadAreas(defaultCityId);
+        }
 
-         // When clicking on Residential tab
-        $("#pills-tab_011").on("click", function () {
-            $("#is_residential").prop("checked", true).trigger("change");
-            $(".some-div").removeClass("d-none"); // remove deactive if residential
-        });
-
-        // When clicking on Commercial tab
-        $("#pills-tab_022").on("click", function () {            
-            $("#is_commercial").prop("checked", true).trigger("change");
-            $(".some-div").addClass("d-none"); // add deactive if commercial
-        });
 
 
         $("#goToSecondTab").on("click", function(){
@@ -105,6 +116,7 @@
         handleMultiSelect(".bathroom", "#bathroom-label", "#bathroomCounts", "#bathroom", "Select Bathroom");
         handleMultiSelect(".property-types", "#propertyTypes-label", "#propertyTypesCounts", "#property_types", "Select Property Types");
         handleMultiSelect(".amenities", "#amenities-label", "#amenitiesCounts", "#amenities", "Select Amenities");
+        handleMultiSelect(".furnishings", "#furnishings-label", "#furnishingsCounts", "#furnishings", "Select Furnishings");
         handleMultiSelect(".facings", "#facings-label", "#facingsCounts", "#facings", "Select Facings");
         handleMultiSelect(".similar", "#similar-label", "#similarCounts", "#similar", "Similar Properties");
 
@@ -164,6 +176,7 @@
         bindJsonUpdater("bathroom-option", "bathrooms_json");
         bindJsonUpdater("property-types", "property_types_json");
         bindJsonUpdater("amenities", "amenities_json");
+        bindJsonUpdater("furnishing", "furnishing_json");
         bindJsonUpdater("facings", "facings_json");
         bindJsonUpdater("related_properties", "related_properties_json");
     });
@@ -304,9 +317,15 @@
                 $(".image-label").off("change").on("change", function() {
                     enforceUniqueLabels();
                 });
+
+                updateProgress(); // ✅ Update progress after adding an image
+            },
+            removedfile: function(file) {
+                updateProgress(); // ✅ Update progress after removing an image
+                file.previewElement.remove();
             },
             complete: function(file) {
-                this.removeFile(file);
+                this.removeFile(file); // Optional: remove preview after upload
             }
         });
 
@@ -317,9 +336,7 @@
             // Collect all selected labels
             $(".image-label").each(function() {
                 let val = $(this).val();
-                if (val) {
-                    selectedLabels.push(val);
-                }
+                if (val) selectedLabels.push(val);
             });
 
             // Reset all options first
@@ -335,10 +352,48 @@
                 });
             });
         }
-        //Delete image
+
+        // Delete image
         function deleteImage(id){
             $("#image-row-"+id).remove();
+            updateProgress(); // ✅ Update progress after deleting an image
         }
+
+        // ✅ Updated updateProgress function to include Dropzone
+        function updateProgress() {
+            let totalSteps = $(".form-section").length;
+            let completedSteps = 0;
+
+            $(".form-section").each(function () {
+                let sectionValid = true;
+
+                $(this).find(".required-field").each(function () {
+                    if (!$(this).val()) sectionValid = false;
+                });
+
+                $(this).find(".required-group").each(function () {
+                    if ($(this).find("input:checked").length === 0) sectionValid = false;
+                });
+
+                if (sectionValid) completedSteps++;
+            });
+
+            // ✅ Include Dropzone as one "section"
+            if ($("#product-gallery .col-md-3").length > 0) completedSteps++;
+
+            let percent = (completedSteps / (totalSteps + 1)) * 100; // +1 for Dropzone
+            $(".progress-bar").css("width", percent + "%").text(Math.round(percent) + "%");
+
+            $(".step-bar li").each(function (index) {
+                if (index < completedSteps) $(this).removeClass("pending in-progress").addClass("completed");
+                else if (index === completedSteps) $(this).removeClass("pending completed").addClass("in-progress");
+                else $(this).removeClass("completed in-progress").addClass("pending");
+            });
+        }
+
+        // Initial call
+        updateProgress();
+
 </script>
 
 @endsection
