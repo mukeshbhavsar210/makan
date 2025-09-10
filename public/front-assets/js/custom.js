@@ -1,5 +1,23 @@
 $(document).ready(function(){
 
+    $(".logoFirst").hover(
+        function() {
+            $(this).find(".rollover-details").fadeIn(200);
+        }, 
+        function() {
+            $(this).find(".rollover-details").fadeOut(200);
+        }
+    );
+
+    $(".user").hover(
+        function() {
+            $(this).find(".rollover-user").fadeIn(200);
+        }, 
+        function() {
+            $(this).find(".rollover-user").fadeOut(200);
+        }
+    );
+
     //Progress bar
     function isFilled(el) {
         let $el = $(el);
@@ -20,6 +38,9 @@ $(document).ready(function(){
     }
 
     function updateProgress() {
+        // let totalSteps = 24;
+        // let completedSteps = 2;
+
         let totalSteps = $(".form-section").length;
         let completedSteps = 0;
 
@@ -42,10 +63,13 @@ $(document).ready(function(){
             // Step-bar class update
             if (filledCount === 0) {
                 $("#step-" + step).removeClass().addClass("pending");
+                $("#step-" + step + " .status").text("Pending");
             } else if (filledCount < inputs.length + groups.length) {
                 $("#step-" + step).removeClass().addClass("in-progress");
+                $("#step-" + step + " .status").text("In Progress");
             } else {
                 $("#step-" + step).removeClass().addClass("completed");
+                $("#step-" + step + " .status").text("Completed");
             }
 
             // Increment completedSteps if section has at least one filled
@@ -67,6 +91,47 @@ $(document).ready(function(){
 
     // Initial call on page load to account for pre-selected/default fields
     updateProgress();
+
+
+
+    //BHK on
+    $(document).on("change", ".room-option", function () {
+        let target = $($(this).data("target"));
+        if ($(this).is(":checked")) {
+            target.addClass("active");
+        } else {
+            target.removeClass("active");
+        }
+    });
+
+    $(document).on("input", ".price, .size", function () {
+        let key = $(this).data("title"); // e.g. 1_bhk
+        let parentGroup = $("#heading_" + key); // parent checkbox group
+        let priceVal = $(".price[data-title='" + key + "']").val().trim();
+        let sizeVal  = $(".size[data-title='" + key + "']").val().trim();
+
+        if (priceVal !== "" || sizeVal !== "") {
+            parentGroup.addClass("active");
+            $("#room_" + key).prop("checked", true); // ✅ also check the box automatically
+        } else {
+            parentGroup.removeClass("active");
+            $("#room_" + key).prop("checked", false); // ✅ uncheck if both empty
+        }
+    });
+
+
+     $("input[name='residence_types']").on("change", function (e) {
+        e.preventDefault();   // stop form submission
+        e.stopPropagation();  // stop bubbling if any parent is listening
+
+        if ($(this).val() === "residential") {
+            $(".residenceProperty").removeClass("d-none");
+            $(".commercialProperty").addClass("d-none");
+        } else {
+            $(".residenceProperty").addClass("d-none");
+            $(".commercialProperty").removeClass("d-none");
+        }
+    });
 
 
 
@@ -238,7 +303,7 @@ $('.sidebar-gallery').slick({
 
 $('.listing-gallery').slick({
     autoplay: true,
-    autoplaySpeed: 1000,
+    autoplaySpeed: 3000,
     dots: true,
     arrows: true,
 });
