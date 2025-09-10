@@ -203,8 +203,9 @@
 					<div class="accordion-body">
 						<ul class="inside-link">
 							<li><a href="{{ route('front.home') }}">Home</a></li>
-							<li><a href="{{ route('properties.create') }}">Post Properties</a></li>							
-							<li><a href="#">Research</a></li>							
+							<li><a href="{{ route('properties.create') }}">Post Properties</a></li>
+							<li><a href="{{ route('account.myPropertyApplications') }}" class="nav-link"> Interested</a></li>
+							<li><a href="{{ route('property.savedProperties') }}" class="nav-link">Saved Property</a></li>
 						</ul>
 					</div>
 				</div>

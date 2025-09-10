@@ -16,16 +16,10 @@
                     0%
                 </div>
             </div>
-
-            <ul class="step-bar">
-                <li id="step-1" class="pending">Step 1</li>
-                <li id="step-2" class="pending">Step 2</li>
-                <li id="step-3" class="pending">Step 3</li>
-            </ul>
         </div>
 
-        <ul class="nav nav-pills" id="pills-tab" role="tablist">
-            <li class="nav-item" role="presentation">
+        <ul class="nav nav-pills step-bar" id="pills-tab" role="tablist">
+            <li id="step-1" class="pending" role="presentation">
                 <a class="nav-link active" id="pills-tab_01" data-bs-toggle="pill" data-bs-target="#pills-basic" role="tab" aria-controls="pills-basic" aria-selected="true">
                     <div class="status-details">
                         <div class="tick"></div>
@@ -36,7 +30,7 @@
                     </div>
                 </a>
             </li>
-            <li class="nav-item" role="presentation">
+            <li id="step-2" class="pending" role="presentation">
                 <a class="nav-link" id="pills-tab_02" data-bs-toggle="pill" data-bs-target="#pills-properties" role="tab" aria-controls="pills-properties" aria-selected="false">
                     <div class="status-details">
                         <div class="tick"></div>
@@ -47,13 +41,12 @@
                     </div>
                 </a>
             </li>
-            <li class="nav-item" role="presentation">
+            <li id="step-3" class="pending" role="presentation">
                 <a class="nav-link" id="pills-tab_03" data-bs-toggle="pill" data-bs-target="#pills-price" role="tab" aria-controls="pills-price" aria-selected="false">
                     <div class="status-details">
                         <div class="tick"></div>
                         <div class="title">
                             <p class="name">Properties Details</p>
-                            <span class="status">Completed</span>
                             <span class="status">Pending</span>
                         </div>
                     </div> 

@@ -22,18 +22,13 @@ class PropertyController extends Controller {
 
     public function index(Request $request) {
         $user = auth()->user();
-
+        
         // Base query
         if ($user->role === 'Admin') {
-            $properties = Property::query()
-                ->where('status', 1)
-                ->orderBy('created_at','DESC');
-            $counts = Property::withCount('visitedUsers')->where('status', 1)->count(); // all active properties
+            $properties = Property::query()->where('status', 1)->orderBy('created_at','DESC');
+            $counts = Property::withCount('visitedUsers')->where('status', 1)->count();
         } else {
-            $properties = Property::query()
-                ->where('user_id', $user->id)
-                ->where('status', 1)
-                ->orderBy('created_at','DESC');
+            $properties = Property::query()->where('user_id', $user->id)->where('status', 1)->orderBy('created_at','DESC');
             $counts = Property::withCount('visitedUsers')->where('user_id', $user->id)
                 ->where('status', 1)
                 ->count(); 
@@ -46,7 +41,7 @@ class PropertyController extends Controller {
         }
 
         // Paginate
-        $properties = $properties->paginate(10);
+        $properties = $properties->paginate(10);        
 
         return view('front.property.index', [
             'properties' => $properties,
@@ -233,6 +228,10 @@ class PropertyController extends Controller {
         $cities = City::orderBy('name','ASC')->get();
         $areas = Area::orderBy('name','ASC')->get();        
         $builders = Builder::orderBy('developer_name','ASC')->get();
+        $selectedType = $property->property_types ?? null;
+        $selectedRoomTitles = $property->rooms ? json_decode($property->rooms, true) : [];
+        $selectedRooms = $property->rooms ? json_decode($property->rooms, true) : [];
+        $bathrooms = $property->bathrooms ? json_decode($property->bathrooms, true) : [];
 
         $data['user'] = $user;
         $data['cities'] = $cities;
@@ -240,8 +239,12 @@ class PropertyController extends Controller {
         $data['builders'] = $builders;
         $data['builder'] = $builder;
         $data['property'] = $property;
+        $data['selectedType'] = $selectedType;
+        $data['selectedRoomTitles'] = $selectedRoomTitles;
+        $data['bathrooms'] = $bathrooms;
+        $data['selectedRooms'] = $selectedRooms;
         $data['propertyImage'] = $propertyImage;
-        $data['relatedProperties'] = $relatedProperties; 
+        $data['relatedProperties'] = $relatedProperties;         
     
         return view('front.property.edit.index',$data);
     }
@@ -432,7 +435,8 @@ class PropertyController extends Controller {
             $savedProperties->where('title', 'like', "%{$keyword}%");
         }
 
-        $savedProperties = $savedProperties->paginate(10);
+        //$savedProperties = $savedProperties->paginate(10);
+        $savedProperties = $savedProperties->paginate(10);        
         
         return view('front.property.saved',[
             'savedProperties' => $savedProperties,
@@ -464,7 +468,6 @@ class PropertyController extends Controller {
             $interested->where('property_id', 'like', "%{$keyword}%");
         }
 
-        // ✅ apply paginate only once
         $interested = $interested->paginate(10);
 
         return view('front.property.interested', [

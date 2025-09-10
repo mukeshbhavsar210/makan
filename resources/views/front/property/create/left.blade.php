@@ -1,9 +1,8 @@
 <div class="progress-left">
     <div class="card-body">
-        <h5>Post your property</h5>
-
         <a href="{{ route('properties.index') }}" class="btn btn-primary">Go Back</a> 
-
+        
+        <h5>Post your property</h5>
         <p>Sell or rent your property</p>
 
         <div class="progress-wrapper">
@@ -13,7 +12,7 @@
         </div>
 
         <ul class="nav nav-pills step-bar" id="pills-tab" role="tablist">
-            <li id="step-1" class="nav-item pending" role="presentation">
+            <li id="step-1" class="pending" role="presentation">
                 <a class="nav-link active" id="pills-tab_01" data-bs-toggle="pill" data-bs-target="#pills-basic" role="tab" aria-controls="pills-basic" aria-selected="true">
                     <div class="status-details">
                         <div class="tick"></div>
@@ -24,7 +23,7 @@
                     </div>
                 </a>
             </li>
-            <li id="step-2" class="nav-item pending" role="presentation">
+            <li id="step-2" class="pending" role="presentation">
                 <a class="nav-link" id="pills-tab_02" data-bs-toggle="pill" data-bs-target="#pills-properties" role="tab" aria-controls="pills-properties" aria-selected="false">
                     <div class="status-details">
                         <div class="tick"></div>
@@ -35,7 +34,7 @@
                     </div>
                 </a>
             </li>
-            <li id="step-3" class="nav-item pending" role="presentation">
+            <li id="step-3" class="pending" role="presentation">
                 <a class="nav-link" id="pills-tab_03" data-bs-toggle="pill" data-bs-target="#pills-price" role="tab" aria-controls="pills-price" aria-selected="false">
                     <div class="status-details">
                         <div class="tick"></div>
