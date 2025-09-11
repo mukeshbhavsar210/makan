@@ -6,19 +6,19 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Workbench\App\Models\User as ModelsUser;
 
-class UserController extends Controller
-{
+class UserController extends Controller {
     public function index(){
-        $users = User::where('role', '=', 'user')->orderBy('created_at','DESC')->paginate(10);
-        return view('admin.users.list',[
+        $users = User::where('role', '!=', 'Admin')->orderBy('created_at', 'DESC')->paginate(10);
+        return view('front.users.list',[
             'users' => $users
         ]);
     }
 
     public function edit($id){
         $user = User::findOrFail($id);
-        return view('admin.users.edit',[
+        return view('front.users.edit',[
             'user' => $user
         ]);
     }
@@ -51,4 +51,5 @@ class UserController extends Controller
             ]);
         }
     }
+
 }

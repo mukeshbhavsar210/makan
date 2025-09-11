@@ -262,7 +262,7 @@ class HomeController extends Controller {
 
 
 
-    public function details($propertyUrl, Request $request) {
+    public function details($propertyUrl, Request $request) {  
         $cities = City::where('status',1)->get();
         $areas = Area::where('status',1)->get();    
         $properties = Property::with('property_images')->get();
@@ -270,6 +270,9 @@ class HomeController extends Controller {
         $areaSelected = $request->filled('area') ? Area::where('slug', $request->area)->first() : null;
         $selectedAreas = $request->filled('area') ? Area::where('slug', $request->area)->first() : null;
         $categoryWord = null;       
+
+       
+
         
         $parts = explode('-', $propertyUrl);
 
@@ -345,6 +348,22 @@ class HomeController extends Controller {
                 ->get();
         }
 
+         //Session stored properties
+        preg_match('/-(\d+)-/', $propertyUrl, $matches);
+        $propertyId = $matches[1] ?? null;
+        if(!$propertyId) abort(404);
+        $property = Property::with('property_images', 'area', 'city')->findOrFail($propertyId);
+
+        $seenProperties = session('seen_properties', []);
+
+        if(isset($seenProperties[$propertyId])){
+            $seenProperties[$propertyId]++;
+        } else {
+            $seenProperties[$propertyId] = 1;
+        }
+
+        session(['seen_properties' => $seenProperties]);
+
         return view('front.home.details.index', compact(
             'property',
             'properties',
@@ -357,7 +376,7 @@ class HomeController extends Controller {
             'citySelected',
             'areaSelected',
             'selectedAreas',
-            'categoryWord'
+            'categoryWord',            
         ));
     }
 

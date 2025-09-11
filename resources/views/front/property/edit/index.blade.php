@@ -6,7 +6,19 @@
     <div class="container">       
         <div class="row">
             <div class="col-md-3 col-12">
-                @include('front.property.edit.left')
+                <div class="progress-left">
+                    <div class="card-body">
+                        <a href="{{ route('properties.index') }}" class="link">< Go Back</a> 
+
+                        <h5 class="title">{{ $property->title}} 
+                            @if($property->status == 1)
+                                <span class="status">Active</span>
+                            @endif
+                        </h5>
+
+                        @include('front.property.progress')
+                    </div>
+                </div>
             </div>
             <div class="col-md-9 col-12">
                 <div class="progress-right">            

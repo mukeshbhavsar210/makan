@@ -11,137 +11,98 @@
     $roomsArray    = json_decode($property?->rooms ?? '[]', true);
 @endphp
 
-<div class="col-md-3 col-12">
-    <div class="listings-posted">
-        <div class="link">            
-            <div class="overlay-details-top">
-                @if(Auth::user()->role == 'Admin')
-                    <span class="tagUser">{{ $property?->id }}</span>
-                @endif                
-                <div class="avatar-stack">
-                    <div class="avatar-wrapper">
-                        <span class="tagSmall">{{ $totalImages }}</span>
-                        <div class="avatar-tooltip" style="bottom: -5px; left:85px;">Uploaded Images</div>
-                    </div>
-                </div>
-            </div>
+<tr>
+    <td>
+        <div class="listing-gallery" style="width: 100px;">                                
+            {{-- @if(Auth::user()->role == 'Admin')
+                <span class="tagUser">{{ $property?->id }}</span>
+            @endif                
+            <span class="tagSmall">{{ $totalImages }}</span> --}}
 
-             <div class="overlay-details-btm">
-                <div>
-                    @if($type === 'property')
-                        @if ($property->status == 1)
-                            <div class="avatar-stack">
-                                <div class="avatar-wrapper">
-                                    <i class="fa-solid fa-circle-check tick-icon-active"></i>
-                                    <div class="avatar-tooltip" style="bottom: 0; left:55px;">Active</div>
-                                </div>
-                            </div>                             
+            @if ($data->property_images && $data->property_images->count() > 0)
+                @foreach ($data->property_images->whereIn('label', ['Main', 'Video', 'Elevation', 'Bedroom']) as $propertyImage)
+                    <img src="{{ asset('uploads/property/thumb/'.$propertyImage->image) }}" 
+                        alt="{{ $propertyImage->label }}" class="thumb" />
+                @endforeach
+            @else
+                <img src="{{ asset('admin-assets/img/default-150x150.png') }}" alt="Default" class="thumb">
+            @endif
+        </div>                        
+    </td>
+    <td>
+        <a href="{{ $property->url }}"  target="_blank" ><h5>{{ $property?->title ?? '' }}</h5></a>
+        <p>{{ $property?->location ?? '' }}, {{ $property?->area?->name ?? '' }}, {{ $property?->city?->name ?? '' }}</p>
+    </td>
+    <td>
+        @foreach($roomsArray as $room)
+            @php
+                $formatted = null;
+                if (!empty($room['price'])) {
+                    $price = (int) $room['price'];
+                    if ($price >= 10000000) {
+                        $formatted = number_format($price / 10000000, 1) . ' Cr';
+                    } elseif ($price >= 100000) {
+                        $formatted = number_format($price / 100000, 1) . ' Lacs';
+                    } else {
+                        $formatted = number_format($price);
+                    }
+                }
+            @endphp
+
+            {{ strtoupper(str_replace('_', ' ', $room['title'] ?? '')) }}
+            - ₹{{ $formatted }}
+            <span class="tint">{{ strtoupper($room['size'] ?? '') }} sq.ft.</span><br>
+        @endforeach
+    </td>
+
+    <td>
+        <div class="developer-details mt-3">
+                @if($type === 'property')
+                    <div class="logoFirst">
+                        @if ($property->builder && $property->builder->image)
+                            <img src="{{ asset('uploads/developer/thumb/' . $property->builder->image) }}" class="logo" >
                         @else
-                            <div class="avatar-stack">
-                                <div class="avatar-wrapper">
-                                    <i class="fa-solid fa-circle-check tick-icon"></i>
-                                    <div class="avatar-tooltip" style="bottom: 0; left:55px;">In-Active</div>
-                                </div>
-                            </div>                            
-                        @endif                                    
-                    @endif                    
-                </div>
-                <div>                    
-                    @if($type === 'property')
-                        <div class="flex-wrapper">
-                            <div class="avatar-stack">
-                                <div class="avatar-wrapper">
-                                    <a href="{{ route('properties.edit', $property->id) }}"><i class="fa-solid fa-pencil"></i></a>
-                                    <div class="avatar-tooltip" style="bottom: -3px; left:-20px;">Edit</div>
-                                </div>
-                            </div> 
-                            <div class="avatar-stack">
-                                <div class="avatar-wrapper">
-                                    <a href="#" onclick="deleteProperty({{ $property->id }})"><i class="fa-solid fa-trash"></i></a>
-                                    <div class="avatar-tooltip" style="bottom: -3px; left:-25px;">Delete</div>
-                                </div>
-                            </div>                
-                        </div>         
-                    @elseif($type === 'interested')
-                        <div class="avatar-stack">
-                            <div class="avatar-wrapper">
-                                <a href="#" onclick="removeProperty({{ $property->id }})"><i class="fa-solid fa-trash"></i></a>
-                                <div class="avatar-tooltip" style="bottom: -3px; left:-25px;">Delete</div>
-                            </div>
-                        </div> 
-                    @else    
-                        <div class="avatar-stack">
-                            <div class="avatar-wrapper">
-                                <a href="#" onclick="removeProperty({{ $property->id }})"><i class="fa-solid fa-trash"></i></a>
-                                <div class="avatar-tooltip" style="bottom: -3px; left:-25px;">Delete</div>
-                            </div>
-                        </div>                                    
-                    @endif
-                </div>
-            </div>
+                            <img src="{{ asset('front-assets/images/default-150x150.png') }}" alt=""  class="logo" />
+                        @endif
 
-            <a href="{{ $property->url }}"  target="_blank" class="overlay"></a>
-
-            <div class="listing-gallery">                                
-                @if ($data->property_images && $data->property_images->count() > 0)
-                    @foreach ($data->property_images->whereIn('label', ['Main', 'Video', 'Elevation', 'Bedroom']) as $propertyImage)
-                        <img src="{{ asset('uploads/property/thumb/'.$propertyImage->image) }}" 
-                            alt="{{ $propertyImage->label }}" class="thumb" />
-                    @endforeach
-                @else
-                    <img src="{{ asset('admin-assets/img/default-150x150.png') }}" alt="Default" class="thumb">
-                @endif
-            </div>
-        </div>
-
-        <div class="details">
-            <h3 class="mb-1">
-                {{ $property?->title ?? '' }}
-            </h3>
-            <p class="m-0">
-                {{ $property?->location ?? '' }}, {{ $property?->area?->name ?? '' }}, {{ $property?->city?->name ?? '' }}
-            </p>
-            <hr>
-
-            <div class="flex-wrapper">
-                @foreach($roomsArray as $room)
-                    @php
-                        $formatted = null;
-                        if (!empty($room['price'])) {
-                            $price = (int) $room['price'];
-                            if ($price >= 10000000) {
-                                $formatted = number_format($price / 10000000, 1) . ' Cr';
-                            } elseif ($price >= 100000) {
-                                $formatted = number_format($price / 100000, 1) . ' L';
-                            } else {
-                                $formatted = number_format($price);
-                            }
-                        }
-                    @endphp
-                
-                    <div class="avatar-stack">
-                        <div class="avatar-wrapper">
-                            {{ strtoupper(str_replace('_', ' ', $room['title'] ?? '')) }}
-                            <div class="avatar-tooltip" style="bottom: 23px; left:25px;">₹{{ $formatted }}</div>
+                        <div class="rollover-details">                                                                                        
+                            <p class="m-0"><b>{{ $property->builder->developer_name }}</b></p>
+                            <p class="m-0">E: <a href="mailto:{{ $property->builder->developer_email }}">{{ $property->builder->developer_email }}</a><br>
+                                M: <a href="tel:{{ $property->builder->developer_mobile }}">{{ $property->builder->developer_mobile }}</a>
+                            </p>
                         </div>
                     </div>
-                @endforeach
-            </div>   
+                @elseif($type === 'interested')
+                    <div class="logoFirst">
+                        @if ($property->builder && $property->builder->image)
+                            <img src="{{ asset('uploads/developer/thumb/' . $property->builder->image) }}" class="logo" >
+                        @else
+                            <img src="{{ asset('front-assets/images/default-150x150.png') }}" alt=""  class="logo" />
+                        @endif
 
-            <div class="developer-details">
-                <div class="avatar-wrapper">
-                    @if ($property->builder && $property->builder->image)
-                        <img src="{{ asset('uploads/developer/thumb/' . $property->builder->image) }}" alt="{{ $property->builder->developer_name }}" class="avatar-logo" >
-                    @else
-                        <img src="{{ asset('front-assets/images/user.png') }}" alt="" class="avatar-logo" />
-                    @endif
-                    <div class="avatar-tooltip">
-                        <p class="m-0"><b>{{ $property->builder->developer_name }}</b></p>
-                        <p class="m-0">E: <a href="mailto:{{ $property->builder->developer_email }}">{{ $property->builder->developer_email }}</a><br>
-                            M: <a href="tel:{{ $property->builder->developer_mobile }}">{{ $property->builder->developer_mobile }}</a>
-                        </p>
+                        <div class="rollover-details">                                                                                        
+                            <p class="m-0"><b>{{ $property->builder->developer_name }}</b></p>
+                            <p class="m-0">E: <a href="mailto:{{ $property->builder->developer_email }}">{{ $property->builder->developer_email }}</a><br>
+                                M: <a href="tel:{{ $property->builder->developer_mobile }}">{{ $property->builder->developer_mobile }}</a>
+                            </p>
+                        </div>
                     </div>
-                </div>                
+                @else                
+                    <div class="logoFirst">
+                        @if ($property->builder && $property->builder->image)
+                            <img src="{{ asset('uploads/developer/thumb/' . $property->builder->image) }}" class="logo" >
+                        @else
+                            <img src="{{ asset('front-assets/images/default-150x150.png') }}" alt=""  class="logo" />
+                        @endif
+
+                        <div class="rollover-details">                                                                                        
+                            <p class="m-0"><b>{{ $property->builder->developer_name }}</b></p>
+                            <p class="m-0">E: <a href="mailto:{{ $property->builder->developer_email }}">{{ $property->builder->developer_email }}</a><br>
+                                M: <a href="tel:{{ $property->builder->developer_mobile }}">{{ $property->builder->developer_mobile }}</a>
+                            </p>
+                        </div>
+                    </div>
+                @endif
 
                 <div class="mt-2 flex-wrapper">
                     @if($type === 'property')
@@ -201,9 +162,13 @@
                                 @foreach($property->savedUsers->take(1) as $saved)
                                     <div class="avatar-wrapper" data-bs-toggle="modal" data-bs-target="#propertySavedModal_{{ $property->id }}">
                                         @if (!empty($saved->user->image))
-                                            <img src="{{ asset('uploads/profile/thumb/' . $saved->user->image) }}" alt="{{ $saved->user->name }}" class="avatar">
+                                            <img src="{{ asset('uploads/profile/thumb/' . $saved->user->image) }}" 
+                                                alt="{{ $saved->user->name }}" 
+                                                class="avatar">
                                         @else
-                                            <img src="{{ asset('front-assets/images/user.png') }}" alt="{{ $saved->user->name }}" class="avatar">
+                                            <img src="{{ asset('front-assets/images/user.png') }}" 
+                                                alt="{{ $saved->user->name }}" 
+                                                class="avatar">
                                         @endif
 
                                         <div class="avatar-tooltip">
@@ -364,6 +329,15 @@
                     @endif  
                 </div>
             </div>
-        </div>
-    </div>
-</div>
+    </td>
+    <td>
+        @if($type === 'property')
+            <a href="{{ route('properties.edit', $property->id) }}"><i class="fa-solid fa-pencil"></i></a>
+            <a href="#" onclick="deleteProperty( {{ $property->id }} )"><i class="fa-solid fa-trash"></i></a>
+        @elseif($type === 'interested')
+            <a href="#" onclick="removeProperty({{ $property->id }})"><i class="fa-solid fa-trash"></i></a>
+        @else                
+            <a href="#" onclick="removeProperty({{ $property->id }})"><i class="fa-solid fa-trash"></i></a>
+        @endif
+    </td>
+</tr>

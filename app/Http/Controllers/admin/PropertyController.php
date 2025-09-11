@@ -13,6 +13,7 @@ use App\Models\Area;
 use App\Models\Builder;
 use App\Models\PropertyApplication;
 use App\Models\SavedProperty;
+use App\Models\User;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\ImageManager;
@@ -41,11 +42,15 @@ class PropertyController extends Controller {
         }
 
         // Paginate
-        $properties = $properties->paginate(10);        
+        $properties = $properties->paginate(10);
+        $users = User::paginate(10);
+        $viewType = auth()->user()->preferred_view ?? 'card';        
 
         return view('front.property.index', [
             'properties' => $properties,
             'counts' => $counts,
+            'viewType' => $viewType,
+            'users' => $users,
         ]);
     }
 
@@ -419,30 +424,43 @@ class PropertyController extends Controller {
     }
 
     //Saved Property
-    public function savedProperties(Request $request){
+   public function savedProperties(Request $request) {
         $user = auth()->user();
 
         if ($user->role === 'Admin') {
-            $savedProperties = SavedProperty::query()->orderBy('created_at','DESC');
+            $savedProperties = SavedProperty::with('property.savedUsers')
+                ->orderBy('created_at', 'DESC');
             $counts = SavedProperty::count();
         } else {
-            $savedProperties = SavedProperty::query()->where('user_id', $user->id)->orderBy('created_at','DESC');
-            $counts = SavedProperty::where('user_id', $user->id)->count();
+            $savedProperties = SavedProperty::with('property.savedUsers')
+                ->where('user_id', $user->id)
+                ->whereHas('property', function ($query) use ($user) {
+                    // Exclude properties posted by the same user
+                    $query->where('user_id', '!=', $user->id);
+                })
+                ->orderBy('created_at', 'DESC');
+
+            $counts = (clone $savedProperties)->count();
         }
 
-        if ($request->filled('keyword')) {
-            $keyword = $request->keyword;
-            $savedProperties->where('title', 'like', "%{$keyword}%");
-        }
+        // if ($request->filled('keyword')) {
+        //     $keyword = $request->keyword;
+        //     $savedProperties->whereHas('property', function ($query) use ($keyword) {
+        //         $query->where('title', 'like', "%{$keyword}%");
+        //     });
+        // }
 
-        //$savedProperties = $savedProperties->paginate(10);
-        $savedProperties = $savedProperties->paginate(10);        
-        
-        return view('front.property.saved',[
+        $savedProperties = $savedProperties->paginate(10);
+        $viewType = auth()->user()->preferred_view ?? 'card';  
+
+        return view('front.property.saved', [
             'savedProperties' => $savedProperties,
-            'counts' => $counts,            
+            'counts' => $counts,
+            'viewType' => $viewType,
         ]);
     }
+
+
 
     //Interested
     public function interested(Request $request) {
@@ -457,10 +475,17 @@ class PropertyController extends Controller {
         } else {
             $interested = PropertyApplication::query()
                             ->where('user_id', $user->id)
+                            ->whereHas('property', function ($q) use ($user) {
+                                $q->where('user_id', '!=', $user->id);
+                            })
                             ->with(['property', 'property.applications', 'property.builder'])
                             ->orderBy('created_at','DESC');
 
-            $counts = PropertyApplication::where('user_id', $user->id)->count();
+            $counts = PropertyApplication::where('user_id', $user->id)
+                            ->whereHas('property', function ($q) use ($user) {
+                                $q->where('user_id', '!=', $user->id);
+                            })
+                            ->count();
         }
 
         if ($request->filled('keyword')) {
@@ -469,12 +494,15 @@ class PropertyController extends Controller {
         }
 
         $interested = $interested->paginate(10);
+        $viewType = auth()->user()->preferred_view ?? 'card'; 
 
         return view('front.property.interested', [
             'interested' => $interested,
-            'counts'     => $counts,            
+            'counts'     => $counts,
+            'viewType' => $viewType,
         ]);
     }
+
 
     public function getProducts(Request $request){
         $tempProduct = [];
@@ -515,5 +543,45 @@ class PropertyController extends Controller {
             'status' => true,
         ]);
     }
-    
+
+
+
+    //Posted properties required approval
+    public function pendingProperties() {
+        $pending = Property::where('status', 0)
+            ->orderBy('created_at', 'DESC')
+            ->paginate(10, ['*'], 'pending_page');
+
+        $approved = Property::where('status', 1)
+            ->orderBy('created_at', 'DESC')
+            ->paginate(10, ['*'], 'approved_page');
+
+        return view('front.property.approval', compact('pending', 'approved'));
+    }
+
+
+    public function toggleStatus(Request $request, $id) {
+        $property = Property::findOrFail($id);
+        $property->status = $property->status == 1 ? 0 : 1;
+        $property->save();
+        \Log::info("Property {$id} new status: {$property->status}");
+        return response()->json(['status' => true, 'newStatus' => $property->status]);
+    }
+
+
+   public function toggleView(Request $request, $id) {
+        $user = User::findOrFail($id);
+
+        // Toggle between 'card' and 'table'
+        $user->preferred_view = $user->preferred_view === 'card' ? 'table' : 'card';
+        $user->save();
+
+        \Log::info("User {$id} new view: {$user->preferred_view}");
+
+        return response()->json([
+            'status' => true,
+            'newView' => $user->preferred_view
+        ]);
+    }
+
 }

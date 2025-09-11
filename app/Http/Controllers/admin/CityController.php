@@ -8,13 +8,12 @@ use App\Models\City;
 use App\Models\Area;
 use Illuminate\Support\Facades\Validator;
 
-class CityController extends Controller
-{
+class CityController extends Controller {
     public function index(){
         $cities = City::all();
         $counts = City::count();
 
-        return view("admin.city.list", [
+        return view("front.city.list", [
             "cities"=> $cities,
             "counts"=> $counts,
         ]);
@@ -54,7 +53,7 @@ class CityController extends Controller
         if (empty($city)) {
             return redirect()->route('cities.index');
         }
-        return view('admin.city.edit', compact('city'));
+        return view('front.city.edit', compact('city'));
     }
 
     //UPDATE

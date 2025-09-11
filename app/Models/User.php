@@ -17,9 +17,7 @@ class User extends Authenticatable {
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        'name','email','password','image','mobile','role','preferred_view','avatar_color',
     ];
 
     /**
@@ -41,6 +39,14 @@ class User extends Authenticatable {
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+
+   
+
+
+    public function user() {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 
     public function properties() {
         return $this->hasMany(Property::class);

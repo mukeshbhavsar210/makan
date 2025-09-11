@@ -24,6 +24,14 @@
                             <p class="posted-status">
                                 {{ $timeAgo }} @if($timeAgo !== 'Today') ago @endif
                             </p>
+                            
+                            @php
+                                $seenProperties = session('seen_properties', []);
+                            @endphp
+
+                            @if(in_array($value->id, $seenProperties))
+                                <p class="seen-status">Seen</p>
+                            @endif
 
                             <div class="media-overlay" data-bs-toggle="modal" data-bs-target="#big-modal_{{ $value->id }}"></div>
                             <div class="listing-gallery" >                                
@@ -44,8 +52,13 @@
                                 <div class="left">         
                                     <a href="{{ $value->url }}" onclick="visitedProperty({{ $value->id }})" class="product-link" target="_blank">
                                         <h3 class="title">{{ $value->title }}
-                                            <div class="rera" style="{{ empty($value->rera) ? 'display:none;' : '' }}">
-                                                <img class="icon" src="{{ asset('front-assets/images/tick.svg') }}" /> RERA
+                                            <div class="avatar-stack">
+                                                <div class="avatar-wrapper">
+                                                  <div class="rera" style="{{ empty($value->rera) ? 'display:none;' : '' }}">
+                                                        <img class="icon" src="{{ asset('front-assets/images/tick.svg') }}" /> RERA
+                                                    </div>
+                                                    <div class="avatar-tooltip" style="bottom: 25px; left:35px;">RERA Got</div>
+                                                </div>
                                             </div>
                                         </h3>                                                                            
                                         <h5>
@@ -76,8 +89,13 @@
                                 </div>
                                 <div class="right">
                                     @if(Auth::check())
-                                        @if(isset($saveCount[$value->id]) && $saveCount[$value->id])                                            
-                                            <i class="fa-solid fa-heart saved"></i>
+                                        @if(isset($saveCount[$value->id]) && $saveCount[$value->id])  
+                                            <div class="avatar-stack">
+                                                <div class="avatar-wrapper">
+                                                    <i class="fa-solid fa-heart saved"></i>
+                                                    <div class="avatar-tooltip" style="bottom: 2px; left:-48px;">Save Property</div>
+                                                </div>
+                                            </div>
                                         @else
                                             <a href="javascript:void(0)" onclick="saveProperty({{ $value->id }})" class="favorite add-to-favorite user_not_logged_in rh-ui-tooltip" title="Add to favorites">
                                                 <div class="stage">
