@@ -77,7 +77,6 @@ class Property extends Model {
         return $this->hasMany(\App\Models\VisitedProperty::class, 'property_id');
     }
 
-
     public function mainImage() {
         return $this->hasOne(PropertyImage::class)->where('label', 'main');
     }

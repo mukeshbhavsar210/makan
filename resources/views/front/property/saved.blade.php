@@ -26,21 +26,95 @@
 
         @include('front.layouts.message')
 
-        <div class="row mt-2">
-            @foreach($savedProperties as $con)
-                <x-card :data="$con" type="contacted" />
-            @endforeach
+        @auth
+            <div class="view-controls">
+                <span class="view-label">Card</span>
+                <label class="switch">
+                    <input type="checkbox" class="toggle-view" data-id="{{ auth()->id() }}" {{ (auth()->user()->preferred_view ?? 'card') === 'table' ? 'checked' : '' }} >
+                    <span class="slider round"></span>
+                </label>
+                <span class="view-label">Table</span>
+            </div>
+        @endauth
+
+        <div id="cardView" class="{{ $viewType === 'table' ? 'd-none' : '' }}">
+            @if($savedProperties->isNotEmpty())
+                <div class="row mt-2">
+                    @foreach($savedProperties as $con)
+                        <x-card :data="$con" type="contacted" />
+                    @endforeach
+                </div>
+
+                <div class="mt-4">
+                    {{-- {{ $savedProperties->links() }} --}}
+                </div>  
+            @else
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <h6>Not saved property yet.</h6>
+                        <a href="{{ route('front.home') }}" class="btn btn-primary">Search Property</a>
+                    </div>
+                </div>
+            @endif  
         </div>
 
-        <div class="mt-4">
-             {{-- {{ $savedProperties->links() }} --}}
-        </div>        
+        <div id="tableView" class="{{ $viewType === 'card' ? 'd-none' : '' }}">
+            <div class="table-responsive browser_users">
+                <table class="table table-striped">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="border-top-0">Photos</th>
+                            <th class="border-top-0">Project Name</th>                    
+                            <th class="border-top-0">Price</th>
+                            @if(Auth::user()->role == 'Admin')
+                                <th class="border-top-0">Developer</th>
+                            @endif
+                            <th class="border-top-0">Interested</th>
+                            <th class="border-top-0">Saved</th>
+                            <th class="border-top-0">Posted</th>                            
+                            <th class="border-top-0">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>                        
+                        @if($savedProperties->isNotEmpty())
+                            @foreach($savedProperties as $con)
+                                <x-table :data="$con" type="contacted" />
+                            @endforeach                                                
+                        @else                
+                            <h6>Not posted property yet.</h6>
+                            <a href="{{ route('properties.create') }}" class="btn btn-primary">Post Property</a>                
+                        @endif 
+                    </tbody>
+                </table>
+            </div>  
+        </div>
     </div>
 </section>
 @endsection
 
 @section('customJs')
 <script type="text/javascript">
+    $(document).on('change', '.toggle-view', function () {
+        let userId = $(this).data('id');
+        $.ajax({
+            url: "{{ route('properties.toggleView', '') }}/" + userId,
+            type: "POST",
+            data: {
+                _token: "{{ csrf_token() }}"
+            },
+            success: function (response) {
+                if(response.status){
+                    console.log("Updated view to: " + response.newView);
+                    // Optional: reload to apply the new view immediately
+                    location.reload();
+                }
+            },
+            error: function(xhr){
+                console.error("AJAX Error:", xhr.responseText);
+            }
+        });
+    });
+
     function removeProperty(id){
         if(confirm("Are you sure you want to remove?")){
                 $.ajax({

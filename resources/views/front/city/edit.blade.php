@@ -1,56 +1,49 @@
 @extends('front.layouts.app')
 
-@section('content')
-<section class="content-header">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-6">
-                <h1>Edit City</h1>
-            </div>
-            <div class="col-sm-6 text-right">
-                <a href="{{ route('cities.index') }}" class="btn btn-primary">Back</a>
-            </div>
-        </div>
-    </div>
-</section>
+@section('main')
 
-<section>
-    <div class="container-fluid">
-        <form action="" method="post" id="cityForm" name="cityForm">
-            <div class="card">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-7">
-                            <div class="form-group">
-                                <label for="name">City</label>
-                                <input type="text" value="{{ $city->name}}" name="name" id="name" class="form-control" placeholder="Name">
-                                <p></p>
-                            </div>
-                        </div>
-                        <div class="col-md-4 d-none">
-                            <div class="form-group">
-                                <label for="slug">Slug</label>
-                                <input type="text" readonly name="slug" id="slug" class="form-control" placeholder="">
-                                <p></p>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <label for="status">Status</label>
-                                <select name="status" id="status" class="form-control">
-                                    <option {{ ($city->status == 1 ? 'selected' : '')}} value="1">Active</option>
-                                    <option  {{ ($city->status == 0 ? 'selected' : '')}} value="0">Block</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <button type="submit" class="btn btn-primary">Update</button>
-                            <a href="{{ route('cities.index') }}" class="btn btn-outline-dark ml-3">Cancel</a>
-                        </div>
+<section class="content-header">
+    <div class="container">           
+        <div class="row">
+            <div class="col-md-3 col-12">
+                <div class="progress-left">
+                    <div class="card-body">
+                        <h1>Cities</h1>
                     </div>
                 </div>
             </div>
-        </form>
+            <div class="col-md-9 col-12">
+                <div class="progress-right">
+                    <form action="" method="post" id="cityForm" name="cityForm">                            
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="light-label" for="name">City</label>
+                                    <input type="text" value="{{ $city->name}}" name="name" id="name" class="form-control" placeholder="Name">
+                                    <input type="text" readonly name="slug" id="slug" class="form-control d-none" placeholder="">
+                                    <p></p>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label class="light-label" for="status">Status</label>
+                                    <select name="status" id="status" class="form-control">
+                                        <option {{ ($city->status == 1 ? 'selected' : '')}} value="1">Active</option>
+                                        <option {{ ($city->status == 0 ? 'selected' : '')}} value="0">Block</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="submit" class="btn btn-primary">Update</button>
+                            </div>
+                            <div class="col-md-2">
+                                <a href="{{ route('cities.index') }}" class="btn btn-outline-dark ml-3">Cancel</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 @endsection

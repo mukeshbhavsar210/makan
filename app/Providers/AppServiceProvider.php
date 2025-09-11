@@ -23,6 +23,7 @@ class AppServiceProvider extends ServiceProvider {
             $countsSaved = 0;
             $appliedProperties = collect();
             $countsApplied = 0;
+            $seenProperties = session('seen_properties', []);
 
             if (Auth::check()) {
                 $user = Auth::user();
@@ -34,9 +35,10 @@ class AppServiceProvider extends ServiceProvider {
                 $appliedProperties = PropertyApplication::with(['property','property.applications','property.builder','property.property_images',])
                     ->where('user_id', $user->id)->orderBy('created_at', 'DESC')->take(10)->get();
                 $countsApplied = PropertyApplication::where('user_id', $user->id)->count();
-            }
+            }            
 
             $view->with([
+                'seenProperties'   => $seenProperties,
                 'savedProperties'   => $savedProperties,
                 'countsSaved'       => $countsSaved,
                 'appliedProperties' => $appliedProperties,

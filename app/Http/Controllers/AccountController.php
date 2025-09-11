@@ -47,7 +47,7 @@ class AccountController extends Controller {
             'name'   => 'required|min:5|max:30',
             'email'  => 'required|email|unique:users,email,'.$id.',id',
             'mobile' => 'required|digits:10',
-            //'image' => 'image|mimes:jpg,jpeg,png,webp|max:5120',
+            'image' => 'image|mimes:jpg,jpeg,png,webp|max:5120',
         ];
 
         if ($request->hasFile('image')) {
@@ -68,6 +68,8 @@ class AccountController extends Controller {
         $user->email  = $request->email;
         $user->mobile = $request->mobile;
         $user->role = $request->role;
+        $colors = ['#FF5733', '#33B5E5', '#2ECC71', '#9B59B6', '#F39C12', '#E74C3C', '#1ABC9C', '#34495E'];
+        $user->avatar_color = $colors[array_rand($colors)];
 
         // If new profile pic uploaded
         if ($request->hasFile('image')) {
@@ -106,6 +108,9 @@ class AccountController extends Controller {
     }
 
 
+    
+
+
 
 
     public function update_builder(Request $request) {
@@ -125,7 +130,7 @@ class AccountController extends Controller {
             'developer_mobile'   => 'required|string|max:20',
             'developer_whatsapp' => 'nullable|string|max:20',
             'address'            => 'required|string|max:255',
-            'image'              => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'logo'              => 'required|image|mimes:jpg,jpeg,png,webp|max:5120',
         ];
 
         $validator = Validator::make($request->all(), $rules);

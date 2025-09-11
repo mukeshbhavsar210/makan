@@ -16,7 +16,7 @@ class AreaController extends Controller {
         $cities = City::with('areas')->withCount('areas')->get();
         $counts = Area::count();
 
-        return view("admin.area.list", [
+        return view("front.area.list", [
             "areas"=> $areas,
             "cities"=> $cities,   
             "counts"=> $counts,             
@@ -60,7 +60,7 @@ class AreaController extends Controller {
         if (empty($area)) {
             return redirect()->route('cities.index');
         }
-        return view('admin.area.edit', [
+        return view('front.area.edit', [
             "area"=> $area,
             "city"=> $city,
         ]);

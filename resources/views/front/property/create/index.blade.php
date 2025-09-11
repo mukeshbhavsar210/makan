@@ -6,7 +6,12 @@
     <div class="container">           
         <div class="row">
             <div class="col-md-3 col-12">
-                @include('front.property.create.left')
+                <div class="progress-left">
+                    <div class="card-body">
+                        <a href="{{ route('properties.index') }}" class="link">< Go Back</a> 
+                        @include('front.property.progress')
+                    </div>
+                </div>
             </div>
             <div class="col-md-9 col-12">
                 <div class="progress-right">
@@ -16,7 +21,7 @@
                                 <div class="tab-pane fade show active" id="tab_01" role="tabpanel" aria-labelledby="pills-tab_01">
                                     <div class="tab-content" id="pills-tabContent_2">
                                         <div class="tab-pane fade show active" id="pills-basic" role="tabpanel" aria-labelledby="pills-tab_01">
-                                            @include('front.property.create.tab_01')                                        
+                                            @include('front.property.create.tab_01')
                                         </div>
 
                                         <div class="tab-pane fade" id="pills-properties" role="tabpanel" aria-labelledby="pills-tab_02">
