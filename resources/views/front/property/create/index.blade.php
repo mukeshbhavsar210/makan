@@ -43,6 +43,7 @@
 @endsection
 
 @section('customJs')
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
     $(document).ready(function(){
         $("form").on("submit", function(){
@@ -185,7 +186,7 @@
         bindJsonUpdater("facings", "facings_json");
         bindJsonUpdater("related_properties", "related_properties_json");
     });
-
+   
 
     $("#city").change(function(){
         var city_id = $(this).val();
@@ -225,12 +226,17 @@
         });
     })
 
-   //Product form add details in database
+
+    // Highlight selected plan card
+    $('input[name="plan_id"]').change(function(){
+        $('.plan-card').removeClass('active');
+        $(this).closest('.plan-card').addClass('active');
+    });
+
+     // AJAX form submission
     $("#createPropertyForm").submit(function(event){
         event.preventDefault();
-
         var formArray = $(this).serializeArray();
-        //$("button[type='submit']").prop('disabled',true);
 
         $.ajax({
             url: '{{ route("properties.store") }}',
@@ -238,39 +244,48 @@
             data: formArray,
             dataType: 'json',
             success: function(response){
-
-                $("button[type='submit']").prop('disabled',false);
-
-                if (response['status'] == true) {
-
-                    $(".error").removeClass('invalid-feedback').html('');
-                    $("input[type='text'], select, input[type='number']").removeClass('is-invalid');
-
-                    window.location.href="{{ route('properties.index') }}";
-
+                if(response.status == true){
+                    if(response.paid_plan){
+                        // Open Razorpay
+                        var options = {
+                            "key": "{{ env('RAZORPAY_KEY') }}",
+                            "amount": response.amount * 100,
+                            "currency": "INR",
+                            "name": "{{ config('app.name') }}",
+                            "description": "Plan Payment",
+                            "order_id": response.razorpay_order_id,
+                            "handler": function(res){
+                                $.post("{{ route('payment.success') }}", {
+                                    _token: '{{ csrf_token() }}',
+                                    razorpay_payment_id: res.razorpay_payment_id,
+                                    razorpay_order_id: res.razorpay_order_id,
+                                    razorpay_signature: res.razorpay_signature
+                                }, function(data){
+                                    window.location.href = data.redirect;
+                                });
+                            },
+                            "theme": { "color": "#528FF0" }
+                        };
+                        var rzp1 = new Razorpay(options);
+                        rzp1.open();
+                    } else {
+                        // Free plan → redirect
+                        window.location.href = "{{ route('properties.index') }}";
+                    }
                 } else {
-                    var errors = response['errors'];
-
-                    $(".error").removeClass('invalid-feedback').html('');
-                    $("input[type='text'], select, input[type='number']").removeClass('is-invalid');
-
+                    var errors = response.errors;
                     $.each(errors, function(key,value){
                         $(`#${key}`).addClass('is-invalid')
-                        .siblings('p')
-                        .addClass('invalid-feedback')
-                        .html(value);
+                            .siblings('p').addClass('invalid-feedback').html(value);
                     });
                 }
             },
             error: function(){
-                console.log("Something went wrong")
+                console.log("Something went wrong");
             }
-            // error: function(xhr, status, error){
-            //     console.log("AJAX Error:", status, error);
-            //     console.log("Response:", xhr.responseText);
-            // }
         });
     });
+
 
     //File image uplaod
     Dropzone.autoDiscover = false;

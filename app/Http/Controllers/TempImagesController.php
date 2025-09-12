@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\admin;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\TempImage;
@@ -9,8 +9,7 @@ use Illuminate\Http\Request;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
 
-class TempImagesController extends Controller
-{
+class TempImagesController extends Controller {
     public function create(Request $request){
         $image = $request->image;
 

@@ -1009,14 +1009,6 @@ body .dropzone { border: 2px dashed var(--primary) !important; border-radius: 10
 .progress-left .nav-pills .status-details .tick { background-color: #fff; border: 2px transparent solid; border-radius: 100px; height: 40px; width: 40px; margin-right: 10px; margin-top: 6px; position: relative;}
 
 .progress-right { background-color: #fff; border-radius: 10px; border: 1px #ccc solid; padding: 30px 60px;}
-.progress-right .table { font-size: 14px; }
-.progress-right .table tr { border-color: #ccc; align-items: center; }
-.progress-right .table .profile-pic { height: 45px; width: 45px; border-radius: 100px; }
-.progress-right .table .avatar { height: 45px; width: 45px; border-radius: 100px; text-align: center; padding: 6px; font-size: 20px; color: var(--white);  }
-.progress-right .table .role { font-size: 11px; border-radius: 100px; padding: 1px 8px 2px 8px; display: inline-block; margin-top: 4px; border: 1px solid transparent;}
-.progress-right .table .builder { background-color: rgb(213, 243, 232); color: green; border-color:rgb(54, 201, 145);  }
-.progress-right .table .user { border-color: color-mix(in srgb, var(--secondary) 50%, transparent); background: color-mix(in srgb, var(--secondary) 10%, transparent); font-weight: normal; color: var(--secondary);  }
-.progress-right .table .agent { border-color: color-mix(in srgb, var(--primary) 50%, transparent); background: color-mix(in srgb, var(--primary) 10%, transparent); font-weight: normal; color: var(--primary); }
 
 .progress-right h5 { font-size: 16px; margin-bottom: 30px; font-weight: bold;}
 .progress-right .property-types { margin-bottom: 20px;}
@@ -1228,3 +1220,13 @@ input:checked + .slider {
 input:checked + .slider:before {
   transform: translateX(26px);
 }
+
+.table { font-size: 14px; }
+.table tr { border-color: #ccc; align-items: center; }
+.table .profile-pic { height: 45px; width: 45px; border-radius: 100px; }
+.table .avatar { height: 45px; width: 45px; border-radius: 100px; text-align: center; padding: 6px; font-size: 20px; color: var(--white);  }
+.table .role { font-size: 11px; border-radius: 100px; padding: 1px 8px 2px 8px; display: inline-block; margin-top: 4px; border: 1px solid transparent;}
+.table .builder { background-color: rgb(213, 243, 232); color: green; border-color:rgb(54, 201, 145);  }
+.table .user { border-color: color-mix(in srgb, var(--secondary) 50%, transparent); background: color-mix(in srgb, var(--secondary) 10%, transparent); font-weight: normal; color: var(--secondary);  }
+.table .agent { border-color: color-mix(in srgb, var(--primary) 50%, transparent); background: color-mix(in srgb, var(--primary) 10%, transparent); font-weight: normal; color: var(--primary); }
+.table td, .table th { vertical-align: middle !important; }
