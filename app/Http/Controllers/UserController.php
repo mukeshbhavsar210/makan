@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\admin;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
@@ -11,14 +11,14 @@ use Workbench\App\Models\User as ModelsUser;
 class UserController extends Controller {
     public function index(){
         $users = User::where('role', '!=', 'Admin')->orderBy('created_at', 'DESC')->paginate(10);
-        return view('front.users.list',[
+        return view('front.admin.users.list',[
             'users' => $users
         ]);
     }
 
     public function edit($id){
         $user = User::findOrFail($id);
-        return view('front.users.edit',[
+        return view('front.admin.users.edit',[
             'user' => $user
         ]);
     }

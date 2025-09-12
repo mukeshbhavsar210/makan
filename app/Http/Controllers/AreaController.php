@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\admin;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -16,7 +16,7 @@ class AreaController extends Controller {
         $cities = City::with('areas')->withCount('areas')->get();
         $counts = Area::count();
 
-        return view("front.area.list", [
+        return view("front.admin.area.list", [
             "areas"=> $areas,
             "cities"=> $cities,   
             "counts"=> $counts,             
@@ -60,7 +60,7 @@ class AreaController extends Controller {
         if (empty($area)) {
             return redirect()->route('cities.index');
         }
-        return view('front.area.edit', [
+        return view('front.admin.area.edit', [
             "area"=> $area,
             "city"=> $city,
         ]);

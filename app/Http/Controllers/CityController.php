@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\admin;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -13,7 +13,7 @@ class CityController extends Controller {
         $cities = City::all();
         $counts = City::count();
 
-        return view("front.city.list", [
+        return view("front.admin.city.list", [
             "cities"=> $cities,
             "counts"=> $counts,
         ]);
@@ -53,7 +53,7 @@ class CityController extends Controller {
         if (empty($city)) {
             return redirect()->route('cities.index');
         }
-        return view('front.city.edit', compact('city'));
+        return view('front.admin.city.edit', compact('city'));
     }
 
     //UPDATE

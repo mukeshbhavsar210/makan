@@ -1,20 +1,14 @@
 <?php
 
 use App\Http\Controllers\AccountController;
-use App\Http\Controllers\admin\AdminLoginController;
-use App\Http\Controllers\admin\AmenityController;
-use App\Http\Controllers\admin\AreaController;
-use App\Http\Controllers\admin\CategoryController;
-use App\Http\Controllers\admin\CityController;
-use App\Http\Controllers\admin\DashboardController;
-use App\Http\Controllers\admin\PropertyImageController;
-use App\Http\Controllers\admin\TempImagesController;
-use App\Http\Controllers\admin\UserController;
-use App\Http\Controllers\admin\BuilderController;
+use App\Http\Controllers\AreaController;
+use App\Http\Controllers\CityController;
+use App\Http\Controllers\PropertyImageController;
+use App\Http\Controllers\TempImagesController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\admin\PropertyController;
-use App\Http\Controllers\ContactController;
-use App\Models\User;
+use App\Http\Controllers\PropertyController;
+use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -69,6 +63,11 @@ Route::group(['prefix' => 'account'], function(){
         Route::post('/properties/toggle-status/{id}', [PropertyController::class, 'toggleStatus'])->name('properties.toggleStatus');
         Route::post('/properties/toggle-view/{id}', [PropertyController::class, 'toggleView'])->name('properties.toggleView');
 
+        //Payment Gateway
+        Route::get('/payment/success/{property}', [PaymentController::class, 'successPage'])->name('payment.success.page');
+        Route::post('/payment/success', [PaymentController::class, 'paymentSuccess'])->name('payment.success');
+        Route::get('/orders', [PaymentController::class, 'index'])->name('orders.index');
+
         //Delete Product Images Route
         Route::post('/uploadTempImage', [TempImagesController::class, 'create'])->name('temp-images.create');        
         Route::post('/property-images/update', [PropertyImageController::class, 'update'])->name('property-images.update');        
@@ -113,8 +112,5 @@ Route::group(['prefix' => 'account'], function(){
             ]);
         })->name('getSlug');
 
-        //Setting Route
-        //Route::get('/change-password', [SettingController::class, 'showChangePasswordForm'])->name('admin.showChangePasswordForm');
-        //Route::post('/process-change-password', [SettingController::class, 'processChangePassword'])->name('admin.processChangePassword');
     });
 });

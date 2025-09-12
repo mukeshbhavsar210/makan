@@ -33,6 +33,10 @@ class Property extends Model {
         return $this->hasMany(PropertyImage::class);
     }    
 
+    public function images() {
+        return $this->hasMany(PropertyImage::class, 'property_id');
+    }   
+
     public function property_details_images() {
         return $this->hasMany(PropertyImage::class, 'property_id', 'id')->orderBy('id', 'asc');;
     }

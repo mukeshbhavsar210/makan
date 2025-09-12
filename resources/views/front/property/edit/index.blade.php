@@ -57,10 +57,6 @@
             btn.text("Updating Data..."); 
         });
 
-        
-
-        
-    
         //Multiselect Checkbox
         function handleMultiSelect(optionsClass, dropdownId, labelId, hiddenInputId, defaultText) {
             $(optionsClass).on("change", function() {
@@ -213,7 +209,6 @@
                     });
                 }
             },
-
             error: function(){
                 console.log("Something went wrong")
             }

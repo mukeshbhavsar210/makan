@@ -248,4 +248,4 @@
     </div>    
 </div>
 
-<button type="submit" id="createBtn" class="btn btn-primary big-btn">Create</button>
+<button type="submit" id="createBtn" class="btn btn-primary big-btn">Create Property</button>

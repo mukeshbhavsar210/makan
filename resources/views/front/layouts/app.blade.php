@@ -101,8 +101,8 @@
 								</ul>								
 								@if(Auth::user()->role === 'Admin')
 									<ul class="inside-link mt-4">
+										<li><a href="{{ route('orders.index') }}">Orders</a></li>
 										<li><a href="{{ route('properties.pending') }}">Approval</a></li>
-										<li><a href="{{ route('cities.index') }}">City</a></li>
 										<li><a href="{{ route('areas.index') }}">Area</a></li>
 										<li><a href="{{ route('users.index') }}">User</a></li>
 									</ul>

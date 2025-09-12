@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\admin;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Models\City;
 use App\Models\Area;
 use App\Models\Builder;
+use App\Models\Order;
 use App\Models\PropertyApplication;
 use App\Models\SavedProperty;
 use App\Models\Plan;
@@ -21,7 +22,6 @@ use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
 
 class PropertyController extends Controller {
-
     public function index(Request $request) {
         $user = auth()->user();
         
@@ -93,7 +93,8 @@ class PropertyController extends Controller {
     //STORE PROPERTY
     public function store(Request $request){
         $rules = [
-            'title' => 'required',            
+            'title' => 'required',     
+            'plan_id' => 'required|exists:plans,id',       
         ];
 
         $validator = Validator::make($request->all(),$rules);
@@ -126,26 +127,10 @@ class PropertyController extends Controller {
             $property->total_area = $request->total_area;
             $property->towers = $request->towers;
             $property->units = $request->units;
-            $property->brokerage = $request->brokerage;      
+            $property->brokerage = $request->brokerage;  
+            $property->start_date = null;
+            $property->end_date = null;    
             
-            $property->start_date = now();          
-            // Get plan duration in days
-            switch ($request->plan_id) {
-                case 1: // Free
-                    $duration = 30;
-                    break;
-                case 2: // Gold
-                    $duration = 60;
-                    break;
-                case 3: // Diamond
-                    $duration = 90;
-                    break;
-                default:
-                    $duration = 30;
-            }
-
-            $property->end_date = now()->addDays($duration);
-
             $fields = [
                 'rooms_json'             => 'rooms',
                 'bathrooms_json'         => 'bathrooms',
@@ -162,12 +147,6 @@ class PropertyController extends Controller {
             }
             
             $property->save();
-
-            $plan = Plan::find($request->plan_id);
-
-            if ($plan->price > 0) {
-                return redirect()->route('payment.checkout', ['property' => $property->id]);
-            }
 
             if (!empty($request->image_array)) {
                 foreach ($request->image_array as $imageData) {
@@ -204,7 +183,7 @@ class PropertyController extends Controller {
                             $constraint->upsize(); 
                         });
                         $image->save($destPath);
-                        $image->toJpeg(100)->save($destPath);
+                        $image->toJpeg(90)->save($destPath);
 
                         // Thumbnail
                         $destPath = public_path() . '/uploads/property/thumb/' . $imageName;
@@ -214,6 +193,45 @@ class PropertyController extends Controller {
                         $image->save($destPath);
                     }
                 }
+            }
+
+            // Check plan price
+            $plan = Plan::find($request->plan_id);            
+
+            if ($plan->price > 0) {
+                // Paid plan → send Razorpay checkout URL or order ID
+                $api = new \Razorpay\Api\Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
+
+                $razorpayOrder = $api->order->create([
+                    'receipt' => 'order_'.$property->id.'_'.time(),
+                    'amount' => $plan->price * 100,
+                    'currency' => 'INR'
+                ]);
+
+                Order::create([
+                    'property_id'       => $property->id,
+                    'plan_id'           => $plan->id,
+                    'amount'            => $plan->price,
+                    'status'            => 'pending',
+                    'razorpay_order_id' => $razorpayOrder['id'],
+                ]);
+
+                return response()->json([
+                    'status' => true,
+                    'paid_plan' => true,
+                    'amount' => $plan->price,
+                    'razorpay_order_id' => $razorpayOrder['id'],
+                ]);
+            } else {
+                $property->status = 0;
+                $property->start_date = now();
+                $property->end_date = now()->addDays($plan->duration ?? 30);
+                $property->save();
+
+                return response()->json([
+                    'status' => true,
+                    'paid_plan' => false,
+                ]);
             }
 
         $request->session()->flash('success','Property added successfully');
@@ -584,7 +602,7 @@ class PropertyController extends Controller {
         $pendingCount = Property::where('status', 0)->count();
         $approvedCount = Property::where('status', 1)->count();
 
-        return view('front.property.approval', compact(
+        return view('front.admin.approval', compact(
             'pending', 
             'approved',
             'pendingCount', 
