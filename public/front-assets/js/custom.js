@@ -1,4 +1,18 @@
 $(document).ready(function(){
+    // When any plan radio button changes
+    $('input[name="plan_id"]').change(function() {
+        // Remove .active class from all plan cards
+        $('.plan-card').removeClass('active');
+
+        // Add .active class to the parent label of the checked radio
+        $(this).closest('.plan-card').addClass('active');
+    });
+
+    // Optional: add .active to the initially checked radio on page load
+    $('input[name="plan_id"]:checked').closest('.plan-card').addClass('active');
+
+
+
 
     $(".logoFirst").hover(
         function() {

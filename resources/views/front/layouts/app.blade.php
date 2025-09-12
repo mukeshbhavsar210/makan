@@ -82,24 +82,23 @@
 
 			<div class="divider"></div>
 
-			<div class="accordion" id="accordionExample">
-				<div class="accordion-item">
-					<h2 class="accordion-header">
-						<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-							<div class="icon icon_01">1</div>
-							Quick Links
-						</button>
-					</h2>
-					<div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
-						<div class="accordion-body">
-							<ul class="inside-link">
-								<li><a href="{{ route('front.home') }}" class="{{ request()->routeIs('front.home') ? 'active' : '' }}">Home</a></li>
-								<li><a href="{{ route('properties.index') }}" class="{{ request()->routeIs('properties.index') ? 'active' : '' }}">Properties</a></li>
-								<li><a href="{{ route('account.myPropertyApplications') }}" class="{{ request()->routeIs('account.myPropertyApplications') ? 'active' : '' }}">Interested</a></li>
-								<li><a href="{{ route('property.savedProperties') }}" class="{{ request()->routeIs('property.savedProperties') ? 'active' : '' }}">Saved</a></li>
-							</ul>	
-							
-							@auth
+			@if (Auth::check())
+				<div class="accordion" id="accordionExample">
+					<div class="accordion-item">
+						<h2 class="accordion-header">
+							<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+								<div class="icon icon_01">1</div>
+								Quick Links
+							</button>
+						</h2>
+						<div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+							<div class="accordion-body">
+								<ul class="inside-link">
+									<li><a href="{{ route('front.home') }}" class="{{ request()->routeIs('front.home') ? 'active' : '' }}">Home</a></li>
+									<li><a href="{{ route('properties.index') }}" class="{{ request()->routeIs('properties.index') ? 'active' : '' }}">Properties</a></li>
+									<li><a href="{{ route('account.myPropertyApplications') }}" class="{{ request()->routeIs('account.myPropertyApplications') ? 'active' : '' }}">Interested</a></li>
+									<li><a href="{{ route('property.savedProperties') }}" class="{{ request()->routeIs('property.savedProperties') ? 'active' : '' }}">Saved</a></li>
+								</ul>								
 								@if(Auth::user()->role === 'Admin')
 									<ul class="inside-link mt-4">
 										<li><a href="{{ route('properties.pending') }}">Approval</a></li>
@@ -108,167 +107,154 @@
 										<li><a href="{{ route('users.index') }}">User</a></li>
 									</ul>
 								@endif
-							@endauth
+							</div>
 						</div>
 					</div>
-				</div>
 
-				<div class="accordion-item">
-					<h2 class="accordion-header">
-						<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-							<div class="icon icon_02">1</div>
-							My Activity
-						</button>
-					</h2>
-					<div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-						<div class="accordion-body">
-							<div class="activities">
-								<ul class="nav nav-pills" id="pills-tab" role="tablist">
-									<li class="nav-item" role="presentation">
-										<a href="#" class="nav-link active" id="pills-tab_01" data-bs-toggle="pill" data-bs-target="#tab_01" aria-controls="tab_01" aria-selected="true">
-											<p>Contacted <br />Properties</p>
-											@php
-												$countsApplied  = isset($countsApplied ) ? $countsApplied  : 0;
-											@endphp
+					<div class="accordion-item">
+						<h2 class="accordion-header">
+							<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+								<div class="icon icon_02">1</div>
+								My Activity
+							</button>
+						</h2>
+						<div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+							<div class="accordion-body">
+								<div class="activities">
+									<ul class="nav nav-pills" id="pills-tab" role="tablist">
+										<li class="nav-item" role="presentation">
+											<a href="#" class="nav-link active" id="pills-tab_01" data-bs-toggle="pill" data-bs-target="#tab_01" aria-controls="tab_01" aria-selected="true">
+												<p>Contacted <br />Properties</p>
+												@php
+													$countsApplied  = isset($countsApplied ) ? $countsApplied  : 0;
+												@endphp
 
-											<p class="count">{{ $countsApplied  }}</p>
-										</a>
-									</li>
-									<li class="nav-item" role="presentation">
-										<a class="nav-link" id="pills-tab_02" data-bs-toggle="pill" data-bs-target="#tab_02" aria-controls="tab_02" aria-selected="false">
-											<p>Seen <br />Properties</p>
-											<p class="count">00</p>		
-											
-											{{-- @if(!empty($seenProperties[$property->id]))
-												<p class="seen-status">
-													Seen {{ $seenProperties[$property->id] }} time{{ $seenProperties[$property->id] > 1 ? 's' : '' }}
-												</p>
-											@endif --}}
-										</a>
-									</li>
-									<li class="nav-item" role="presentation">
-										<a class="nav-link" id="pills-tab_03" data-bs-toggle="pill" data-bs-target="#tab_03" aria-controls="tab_03" aria-selected="false">
-											<p>Saved<br /> Properties</p>
-											@php
-												$countsSaved  = isset($countsSaved ) ? $countsSaved  : 0;
-											@endphp
+												<p class="count">{{ $countsApplied  }}</p>
+											</a>
+										</li>
+										<li class="nav-item" role="presentation">
+											<a class="nav-link" id="pills-tab_02" data-bs-toggle="pill" data-bs-target="#tab_02" aria-controls="tab_02" aria-selected="false">
+												<p>Seen <br />Properties</p>
+												@php
+													$propertyIds = array_filter(array_keys($seenProperties), fn($id) => $id > 0);
+													$totalSeen = count($propertyIds);
+												@endphp
+												<p class="count">{{ $totalSeen }}</p>
+											</a>
+										</li>
+										<li class="nav-item" role="presentation">
+											<a class="nav-link" id="pills-tab_03" data-bs-toggle="pill" data-bs-target="#tab_03" aria-controls="tab_03" aria-selected="false">
+												<p>Saved<br /> Properties</p>
+												@php
+													$countsSaved  = isset($countsSaved ) ? $countsSaved  : 0;
+												@endphp
+												<p class="count">{{ $countsSaved  }}</p>
+											</a>
+										</li>
+									</ul>
+									<div class="tab-content" id="pills-tabContent">
+										<div class="tab-pane fade show active" id="tab_01" role="tabpanel" aria-labelledby="pills-tab_01">
+											<div class="gallery-body">
+												@php
+													$appliedProperties = isset($appliedProperties) ? $appliedProperties : collect();
+												@endphp
 
-											<p class="count">{{ $countsSaved  }}</p>
-										</a>
-									</li>
-									<li class="nav-item" role="presentation">
-										<a class="nav-link" id="pills-tab_04" data-bs-toggle="pill" data-bs-target="#tab_04" aria-controls="tab_04" aria-selected="false">
-											<p>Recent<br /> Searches</p>
-											<p class="count">00</p>																		
-										</a>
-									</li>
-								</ul>
-								<div class="tab-content" id="pills-tabContent">
-									<div class="tab-pane fade show active" id="tab_01" role="tabpanel" aria-labelledby="pills-tab_01">
-										<div class="gallery-body">
-											@php
-												$appliedProperties = isset($appliedProperties) ? $appliedProperties : collect();
-											@endphp
-
-											@if(isset($appliedProperties) && $appliedProperties->isNotEmpty())
-												<div class="sidebar-gallery">
-													@foreach ($appliedProperties as $value)
-														<div class="gallery-item">
-															@php
-																$PropertyImage = $value->property->property_images->first();
-															@endphp
-															<a href="{{ $value->url }}" target="_blank">
-																@if ($PropertyImage && !empty($PropertyImage->image))
-																	<img src="{{ asset('uploads/property/thumb/' . $PropertyImage->image) }}" class="thumb">
-																@else
-																	<img src="{{ asset('admin-assets/img/default-150x150.png') }}" class="thumb">
-																@endif
-															</a>
-															<h5>{{ $value->property->title }}</h5>
-															<p>{{ $value->property->location }}, {{ $value->property->area->name }}, {{ $value->property->city->name ?? '' }}</p>
-															<a href="#" class="btn btn-primary mt-2">Contact</a>
-														</div>
-													@endforeach
-												</div>									
-												@else
-													<a href="{{ route('front.home') }}" class="btn btn-primary">Start New Search</a>
-												@endif	
-										</div>						
-									</div>
-
-									<div class="tab-pane fade" id="tab_02" role="tabpanel" aria-labelledby="pills-tab_02">
-										<div class="gallery-body">
-											@php
-												$uniqueSeen = collect($seenProperties)->unique(); 
-											@endphp
-												<div class="sidebar-gallery">
-													@foreach($uniqueSeen as $propertyId => $count)
-														@php
-															$property = \App\Models\Property::with('property_images','area','city')
-																->find($propertyId);
-														@endphp
-
-														@if($property)
+												@if(isset($appliedProperties) && $appliedProperties->isNotEmpty())
+													<div class="sidebar-gallery">
+														@foreach ($appliedProperties as $value)
 															<div class="gallery-item">
-																<a href="{{ $property->url }}" target="_blank">
-																	@if($property->property_images->first())
-																		<img src="{{ asset('uploads/property/thumb/' . $property->property_images->first()->image) }}" class="thumb">
+																@php
+																	$PropertyImage = $value->property->property_images->first();
+																@endphp
+																<a href="{{ $value->url }}" target="_blank">
+																	@if ($PropertyImage && !empty($PropertyImage->image))
+																		<img src="{{ asset('uploads/property/thumb/' . $PropertyImage->image) }}" class="thumb">
 																	@else
 																		<img src="{{ asset('admin-assets/img/default-150x150.png') }}" class="thumb">
 																	@endif
 																</a>
-																<h5>{{ $property->title }}</h5>
-																<p>{{ $property->area->name ?? '' }}, {{ $property->city->name ?? '' }}</p>
-																<p class="seen-status">Seen {{ $count }} time{{ $count > 1 ? 's' : '' }}</p>
-																<a href="#" class="btn btn-primary mt-2">Contact</a>														
+																<h5>{{ $value->property->title }}</h5>
+																<p>{{ $value->property->location }}, {{ $value->property->area->name }}, {{ $value->property->city->name ?? '' }}</p>
+																<a href="#" class="btn btn-primary mt-2">Contact</a>
 															</div>
-														@endif
-													@endforeach
+														@endforeach
+													</div>									
+													@else
+														<a href="{{ route('front.home') }}" class="btn btn-primary">Start New Search</a>
+													@endif	
+											</div>						
+										</div>
+
+										<div class="tab-pane fade" id="tab_02" role="tabpanel" aria-labelledby="pills-tab_02">
+											<div class="gallery-body">
+												@php
+													$uniqueSeen = collect($seenProperties)->unique(); 
+												@endphp
+													<div class="sidebar-gallery">
+														@foreach($uniqueSeen as $propertyId => $count)
+															@php
+																$property = \App\Models\Property::with('property_images','area','city')
+																	->find($propertyId);
+															@endphp
+
+															@if($property)
+																<div class="gallery-item">
+																	<a href="{{ $property->url }}" target="_blank">
+																		@if($property->property_images->first())
+																			<img src="{{ asset('uploads/property/thumb/' . $property->property_images->first()->image) }}" class="thumb">
+																		@else
+																			<img src="{{ asset('admin-assets/img/default-150x150.png') }}" class="thumb">
+																		@endif
+																	</a>
+																	<h5>{{ $property->title }}</h5>
+																	<p>{{ $property->area->name ?? '' }}, {{ $property->city->name ?? '' }}</p>
+																	<p class="seen-status">Seen {{ $count }} time{{ $count > 1 ? 's' : '' }}</p>
+																	<a href="#" class="btn btn-primary mt-2">Contact</a>														
+																</div>
+															@endif
+														@endforeach
+													</div>
 												</div>
 											</div>
 										</div>
-									</div>
 
-									<div class="tab-pane fade" id="tab_03" role="tabpanel" aria-labelledby="pills-tab_03">
-										<div class="gallery-body">
-											@php
-												$savedProperties = isset($savedProperties) ? $savedProperties : collect();
-											@endphp
+										<div class="tab-pane fade" id="tab_03" role="tabpanel" aria-labelledby="pills-tab_03">
+											<div class="gallery-body">
+												@php
+													$savedProperties = isset($savedProperties) ? $savedProperties : collect();
+												@endphp
 
-											@if(isset($savedProperties) && $savedProperties->isNotEmpty())
-												<div class="sidebar-gallery">
-													@foreach ($savedProperties as $value)
-														<div class="gallery-item">
-															@php
-																$PropertyImage = $value->property->property_images->first();
-															@endphp
-															<a href="{{ $value->url }}" target="_blank">
-																@if ($PropertyImage && !empty($PropertyImage->image))
-																	<img src="{{ asset('uploads/property/thumb/' . $PropertyImage->image) }}" class="thumb">
-																@else
-																	<img src="{{ asset('admin-assets/img/default-150x150.png') }}" class="thumb">
-																@endif
-															</a>
-															<h5>{{ $value->property->title }}</h5>
-															<p>{{ $value->property->location }}, {{ $value->property->area->name }}, {{ $value->property->city->name ?? '' }}</p>
-															<a href="#" class="btn btn-primary mt-2">Contact</a>
-														</div>
-													@endforeach
-												</div>									
-												@else
-													<a href="{{ route('front.home') }}" class="btn btn-primary">Start New Search</a>
-												@endif	
-										</div>						
-									</div>
-
-									<div class="tab-pane fade" id="tab_04" role="tabpanel" aria-labelledby="pills-tab_04">
-										<h2>Contact 4</h2>							
+												@if(isset($savedProperties) && $savedProperties->isNotEmpty())
+													<div class="sidebar-gallery">
+														@foreach ($savedProperties as $value)
+															<div class="gallery-item">
+																@php
+																	$PropertyImage = $value->property->property_images->first();
+																@endphp
+																<a href="{{ $value->url }}" target="_blank">
+																	@if ($PropertyImage && !empty($PropertyImage->image))
+																		<img src="{{ asset('uploads/property/thumb/' . $PropertyImage->image) }}" class="thumb">
+																	@else
+																		<img src="{{ asset('admin-assets/img/default-150x150.png') }}" class="thumb">
+																	@endif
+																</a>
+																<h5>{{ $value->property->title }}</h5>
+																<p>{{ $value->property->location }}, {{ $value->property->area->name }}, {{ $value->property->city->name ?? '' }}</p>
+																<a href="#" class="btn btn-primary mt-2">Contact</a>
+															</div>
+														@endforeach
+													</div>									
+													@else
+														<a href="{{ route('front.home') }}" class="btn btn-primary">Start New Search</a>
+													@endif	
+											</div>						
+										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-				</div>
+				@endif
 			</div>
 		</div>	
 	</div>

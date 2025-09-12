@@ -214,11 +214,38 @@
     </div>
 </div> --}}
 
-       
-    
+<h5 class="mt-4">Choose Your Plan</h5>
 
-{{-- <a href="{{ route('properties.index') }}" class="btn m-1 btn-outline-dark">Cancel</a> --}}
+<div class="plans-container mt-3">
+    <div class="row">
+        @foreach($plans as $plan)
+            <div class="col-md-4 col-12">
+                <label class="plan-card">
+                    <input type="radio" name="plan_id" value="{{ $plan->id }}" required {{ $plan->name === 'Gold' ? 'checked' : '' }}>
+                    <div class="plan-header">
+                        {{ $plan->name }}
+                    </div>
+                    <div class="plan-body">
+                        <div class="price">
+                            @if($plan->price > 0)
+                                Rs.{{ $plan->price }}/<span>Month</span>
+                            @else
+                                Free
+                            @endif
+                        </div>
 
+                        <ul class="features">
+                            @foreach(json_decode($plan->features) as $feature)
+                                <li>{{ $feature }}</li>
+                            @endforeach
+                        </ul>
+
+                        <span class="btn btn-primary">Select Plan</span>
+                    </div>
+                </label>
+            </div>
+        @endforeach
+    </div>    
 </div>
 
 <button type="submit" id="createBtn" class="btn btn-primary big-btn">Create</button>

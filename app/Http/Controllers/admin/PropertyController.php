@@ -13,6 +13,7 @@ use App\Models\Area;
 use App\Models\Builder;
 use App\Models\PropertyApplication;
 use App\Models\SavedProperty;
+use App\Models\Plan;
 use App\Models\User;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
@@ -51,6 +52,7 @@ class PropertyController extends Controller {
             'counts' => $counts,
             'viewType' => $viewType,
             'users' => $users,
+            
         ]);
     }
 
@@ -74,6 +76,7 @@ class PropertyController extends Controller {
         $cities = City::orderBy('name','ASC')->where('status',1)->get();
         $areas = Area::orderBy('name','ASC')->where('status',1)->get();
         $relatedProperties = Property::where('status',1)->get();   
+        $plans = Plan::all();
         
         $data = [ 
             'user' => $user,
@@ -81,6 +84,7 @@ class PropertyController extends Controller {
             'areas' => $areas,            
             'builder' => $builder,
             'builders' => $builders,
+            'plans' => $plans,
             'relatedProperties' => $relatedProperties,
         ];
         return view('front.property.create.index', $data);
@@ -104,10 +108,12 @@ class PropertyController extends Controller {
             }
 
             $property->title = $request->title;
-            $property->slug = $request->slug;            
+            $property->slug = $request->slug;  
+            $property->plan_id = $request->plan_id;
             $property->category = $request->category;
             $property->category = $request->category;
             $property->sale_types = $request->sale_types;
+            $property->property_types = $request->property_types;
             $property->furnish_types = $request->furnish_types;
             $property->construction_types = $request->construction_types;
             $property->city_id = $request->city;   
@@ -120,12 +126,29 @@ class PropertyController extends Controller {
             $property->total_area = $request->total_area;
             $property->towers = $request->towers;
             $property->units = $request->units;
-            $property->brokerage = $request->brokerage;            
+            $property->brokerage = $request->brokerage;      
+            
+            $property->start_date = now();          
+            // Get plan duration in days
+            switch ($request->plan_id) {
+                case 1: // Free
+                    $duration = 30;
+                    break;
+                case 2: // Gold
+                    $duration = 60;
+                    break;
+                case 3: // Diamond
+                    $duration = 90;
+                    break;
+                default:
+                    $duration = 30;
+            }
+
+            $property->end_date = now()->addDays($duration);
 
             $fields = [
                 'rooms_json'             => 'rooms',
                 'bathrooms_json'         => 'bathrooms',
-                'property_types_json'    => 'property_types',
                 'amenities_json'         => 'amenities',
                 'furnishing_json'        => 'furnishing',
                 'facings_json'           => 'facings',
@@ -139,6 +162,12 @@ class PropertyController extends Controller {
             }
             
             $property->save();
+
+            $plan = Plan::find($request->plan_id);
+
+            if ($plan->price > 0) {
+                return redirect()->route('payment.checkout', ['property' => $property->id]);
+            }
 
             if (!empty($request->image_array)) {
                 foreach ($request->image_array as $imageData) {
@@ -547,16 +576,20 @@ class PropertyController extends Controller {
 
 
     //Posted properties required approval
-    public function pendingProperties() {
-        $pending = Property::where('status', 0)
-            ->orderBy('created_at', 'DESC')
-            ->paginate(10, ['*'], 'pending_page');
+    public function approval() {
+        $pending = Property::with('plan')->where('status', 0)->orderBy('created_at', 'DESC')->paginate(10, ['*'], 'pending_page');
+        $approved = Property::with('plan')->where('status', 1)->orderBy('created_at', 'DESC')->paginate(10, ['*'], 'approved_page');
 
-        $approved = Property::where('status', 1)
-            ->orderBy('created_at', 'DESC')
-            ->paginate(10, ['*'], 'approved_page');
+        // Counts
+        $pendingCount = Property::where('status', 0)->count();
+        $approvedCount = Property::where('status', 1)->count();
 
-        return view('front.property.approval', compact('pending', 'approved'));
+        return view('front.property.approval', compact(
+            'pending', 
+            'approved',
+            'pendingCount', 
+            'approvedCount'
+        ));
     }
 
 

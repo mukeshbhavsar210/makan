@@ -49,12 +49,12 @@
                 @endforeach
             </div>
 
-            <div class="custom-radio-square commercialProperty d-none required-group">
+            {{-- <div class="custom-radio-square commercialProperty d-none required-group">
                 @foreach($commercialTypes as $value => $label)
                     <input type="radio" class="btn-check" name="property_types" id="type_{{ $value }}" value="{{ $value }}" {{ $selectedType == $value ? 'checked' : '' }}>
                     <label class="btn-radio" for="type_{{ $value }}">{{ $label }}</label>
                 @endforeach
-            </div>
+            </div> --}}
         </div>
     </div>
 
