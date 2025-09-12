@@ -65,7 +65,7 @@ Route::group(['prefix' => 'account'], function(){
         Route::put('/properties/{property}', [PropertyController::class, 'update'])->name('properties.update');
         Route::delete('/properties/{property}', [PropertyController::class, 'destroy'])->name('properties.delete');
         Route::get('/get-properties',[PropertyController::class,'getProducts'])->name('properties.getProducts');
-        Route::get('/properties/pending', [PropertyController::class, 'pendingProperties'])->name('properties.pending');
+        Route::get('/properties/pending', [PropertyController::class, 'approval'])->name('properties.pending');
         Route::post('/properties/toggle-status/{id}', [PropertyController::class, 'toggleStatus'])->name('properties.toggleStatus');
         Route::post('/properties/toggle-view/{id}', [PropertyController::class, 'toggleView'])->name('properties.toggleView');
 

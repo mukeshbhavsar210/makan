@@ -89,5 +89,8 @@ class Property extends Model {
         return $this->hasOne(PropertyImage::class)->where('label', 'elevation');
     }
 
+    public function plan() {
+        return $this->belongsTo(Plan::class);
+    }
 
 }

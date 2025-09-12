@@ -774,22 +774,71 @@ header { position: fixed; width: 100%; top:0; left: 0; z-index: 99; background-c
 .sidebar .user-details .activities .inside-link li { margin-right: 15px;}
 .sidebar .user-details .activities .inside-link li a { font-size: 14px; text-decoration: none; color: var(--black); padding: 5px 10px; border: 1px #ccc solid; border-radius: 3px;}
 .sidebar .user-details .activities .nav-pills { margin: 5px 0; display: inline-flex;}
-.sidebar .user-details .activities .nav-pills .nav-link { border-radius: 7px; padding: 5px 12px 8px 12px; cursor: pointer; font-size: 13px; line-height: 16px; border: 1px #ccc solid; margin-right: 5px; text-align: center; color: var(--gray); background-color: #fff; }
+.sidebar .user-details .activities .nav-pills .nav-link { border-radius: 7px; padding: 5px 23px 8px 23px; cursor: pointer; font-size: 13px; line-height: 16px; border: 1px #ccc solid; margin-right: 5px; text-align: center; color: var(--gray); background-color: #fff; }
 .sidebar .user-details .activities .nav-pills .nav-link p { margin: 0;}
 .sidebar .user-details .activities .nav-pills .nav-link .count { margin: 0; background-color: rgba(153, 153, 153, 0.22); border-radius: 100px; display: inline-block; padding: 1px 8px 2px 8px; margin-top: 5px; color: var(--black); font-size: 11px;}
 .sidebar .user-details .activities .nav-pills .nav-link.active { border-color: var(--primary); background-color: #cfe2ff; color: var(--black); }
 .sidebar .user-details .activities .nav-pills .nav-link.active .count { background-color: #007bff; color: #fff; }
 .sidebar .user-details .divider { height: 1px; background-image: radial-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.012)); }
-.sidebar .accordion-item .accordion-button { padding: 8px 15px; font-size: 14px;}
+.sidebar .accordion-item { border-radius: 0 !important;}
+.sidebar .accordion-item .accordion-button { padding: 8px 15px; font-size: 14px; border-radius: 0 !important;}
 .sidebar .accordion-item .accordion-button .icon { border: 1px #ccc solid; height: 30px; width: 30px; border-radius: 100px; margin-right: 15px; text-align: center; background-color: #fff; padding-top:5px;}
 .sidebar .accordion-item .accordion-button:focus { box-shadow: none;}
 
-.sidebar .accordion-item .accordion-body { padding:15px;}
+.sidebar .accordion-item .accordion-body { padding:15px 20px;}
 .sidebar .accordion-item .accordion-body .inside-link { display: flex; margin: 10px 0; padding: 0;}
 .sidebar .accordion-item .accordion-body .inside-link li { margin: 0; padding: 0;}
 .sidebar .accordion-item .accordion-body .inside-link li a { padding: 8px 12px; border: 1px #ccc solid; border-radius: 5px; margin-right: 10px; text-decoration: none; font-size: 14px; color: var(--gray); display: inline;}
 .sidebar .accordion-item .accordion-body .inside-link li a:hover, .sidebar .accordion-item .accordion-body .inside-link li a.active { border-color: var(--primary); color: var(--primary); background-color: color-mix(in srgb, var(--primary) 10%, transparent); }
 
+body .dropzone { border: 2px dashed var(--primary) !important; border-radius: 10px;}
+
+.media { position: relative; margin-bottom: 25px; width: 100%; border: 1px #ccc solid; padding:10px; border-radius: 7px;}
+.media img { width: 100%; border-radius: 4px;}
+.media .form-select { width: 100%; border-radius: 4px; padding: 5px 10px;}
+.media .label { padding: 7px 0 0 0; display: flex; justify-content: space-between;}
+.media .deleteCardImg { padding:0 3px; border-radius: 3px; height:20px; width: 20px; font-size: 13px; text-align: center; position: absolute; top:10px; right:10px; background-color: red; color: var(--white); text-decoration: none;}
+.media .deleteCardImg:hover { background-color: #0d6efd; color: #fff;}
+
+/* Container */
+.plans-container { font-size: 13px;}
+
+/* Card */
+.plan-card {
+  position: relative;
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: #fff;
+}
+.plan-card.active { border-color: var(--primary); background-color: color-mix(in srgb, var(--primary) 10%, transparent); }
+.plan-card.active .plan-header { background-color: var(--primary); color: var(--white); font-weight: bold; }
+.plan-card:hover, .plan-card:hover .plan-header { border-color: var(--gray);  }
+
+.plan-body { padding:15px 20px 20px 20px;}
+.plan-body .price { font-size: 20px; text-align: center; font-weight: bold; margin-bottom: 20px;}
+.plan-body .price span { font-size: 13px; color: #666;}
+
+/* Hide the radio button */
+.plan-card input[type="radio"] {
+  display: none;
+}
+
+/* Highlight selected card */
+.plan-card input[type="radio"]:checked + .plan-header,
+.plan-card input[type="radio"]:checked ~ .features {
+  border-color: #333;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.plan-header { text-align: center; padding: 10px; border-radius: 10px 10px 0 0; color: var(--black); font-size: 14px; text-transform: uppercase; border-bottom: 1px #e5e5e5 solid; }
+.plan-header h2 { margin: 0; font-size: 24px; }
+.plan-header .price { font-size: 22px; font-weight: bold; margin-top: 5px;}
+.features { list-style: none; padding: 0; margin: 10px 0 20px 0; }
+.features li { margin: 5px 0; position: relative; padding-left: 20px; font-size: 14px; }
+.features li::before { content: '✔'; position: absolute; left: 0; color: green; font-size: 11px; }
 
 .area-listing { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
 .area-listing .details {
@@ -971,7 +1020,7 @@ header { position: fixed; width: 100%; top:0; left: 0; z-index: 99; background-c
 
 .progress-right h5 { font-size: 16px; margin-bottom: 30px; font-weight: bold;}
 .progress-right .property-types { margin-bottom: 20px;}
-.progress-right .big-btn { padding: 12px; width: 100%; margin-top: 40px;}
+.progress-right .big-btn { padding: 12px; width: 100%; margin-top: 30px; text-transform: uppercase; font-size: 14px;}
 .progress-right .custom .nav-link { padding: 10px 30px; border: 1px #ccc solid; margin-right: 20px; color: var(--gray);}
 .progress-right .custom .nav-link.active { border-color: var(--primary); color: var(--primary);  background-color: #cfe2ff;}
 .progress-right .custom-radio .btn-radio { padding: 7px 20px 9px 20px; border: 1px #e5e5e5 solid; margin-right: 10px; color: var(--gray); font-weight: normal; font-size: 14px; border-radius: 5px; cursor: pointer; }

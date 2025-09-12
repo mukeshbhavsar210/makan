@@ -230,7 +230,7 @@
         event.preventDefault();
 
         var formArray = $(this).serializeArray();
-        $("button[type='submit']").prop('disabled',true);
+        //$("button[type='submit']").prop('disabled',true);
 
         $.ajax({
             url: '{{ route("properties.store") }}',
@@ -296,7 +296,7 @@
                             <img src="${response.ImagePath}" class="img-fluid" />
 
                             <!-- Label selection -->
-                            <select name="image_array[${response.image_id}][label]" class="form-control mt-2 image-label">
+                            <select name="image_array[${response.image_id}][label]" class="form-select mt-2 image-label">
                                 <option value="">Select Label</option>
                                 <option value="Main">Main</option>
                                 <option value="Video">Video</option>
@@ -312,7 +312,7 @@
 
                             <!-- Delete button -->
                             <a href="javascript:void(0)" onclick="deleteImage(${response.image_id})" 
-                            class="deleteCardImg btn btn-sm btn-danger mt-2">X</a>
+                            class="deleteCardImg">X</a>
                         </div>
                     </div>`;
 
