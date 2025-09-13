@@ -51,7 +51,7 @@
                             <td style="width: 150px;">{{ \Carbon\Carbon::parse($property->end_date)->format('d M, Y') }}</td>
                             <td style="width: 100px;">
                                 <label class="switch">
-                                    <input type="checkbox" class="toggle-status" data-id="{{ $property->id }}" {{ $property->status ? 'checked' : '' }}>
+                                    <input type="checkbox" class="toggle-status" data-id="{{ $property->id }}" {{ $property->verification === 'approved' ? 'checked' : '' }}>
                                     <span class="slider round"></span>
                                 </label>
                             </td>
@@ -103,7 +103,7 @@
                             <td style="width: 150px;">{{ \Carbon\Carbon::parse($property->end_date)->format('d M, Y') }}</td>
                             <td>
                                 <label class="switch">
-                                    <input type="checkbox" class="toggle-status" data-id="{{ $property->id }}" {{ $property->status ? 'checked' : '' }}>
+                                    <input type="checkbox" class="toggle-status" data-id="{{ $property->id }}" {{ $property->verification === 'approved' ? 'checked' : '' }}>
                                     <span class="slider round"></span>
                                 </label>
                             </td>

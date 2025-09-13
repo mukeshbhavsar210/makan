@@ -943,6 +943,7 @@ body .dropzone { border: 2px dashed var(--primary) !important; border-radius: 10
 
 .listings-posted { border: 1px #ccc solid; position: relative; border-radius: 10px; margin: 10px 0; background-color: #fff; font-size: 14px; min-height: 445px;}
 .listings-posted .link { position: relative; height: 220px;}
+.listings-posted .pending { background: linear-gradient(180deg,transparent,rgba(0,0,0,.5)); height: 220px; width: 100%; position: absolute; bottom: 0; left: 0; border-radius: 7px 7px 0 0; z-index: 9; }
 .listings-posted .overlay { background: linear-gradient(180deg,transparent,rgba(0,0,0,.5)); height: 220px; width: 100%; position: absolute; bottom: 0; left: 0; border-radius: 7px 7px 0 0; z-index: 1; }
 .listings-posted .overlay-details-top { padding: 10px; position: absolute; top: 0; left:0; color:#fff; width: 100%; z-index: 11; display: flex;}
 .listings-posted .overlay-details-top .avatar-stack { margin-right: 5px;}

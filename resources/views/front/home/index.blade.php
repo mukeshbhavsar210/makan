@@ -14,11 +14,19 @@
                 <ul class="rentBuy">
                     @php
                         $categories = ['buy', 'rent'];
+                        $types = ['Commercial', 'PG/Co-Living'];
                     @endphp
                     @foreach ($categories as $value)
                         <li>
                             <label class="{{ request('category') == $value || (!request('category') && $loop->first) ? 'activeTab' : '' }}">
                                 <input type="radio" name="category" value="{{ $value }}" {{ request('category') == $value || (!request('category') && $loop->first) ? 'checked' : '' }}>{{ $value }}
+                            </label> 
+                        </li>
+                    @endforeach
+                    @foreach ($types as $value)
+                        <li>
+                            <label class="{{ request('residence_types') == $value || (!request('residence_types') && $loop->first) ? 'activeTab' : '' }}">
+                                <input type="radio" name="residence_types" value="{{ $value }}" {{ request('residence_types') == $value || (!request('residence_types') && $loop->first) ? 'checked' : '' }}>{{ $value }}
                             </label> 
                         </li>
                     @endforeach

@@ -22,8 +22,8 @@
             $selectedRooms = isset($property) ? json_decode($property->rooms, true) ?? [] : [];
             if (empty($selectedRooms)) {
                 $selectedRooms = [
-                    ['title' => '2_bhks', 'price' => '', 'size' => ''],
-                    ['title' => '3_bhks', 'price' => '', 'size' => ''],
+                    ['title' => '2_bhk', 'price' => '', 'size' => ''],
+                    ['title' => '3_bhk', 'price' => '', 'size' => ''],
                 ];
             }
 
@@ -38,7 +38,7 @@
 
         <label for="room" id="roomCounts" class="light-label">BHK, Price and Sq ft <span class="req">*</span></label><br />
         <div class="title required-group">
-            @foreach (['1_rk'=>'1 RK','1_bhk'=>'1 BHK','2_bhks'=>'2 BHKs','3_bhks'=>'3 BHKs','4_bhks'=>'4 BHKs','5_bhks'=>'5 BHKs'] as $key => $label)
+            @foreach (['1_rk'=>'1 RK','1_bhk'=>'1 BHK','2_bhk'=>'2 BHK','3_bhk'=>'3 BHK','4_bhk'=>'4 BHK','5_bhk'=>'5 BHK'] as $key => $label)
                 <div class="custom-checkbox-group" id="heading_{{ $key }}">
                     <label class="custom-checkbox">
                         <input type="checkbox" 
@@ -50,13 +50,25 @@
                             data-target="#collapse_{{ $key }}">
                         <span class="btn-checkbox">{{ $label }}</span>
                     </label>
+                    
                 </div>
             @endforeach  
         </div>
 
+        @php
+            $selectedRooms = isset($property) ? json_decode($property->rooms, true) ?? [] : [];
+            if (empty($selectedRooms)) {
+                $selectedRooms = [
+                    ['title' => '2_bhk', 'price' => '', 'size' => ''],
+                    ['title' => '3_bhk', 'price' => '', 'size' => ''],
+                ];
+            }
+            $activeField = array_column($selectedRooms, 'title');
+        @endphp
+
         <div class="child-wrapper">            
-            @foreach (['1_rk'=>'1 RK','1_bhk'=>'1 BHK','2_bhk'=>'2 BHKs','3_bhk'=>'3 BHKs','4_bhk'=>'4 BHKs','5_bhk'=>'5 BHKs'] as $key => $label)
-                <div id="collapse_{{ $key }}" class="child-div {{ in_array($key, $selectedRoomTitles) ? 'active' : '' }} {{ $loop->iteration % 2 == 1 ? 'odd' : 'even' }}">
+            @foreach (['1_rk'=>'1 RK','1_bhk'=>'1 BHK','2_bhk'=>'2 BHK','3_bhk'=>'3 BHK','4_bhk'=>'4 BHK','5_bhk'=>'5 BHK'] as $key => $label)
+                <div id="collapse_{{ $key }}" class="child-div {{ in_array($key, $activeField) ? 'active' : '' }} {{ $loop->iteration % 2 == 1 ? 'odd' : 'even' }}">
                     <div class="flex-details">                            
                         <div class="room-title">{{ $label }}</div>
                         <div class="input-group price-details">
@@ -201,4 +213,4 @@
 </div>
 </div>       
 
-<p><a href="#" class="btn btn-primary">Next, add price details</a></p>
+<p><a href="#" class="btn btn-primary btn-next-tab">Next, add Property details</a></p>

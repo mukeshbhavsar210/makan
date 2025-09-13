@@ -72,7 +72,7 @@ class HomeController extends Controller {
                             ELSE 3
                         END ASC
                     ")
-                    ->orderBy('created_at', 'desc')->where('status',1);                            
+                    ->orderBy('created_at', 'desc')->where('verification','approved');                            
         $cities = City::where('status',1)->get();
         $areas = Area::where('status',1)->get();    
         $users = User::select('id', 'name', 'role')->get();                    
@@ -108,6 +108,11 @@ class HomeController extends Controller {
         //Filter using category               
         if (!empty($request->category)) {
             $properties = $properties->where('category', $request->category);
+        }
+
+        //Filter using residence_types               
+        if (!empty($request->residence_types)) {
+            $properties = $properties->where('residence_types', $request->residence_types);
         }
 
         //Filter using city
@@ -301,9 +306,6 @@ class HomeController extends Controller {
         $areaSelected = $request->filled('area') ? Area::where('slug', $request->area)->first() : null;
         $selectedAreas = $request->filled('area') ? Area::where('slug', $request->area)->first() : null;
         $categoryWord = null;       
-
-       
-
         
         $parts = explode('-', $propertyUrl);
 
@@ -331,6 +333,7 @@ class HomeController extends Controller {
                         $q->where('property_id', $id);
                     }
                 ])
+            ->where('status', 1)
             ->where('id', $id)
             ->where('slug', $slug)
             ->where('category', $category)

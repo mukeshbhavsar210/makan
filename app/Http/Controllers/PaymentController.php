@@ -86,7 +86,7 @@ class PaymentController extends Controller {
 
             return response()->json([
                 'status' => true,
-                'redirect' => route('front.admin.success', ['property' => $property->id])
+                'redirect' => route('payment.success.page', ['property' => $property->id])
             ]);
 
         } catch (\Exception $e) {
