@@ -41,15 +41,15 @@
         @endphp
 
         <label for="property_types" id="propertyTypesCounts" class="light-label">Property Type<span class="req">*</span></label>
-        <div class="form-section">
-            <div class="custom-radio-square residenceProperty required-group">
+        <div class="form-section required-group">
+            <div class="custom-radio-square residenceProperty ">
                 @foreach($residenceTypes as $value => $label)
                     <input type="radio" class="btn-check" name="property_types" id="type_{{ $value }}" value="{{ $value }}" {{ $selectedType == $value ? 'checked' : '' }}>
                     <label class="btn-radio" for="type_{{ $value }}">{{ $label }}</label>
                 @endforeach
             </div>
 
-            <div class="custom-radio-square commercialProperty d-none required-group">
+            <div class="custom-radio-square commercialProperty d-none">
                 @foreach($commercialTypes as $value => $label)
                     <input type="radio" class="btn-check" name="property_types" id="type_{{ $value }}" value="{{ $value }}" {{ $selectedType == $value ? 'checked' : '' }}>
                     <label class="btn-radio" for="type_{{ $value }}">{{ $label }}</label>
@@ -110,4 +110,4 @@
     </div>
 </div>
 
-<a href="#" class="btn btn-primary big-btn">Next, add property details</a>
+<p><a href="#" class="btn btn-primary btn-next-tab">Next, add price details</a></p>

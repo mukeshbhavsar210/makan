@@ -362,7 +362,7 @@
                     ]);
                 @endphp
 
-                <button type="button" id="resetPriceRange" class="btn btn-primary btn-sm">Reset</button>
+                <a href="{{ $resetUrl }}" class="btn btn-secondary btn-sm">Reset</a>
 
                 <script>
                     let resetUrl = @json($resetUrl);
@@ -386,19 +386,6 @@
                     <option value="1" {{ (Request::get('sort') == '1') ? 'selected' : '' }}>Latest</option>
                     <option value="0" {{ (Request::get('sort') == '0') ? 'selected' : '' }}>Oldest</option>
                 </select>
-
-                {{-- <div class="col">
-                    <div style="display: none">
-                        <select name="city" id="city" >
-                            <option value="">City</option>
-                            @if ($cities)
-                                @foreach ($cities as $value)
-                                    <option {{ (Request::get('city') == $value->id) ? 'selected' : '' }} value="{{ $value->id }}">{{ $value->name }}</option>
-                                @endforeach
-                            @endif
-                        </select>
-                    </div>
-                </div> --}}
             </div>
         </div>    
     </form>     

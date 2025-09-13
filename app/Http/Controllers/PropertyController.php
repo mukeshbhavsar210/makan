@@ -33,7 +33,7 @@ class PropertyController extends Controller {
             $properties = Property::query()->where('status', 1)->orderBy('created_at','DESC');
             $counts = Property::withCount('visitedUsers')->where('status', 1)->count();
         } else {
-            $properties = Property::query()->where('user_id', $user->id)->where('status', 1)->orderBy('created_at','DESC');
+            $properties = Property::query()->where('user_id', $user->id)->orderBy('created_at','DESC');
             $counts = Property::withCount('visitedUsers')->where('user_id', $user->id)
                 ->where('status', 1)
                 ->count(); 
@@ -598,12 +598,12 @@ class PropertyController extends Controller {
 
     //Posted properties required approval
     public function approval() {
-        $pending = Property::with('plan')->where('status', 0)->orderBy('created_at', 'DESC')->paginate(10, ['*'], 'pending_page');
-        $approved = Property::with('plan')->where('status', 1)->orderBy('created_at', 'DESC')->paginate(10, ['*'], 'approved_page');
+        $pending = Property::with('plan')->where('verification', 'pending')->orderBy('created_at', 'DESC')->paginate(10, ['*'], 'pending_page');
+        $approved = Property::with('plan')->where('verification', 'approved')->orderBy('created_at', 'DESC')->paginate(10, ['*'], 'approved_page');
 
         // Counts
-        $pendingCount = Property::where('status', 0)->count();
-        $approvedCount = Property::where('status', 1)->count();
+        $pendingCount = Property::where('verification', 'pending')->count();
+        $approvedCount = Property::where('verification', 'approved')->count();
 
         return view('front.admin.approval', compact(
             'pending', 
@@ -616,7 +616,8 @@ class PropertyController extends Controller {
 
     public function toggleStatus(Request $request, $id) {
         $property = Property::findOrFail($id);
-        $property->status = $property->status == 1 ? 0 : 1;
+        //$property->status = $property->status == 1 ? 0 : 1;
+        $property->verification = $property->verification === 'approved' ? 'pending' : 'approved';
         $property->save();
         \Log::info("Property {$id} new status: {$property->status}");
         return response()->json(['status' => true, 'newStatus' => $property->status]);

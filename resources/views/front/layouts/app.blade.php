@@ -421,6 +421,9 @@
 <script src="{{ asset('front-assets/js/ion.rangeSlider.min.js') }}"></script>
 <script src="{{ asset('front-assets/js/slick.min.js') }}"></script>
 <script src="{{ asset('front-assets/js/custom.js') }}"></script>
+<script src="{{ asset('front-assets/js/filters.js') }}"></script>
+<script src="{{ asset('front-assets/js/gallery.js') }}"></script>
+
 <script type="text/javascript">
     //$('.textarea').trumbowyg();
     $.ajaxSetup({

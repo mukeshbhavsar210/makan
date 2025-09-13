@@ -16,24 +16,20 @@
             <div class="col-md-9 col-12">
                 <div class="progress-right">
                     <form action="" method="post" id="createPropertyForm" name="createPropertyForm" >
-                        @csrf
-                            <div class="tab-content" id="pills-tabContent">
-                                <div class="tab-pane fade show active" id="tab_01" role="tabpanel" aria-labelledby="pills-tab_01">
-                                    <div class="tab-content" id="pills-tabContent_2">
-                                        <div class="tab-pane fade show active" id="pills-basic" role="tabpanel" aria-labelledby="pills-tab_01">
-                                            @include('front.property.create.tab_01')
-                                        </div>
-
-                                        <div class="tab-pane fade" id="pills-properties" role="tabpanel" aria-labelledby="pills-tab_02">
-                                            @include('front.property.create.tab_02')
-                                        </div>
-
-                                        <div class="tab-pane fade" id="pills-price" role="tabpanel" aria-labelledby="pills-tab_03">
-                                            @include('front.property.create.tab_03')
-                                        </div>
-                                    </div>
+                        @csrf                            
+                            <div class="tab-content" id="pills-tabContent_2">
+                                <div class="tab-pane fade show active" id="pills-basic" role="tabpanel" aria-labelledby="pills-tab_01">
+                                    @include('front.property.create.tab_01')
                                 </div>
-                            </div>
+
+                                <div class="tab-pane fade" id="pills-properties" role="tabpanel" aria-labelledby="pills-tab_02">
+                                    @include('front.property.create.tab_02')
+                                </div>
+
+                                <div class="tab-pane fade" id="pills-price" role="tabpanel" aria-labelledby="pills-tab_03">
+                                    @include('front.property.create.tab_03')
+                                </div>
+                            </div>                            
                         </form>
                     </div>
                 </div>
@@ -413,7 +409,6 @@
 
         // Initial call
         updateProgress();
-
 </script>
 
 @endsection
