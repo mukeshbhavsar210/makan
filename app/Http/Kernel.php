@@ -66,4 +66,16 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'checkRole' => \App\Http\Middleware\CheckAdmin::class,
     ];
+
+    protected $routeMiddleware = [
+        'auth' => \App\Http\Middleware\Authenticate::class,
+        'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+
+        // 👇 add this line
+        'role' => \App\Http\Middleware\RoleMiddleware::class,
+    ];
+
+    protected $commands = [
+        \App\Console\Commands\SendTestMail::class,
+    ];
 }

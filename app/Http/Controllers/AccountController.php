@@ -30,12 +30,12 @@ class AccountController extends Controller {
         $data['developer'] = $developer;
         $data['counts'] = $counts;
 
-        return view('front.account.profile', $data);
+        return view('front.layouts.profile', $data);
     }
 
 
     public function registration(){
-        return view('front.account.registration');
+        return view('front.layouts.registration');
     }
 
 
@@ -233,23 +233,15 @@ class AccountController extends Controller {
             'password' => 'required',
         ]);
 
-        if ($validator->passes()) {
-            if(Auth::attempt([ 'email' => $request->email, 'password' => $request->password ])){
-                return redirect()->route('properties.index');
-            } else {
-                return redirect()->route('account.login')->with('error','Either Email/Password Incorrect');
-            }
+        if($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
 
-        } else {
-            return redirect()->route('account.login')
-                             ->withErrors($validator)
-                             ->withInput($request->only('email'));
+        if(Auth::attempt($request->only('email', 'password'))) {
+            return response()->json(['status' => true]);
         }
     }
 
-    
-
-   
 
     public function logout(){
         Auth::logout();
@@ -288,50 +280,51 @@ class AccountController extends Controller {
         ]);
     }
 
-
-
     public function forgotPassword(){
-        return view('front.account.forgot-password');
+        return view('front.layouts.forgot-password');
     }
 
+    public function processForgotPassword(Request $request)
+{
+    $validator = Validator::make($request->all(), [
+        'email' => 'required|email|exists:users,email'
+    ]);
 
-
-    public function processforgotPassword(Request $request){
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|email|exists:users,email'
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()->route('account.forgotPassword')->withInput()->withErrors($validator);
-        }
-
-        $token = Str::random(60);
-
-        \DB::table('password_reset_tokens')->where('email',$request->email)->delete();
-        \DB::table('password_reset_tokens')->insert([
-            'email' => $request->email,
-            'token' => $token,
-            'created_at' => now()
-        ]);
-
-        //Send email here
-        $user = User::where('email',$request->email)->first();
-        $mailData = [
-            'token' => $token,
-            'user' => $user,
-            'subject' => 'You have requested to change your password.',
-        ];
-
-        Mail::to($request->email)->send(new ResetPasswordEmail($mailData));
-
-        return redirect()->route('account.forgotPassword')->with('success','Reset password email hase been sent to your email');
+    if ($validator->fails()) {
+        return response()->json(['errors' => $validator->errors()], 422);
     }
+
+    $token = Str::random(60);
+
+    \DB::table('password_reset_tokens')->where('email', $request->email)->delete();
+    \DB::table('password_reset_tokens')->insert([
+        'email' => $request->email,
+        'token' => $token,
+        'created_at' => now()
+    ]);
+
+    //Send email
+    $user = User::where('email', $request->email)->first();
+    $mailData = [
+        'token' => $token,
+        'user' => $user,
+        'subject' => 'You have requested to change your password.',
+    ];
+
+    Mail::to($request->email)->send(new ResetPasswordEmail($mailData));
+
+    return response()->json([
+        'status' => true,
+        'message' => 'Reset password email has been sent to your email.'
+    ]);
+}
+
 
     public function resetPassword($tokenString){
         $token = \DB::table('password_reset_tokens')->where('token',$tokenString)->first();
 
         if($token == null){
-            return redirect()->route('account.forgotPassword')->with('error','Invalid token.');
+            return redirect()->route('front.home')->with('error','Invalid token.');
         }
 
         return view('front.account.reset-password', [

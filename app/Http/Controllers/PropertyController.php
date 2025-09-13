@@ -20,6 +20,9 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
+use App\Mail\PropertyPostedMail;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 
 class PropertyController extends Controller {
     public function index(Request $request) {
@@ -112,7 +115,7 @@ class PropertyController extends Controller {
             $property->slug = $request->slug;  
             $property->plan_id = $request->plan_id;
             $property->category = $request->category;
-            $property->category = $request->category;
+            $property->residence_types = $request->residence_types;
             $property->sale_types = $request->sale_types;
             $property->property_types = $request->property_types;
             $property->furnish_types = $request->furnish_types;
@@ -148,6 +151,12 @@ class PropertyController extends Controller {
             
             $property->save();
 
+            // send mail to owner
+            //Mail::to($property->user->email)->send(new PropertyPostedMail($property));
+
+            // send mail to admin (assuming admin email is in .env or config)
+            //Mail::to(config('mail.admin_email', 'admin@example.com'))->send(new PropertyPostedMail($property));
+
             if (!empty($request->image_array)) {
                 foreach ($request->image_array as $imageData) {
                     // $imageData now contains ['id' => temp_image_id, 'label' => 'Main/Bedroom/Elevation']
@@ -159,20 +168,16 @@ class PropertyController extends Controller {
                         if (!$tempImageInfo) {
                             continue; 
                         }
-
                         $extArray = explode('.', $tempImageInfo->name);
                         $ext = last($extArray);
-
                         $propertyImage = new PropertyImage();
                         $propertyImage->property_id = $property->id;
                         $propertyImage->image = "NULL";
                         $propertyImage->label = $label; // save enum label
                         $propertyImage->save();
-
                         $imageName = $property->slug . '_' .$property->id . '_' . time() . '.' . $ext;
                         $propertyImage->image = $imageName;
                         $propertyImage->save();
-
                         // Large Image
                         $sourcePath = public_path() . '/temp/' . $tempImageInfo->name;
                         $destPath = public_path() . '/uploads/property/' . $imageName;
@@ -184,7 +189,6 @@ class PropertyController extends Controller {
                         });
                         $image->save($destPath);
                         $image->toJpeg(90)->save($destPath);
-
                         // Thumbnail
                         $destPath = public_path() . '/uploads/property/thumb/' . $imageName;
                         $manager = new ImageManager(new Driver());
@@ -207,7 +211,6 @@ class PropertyController extends Controller {
                     'amount' => $plan->price * 100,
                     'currency' => 'INR'
                 ]);
-
                 Order::create([
                     'property_id'       => $property->id,
                     'plan_id'           => $plan->id,
@@ -215,7 +218,6 @@ class PropertyController extends Controller {
                     'status'            => 'pending',
                     'razorpay_order_id' => $razorpayOrder['id'],
                 ]);
-
                 return response()->json([
                     'status' => true,
                     'paid_plan' => true,
@@ -248,6 +250,7 @@ class PropertyController extends Controller {
             ]);
         }
     }
+
 
     //EDIT PROPERTY
     public function edit($id, Request $request){
@@ -472,7 +475,7 @@ class PropertyController extends Controller {
 
     //Saved Property
    public function savedProperties(Request $request) {
-        $user = auth()->user();
+        $user = auth()->user();        
 
         if ($user->role === 'Admin') {
             $savedProperties = SavedProperty::with('property.savedUsers')
@@ -620,7 +623,46 @@ class PropertyController extends Controller {
     }
 
 
-   public function toggleView(Request $request, $id) {
+    // public function toggleStatus(Request $request, $id) {
+    //     $property = Property::with('user')->findOrFail($id);
+
+    //     // Toggle status
+    //     $property->status = $property->status == 1 ? 0 : 1;
+    //     $property->save();
+
+    //     // Only send email if the property has a user
+    //     if ($property->user && $property->user->email) {
+    //         $mailData = [
+    //             'property' => $property,
+    //             'userType' => 'customer',
+    //             'subject'  => $property->status == 1
+    //                 ? 'Your Property Has Been Approved'
+    //                 : 'Your Property Has Been Deactivated',
+    //         ];
+
+    //         try {
+    //             Mail::send('email.property-status', ['mailData' => $mailData], function ($message) use ($mailData) {
+    //                 $message->to($mailData['property']->user->email)
+    //                         ->subject($mailData['subject']);
+    //             });
+    //         } catch (\Exception $e) {
+    //             Log::error('Mail sending failed: '.$e->getMessage());
+    //         }
+    //     } else {
+    //         Log::warning("Property {$property->id} has no valid user or email, skipping mail.");
+    //     }
+    //     return response()->json([
+    //         'status'    => true,
+    //         'newStatus' => $property->status
+    //     ]);
+    // }
+
+
+
+
+   
+   
+    public function toggleView(Request $request, $id) {
         $user = User::findOrFail($id);
 
         // Toggle between 'card' and 'table'

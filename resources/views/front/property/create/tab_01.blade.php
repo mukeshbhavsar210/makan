@@ -49,32 +49,28 @@
                 @endforeach
             </div>
 
-            {{-- <div class="custom-radio-square commercialProperty d-none required-group">
+            <div class="custom-radio-square commercialProperty d-none required-group">
                 @foreach($commercialTypes as $value => $label)
                     <input type="radio" class="btn-check" name="property_types" id="type_{{ $value }}" value="{{ $value }}" {{ $selectedType == $value ? 'checked' : '' }}>
                     <label class="btn-radio" for="type_{{ $value }}">{{ $label }}</label>
                 @endforeach
-            </div> --}}
+            </div>
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-md-6">
-            <div class="form-group form-section">
-                <label for="" class="light-label">City<span class="req">*</span></label>
-                <select name="city" id="city" class="form-select required-field">
-                    <option value="">Select a City</option>
-                    @if ($cities->isNotEmpty())
-                        @foreach ($cities as $value)
-                            <option value="{{ $value->id }}" 
-                                {{ $value->name === 'Ahmedabad' ? 'selected' : '' }}>
-                                {{ $value->name }}
-                            </option>
-                        @endforeach
-                    @endif
-                </select>
-            </div>
-        </div>  
+    <div class="row">                
+        <select name="city" id="city" class="form-select" hidden >
+            <option value="">Select a City</option>
+            @if ($cities->isNotEmpty())
+                @foreach ($cities as $value)
+                    <option value="{{ $value->id }}" 
+                        {{ $value->name === 'Ahmedabad' ? 'selected' : '' }}>
+                        {{ $value->name }}
+                    </option>
+                @endforeach
+            @endif
+        </select>
+            
         <div class="col-md-6">
             <div class="form-group form-section">
                 <label for="" class="light-label">Area<span class="req">*</span></label>
@@ -83,7 +79,7 @@
                 </select>                        
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-3">
             <div class="form-group form-section">
                 <label for="category" class="light-label">Looking to<span class="req">*</span></label><br />
                 <div class="custom-radio required-group">
@@ -97,7 +93,7 @@
                 </div> 
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-3">
             <div class="form-group form-section">
                 <label for="saletype" class="light-label">Sale Type<span class="req">*</span></label>
                 <div class="custom-radio required-group">

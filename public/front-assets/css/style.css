@@ -323,7 +323,7 @@ header { position: fixed; width: 100%; top:0; left: 0; z-index: 99; background-c
 .searchHome .mainTitle { text-align: center; color: var(--white); }
 .searchHome .mainTitle h1 { font-size: 32px; font-weight: bold; text-shadow: 1px 1px 1px rgba(0,0,0,0.51);}
 
-.listing-page { margin-top: 50px;}
+.listing-page { margin-top: 5px;}
 .listing-page form { margin:0px;}
 
 .rentBuy { display: flex; padding: 10px 20px 0 20px; list-style-type: none;}
@@ -753,6 +753,16 @@ header { position: fixed; width: 100%; top:0; left: 0; z-index: 99; background-c
 .sidebar-modal-btn svg { margin: 7px 6px 6px 3px;}
 
 .sidebar { height: 100vh; overflow-y: scroll;}
+.sidebar .login-wrapper { padding: 15px 20px;}
+.sidebar .login-wrapper .form-group { margin-bottom: 3px;}
+.sidebar .login-wrapper .form-group .light-label { margin-bottom: 3px;}
+
+.sidebar .radio-hidden { display: none; }
+.sidebar .radio-btn { display: inline-block; background-color: color-mix(in srgb, var(--primary) 10%, transparent); padding: 6px 12px; margin-right:4px; font-size: 14px; border: 1px solid var(--primary); border-radius: 4px; cursor: pointer; color: var(--primary); transition: all 0.3s; font-weight: bold; }
+.sidebar .radio-btn:hover { background-color: #007bff; color: white;}
+.sidebar .radio-hidden:checked + .radio-btn { background-color: var(--primary); color: var(--white); }
+.sidebar .radio-link { display: inline-block; font-size: 14px; cursor: pointer; color: var(--gray); transition: all 0.3s; font-weight: bold; }
+
 .sidebar .user-details { background-color: #f2f3f8; position: relative; }
 .sidebar .user-details .btn-close { position: absolute; right:15px; top:15px; z-index: 9;}
 .sidebar .user-details .btn-close:focus { box-shadow: none;}
@@ -934,7 +944,8 @@ body .dropzone { border: 2px dashed var(--primary) !important; border-radius: 10
 .listings-posted { border: 1px #ccc solid; position: relative; border-radius: 10px; margin: 10px 0; background-color: #fff; font-size: 14px; min-height: 445px;}
 .listings-posted .link { position: relative; height: 220px;}
 .listings-posted .overlay { background: linear-gradient(180deg,transparent,rgba(0,0,0,.5)); height: 220px; width: 100%; position: absolute; bottom: 0; left: 0; border-radius: 7px 7px 0 0; z-index: 1; }
-.listings-posted .overlay-details-top { padding: 10px; position: absolute; top: 0; left:0; color:#fff; width: 100%; z-index: 11;}
+.listings-posted .overlay-details-top { padding: 10px; position: absolute; top: 0; left:0; color:#fff; width: 100%; z-index: 11; display: flex;}
+.listings-posted .overlay-details-top .avatar-stack { margin-right: 5px;}
 .listings-posted .overlay-details-top .tagSmall { border-radius: 25px; color: #fff; padding: 2px 7px 4px 7px; font-size: 11px; background-color: #000000a3;}
 .listings-posted .overlay-details-top .tagUser { border-radius: 25px; color: #fff; padding: 2px 7px 4px 7px; font-size: 11px; background-color: red;}
 .listings-posted .overlay-details-btm { padding: 10px; position: absolute; bottom: 0; left:0; color:#fff; width: 100%; z-index: 11; display: flex; justify-content: space-between; }
@@ -1230,3 +1241,10 @@ input:checked + .slider:before {
 .table .user { border-color: color-mix(in srgb, var(--secondary) 50%, transparent); background: color-mix(in srgb, var(--secondary) 10%, transparent); font-weight: normal; color: var(--secondary);  }
 .table .agent { border-color: color-mix(in srgb, var(--primary) 50%, transparent); background: color-mix(in srgb, var(--primary) 10%, transparent); font-weight: normal; color: var(--primary); }
 .table td, .table th { vertical-align: middle !important; }
+
+.dropdown .irs--flat .irs-bar,
+.dropdown .irs--flat .irs-from, 
+.dropdown .irs--flat .irs-to, .irs--flat .irs-single,
+.dropdown .irs--flat .irs-handle > i:first-child { background-color: var(--primary);}
+.dropdown .irs--flat .irs-from::before, 
+.dropdown .irs--flat .irs-to::before, .dropdown .irs--flat .irs-single::before { border-top-color: var(--primary);}

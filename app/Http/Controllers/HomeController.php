@@ -13,6 +13,8 @@ use App\Models\PropertyApplication;
 use App\Models\SavedProperty;
 use App\Models\User;
 use App\Models\VisitedProperty;
+use Illuminate\Support\Facades\DB;
+
 
 class HomeController extends Controller {
     public function index(Request $request){        
@@ -62,13 +64,20 @@ class HomeController extends Controller {
        
     
     public function properties(Request $request) {
+        $properties = Property::with('property_images')
+                    ->orderByRaw("
+                        CASE 
+                            WHEN plan_id = (SELECT id FROM plans WHERE name = 'Diamond' LIMIT 1) THEN 1
+                            WHEN plan_id = (SELECT id FROM plans WHERE name = 'Gold' LIMIT 1) THEN 2
+                            ELSE 3
+                        END ASC
+                    ")
+                    ->orderBy('created_at', 'desc')->where('status',1);                            
         $cities = City::where('status',1)->get();
         $areas = Area::where('status',1)->get();    
         $users = User::select('id', 'name', 'role')->get();                    
         $cityId = $request->get('city');
-        $areaId = $request->get('area');
-        $roomIds = $request->get('room', []);
-        $properties = Property::with('property_images')->orderBy('created_at', 'desc')->where('status',1);                    
+        $areaId = $request->get('area');        
         $citySelected = $request->filled('city') ? City::where('slug', $request->city)->first() : null;
         $areaSelected = $request->filled('area') ? Area::where('slug', $request->area)->first() : null;
         $selectedAreas = $request->filled('area') ? Area::where('slug', $request->area)->first() : null;
@@ -133,10 +142,10 @@ class HomeController extends Controller {
         }
 
         //Filter using property types working
-        if (!empty($request->property_type) && is_array($request->property_type)) {
+        if (!empty($request->property_type)) {
             $properties = $properties->where(function ($query) use ($request) {
-                foreach ($request->property_type as $type) {
-                    $query->orWhereJsonContains('property_types', strtolower($type));
+                foreach ((array) $request->property_type as $type) {
+                    $query->orWhereRaw("FIND_IN_SET(?, property_types)", [strtolower($type)]);
                 }
             });
         }
@@ -210,15 +219,40 @@ class HomeController extends Controller {
                 $properties = $properties->where('property_age', $request->age);
             }
         }   
-        
-        // Price slider working
-        if($request->get('price_max') != '' && $request->get('price_min') != '') {
-            if($request->get('price_max') == 100000000){
-                $properties = $properties->whereBetween('price',[intval($request->get('price_min')),1000000]);
-            } else {
-                $properties = $properties->whereBetween('price',[intval($request->get('price_min')),intval($request->get('price_max'))]);
-            }
-        }                     
+                
+        // ✅ Apply price filter if present
+        if ($request->filled('price_min') && $request->filled('price_max')) {
+            $min = (int) $request->price_min;
+            $max = (int) $request->price_max;
+
+            $properties->where(function ($query) use ($min, $max) {
+                $query->whereBetween(DB::raw("JSON_UNQUOTE(JSON_EXTRACT(rooms, '$[0].price'))"), [$min, $max])
+                    ->orWhereBetween(DB::raw("JSON_UNQUOTE(JSON_EXTRACT(rooms, '$[1].price'))"), [$min, $max])
+                    ->orWhereBetween(DB::raw("JSON_UNQUOTE(JSON_EXTRACT(rooms, '$[2].price'))"), [$min, $max])
+                    ->orWhereBetween(DB::raw("JSON_UNQUOTE(JSON_EXTRACT(rooms, '$[3].price'))"), [$min, $max])
+                    ->orWhereBetween(DB::raw("JSON_UNQUOTE(JSON_EXTRACT(rooms, '$[4].price'))"), [$min, $max])
+                    ->orWhereBetween(DB::raw("JSON_UNQUOTE(JSON_EXTRACT(rooms, '$[5].price'))"), [$min, $max])
+                    ->orWhereBetween(DB::raw("JSON_UNQUOTE(JSON_EXTRACT(rooms, '$[6].price'))"), [$min, $max]);
+                    // add more indexes if needed
+            });
+        }
+
+        // ✅ Apply size filter if present
+        if ($request->filled('size_min') && $request->filled('size_max')) {
+            $min = (int) $request->size_min;
+            $max = (int) $request->size_max;
+
+            $properties->where(function ($query) use ($min, $max) {
+                $query->whereBetween(DB::raw("JSON_UNQUOTE(JSON_EXTRACT(rooms, '$[0].size'))"), [$min, $max])
+                    ->orWhereBetween(DB::raw("JSON_UNQUOTE(JSON_EXTRACT(rooms, '$[1].size'))"), [$min, $max])
+                    ->orWhereBetween(DB::raw("JSON_UNQUOTE(JSON_EXTRACT(rooms, '$[2].size'))"), [$min, $max])
+                    ->orWhereBetween(DB::raw("JSON_UNQUOTE(JSON_EXTRACT(rooms, '$[3].size'))"), [$min, $max])
+                    ->orWhereBetween(DB::raw("JSON_UNQUOTE(JSON_EXTRACT(rooms, '$[4].size'))"), [$min, $max])
+                    ->orWhereBetween(DB::raw("JSON_UNQUOTE(JSON_EXTRACT(rooms, '$[5].size'))"), [$min, $max])
+                    ->orWhereBetween(DB::raw("JSON_UNQUOTE(JSON_EXTRACT(rooms, '$[6].size'))"), [$min, $max]);
+                    // add more indexes if needed
+            });
+        }
                
         $savedPropertyIds = [];
         if (Auth::check()) {
@@ -226,9 +260,6 @@ class HomeController extends Controller {
                 ->pluck('property_id')
                 ->toArray();
         }
-
-        $data['priceMax'] = (intval($request->get('price_max')) == 0 ? 1000 : $request->get('price_max'));
-        $data['priceMin'] = intval($request->get('price_min'));     
         
         $properties = $properties->paginate(10);
         

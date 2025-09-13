@@ -9,9 +9,13 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\OTPController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\PropertyPostedMail;
+use App\Models\Property;
 
 Route::get("/",[HomeController::class, 'index'])->name('front.home');
 Route::get('/get-areas/{city_id}', [HomeController::class, 'getAreas']);
@@ -28,6 +32,15 @@ Route::post("/process-forgot-password",[AccountController::class, 'processForgot
 Route::get("/reset-password/{token}",[AccountController::class, 'resetPassword'])->name('account.resetPassword');
 Route::post("/process-reset-password",[AccountController::class, 'processResetPassword'])->name('account.processResetPassword');
 
+// Google
+Route::get('auth/google', [App\Http\Controllers\Auth\SocialController::class, 'redirectToGoogle']);
+Route::get('auth/google/callback', [App\Http\Controllers\Auth\SocialController::class, 'handleGoogleCallback']);
+
+// Facebook
+Route::get('auth/facebook', [App\Http\Controllers\Auth\SocialController::class, 'redirectToFacebook']);
+Route::get('auth/facebook/callback', [App\Http\Controllers\Auth\SocialController::class, 'handleFacebookCallback']);
+
+
 // Route::get("/contact",[ContactController::class, 'index'])->name('contact.index');;
 // Route::post("/contact",[ContactController::class, 'store'])->name('contact.store');
 // Route::get("/contact/{id}",[ContactController::class, 'details'])->name('contact.details');;
@@ -42,8 +55,34 @@ Route::group(['prefix' => 'account'], function(){
         Route::post("/authenticate",[AccountController::class, 'authenticate'])->name('account.authenticate');
     });
 
+    Route::middleware(['auth', 'role:Admin'])->group(function () {
+        Route::get('/properties/pending', [PropertyController::class, 'approval'])->name('properties.pending');
+        Route::get('/orders', [PaymentController::class, 'index'])->name('orders.index');
+    });
+
     //Authenticate routes
     Route::group(['middleware' => 'auth'], function(){
+        //Payment Gateway
+        Route::get('/payment/success/{property}', [PaymentController::class, 'successPage'])->name('payment.success.page');
+        Route::post('/payment/success', [PaymentController::class, 'paymentSuccess'])->name('payment.success');
+
+        //City
+        Route::get('/cities', [CityController::class, 'index'])->name('cities.index');    
+        Route::post('/cities', [CityController::class, 'store'])->name('cities.store');
+        Route::get('/cities/{id}/edit', [CityController::class, 'edit'])->name('cities.edit');
+        Route::put('/cities/{id}', [CityController::class, 'update'])->name('cities.update');
+        Route::delete('/cities/{id}', [CityController::class, 'destroy'])->name('cities.delete');
+
+        //Area
+        Route::get('/areas', [AreaController::class, 'index'])->name('areas.index');    
+        Route::post('/areas', [AreaController::class, 'store'])->name('areas.store');
+        Route::get('/areas/{id}/edit', [AreaController::class, 'edit'])->name('areas.edit');
+        Route::put('/areas/{id}', [AreaController::class, 'update'])->name('areas.update');
+        Route::delete('/areas/{id}', [AreaController::class, 'destroy'])->name('areas.delete');
+
+        Route::get("/users/{id}",[UserController::class, 'edit'])->name('users.index.edit');
+        Route::put("/users/{id}",[UserController::class, 'update'])->name('users.index.update');
+
         //Profile Routes
         Route::get("/profile",[AccountController::class, 'index'])->name('profile.index');
         Route::put("/update-profile",[AccountController::class, 'update_profile'])->name('profile.update');
@@ -59,45 +98,47 @@ Route::group(['prefix' => 'account'], function(){
         Route::put('/properties/{property}', [PropertyController::class, 'update'])->name('properties.update');
         Route::delete('/properties/{property}', [PropertyController::class, 'destroy'])->name('properties.delete');
         Route::get('/get-properties',[PropertyController::class,'getProducts'])->name('properties.getProducts');
-        Route::get('/properties/pending', [PropertyController::class, 'approval'])->name('properties.pending');
+
         Route::post('/properties/toggle-status/{id}', [PropertyController::class, 'toggleStatus'])->name('properties.toggleStatus');
         Route::post('/properties/toggle-view/{id}', [PropertyController::class, 'toggleView'])->name('properties.toggleView');
-
-        //Payment Gateway
-        Route::get('/payment/success/{property}', [PaymentController::class, 'successPage'])->name('payment.success.page');
-        Route::post('/payment/success', [PaymentController::class, 'paymentSuccess'])->name('payment.success');
-        Route::get('/orders', [PaymentController::class, 'index'])->name('orders.index');
 
         //Delete Product Images Route
         Route::post('/uploadTempImage', [TempImagesController::class, 'create'])->name('temp-images.create');        
         Route::post('/property-images/update', [PropertyImageController::class, 'update'])->name('property-images.update');        
         Route::delete('/property-images', [PropertyImageController::class, 'destroy'])->name('property-images.destroy');   
         Route::get('/get-properties',[PropertyController::class,'similar_properties'])->name('property.properties');
-
+        
         Route::get("/savedProperties",[PropertyController::class, 'savedProperties'])->name('property.savedProperties');
         Route::post("/removeSavedProperty",[PropertyController::class, 'removeSavedProperty'])->name('account.removeSavedProperty');
         Route::post("/removePropertyInterested",[PropertyController::class, 'removeProperty'])->name('account.removeProperties');
         Route::get("/interested",[PropertyController::class, 'interested'])->name('account.myPropertyApplications');
-        
-        //City
-        Route::get('/cities', [CityController::class, 'index'])->name('cities.index');    
-        Route::post('/cities', [CityController::class, 'store'])->name('cities.store');
-        Route::get('/cities/{id}/edit', [CityController::class, 'edit'])->name('cities.edit');
-        Route::put('/cities/{id}', [CityController::class, 'update'])->name('cities.update');
-        Route::delete('/cities/{id}', [CityController::class, 'destroy'])->name('cities.delete');
+
+        Route::post('/razorpay/success', [PropertyController::class, 'razorpaySuccess'])->name('razorpay.success');
+        Route::get('/property/success', function () {return view('property.success');})->name('property.success');
+        Route::get('/property/failed', function () {return view('property.failed');})->name('property.failed');
 
         //Area
-        Route::get('/areas', [AreaController::class, 'index'])->name('areas.index');    
-        Route::post('/areas', [AreaController::class, 'store'])->name('areas.store');
-        Route::get('/areas/{id}/edit', [AreaController::class, 'edit'])->name('areas.edit');
-        Route::put('/areas/{id}', [AreaController::class, 'update'])->name('areas.update');
-        Route::delete('/areas/{id}', [AreaController::class, 'destroy'])->name('areas.delete');
+        Route::get('/areas', [AreaController::class, 'index'])->name('areas.index');            
 
         //Users
         Route::get("/users",[UserController::class, 'index'])->name('users.index');
-        Route::get("/users/{id}",[UserController::class, 'edit'])->name('users.index.edit');
-        Route::put("/users/{id}",[UserController::class, 'update'])->name('users.index.update');
-        
+
+
+        //OTP login
+        Route::controller(OTPController::class)->group(function() {
+            Route::get('/otp-login', 'showLogin')->name('otp.login');
+            Route::post('/send-otp', 'sendOTP')->name('otp.send');
+            Route::post('/verify-otp', 'verifyOTP')->name('otp.verify');
+        });
+
+        Route::get('/test-mail', function () {
+            Mail::raw('Testing...', function($msg) {
+                $msg->to('test@example.com')->subject('Mailtrap Test');
+            });
+
+            return 'Test mail sent!';
+        });
+                
         //Get area name parent city
         Route::get('/areaSub', [CityController::class, 'areaSub'])->name('areaSub.index');
 
@@ -111,6 +152,5 @@ Route::group(['prefix' => 'account'], function(){
                 'slug' => $slug
             ]);
         })->name('getSlug');
-
     });
 });

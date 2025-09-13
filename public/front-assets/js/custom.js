@@ -1,4 +1,69 @@
 $(document).ready(function(){
+
+     $('input[name="optionRadio"]').change(function() {
+        var selected = $(this).val();
+        $('.tab-pane').removeClass('show active');
+        $('#div' + selected).addClass('show active');
+    });    
+
+
+    $('#loginForm').submit(function(e) {
+			e.preventDefault(); // prevent page refresh
+			$('.invalid-feedback').text('').addClass('d-none');
+			$('.form-control').removeClass('is-invalid');
+			$.ajax({
+				url: $(this).attr('action'),
+				type: 'POST',
+				data: $(this).serialize(),
+				success: function(response) {
+					if(response.status) {
+						location.reload(); // or window.location.href = '/dashboard';
+					}
+				},
+				error: function(xhr) {
+					if(xhr.status === 422) {
+						let errors = xhr.responseJSON.errors;
+						$.each(errors, function(key, value) {
+							$('#error_' + key).text(value[0]).removeClass('d-none');
+							$('#login_' + key).addClass('is-invalid'); // adds red border
+						});
+					}
+				}
+			});
+		});
+
+
+
+		$('#forgotPasswordForm').submit(function(e) {
+			e.preventDefault();
+
+			// Remove previous errors
+			$('.form-control').removeClass('is-invalid');
+			$('.invalid-feedback').text('');
+
+			let form = $(this);
+			let url = form.attr('action');
+
+			$.ajax({
+				url: url,
+				type: 'POST',
+				data: form.serialize(),
+				success: function(response) {
+					alert(response.message); // or display inside modal
+					form[0].reset();
+				},
+				error: function(xhr) {
+					if(xhr.status === 422) {
+						let errors = xhr.responseJSON.errors;
+						$.each(errors, function(key, value) {
+							$('#forgot_' + key).addClass('is-invalid'); // add red border
+							$('#error_' + key).text(value[0]); // show error message
+						});
+					}
+				}
+			});
+		});
+
     // When any plan radio button changes
     $('input[name="plan_id"]').change(function() {
         // Remove .active class from all plan cards
@@ -567,96 +632,62 @@ $('.rentBuy input[type="radio"]').on('change', function() {
 });
 
 
-//Price Range
-let priceLabels = ["0", "50L", "75L", "1Cr", "2Cr", "3Cr", "4Cr", "5Cr+"];
-let priceValues = [0, 5000000, 7500000, 10000000, 20000000, 30000000, 40000000, 50000000];
+function initRangeSlider(config) {
+    let {
+        element,       // slider element selector
+        labels,        // display labels
+        values,        // real values
+        minInput,      // hidden min input selector
+        maxInput       // hidden max input selector
+    } = config;
 
-let fromIndex = 0;
-let toIndex = 6;
+    let fromIndex = 0;
+    let toIndex = labels.length - 1;
 
-let minVal = parseInt($("#price_min").val());
-let maxVal = parseInt($("#price_max").val());
+    let minVal = parseInt($(minInput).val());
+    let maxVal = parseInt($(maxInput).val());
 
-if (!isNaN(minVal)) {
-    let idx = priceValues.indexOf(minVal);
-    if (idx !== -1) fromIndex = idx;
-}
-if (!isNaN(maxVal)) {
-    let idx = priceValues.indexOf(maxVal);
-    if (idx !== -1) toIndex = idx;
-}
-
-let slider = $("#priceRange").ionRangeSlider({
-    type: "double",
-    values: priceLabels,
-    from: fromIndex,
-    to: toIndex,
-    grid: true,
-    skin: "round",
-    onFinish: function (data) {
-        $("#price_min").val(priceValues[data.from]);
-        $("#price_max").val(priceValues[data.to]);
+    if (!isNaN(minVal)) {
+        let idx = values.indexOf(minVal);
+        if (idx !== -1) fromIndex = idx;
     }
-}).data("ionRangeSlider");
-
-
-
-
-//Size range
-let sizeLabels = ["0", "500", "1000", "1500", "2000", "3000", "4000", "5000+"];
-let sizeValues = [0, 500, 1000, 1500, 2000, 3000, 4000, 5000];
-
-let fromSizeIndex = 0;
-let toSizeIndex = sizeLabels.length - 1;
-
-let minSize = parseInt($("#size_min").val());
-let maxSize = parseInt($("#size_max").val());
-
-if (!isNaN(minSize)) {
-    let idx = sizeValues.indexOf(minSize);
-    if (idx !== -1) fromSizeIndex = idx;
-}
-if (!isNaN(maxSize)) {
-    let idx = sizeValues.indexOf(maxSize);
-    if (idx !== -1) toSizeIndex = idx;
-}
-
-let sizeSlider = $("#sizeRange").ionRangeSlider({
-    type: "double",
-    values: sizeLabels,
-    from: fromSizeIndex,
-    to: toSizeIndex,
-    grid: true,
-    skin: "round",
-    onFinish: function (data) {
-        $("#size_min").val(sizeValues[data.from]);
-        $("#size_max").val(sizeValues[data.to]);
+    if (!isNaN(maxVal)) {
+        let idx = values.indexOf(maxVal);
+        if (idx !== -1) toIndex = idx;
     }
-}).data("ionRangeSlider");
 
-// Reset Button Click
-$("#resetPriceRange").on("click", function () {
-    $("#price_min").val("");
-    $("#price_max").val("");
-
-    slider.update({
-        from: 0,
-        to: priceLabels.length - 1
+    $(element).ionRangeSlider({
+        type: "double",
+        values: labels,
+        from: fromIndex,
+        to: toIndex,
+        grid: true,
+        skin: "flat",
+        onFinish: function (data) {
+            $(minInput).val(values[data.from]);
+            $(maxInput).val(values[data.to]);
+        }
     });
-    $("#filterForm").submit();
+}
+
+// ---- Price Slider ----
+initRangeSlider({
+    element: "#priceRange",
+    labels: ["0", "25L", "50L", "75L", "1Cr", "2Cr", "3Cr", "4Cr", "5Cr+"],
+    values: [0, 2500000, 5000000, 7500000, 10000000, 20000000, 30000000, 40000000, 50000000],
+    minInput: "#price_min",
+    maxInput: "#price_max"
 });
 
-// Reset Button Click
-$("#resetSizeRange").on("click", function () {
-    $("#size_min").val("");
-    $("#size_max").val("");
-
-    sizeSlider.update({
-        from: 0,
-        to: sizeLabels.length - 1
-    });
-    $("#sizeFilterForm").submit();
+// ---- Size Slider ----
+initRangeSlider({
+    element: "#sizeRange",
+    labels: ["0", "500", "1000", "1500", "2000", "3000", "4000", "5000+"],
+    values: [0, 500, 1000, 1500, 2000, 3000, 4000, 5000],
+    minInput: "#size_min",
+    maxInput: "#size_max"
 });
+
 
 
 function toggleActiveClass(name, buttonId) {
