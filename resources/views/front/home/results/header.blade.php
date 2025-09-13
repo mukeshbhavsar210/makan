@@ -19,9 +19,10 @@
 
         @include('front.home.results.search') 
         @include('front.home.results.search_slide')
-
-        @include('front.layouts.login')
+        @include('front.layouts.login_header')
                     
         <div class="overlay"></div>
     </div>
+    @include('front.home.results.filters')
+
 </header>

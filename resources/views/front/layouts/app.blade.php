@@ -33,7 +33,7 @@
 					<a class="btn btn-primary" href="" type="submit">Post a Job</a>
 				</div>
 
-				@include('front.layouts.login')
+				@include('front.layouts.login_header')
 			</div>
 		</nav>
 	</header>	
@@ -53,8 +53,7 @@
 								{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
 							</div>
 						@endif
-					</div>		
-					
+					</div>							
 					<div class="name">
 						<p><b>Hello {{ Auth::user()->name }}</b><br />
 							{{ Auth::user()->email }}<br /> +91-{{ Auth::user()->mobile }}
@@ -72,189 +71,342 @@
 					</div>							
 					<div class="name">
 						<p><b>Hello 👋🏻</b><br />Easy Contact with sellers<br />Personalized experience</p>
-						<ul class="sidebar-login">
-							<li><a class="btn btn-secondary" href="#" data-bs-toggle="modal" data-bs-target="#registerAccountModal">Register</a></li>
-							<li><a class="btn btn-primary" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a></li>
-						</ul>
-					</div>	
-				</div>								
-			@endif	
+						<div class="custom-radio-buttons mt-2">
+							<input type="radio" name="optionRadio" id="radio2" value="2" class="radio-hidden">
+							<label for="radio2" class="radio-btn">Register Account</label>		
+
+							<input type="radio" name="optionRadio" id="radio1" value="1" class="radio-hidden" checked>
+							<label for="radio1" class="radio-btn">Login</label>
+						</div>
+					</div>
+				</div>
+			</div>
 
 			<div class="divider"></div>
 
-			@if (Auth::check())
-				<div class="accordion" id="accordionExample">
-					<div class="accordion-item">
-						<h2 class="accordion-header">
-							<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-								<div class="icon icon_01">1</div>
-								Quick Links
-							</button>
-						</h2>
-						<div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
-							<div class="accordion-body">
-								<ul class="inside-link">
-									<li><a href="{{ route('front.home') }}" class="{{ request()->routeIs('front.home') ? 'active' : '' }}">Home</a></li>
-									<li><a href="{{ route('properties.index') }}" class="{{ request()->routeIs('properties.index') ? 'active' : '' }}">Properties</a></li>
-									<li><a href="{{ route('account.myPropertyApplications') }}" class="{{ request()->routeIs('account.myPropertyApplications') ? 'active' : '' }}">Interested</a></li>
-									<li><a href="{{ route('property.savedProperties') }}" class="{{ request()->routeIs('property.savedProperties') ? 'active' : '' }}">Saved</a></li>
-								</ul>								
-								@if(Auth::user()->role === 'Admin')
-									<ul class="inside-link mt-4">
-										<li><a href="{{ route('orders.index') }}">Orders</a></li>
-										<li><a href="{{ route('properties.pending') }}">Approval</a></li>
-										<li><a href="{{ route('areas.index') }}">Area</a></li>
-										<li><a href="{{ route('users.index') }}">User</a></li>
-									</ul>
-								@endif
+			<div class="login-wrapper">
+				<div class="tab-content">
+					<div class="tab-pane fade show active" id="div1">
+						<h5 class="mb-3">Login</h5>
+						<form id="loginForm" action="{{ route('account.authenticate') }}" method="post">
+							@csrf	
+							<div class="form-group">
+								<label for="login_email" class="light-label">Email<span class="req">*</span></label>
+								<input type="text" value="{{ old('email') }}" name="email" id="login_email" class="form-control" placeholder="email">
+								<p class="invalid-feedback d-none" id="error_email"></p>								
 							</div>
+
+							<div class="form-group">
+								<label for="login_password" class="light-label">Password<span class="req">*</span></label>
+								<input type="password" name="password" id="login_password" class="form-control" placeholder="Enter Password">
+								<p class="invalid-feedback d-none" id="error_password"></p>
+							</div>
+
+							<div class="flex-wrapper mt-3">
+								<button class="btn btn-primary">Login</button>
+								<div class="custom-radio-buttons">
+									<input type="radio" name="optionRadio" id="radio3" value="3" class="radio-hidden">
+									<label for="radio3" class="radio-link">Forgot Password?</label>									
+								</div>
+							</div>
+						</form>	
+
+						<div class="mt-3">
+							<a href="{{ url('auth/google') }}" class="btn btn-danger ">
+								Login with Google
+							</a>
+
+							<a href="{{ url('auth/facebook') }}" class="btn btn-primary">
+								Login with Facebook
+							</a>
 						</div>
+
+						<div id="sessionMessage" class="alert" style="display: none;"></div>
+						<div id="otpSendForm" style="display: none;">
+							<form id="sendOtpForm" action="{{ route('otp.send') }}" method="POST">
+								@csrf
+								<div class="form-group mb-3">
+									<label>Email:</label>
+									<input type="email" name="email" required class="form-control">
+								</div>
+								<div class="form-group mb-0 row">
+									<div class="col-12">
+										<div class="d-grid mb-3">
+											<button type="submit" class="btn btn-primary" type="button">Send OTP <i class="fas fa-sign-in-alt ms-1"></i></button>
+										</div>
+									</div>
+								</div>                                        
+							</form>
+						</div>
+
+						<div id="otpVerifyForm" style="display: none;">
+							<form id="verifyOtpForm" action="{{ route('otp.verify') }}" method="POST">
+								@csrf
+
+								<div class="row">
+									<div class="col-md-12 col-12">
+										<div class="form-group">
+											<label>Email:</label>
+											<input type="email" name="email" placeholder="Enter Email" required class="form-control" id="verifyEmail">
+										</div>
+									</div>
+									<div class="col-md-12 col-12 mt-2">
+										<label>OTP:</label>
+										<input type="text" name="otp" placeholder="Enter OTP" required class="form-control">
+									</div>
+								</div>
+
+								<div class="form-group mb-0 row">
+									<div class="col-12">
+										<div class="d-grid mt-3">
+											<button class="btn btn-primary" type="button">Log In <i class="fas fa-sign-in-alt ms-1"></i></button>
+										</div>
+									</div> 
+								</div>
+
+								<button type="submit" class="btn btn-primary mt-2">Verify OTP</button>
+							</form>
+						</div>						
 					</div>
 
-					<div class="accordion-item">
-						<h2 class="accordion-header">
-							<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-								<div class="icon icon_02">1</div>
-								My Activity
-							</button>
-						</h2>
-						<div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-							<div class="accordion-body">
-								<div class="activities">
-									<ul class="nav nav-pills" id="pills-tab" role="tablist">
-										<li class="nav-item" role="presentation">
-											<a href="#" class="nav-link active" id="pills-tab_01" data-bs-toggle="pill" data-bs-target="#tab_01" aria-controls="tab_01" aria-selected="true">
-												<p>Contacted <br />Properties</p>
-												@php
-													$countsApplied  = isset($countsApplied ) ? $countsApplied  : 0;
-												@endphp
+					<div class="tab-pane fade" id="div2">
+						<h5 class="mb-3">Register Account</h5>
+						<form action="" name="registrationForm" id="registrationForm" class="formPadding">
+							<div class="form-group">
+								<label class="light-label" for="name">Name<span class="req">*</span></label>                                    
+								<input type="text" name="name" id="name" class="form-control" placeholder="Name">
+								<p></p>
+							</div>
+							<div class="form-group">
+								<label for="email" class="light-label">Email<span class="req">*</span></label>
+								<input type="text" name="email" id="email" class="form-control" placeholder="Email">
+								<p></p>
+							</div>
+							<div class="row">
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="password" class="light-label">Password<span class="req">*</span></label>
+										<input type="password" name="password" id="password" class="form-control" placeholder="Password">
+										<p></p>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="confirm_password" class="light-label">Confirm Password<span class="req">*</span></label>
+										<input type="password" name="confirm_password" id="confirm_password" class="form-control" placeholder="Confirm Password">
+										<p></p>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="role" class="light-label">Are you Agent/Developer?<span class="req">*</span></label><br />
+								<div class="btn-group mt-2" role="group" aria-label="Is Role Switch">
+									<input type="radio" class="btn-check" name="role" id="is_role_agent" value="user" autocomplete="off"  
+									{{ old('role', $user->role ?? 'Agent') == 'Agent' ? 'checked' : '' }} >
+									<label class="btn btn-outline-secondary" for="is_role_agent">Agent</label>
 
-												<p class="count">{{ $countsApplied  }}</p>
-											</a>
-										</li>
-										<li class="nav-item" role="presentation">
-											<a class="nav-link" id="pills-tab_02" data-bs-toggle="pill" data-bs-target="#tab_02" aria-controls="tab_02" aria-selected="false">
-												<p>Seen <br />Properties</p>
-												@php
-													$propertyIds = array_filter(array_keys($seenProperties), fn($id) => $id > 0);
-													$totalSeen = count($propertyIds);
-												@endphp
-												<p class="count">{{ $totalSeen }}</p>
-											</a>
-										</li>
-										<li class="nav-item" role="presentation">
-											<a class="nav-link" id="pills-tab_03" data-bs-toggle="pill" data-bs-target="#tab_03" aria-controls="tab_03" aria-selected="false">
-												<p>Saved<br /> Properties</p>
-												@php
-													$countsSaved  = isset($countsSaved ) ? $countsSaved  : 0;
-												@endphp
-												<p class="count">{{ $countsSaved  }}</p>
-											</a>
-										</li>
-									</ul>
-									<div class="tab-content" id="pills-tabContent">
-										<div class="tab-pane fade show active" id="tab_01" role="tabpanel" aria-labelledby="pills-tab_01">
-											<div class="gallery-body">
-												@php
-													$appliedProperties = isset($appliedProperties) ? $appliedProperties : collect();
-												@endphp
+									<input type="radio" class="btn-check" name="role" id="is_role_developer" value="builder" autocomplete="off" >
+									<label class="btn btn-outline-secondary" for="is_role_developer">Developer</label>
+								</div> 
+							</div>								
+							<button class="btn btn-primary mt-3">Register</button>
+						</form>
+					</div>
 
-												@if(isset($appliedProperties) && $appliedProperties->isNotEmpty())
-													<div class="sidebar-gallery">
-														@foreach ($appliedProperties as $value)
+					<div class="tab-pane fade" id="div3">
+						<h5 class="mb-3">Forgot Password?</h5>
+						<form id="forgotPasswordForm" action="{{ route('account.processForgotPassword') }}" method="post">
+							@csrf
+							<div class="form-group">
+								<label for="forgot_email" class="light-label">Email<span class="req">*</span></label>
+								<input type="text" value="{{ old('email') }}" name="email" id="forgot_email" class="form-control" placeholder="example@example.com">
+								<p class="invalid-feedback d-none" id="error_email">Enter your email</p>
+							</div>
+
+							<div class="flex-wrapper mt-3">
+								<button class="btn btn-primary">Send Rest Link</button>						
+							</div>	
+						</form>
+					</div>
+				</div>
+				</div>
+			</div>
+		@endif	
+
+		<div class="divider"></div>
+
+		@if (Auth::check())
+			<div class="accordion" id="accordionExample">
+				<div class="accordion-item">
+					<h2 class="accordion-header">
+						<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+							<div class="icon icon_01">1</div>
+							Quick Links
+						</button>
+					</h2>
+					<div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+						<div class="accordion-body">
+							<ul class="inside-link">
+								<li><a href="{{ route('front.home') }}" class="{{ request()->routeIs('front.home') ? 'active' : '' }}">Home</a></li>
+								<li><a href="{{ route('properties.index') }}" class="{{ request()->routeIs('properties.index') ? 'active' : '' }}">Properties</a></li>
+								<li><a href="{{ route('account.myPropertyApplications') }}" class="{{ request()->routeIs('account.myPropertyApplications') ? 'active' : '' }}">Interested</a></li>
+								<li><a href="{{ route('property.savedProperties') }}" class="{{ request()->routeIs('property.savedProperties') ? 'active' : '' }}">Saved</a></li>
+							</ul>								
+							@if(Auth::user()->role === 'Admin')
+								<ul class="inside-link mt-4">
+									<li><a href="{{ route('orders.index') }}">Orders</a></li>
+									<li><a href="{{ route('properties.pending') }}">Approval</a></li>
+									<li><a href="{{ route('areas.index') }}">Area</a></li>
+									<li><a href="{{ route('users.index') }}">User</a></li>
+								</ul>
+							@endif
+						</div>
+					</div>
+				</div>
+				<div class="accordion-item">
+					<h2 class="accordion-header">
+						<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+							<div class="icon icon_02">1</div>
+							My Activity
+						</button>
+					</h2>
+					<div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+						<div class="accordion-body">
+							<div class="activities">
+								<ul class="nav nav-pills" id="pills-tab" role="tablist">
+									<li class="nav-item" role="presentation">
+										<a href="#" class="nav-link active" id="pills-tab_01" data-bs-toggle="pill" data-bs-target="#tab_01" aria-controls="tab_01" aria-selected="true">
+											<p>Contacted <br />Properties</p>
+											@php
+												$countsApplied  = isset($countsApplied ) ? $countsApplied  : 0;
+											@endphp
+
+											<p class="count">{{ $countsApplied  }}</p>
+										</a>
+									</li>
+									<li class="nav-item" role="presentation">
+										<a class="nav-link" id="pills-tab_02" data-bs-toggle="pill" data-bs-target="#tab_02" aria-controls="tab_02" aria-selected="false">
+											<p>Seen <br />Properties</p>
+											@php
+												$propertyIds = array_filter(array_keys($seenProperties), fn($id) => $id > 0);
+												$totalSeen = count($propertyIds);
+											@endphp
+											<p class="count">{{ $totalSeen }}</p>
+										</a>
+									</li>
+									<li class="nav-item" role="presentation">
+										<a class="nav-link" id="pills-tab_03" data-bs-toggle="pill" data-bs-target="#tab_03" aria-controls="tab_03" aria-selected="false">
+											<p>Saved<br /> Properties</p>
+											@php
+												$countsSaved  = isset($countsSaved ) ? $countsSaved  : 0;
+											@endphp
+											<p class="count">{{ $countsSaved  }}</p>
+										</a>
+									</li>
+								</ul>
+								<div class="tab-content" id="pills-tabContent">
+									<div class="tab-pane fade show active" id="tab_01" role="tabpanel" aria-labelledby="pills-tab_01">
+										<div class="gallery-body">
+											@php
+												$appliedProperties = isset($appliedProperties) ? $appliedProperties : collect();
+											@endphp
+
+											@if(isset($appliedProperties) && $appliedProperties->isNotEmpty())
+												<div class="sidebar-gallery">
+													@foreach ($appliedProperties as $value)
+														<div class="gallery-item">
+															@php
+																$PropertyImage = $value->property->property_images->first();
+															@endphp
+															<a href="{{ $value->url }}" target="_blank">
+																@if ($PropertyImage && !empty($PropertyImage->image))
+																	<img src="{{ asset('uploads/property/thumb/' . $PropertyImage->image) }}" class="thumb">
+																@else
+																	<img src="{{ asset('admin-assets/img/default-150x150.png') }}" class="thumb">
+																@endif
+															</a>
+															<h5>{{ $value->property->title }}</h5>
+															<p>{{ $value->property->location }}, {{ $value->property->area->name }}, {{ $value->property->city->name ?? '' }}</p>
+															<a href="#" class="btn btn-primary mt-2">Contact</a>
+														</div>
+													@endforeach
+												</div>									
+												@else
+													<a href="{{ route('front.home') }}" class="btn btn-primary">Start New Search</a>
+												@endif	
+										</div>						
+									</div>
+
+									<div class="tab-pane fade" id="tab_02" role="tabpanel" aria-labelledby="pills-tab_02">
+										<div class="gallery-body">
+											@php
+												$uniqueSeen = collect($seenProperties)->unique(); 
+											@endphp
+												<div class="sidebar-gallery">
+													@foreach($uniqueSeen as $propertyId => $count)
+														@php
+															$property = \App\Models\Property::with('property_images','area','city')
+																->find($propertyId);
+														@endphp
+
+														@if($property)
 															<div class="gallery-item">
-																@php
-																	$PropertyImage = $value->property->property_images->first();
-																@endphp
-																<a href="{{ $value->url }}" target="_blank">
-																	@if ($PropertyImage && !empty($PropertyImage->image))
-																		<img src="{{ asset('uploads/property/thumb/' . $PropertyImage->image) }}" class="thumb">
+																<a href="{{ $property->url }}" target="_blank">
+																	@if($property->property_images->first())
+																		<img src="{{ asset('uploads/property/thumb/' . $property->property_images->first()->image) }}" class="thumb">
 																	@else
 																		<img src="{{ asset('admin-assets/img/default-150x150.png') }}" class="thumb">
 																	@endif
 																</a>
-																<h5>{{ $value->property->title }}</h5>
-																<p>{{ $value->property->location }}, {{ $value->property->area->name }}, {{ $value->property->city->name ?? '' }}</p>
-																<a href="#" class="btn btn-primary mt-2">Contact</a>
+																<h5>{{ $property->title }}</h5>
+																<p>{{ $property->area->name ?? '' }}, {{ $property->city->name ?? '' }}</p>
+																<p class="seen-status">Seen {{ $count }} time{{ $count > 1 ? 's' : '' }}</p>
+																<a href="#" class="btn btn-primary mt-2">Contact</a>														
 															</div>
-														@endforeach
-													</div>									
-													@else
-														<a href="{{ route('front.home') }}" class="btn btn-primary">Start New Search</a>
-													@endif	
-											</div>						
-										</div>
-
-										<div class="tab-pane fade" id="tab_02" role="tabpanel" aria-labelledby="pills-tab_02">
-											<div class="gallery-body">
-												@php
-													$uniqueSeen = collect($seenProperties)->unique(); 
-												@endphp
-													<div class="sidebar-gallery">
-														@foreach($uniqueSeen as $propertyId => $count)
-															@php
-																$property = \App\Models\Property::with('property_images','area','city')
-																	->find($propertyId);
-															@endphp
-
-															@if($property)
-																<div class="gallery-item">
-																	<a href="{{ $property->url }}" target="_blank">
-																		@if($property->property_images->first())
-																			<img src="{{ asset('uploads/property/thumb/' . $property->property_images->first()->image) }}" class="thumb">
-																		@else
-																			<img src="{{ asset('admin-assets/img/default-150x150.png') }}" class="thumb">
-																		@endif
-																	</a>
-																	<h5>{{ $property->title }}</h5>
-																	<p>{{ $property->area->name ?? '' }}, {{ $property->city->name ?? '' }}</p>
-																	<p class="seen-status">Seen {{ $count }} time{{ $count > 1 ? 's' : '' }}</p>
-																	<a href="#" class="btn btn-primary mt-2">Contact</a>														
-																</div>
-															@endif
-														@endforeach
-													</div>
+														@endif
+													@endforeach
 												</div>
 											</div>
 										</div>
+									</div>
 
-										<div class="tab-pane fade" id="tab_03" role="tabpanel" aria-labelledby="pills-tab_03">
-											<div class="gallery-body">
-												@php
-													$savedProperties = isset($savedProperties) ? $savedProperties : collect();
-												@endphp
+									<div class="tab-pane fade" id="tab_03" role="tabpanel" aria-labelledby="pills-tab_03">
+										<div class="gallery-body">
+											@php
+												$savedProperties = isset($savedProperties) ? $savedProperties : collect();
+											@endphp
 
-												@if(isset($savedProperties) && $savedProperties->isNotEmpty())
-													<div class="sidebar-gallery">
-														@foreach ($savedProperties as $value)
-															<div class="gallery-item">
-																@php
-																	$PropertyImage = $value->property->property_images->first();
-																@endphp
-																<a href="{{ $value->url }}" target="_blank">
-																	@if ($PropertyImage && !empty($PropertyImage->image))
-																		<img src="{{ asset('uploads/property/thumb/' . $PropertyImage->image) }}" class="thumb">
-																	@else
-																		<img src="{{ asset('admin-assets/img/default-150x150.png') }}" class="thumb">
-																	@endif
-																</a>
-																<h5>{{ $value->property->title }}</h5>
-																<p>{{ $value->property->location }}, {{ $value->property->area->name }}, {{ $value->property->city->name ?? '' }}</p>
-																<a href="#" class="btn btn-primary mt-2">Contact</a>
-															</div>
-														@endforeach
-													</div>									
-													@else
-														<a href="{{ route('front.home') }}" class="btn btn-primary">Start New Search</a>
-													@endif	
-											</div>						
-										</div>
+											@if(isset($savedProperties) && $savedProperties->isNotEmpty())
+												<div class="sidebar-gallery">
+													@foreach ($savedProperties as $value)
+														<div class="gallery-item">
+															@php
+																$PropertyImage = $value->property->property_images->first();
+															@endphp
+															<a href="{{ $value->url }}" target="_blank">
+																@if ($PropertyImage && !empty($PropertyImage->image))
+																	<img src="{{ asset('uploads/property/thumb/' . $PropertyImage->image) }}" class="thumb">
+																@else
+																	<img src="{{ asset('admin-assets/img/default-150x150.png') }}" class="thumb">
+																@endif
+															</a>
+															<h5>{{ $value->property->title }}</h5>
+															<p>{{ $value->property->location }}, {{ $value->property->area->name }}, {{ $value->property->city->name ?? '' }}</p>
+															<a href="#" class="btn btn-primary mt-2">Contact</a>
+														</div>
+													@endforeach
+												</div>									
+												@else
+													<a href="{{ route('front.home') }}" class="btn btn-primary">Start New Search</a>
+												@endif	
+										</div>						
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-				@endif
+			</div>
+		@endif
 			</div>
 		</div>	
 	</div>
@@ -262,117 +414,13 @@
 
 @yield('main')
 
-<footer>	
-	<div class="modal fade bd-example-modal-lg" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content login-modal">
-				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-				<div class="modal-header">Login</div>
-				<div class="modal-body">									
-					<form action="{{ route('account.authenticate') }}" method="post">
-						@csrf					
-						<div class="form-group">
-							<label for="login_email">Email</label>
-							<input type="text" value="{{ old('email') }}" name="email" id="login_email" class="form-control @error('email') is-invalid @enderror" placeholder="email">
-							@error('email')
-								<p class="invalid-feedback">{{ $message }}</p>
-							@enderror
-						</div>
-
-						<div class="form-group">
-							<label for="login_password">Password</label>
-							<input type="password" name="password" id="login_password" class="form-control @error('password') is-invalid @enderror" placeholder="Enter Password">
-							@error('password')
-								<p class="invalid-feedback">{{ $message }}</p>
-							@enderror
-						</div>
-					</div>
-						
-					<div class="modal-footer">
-						<a href="{{ route('account.forgotPassword') }}" class="rh_forget_password_trigger">Forgot Password?</a>
-						<button class="btn btn-primary">Login</button>
-					</div>
-				</form>				
-			</div>
-		</div>
-	</div>
-
-	<div class="modal fade bd-example-modal-lg" id="registerAccountModal" tabindex="-1" aria-labelledby="registerAccountLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content login-modal">
-				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-				<div class="modal-header">Register Account</div>
-				<div class="modal-body">										
-					<form action="" name="registrationForm" id="registrationForm" class="formPadding">
-						<div class="row">
-							<div class="col-md-6">
-								<div class="form-group">
-									<label class="rh_modal_labels" for="name">Name</label>                                    
-									<input type="text" name="name" id="name" class="form-control" placeholder="Name">
-									<p></p>
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div class="form-group">
-									<label for="email" class="mb-2">Email*</label>
-									<input type="text" name="email" id="email" class="form-control" placeholder="Email">
-									<p></p>
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div class="form-group">
-									<label for="password">Password*</label>
-									<input type="password" name="password" id="password" class="form-control" placeholder="Password">
-									<p></p>
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div class="form-group">
-									<label for="confirm_password">Confirm Password*</label>
-									<input type="password" name="confirm_password" id="confirm_password" class="form-control" placeholder="Confirm Password">
-									<p></p>
-								</div>
-							</div>
-						</div>														
-					</div>
-					<hr class="m-0" />
-					<div class="modal-body">
-						<div class="row">
-							<div class="col-md-9">
-								<div class="agentBtn">
-									<div class="label"><label for="role" class="mt-2">Are you Agent/Developer?<span class="req">*</span></label></div>
-									<div class="btn-group" role="group" aria-label="Is Role Switch">
-										<input type="radio" class="btn-check" name="role" id="is_role_agent" value="user" autocomplete="off"  
-										{{ old('role', $user->role ?? 'Agent') == 'Agent' ? 'checked' : '' }} >
-										<label class="btn btn-outline-secondary" for="is_role_agent">Agent</label>
-
-										<input type="radio" class="btn-check" name="role" id="is_role_developer" value="builder" autocomplete="off" >
-										<label class="btn btn-outline-secondary" for="is_role_developer">Developer</label>
-									</div> 
-								</div>
-							</div>
-							
-							<div class="col-md-3">
-								<button class="btn btn-primary pull-right">Register</button>
-							</div>
-						</div>
-					</div>
-				</form>					
-			</div>
-		</div>
-	</div>
-</footer>
-
 <script src="{{ asset('front-assets/js/jquery-3.6.0.min.js') }}"></script>
 <script src="{{ asset('front-assets/js/bootstrap.min.js') }}"></script>
 {{-- <script src="{{ asset('front-assets/js/dropzone.min.js') }}"></script> --}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>
 <script src="{{ asset('front-assets/js/ion.rangeSlider.min.js') }}"></script>
-<script src="{{ asset('front-assets/js/custom.js') }}"></script>
-
-
 <script src="{{ asset('front-assets/js/slick.min.js') }}"></script>
-
+<script src="{{ asset('front-assets/js/custom.js') }}"></script>
 <script type="text/javascript">
     //$('.textarea').trumbowyg();
     $.ajaxSetup({
@@ -381,10 +429,87 @@
         }
     });
 </script>
-
 @yield('customJs')
-
 <script>
+	$('#sendOtpForm').on('submit', function(e) {
+		e.preventDefault();
+
+		$.ajax({
+			url: $(this).attr('action'),
+			method: 'POST',
+			data: $(this).serialize(),
+			success: function(response) {
+
+				// Hide first form and show second
+				$('#otpSendForm').hide();
+				$('#otpVerifyForm').show();
+
+				$('#sessionMessage')
+					.removeClass('alert-success')
+					.addClass('alert alert-success')
+					.text('OTP sent successfully!')
+					.fadeIn();
+
+				// $('#sessionMessage')
+				//     .removeClass('alert-success')
+				//     .addClass('alert alert-danger')
+				//     .text(error)
+				//     .fadeIn();
+
+				setTimeout(() => {
+					$('#sessionMessage').fadeOut();
+				}, 1500);
+
+				// Set email value in second form
+				let email = $('#sendOtpForm input[name="email"]').val();
+				$('#verifyEmail').val(email);
+			},
+			error: function(xhr) {
+				let error = xhr.responseJSON?.message || 'Something went wrong';
+				alert(error);
+			}
+		});
+	});
+
+	$('#verifyOtpForm').on('submit', function(e) {
+		e.preventDefault();
+
+		$.ajax({
+			url: $(this).attr('action'),
+			method: 'POST',
+			data: $(this).serialize(),
+			success: function(response) {
+				$('#sessionMessage')
+					.removeClass('alert-danger')
+					.addClass('alert alert-success')
+					.text(response.message)
+					.fadeIn();
+
+				// 🔁 Redirect after 1 second (you can make it 0 for instant redirect)
+				setTimeout(function() {
+					var redirectUrl = response.redirect; // the URL from the response
+					
+					if (response.redirect) {
+						window.location.href = redirectUrl;
+					} else {
+						window.location.href = 'account/profile'; // Change '/defaultRoute' to any route
+					}
+				}, 1000); // Adjust timeout duration as needed
+			},
+			error: function(xhr) {
+				const errorMsg = xhr.responseJSON?.message || 'OTP verification failed';
+
+				$('#sessionMessage')
+					.removeClass('alert-success')
+					.addClass('alert alert-danger')
+					.text(errorMsg)
+					.fadeIn();
+			}
+		});
+	});
+
+
+
     $("#registrationForm").submit(function(event){
         event.preventDefault();
 

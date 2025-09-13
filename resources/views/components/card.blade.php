@@ -16,14 +16,21 @@
         <div class="link">            
             <div class="overlay-details-top">
                 @if(Auth::user()->role == 'Admin')
-                    <span class="tagUser">{{ $property?->id }}</span>
-                @endif                
-                <div class="avatar-stack">
-                    <div class="avatar-wrapper">
-                        <span class="tagSmall">{{ $totalImages }}</span>
-                        <div class="avatar-tooltip" style="bottom: -5px; left:85px;">Uploaded Images</div>
+                    <div class="avatar-stack">
+                        <div class="avatar-wrapper">
+                            <span class="tagUser">{{ $property?->id }}</span>
+                            <div class="avatar-tooltip" style="bottom: -35px; left:20px;">Property ID</div>
+                        </div>
+                    </div>                    
+                @endif 
+                @if ($data->property_images && $data->property_images->count() > 0)               
+                    <div class="avatar-stack">
+                        <div class="avatar-wrapper">
+                            <span class="tagSmall">{{ $totalImages }}</span>
+                            <div class="avatar-tooltip" style="bottom: -35px; left:10px;">Uploaded Images</div>
+                        </div>
                     </div>
-                </div>
+                @endif 
             </div>
 
              <div class="overlay-details-btm">
@@ -80,18 +87,24 @@
                 </div>
             </div>
 
+            @php
+                $propertyImages = $property?->images?->take(4);
+            @endphp
+            
             <a href="{{ $property->url }}"  target="_blank" class="overlay"></a>
-
-            <div class="listing-gallery">                                
-                @if ($data->property_images && $data->property_images->count() > 0)
-                    @foreach ($data->property_images->whereIn('label', ['Main', 'Video', 'Elevation', 'Bedroom']) as $propertyImage)
-                        <img src="{{ asset('uploads/property/thumb/'.$propertyImage->image) }}" 
-                            alt="{{ $propertyImage->label }}" class="thumb" />
+            @if ($propertyImages && $propertyImages->count() > 0)
+                <div class="{{ ($data->property_images && $data->property_images->count() > 0) ? 'listing-gallery' : 'no-gallery' }}">
+                    @foreach ($propertyImages as $image)
+                        @if (!empty($image->image))
+                            <img src="{{ asset('uploads/property/thumb/'.$image->image) }}" class="thumb" alt="{{ $property?->title ?? '' }}" >
+                        @else
+                            <img src="{{ asset('front-assets/images/default-150x150.png') }}" alt="" class="thumb">
+                        @endif
                     @endforeach
-                @else
-                    <img src="{{ asset('admin-assets/img/default-150x150.png') }}" alt="Default" class="thumb">
-                @endif
-            </div>
+                </div>
+            @else
+                <img src="{{ asset('front-assets/images/default-150x150.png') }}" alt="" class="thumb">
+            @endif
         </div>
 
         <div class="details">

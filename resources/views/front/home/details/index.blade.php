@@ -1,6 +1,6 @@
 @extends('front.layouts.app')
-
 @section('hideHeader') @endsection
+
 
 <header class="control-header">
     <div id="pageLoader" class="page-loader">
@@ -23,12 +23,12 @@
 
         @include('front.home.results.search') 
         @include('front.home.results.search_slide')
-
-        @include('front.layouts.login')
+        @include('front.layouts.login_header')
                     
         <div class="overlay"></div>
     </div>
 </header>
+
 
 @section('main')
 

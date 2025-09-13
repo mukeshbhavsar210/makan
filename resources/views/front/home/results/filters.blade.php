@@ -80,30 +80,29 @@
                 <div class="col">
                     <div class="dropdown">
                         <button class="btn btnFilter btn-secondary dropdown-toggle" type="button" id="priceDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                            Price Range
+                            Price and Size
                         </button>
                         <ul class="dropdown-menu custom-price" aria-labelledby="priceDropdown">
-
                             <form id="filterForm" method="GET" action="{{ route('properties.index') }}">
-                                <input type="hidden" name="price_min" id="price_min" value="{{ request('price_min', 1000) }}">
-                                <input type="hidden" name="price_max" id="price_max" value="{{ request('price_max', 50000) }}">
-                                
-                                <p>
-                                    <label for="priceRange">Price range:</label>
-                                    <input type="text" id="priceRange" readonly style="border:0; color:#f6931f; font-weight:bold;">
-                                </p>
-                                <div id="priceSlider"></div>
+                            {{-- Price Range --}}
+                            <input type="hidden" name="price_min" id="price_min" value="{{ request('price_min', 1000) }}">
+                            <input type="hidden" name="price_max" id="price_max" value="{{ request('price_max', 50000000) }}">
+                            <p>
+                                <label for="priceRange">Price range:</label>
+                                <input type="text" id="priceRange" readonly style="border:0; color:#f6931f; font-weight:bold;">
+                            </p>
+                            <div id="priceSlider"></div>
 
-                                <button type="submit" class="btn btn-primary">Filter</button>
-                            </form>
-
-                            {{-- <form id="filterForm" method="GET" action="{{ route('properties.index') }}">
-                                <input type="hidden" name="price_min" id="price_min" value="{{ request('price_min') }}">
-                                <input type="hidden" name="price_max" id="price_max" value="{{ request('price_max') }}">
-                                <input type="text" id="priceRange" />
-                                <button type="submit" class="btn btn-primary">Filter</button>
-                                <button type="button" id="resetPriceRange" class="btn btn-secondary">Reset</button>
-                            </form> --}}
+                            {{-- Size Range --}}
+                            <input type="hidden" name="size_min" id="size_min" value="{{ request('size_min', 500) }}">
+                            <input type="hidden" name="size_max" id="size_max" value="{{ request('size_max', 10000) }}">
+                            <p>
+                                <label for="sizeRange">Size (sq.ft.):</label>
+                                <input type="text" id="sizeRange" readonly style="border:0; color:#f6931f; font-weight:bold;">
+                            </p>
+                            <div id="sizeSlider"></div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
                         </ul>
                     </div>
                 </div>
@@ -171,8 +170,7 @@
                     <div class="dropdown-menu moreFilters" aria-labelledby="moreFiltersDropdown" style="min-width: 500px;">
                         <div class="wrapper-filters">
                             <ul class="nav flex-column nav-pills" id="more-filters-tab" role="tablist" aria-orientation="vertical">
-                                <li><a href="#" class="nav-link active" id="tab-listedby" data-bs-toggle="pill" data-bs-target="#listedby-content" role="tab">Listed By</a></li>
-                                <li><a href="#" class="nav-link" id="tab-size" data-bs-toggle="pill" data-bs-target="#size-content" type="button" role="tab">Built-up Area</a></li>
+                                <li><a href="#" class="nav-link active" id="tab-listedby" data-bs-toggle="pill" data-bs-target="#listedby-content" role="tab">Listed By</a></li>                                
                                 <li><a href="#" class="nav-link" id="tab-amenities" data-bs-toggle="pill" data-bs-target="#amenities-content" type="button" role="tab">Amenities</a></li>
                                 <li><a href="#" class="nav-link" id="tab-age" data-bs-toggle="pill" data-bs-target="#age-content" type="button" role="tab">Age of Property</a></li>                                
                                 <li><a href="#" class="nav-link" id="tab-facing" data-bs-toggle="pill" data-bs-target="#facing-content" type="button" role="tab">Facing</a></li>                                
@@ -199,20 +197,6 @@
                                                 </li>
                                             @endforeach  
                                         </ul>                                  
-                                    </div>
-                                </div>
-
-                                <!-- Size -->
-                                <div class="tab-pane fade" id="size-content" role="tabpanel">
-                                    <div class="more-filter-checkbox">
-                                        <h6>Built-up Area in sq.ft.</h6>
-                                        <form id="sizeFilterForm" method="GET" action="{{ route('properties.index') }}">
-                                            <input type="hidden" name="size_min" id="size_min" value="{{ request('size_min') }}">
-                                            <input type="hidden" name="size_max" id="size_max" value="{{ request('size_max') }}">
-                                            <input type="text" id="sizeRange" />
-                                            <button type="submit" class="btn btn-primary">Filter</button>
-                                            <button type="button" id="resetSizeRange" class="btn btn-secondary">Reset</button>
-                                        </form>
                                     </div>
                                 </div>
 

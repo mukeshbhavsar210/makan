@@ -40,11 +40,11 @@
                 <span class="rh-ultra-hot">Sale</span>
             @endif
             
-            in 
+            {{-- in 
             @if($areaSelected)
                 {{ $areaSelected->name }},    
             @endif
-                {{ $citySelected->name }}
+                {{ $citySelected->name }} --}}
         </h5>
         <div class="css-7b7t20">Sort by:<div class="input-container-dropdown css-1bh13te"><div class="input-container"><div class="css-gg4vpm"><div>Relevance</div><span class="css-5m6l3y"></span></div></div></div></div>
     </div>

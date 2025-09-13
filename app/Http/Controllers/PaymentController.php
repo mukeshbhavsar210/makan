@@ -10,7 +10,6 @@ use App\Models\Order;
 use Illuminate\Http\Request;
 
 class PaymentController extends Controller {
-
     public function index() {
         $successOrders = Order::with(['property.images', 'plan'])->where('status', 'paid')->latest()->paginate(10, ['*'], 'success_page');
         $failedOrders = Order::with(['property.images', 'plan'])->whereIn('status', ['failed', 'pending'])->latest()->paginate(10, ['*'], 'failed_page');
@@ -80,14 +79,14 @@ class PaymentController extends Controller {
             // Activate property
             $property = $order->property;
             $property->plan_id = $order->plan_id;
-            $property->status = 1;
+            $property->status = 0;
             $property->start_date = now();
             $property->end_date = now()->addDays($property->plan->duration ?? 30);
             $property->save();
 
             return response()->json([
                 'status' => true,
-                'redirect' => route('payment.success.page', ['property' => $property->id])
+                'redirect' => route('front.admin.success', ['property' => $property->id])
             ]);
 
         } catch (\Exception $e) {

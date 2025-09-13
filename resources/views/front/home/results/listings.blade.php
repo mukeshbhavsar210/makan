@@ -1,18 +1,14 @@
 @extends('front.layouts.app')
-
 @section('hideHeader') @endsection
-
 @section('main')
 
 @include('front.home.results.header')
-@include('front.home.results.filters')
 
 <div class="body-details">
     <div class="row">
         <div class="col-md-8 col-12">
             @include('front.home.results.breadcrumb')
-            @include('front.home.results.cards')
-                                                                                     
+            @include('front.home.results.cards')                                                                                     
             </div>
             <div class="col-md-4 col-12">Right</div>
         </div>
