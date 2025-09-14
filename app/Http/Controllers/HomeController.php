@@ -20,9 +20,9 @@ class HomeController extends Controller {
     public function index(Request $request){        
         $cities = City::where('status',1)->get();
         $areas = Area::where('status',1)->get();                
-        $featuredJobs = Property::where('status',1)->orderBy('created_at','DESC')->take(6)->get();
-        $latestJobs = Property::where('status',1)->orderBy('created_at','DESC')->take(6)->get();
-        $properties = Property::where('status',1);              
+        $featuredJobs = Property::where('verification','approved')->orderBy('created_at','DESC')->take(6)->get();
+        $latestJobs = Property::where('verification','approved')->orderBy('created_at','DESC')->take(6)->get();
+        $properties = Property::where('verification','approved');
 
         //Filter using keyword
         // if(!empty($request->keyword)){
@@ -333,7 +333,7 @@ class HomeController extends Controller {
                         $q->where('property_id', $id);
                     }
                 ])
-            ->where('status', 1)
+            ->where('verification', 'approved')
             ->where('id', $id)
             ->where('slug', $slug)
             ->where('category', $category)
@@ -377,7 +377,7 @@ class HomeController extends Controller {
         if($property->related_properties != ''){
             $propertyArray = explode(',',$property->related_properties);
             $relatedProperties = Property::whereIn('id',$propertyArray)
-                ->where('status',1)
+                ->where('verification', 'approved')
                 ->with('property_images')
                 ->get();
         }

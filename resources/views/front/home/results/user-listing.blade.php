@@ -3,9 +3,6 @@
 @section('hideHeader') @endsection
 @section('main')
 
-@include('front.home.results.header')
-{{-- @include('front.home.results.filters') --}}
-
 <div class="body-details">
     <div class="row">
         <div class="col-md-8 col-12">

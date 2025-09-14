@@ -14,7 +14,7 @@ class Property extends Model {
         'construction_types','rooms','bathrooms','user_id','builder_id','property_age','facings',
         'city_id','area_id','description','keywords','location','rera',
         'year_build','total_area','towers','units','related_properties','amenities','furnishing',
-        'possession_date','brokerage','status'
+        'possession_date','brokerage','status', 'verification'
     ];
    
     protected static function booted() {

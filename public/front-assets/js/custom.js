@@ -1,35 +1,39 @@
 $(document).ready(function(){
+
+    // Plan radio button changes
+    $('input[name="plan_id"]').change(function() {
+        $('.plan-card').removeClass('active');
+        $(this).closest('.plan-card').addClass('active');
+    });
+    $('input[name="plan_id"]:checked').closest('.plan-card').addClass('active');
+
     //Property progress tabs
     $(document).on("click", ".btn-next-tab", function (e) {
         e.preventDefault();
-
-        // find current active pane and tab
         let $currentPane = $(".tab-pane.show.active");
         let $nextPane = $currentPane.next(".tab-pane");
-
         let $currentTab = $(".nav-pills .nav-link.active");
         let $nextTab = $currentTab.closest("li").next("li").find(".nav-link");
 
         if ($nextPane.length && $nextTab.length) {
-            // switch tab panes
             $currentPane.removeClass("show active");
             $nextPane.addClass("show active");
-
-            // switch nav links
             $currentTab.removeClass("active");
             $nextTab.addClass("active");
         }
     });
 
-
-
-
-     $('input[name="optionRadio"]').change(function() {
+    //Login and Register tabs
+    $('input[name="optionRadio"]').change(function() {
         var selected = $(this).val();
         $('.tab-pane').removeClass('show active');
         $('#div' + selected).addClass('show active');
-    });    
+    });
+    $('input[name="optionRadio"]:checked').trigger('change'); 
 
+    
+
+    //Login form
     $('#loginForm').submit(function(e) {
         e.preventDefault(); // prevent page refresh
         $('.invalid-feedback').text('').addClass('d-none');
@@ -85,17 +89,7 @@ $(document).ready(function(){
         });
     });
 
-    // When any plan radio button changes
-    $('input[name="plan_id"]').change(function() {
-        // Remove .active class from all plan cards
-        $('.plan-card').removeClass('active');
-
-        // Add .active class to the parent label of the checked radio
-        $(this).closest('.plan-card').addClass('active');
-    });
-
-    // Optional: add .active to the initially checked radio on page load
-    $('input[name="plan_id"]:checked').closest('.plan-card').addClass('active');
+   
 
 
 

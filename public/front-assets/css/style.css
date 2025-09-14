@@ -315,7 +315,7 @@ p {
 .sellCover { background-image: url('../images/rentCover.webp') !important; }
 .navbar { background-image: linear-gradient( rgba(0,0,0,0.45),rgba(0,0,0,0.25),transparent );}
 
-header { position: fixed; width: 100%; top:0; left: 0; z-index: 99; background-color: var(--white);}
+header { position: fixed; width: 100%; top:0; left: 0; z-index: 999; background-color: var(--white);}
 
 .custom-price { width: 500px;}
 
@@ -323,7 +323,7 @@ header { position: fixed; width: 100%; top:0; left: 0; z-index: 99; background-c
 .searchHome .mainTitle { text-align: center; color: var(--white); }
 .searchHome .mainTitle h1 { font-size: 32px; font-weight: bold; text-shadow: 1px 1px 1px rgba(0,0,0,0.51);}
 
-.listing-page { margin-top: 5px;}
+.listing-page { margin-top: 50px;}
 .listing-page form { margin:0px;}
 
 .rentBuy { display: flex; padding: 10px 20px 0 20px; list-style-type: none;}
@@ -943,7 +943,9 @@ body .dropzone { border: 2px dashed var(--primary) !important; border-radius: 10
 
 .listings-posted { border: 1px #ccc solid; position: relative; border-radius: 10px; margin: 10px 0; background-color: #fff; font-size: 14px; min-height: 445px;}
 .listings-posted .link { position: relative; height: 220px;}
-.listings-posted .pending { background: linear-gradient(180deg,transparent,rgba(0,0,0,.5)); height: 220px; width: 100%; position: absolute; bottom: 0; left: 0; border-radius: 7px 7px 0 0; z-index: 9; }
+.listings-posted .pending { background: linear-gradient(180deg,transparent,rgba(0,0,0,.5)); height: 220px; width: 100%; position: absolute; bottom: 0; left: 0; border-radius: 7px 7px 0 0; z-index: 2; }
+.listings-posted .pending-verification { background: rgba(0,0,0,0.5); height: 100%; width: 100%; position: absolute; top: 0; left: 0; border-radius: 7px 7px 0 0; z-index: 99; color: #fff; text-align: center; padding: 90px 20px 100px 20px; font-size: 16px; font-weight: bold;}
+
 .listings-posted .overlay { background: linear-gradient(180deg,transparent,rgba(0,0,0,.5)); height: 220px; width: 100%; position: absolute; bottom: 0; left: 0; border-radius: 7px 7px 0 0; z-index: 1; }
 .listings-posted .overlay-details-top { padding: 10px; position: absolute; top: 0; left:0; color:#fff; width: 100%; z-index: 11; display: flex;}
 .listings-posted .overlay-details-top .avatar-stack { margin-right: 5px;}

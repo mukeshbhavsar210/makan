@@ -100,6 +100,7 @@ Route::group(['prefix' => 'account'], function(){
         Route::get('/get-properties',[PropertyController::class,'getProducts'])->name('properties.getProducts');
 
         Route::post('/properties/toggle-status/{id}', [PropertyController::class, 'toggleStatus'])->name('properties.toggleStatus');
+        Route::post('/properties/bulk-approve-pending', [PropertyController::class, 'bulkApprovePending'])->name('properties.bulkApprovePending');
         Route::post('/properties/toggle-view/{id}', [PropertyController::class, 'toggleView'])->name('properties.toggleView');
 
         //Delete Product Images Route
