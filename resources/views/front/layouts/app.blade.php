@@ -39,6 +39,33 @@
 	</header>	
 @endif
 
+<header class="control-header">
+    <div id="pageLoader" class="page-loader">
+        <img src="{{ asset('front-assets/images/loader.gif') }}" />    
+    </div>
+
+    <div class="strip">
+        <a class="navbar-brand" href="{{ route('front.home') }}"><img src="{{ asset('front-assets/images/logo.png') }}" /></a>
+        <a class="toggleHeader toggleControl">
+            @if($categoryWord)
+                {{ $categoryWord }} 
+            @endif
+            @if($citySelected)
+                in {{ $citySelected->name }}
+            @endif
+            
+            <i class="fa-solid fa-angle-down down-arrow"></i>
+            <i class="fa-solid fa-angle-up up-arrow"></i>            
+        </a>  
+
+        @include('front.home.results.search') 
+        @include('front.home.results.search_slide')
+        @include('front.layouts.login_header')
+                    
+        <div class="overlay"></div>
+    </div>
+</header>
+
 <div class="offcanvas offcanvas-end" tabindex="-1" id="sideModal" aria-labelledby="sideModalLabel">  
 	<div class="sidebar">
 		<div class="user-details">
@@ -75,7 +102,7 @@
 							<input type="radio" name="optionRadio" id="radio2" value="2" class="radio-hidden">
 							<label for="radio2" class="radio-btn">Register Account</label>		
 
-							<input type="radio" name="optionRadio" id="radio1" value="1" class="radio-hidden" checked>
+							<input type="radio" name="optionRadio" id="radio1" value="1" class="radio-hidden">
 							<label for="radio1" class="radio-btn">Login</label>
 						</div>
 					</div>
@@ -86,7 +113,7 @@
 
 			<div class="login-wrapper">
 				<div class="tab-content">
-					<div class="tab-pane fade show active" id="div1">
+					<div class="tab-pane fade" id="div1">
 						<h5 class="mb-3">Login</h5>
 						<form id="loginForm" action="{{ route('account.authenticate') }}" method="post">
 							@csrf	
@@ -111,7 +138,7 @@
 							</div>
 						</form>	
 
-						<div class="mt-3">
+						<div class="mt-5">
 							<a href="{{ url('auth/google') }}" class="btn btn-danger ">
 								Login with Google
 							</a>

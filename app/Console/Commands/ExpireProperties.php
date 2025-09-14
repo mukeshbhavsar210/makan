@@ -23,10 +23,10 @@ class ExpireProperties extends Command {
 
 
         // Update properties where end_date is passed
-        $expired = Property::where('status', 1)
+        $expired = Property::where('verification', 'approved')
             ->whereNotNull('end_date')
             ->where('end_date', '<', $today)
-            ->update(['status' => 0]);
+            ->update(['verification' => 'expired']);
 
         $this->info("Expired properties: $expired");
     }

@@ -14,7 +14,7 @@
                         <form action="" method="get" class="part">
                             <div class="search-top">
                                 <div class="input-group input-group" style="width: 250px;">
-                                    <input value="{{ Request::get('keyword') }}" type="text" name="keyword" class="form-control float-right" placeholder="Search">
+                                    <input type="text" name="search" value="{{ request('search') }}" class="form-control float-right" placeholder="Search properties...">                                    
                                     <div class="input-group-append">
                                         <button type="submit" class="btn btn-primary icon-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
                                     </div>
@@ -42,78 +42,123 @@
             </div>
         @endauth
 
-        <div id="cardView" class="{{ $viewType === 'table' ? 'd-none' : '' }}">
-            @if($properties->isNotEmpty())
+        @if(Auth::user()->role == 'Admin')
+            <ul class="nav nav-tabs mt-3" id="propertyTabs" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" data-bs-toggle="tab" href="#approved">Approved {{ $approvedCount }}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#pending">Pending {{ $pendingCount }}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#expired">Expired {{ $expiredCount }}</a>
+                </li>
+            </ul>
+
+            <div class="tab-content mt-2">
+                <div class="tab-pane fade show active" id="approved">
+                    <div class="row mt-2">                        
+                        @foreach($properties as $property)
+                            @if($property->verification == 'approved')
+                                <x-card :data="$property" type="property" />
+                            @endif
+                        @endforeach
+                        {{ $properties->links() }}
+                    </div>
+                </div>
+
+                 <div class="tab-pane fade" id="pending">
+                    <div class="row mt-2">
+                        @foreach($pending as $property)
+                            @if($property->verification == 'pending')
+                                <x-card :data="$property" type="property" />
+                            @endif
+                        @endforeach
+                        {{ $pending->links() }}                            
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="expired">
+                    <div class="row mt-2">
+                        @foreach($expired as $property)
+                            @if($property->verification == 'expired')
+                                <x-card :data="$property" type="property" />
+                            @endif
+                        @endforeach
+                        {{ $expired->links() }}                   
+                    </div>
+                </div>
+            </div>
+        @else
+            <div id="cardView" class="{{ $viewType === 'table' ? 'd-none' : '' }}">
                 <div class="row mt-2">
                     @foreach($properties as $property)
                         <x-card :data="$property" type="property" />
                     @endforeach
-                </div>
-
-                <div class="mt-4">
                     {{ $properties->links() }}
                 </div>
-            @else
-                <div class="card mt-3">
-                    <div class="card-body">
-                        <h6>Not posted property yet.</h6>
-                        <a href="{{ route('properties.create') }}" class="btn btn-primary">Post Property</a>
-                    </div>
-                </div>
-            @endif                        
-        </div>
-
-        <div id="tableView" class="{{ $viewType === 'card' ? 'd-none' : '' }}">
-            <div class="table-responsive browser_users">
-                <table class="table table-striped">
-                    <thead class="table-light">
-                        <tr>
-                            <th class="border-top-0">Photos</th>
-                            <th class="border-top-0">Project Name</th>                    
-                            <th class="border-top-0">Price</th>
-                            @if(Auth::user()->role == 'Admin')
-                                <th class="border-top-0">Developer</th>
-                            @endif
-                            <th class="border-top-0">Interested</th>
-                            <th class="border-top-0">Saved</th>
-                            <th class="border-top-0">Posted</th>                            
-                            <th class="border-top-0">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>                        
-                        @if($properties->isNotEmpty())
-                            @foreach($properties as $property)
-                                <x-table :data="$property" type="property" />
-                            @endforeach
-                        <div class="mt-4">
-                            {{ $properties->links() }}
-                        </div>                        
-                        @else                
-                            <h6>Not posted property yet.</h6>
-                            <a href="{{ route('properties.create') }}" class="btn btn-primary">Post Property</a>                
-                        @endif 
-                    </tbody>
-                </table>
-            </div>        
-        </div>
+            </div>
+            <div id="tableView" class="{{ $viewType === 'card' ? 'd-none' : '' }}">
+                <div class="table-responsive browser_users">
+                    <table class="table table-striped">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="border-top-0">Photos</th>
+                                <th class="border-top-0">Project Name</th>                    
+                                <th class="border-top-0">Price</th>
+                                @if(Auth::user()->role == 'Admin')
+                                    <th class="border-top-0">Developer</th>
+                                @endif
+                                <th class="border-top-0">Interested</th>
+                                <th class="border-top-0">Saved</th>
+                                <th class="border-top-0">Posted</th>                            
+                                <th class="border-top-0">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>                        
+                            @if($properties->isNotEmpty())
+                                @foreach($properties as $property)
+                                    <x-table :data="$property" type="property" />
+                                @endforeach
+                                {{ $properties->links() }}
+                            <div class="mt-4">
+                                
+                            </div>                        
+                            @else                
+                                <h6>Not posted property yet.</h6>
+                                <a href="{{ route('properties.create') }}" class="btn btn-primary">Post Property</a>                
+                            @endif 
+                        </tbody>
+                    </table>
+                </div>        
+            </div>
+        @endif
     </div>
 </section>
 @endsection
 
 @section('customJs')
 <script>
-     $(document).on('change', '.toggle-view', function () {
-        let userId = $(this).data('id');
+    $(document).on('change', '.toggle-status', function () {
+        let propertyId = $(this).data('id');
+        let isChecked = $(this).is(':checked'); // true if checked, false if unchecked
+
+        // Simple alert
+        if (isChecked) {
+            alert("You have checked this property!");
+        } else {
+            alert("Are you sure you want to De-Active property?");
+        }
+
         $.ajax({
-            url: "{{ route('properties.toggleView', '') }}/" + userId,
+            url: "{{ route('properties.toggleStatus', '') }}/" + propertyId,
             type: "POST",
             data: {
                 _token: "{{ csrf_token() }}"
             },
             success: function (response) {
                 if(response.status){
-                    console.log("Updated view to: " + response.newView);
-                    // Optional: reload to apply the new view immediately
+                    console.log("Updated: " + response.newStatus);
                     location.reload();
                 }
             },
@@ -122,29 +167,5 @@
             }
         });
     });
-
-
-
-
-    function deleteProperty(id){
-        var url = '{{ route("properties.delete","ID") }}'
-        var newUrl = url.replace("ID",id)
-
-        if(confirm("Are you sure you want to delete?")){
-            $.ajax({
-                url: newUrl,
-                type: 'delete',
-                data: {},
-                dataType: 'json',
-                success: function(response){
-                    if(response["status"]){
-                        window.location.href="{{ route('properties.index') }}"
-                    } else {
-                        window.location.href="{{ route('properties.index') }}"
-                    }
-                }
-            });
-        }
-    }
 </script>
 @endsection

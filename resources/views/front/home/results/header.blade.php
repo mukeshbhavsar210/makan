@@ -23,6 +23,4 @@
                     
         <div class="overlay"></div>
     </div>
-    @include('front.home.results.filters')
-
 </header>

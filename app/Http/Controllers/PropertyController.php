@@ -27,35 +27,57 @@ use Illuminate\Support\Facades\Log;
 class PropertyController extends Controller {
     public function index(Request $request) {
         $user = auth()->user();
-        
-        // Base query
-        if ($user->role === 'Admin') {
-            $properties = Property::query()->where('status', 1)->orderBy('created_at','DESC');
-            $counts = Property::withCount('visitedUsers')->where('status', 1)->count();
-        } else {
-            $properties = Property::query()->where('user_id', $user->id)->orderBy('created_at','DESC');
-            $counts = Property::withCount('visitedUsers')->where('user_id', $user->id)
-                ->where('status', 1)
-                ->count(); 
-        }
+
+        $query = Property::with('property_images')->orderBy('created_at', 'desc');
 
         // Search filter
-        if ($request->filled('keyword')) {
-            $keyword = $request->keyword;
-            $properties->where('title', 'like', "%{$keyword}%");
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                ->orWhere('description', 'like', "%{$search}%");
+            });
         }
 
-        // Paginate
-        $properties = $properties->paginate(10);
+        if (Auth::user()->role != 'Admin') {
+            // Non-admin → only their own approved properties
+            $properties = $query->where('user_id', Auth::id())->paginate(10);
+            $counts = Property::withCount('visitedUsers')->where('user_id', Auth::id())->count();
+            $pending = collect(); // empty
+            $expired = collect(); // empty
+        } else {
+            // Admin → separate lists
+            $counts = Property::withCount('visitedUsers')->count();
+            $properties = (clone $query)->where('verification', 'approved')
+                                    ->paginate(10, ['*'], 'approved_page');
+
+            $pending  = (clone $query)->where('verification', 'pending')
+                                    ->paginate(10, ['*'], 'pending_page');
+
+            $expired  = (clone $query)->where('verification', 'expired')
+                                    ->paginate(10, ['*'], 'expired_page');
+        }
+
+         // Counts
+        $pendingCount = Property::where('verification', 'pending')->count();
+        $approvedCount = Property::where('verification', 'approved')->count();
+        $expiredCount = Property::where('verification', 'expired')->count();
+
+        // ✅ Paginate before executing
+        $properties = $query->paginate(10);
         $users = User::paginate(10);
-        $viewType = auth()->user()->preferred_view ?? 'card';        
+        $viewType = auth()->user()->preferred_view ?? 'card';          
 
         return view('front.property.index', [
             'properties' => $properties,
             'counts' => $counts,
             'viewType' => $viewType,
+            'pending' => $pending,
+            'expired' => $expired,
+            'pendingCount' => $pendingCount,
+            'approvedCount' => $approvedCount,
+            'expiredCount' => $expiredCount,
             'users' => $users,
-            
         ]);
     }
 
@@ -78,7 +100,7 @@ class PropertyController extends Controller {
         $user = auth()->user();
         $cities = City::orderBy('name','ASC')->where('status',1)->get();
         $areas = Area::orderBy('name','ASC')->where('status',1)->get();
-        $relatedProperties = Property::where('status',1)->get();   
+        $relatedProperties = Property::where('verification','approved')->get();   
         $plans = Plan::all();
         
         $data = [ 
@@ -225,7 +247,7 @@ class PropertyController extends Controller {
                     'razorpay_order_id' => $razorpayOrder['id'],
                 ]);
             } else {
-                $property->status = 0;
+                $property->verification = 'pending';
                 $property->start_date = now();
                 $property->end_date = now()->addDays($plan->duration ?? 30);
                 $property->save();
@@ -600,28 +622,59 @@ class PropertyController extends Controller {
     public function approval() {
         $pending = Property::with('plan')->where('verification', 'pending')->orderBy('created_at', 'DESC')->paginate(10, ['*'], 'pending_page');
         $approved = Property::with('plan')->where('verification', 'approved')->orderBy('created_at', 'DESC')->paginate(10, ['*'], 'approved_page');
+        $expired = Property::with('plan')->where('verification', 'expired')->orderBy('created_at', 'DESC')->paginate(10, ['*'], 'approved_page');
 
         // Counts
         $pendingCount = Property::where('verification', 'pending')->count();
         $approvedCount = Property::where('verification', 'approved')->count();
+        $expiredCount = Property::where('verification', 'expired')->count();
 
         return view('front.admin.approval', compact(
             'pending', 
             'approved',
+            'expired',
             'pendingCount', 
-            'approvedCount'
+            'approvedCount',
+            'expiredCount'
         ));
     }
 
 
     public function toggleStatus(Request $request, $id) {
         $property = Property::findOrFail($id);
-        //$property->status = $property->status == 1 ? 0 : 1;
         $property->verification = $property->verification === 'approved' ? 'pending' : 'approved';
         $property->save();
         \Log::info("Property {$id} new status: {$property->status}");
         return response()->json(['status' => true, 'newStatus' => $property->status]);
     }
+
+
+    public function bulkApprovePending(Request $request) {
+        $approve = $request->input('approve');
+
+        // Only approve pending properties
+        if($approve){
+            $updated = Property::where('verification', 'pending')
+                        ->update(['verification' => 'approved']);
+            return response()->json([
+                'status' => true,
+                'message' => "{$updated} pending properties approved."
+            ]);
+        }
+
+        // Optional: revert approved → pending
+        else {
+            $updated = Property::where('verification', 'approved')
+                        ->update(['verification' => 'pending']);
+            return response()->json([
+                'status' => true,
+                'message' => "{$updated} properties reverted to pending."
+            ]);
+        }
+    }
+
+
+    
 
 
     // public function toggleStatus(Request $request, $id) {

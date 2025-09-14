@@ -79,7 +79,7 @@ class PaymentController extends Controller {
             // Activate property
             $property = $order->property;
             $property->plan_id = $order->plan_id;
-            $property->status = 0;
+            $property->verification = 'pending';
             $property->start_date = now();
             $property->end_date = now()->addDays($property->plan->duration ?? 30);
             $property->save();
