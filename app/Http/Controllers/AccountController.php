@@ -30,14 +30,8 @@ class AccountController extends Controller {
         $data['developer'] = $developer;
         $data['counts'] = $counts;
 
-        return view('front.layouts.profile', $data);
+        return view('front.admin.profile', $data);
     }
-
-
-    public function registration(){
-        return view('front.layouts.registration');
-    }
-
 
     public function update_profile(Request $request) {
         $id = Auth::id();
@@ -221,12 +215,7 @@ class AccountController extends Controller {
         }
     }
 
-    public function login(){
-        return view('front.layouts.app');
-    }
-
-
-
+   
     public function authenticate(Request $request){
         $validator = Validator::make($request->all(),[
             'email' => 'required|email',
@@ -280,44 +269,41 @@ class AccountController extends Controller {
         ]);
     }
 
-    public function forgotPassword(){
-        return view('front.layouts.forgot-password');
+   
+
+    public function processForgotPassword(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|exists:users,email'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $token = Str::random(60);
+
+        \DB::table('password_reset_tokens')->where('email', $request->email)->delete();
+        \DB::table('password_reset_tokens')->insert([
+            'email' => $request->email,
+            'token' => $token,
+            'created_at' => now()
+        ]);
+
+        //Send email
+        $user = User::where('email', $request->email)->first();
+        $mailData = [
+            'token' => $token,
+            'user' => $user,
+            'subject' => 'You have requested to change your password.',
+        ];
+
+        Mail::to($request->email)->send(new ResetPasswordEmail($mailData));
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Reset password email has been sent to your email.'
+        ]);
     }
-
-    public function processForgotPassword(Request $request)
-{
-    $validator = Validator::make($request->all(), [
-        'email' => 'required|email|exists:users,email'
-    ]);
-
-    if ($validator->fails()) {
-        return response()->json(['errors' => $validator->errors()], 422);
-    }
-
-    $token = Str::random(60);
-
-    \DB::table('password_reset_tokens')->where('email', $request->email)->delete();
-    \DB::table('password_reset_tokens')->insert([
-        'email' => $request->email,
-        'token' => $token,
-        'created_at' => now()
-    ]);
-
-    //Send email
-    $user = User::where('email', $request->email)->first();
-    $mailData = [
-        'token' => $token,
-        'user' => $user,
-        'subject' => 'You have requested to change your password.',
-    ];
-
-    Mail::to($request->email)->send(new ResetPasswordEmail($mailData));
-
-    return response()->json([
-        'status' => true,
-        'message' => 'Reset password email has been sent to your email.'
-    ]);
-}
 
 
     public function resetPassword($tokenString){

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 13, 2025 at 04:00 PM
+-- Generation Time: Sep 14, 2025 at 01:53 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -266,7 +266,8 @@ CREATE TABLE `orders` (
 INSERT INTO `orders` (`id`, `property_id`, `plan_id`, `razorpay_order_id`, `razorpay_payment_id`, `razorpay_signature`, `amount`, `status`, `created_at`, `updated_at`) VALUES
 (5, 125, 2, 'order_RGhjK4UQ1Y74J6', 'pay_RGhjYEH2AIciYB', 'b10c386595bd4abe22ba5ed813e8ae56df3463c70d69c12828717c7758fdc7dc', 299.00, 'paid', '2025-09-12 07:49:41', '2025-09-12 07:50:06'),
 (11, 132, 2, 'order_RGxSGJz6irefJ3', 'pay_RGxSL4b1ykqrlg', '344bbd01b9e16a5c1b0687e1d5a75a0f942de6c78e4e5fa9ca3abde739b9f4d5', 299.00, 'paid', '2025-09-12 23:12:37', '2025-09-12 23:12:55'),
-(14, 135, 2, 'order_RH5fNrpJAZlzXn', 'pay_RH5fTFZAPnuTuy', '77cdbe8964fd6868fd393a54585faec08e42e30d9ff9938c83b3bb44ea8356ed', 299.00, 'paid', '2025-09-13 07:14:35', '2025-09-13 07:14:55');
+(14, 135, 2, 'order_RH5fNrpJAZlzXn', 'pay_RH5fTFZAPnuTuy', '77cdbe8964fd6868fd393a54585faec08e42e30d9ff9938c83b3bb44ea8356ed', 299.00, 'paid', '2025-09-13 07:14:35', '2025-09-13 07:14:55'),
+(15, 136, 2, 'order_RHP34ViUjhGZmq', 'pay_RHP3IhNwxGhfnH', '461c56c59b7528375410c0155c76250cdf5ea1767f0e8700a07334a52853a2a3', 299.00, 'paid', '2025-09-14 02:12:12', '2025-09-14 02:12:37');
 
 -- --------------------------------------------------------
 
@@ -374,8 +375,7 @@ CREATE TABLE `properties` (
   `furnishing` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`furnishing`)),
   `possession_date` date DEFAULT NULL,
   `brokerage` int(11) NOT NULL DEFAULT 0,
-  `verification` enum('approved','pending') NOT NULL DEFAULT 'pending',
-  `status` int(11) NOT NULL DEFAULT 0,
+  `verification` enum('approved','pending','expired') NOT NULL DEFAULT 'pending',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -384,15 +384,16 @@ CREATE TABLE `properties` (
 -- Dumping data for table `properties`
 --
 
-INSERT INTO `properties` (`id`, `title`, `plan_id`, `start_date`, `end_date`, `slug`, `residence_types`, `property_types`, `category`, `furnish_types`, `sale_types`, `construction_types`, `rooms`, `bathrooms`, `user_id`, `builder_id`, `property_age`, `facings`, `city_id`, `area_id`, `description`, `keywords`, `location`, `rent`, `available`, `deposit`, `rera`, `year_build`, `total_area`, `towers`, `units`, `related_properties`, `amenities`, `furnishing`, `possession_date`, `brokerage`, `verification`, `status`, `created_at`, `updated_at`) VALUES
-(44, 'Shlok Heights', 3, NULL, NULL, 'shlok-heights', 'residential', 'studio', 'buy', 'unfurnished', 'resale', 'under', '[{\"id\":1,\"title\":\"4_bhk\",\"price\":\"7500000\",\"size\":\"1200\"},{\"id\":2,\"title\":\"5_bhk\",\"price\":\"9500000\",\"size\":\"1500\"}]', '[\"2_baths\",\"3_baths\"]', 2, 34, '6_years', '[\"north\",\"south\"]', 1, 1, 'Shlok Heights', '3 BHK Apartment', 'Mansarovar Road', NULL, NULL, NULL, '13', NULL, '13', NULL, NULL, '[\"51\",\"53\",\"55\"]', '[]', NULL, '2025-12-31', 1, 'approved', 1, '2025-01-06 05:12:07', '2025-09-13 08:07:23'),
-(57, 'Navami Funique', 2, NULL, NULL, 'navami-funique', 'residential', 'apartment', 'rent', 'unfurnished', 'new', 'under', '[{\"id\":1,\"title\":\"2_bhk\",\"price\":\"1500000\",\"size\":\"2000\"},{\"id\":2,\"title\":\"3_bhk\",\"price\":\"2500000\",\"size\":\"3000\"}]', '[]', 2, 43, '1_year', '[]', 1, 1, 'Shlok Heights', '3 BHK Apartment', 'Ahmedabad', NULL, NULL, NULL, NULL, NULL, NULL, 5, 300, '[]', '[]', NULL, NULL, 0, 'approved', 1, '2025-08-16 05:12:07', '2025-09-13 08:07:19'),
-(64, 'Om Elegance', 2, NULL, NULL, 'om-elegance', 'residential', 'apartment', 'buy', 'unfurnished', 'resale', 'under', '[{\"id\":1,\"title\":\"2_bhk\",\"price\":\"7500000\",\"size\":\"1200\"},{\"id\":2,\"title\":\"3_bhk\",\"price\":\"9500000\",\"size\":\"1500\"}]', '[\"2_baths\",\"3_baths\",\"4_baths\"]', 3, 42, '6_years', '[\"north\",\"south\"]', 1, 1, 'Shlok Heights', '3 BHK Apartment', 'Mansarovar Road', NULL, NULL, NULL, '13', NULL, '13', NULL, NULL, '[\"51\",\"53\",\"55\"]', '[]', NULL, '2025-12-31', 0, 'approved', 1, '2025-01-06 05:12:07', '2025-09-13 08:07:26'),
-(65, 'Swastik Marvella', 3, NULL, NULL, 'swastik-marvella', 'commercial', 'retail_shop', 'buy', 'fully_furnished', 'resale', 'under', '[{\"id\":1,\"title\":\"2_bhk\",\"price\":\"6350000\",\"size\":\"1200\"},{\"id\":2,\"title\":\"3_bhk\",\"price\":\"7810000\",\"size\":\"1500\"}]', '[\"3_baths\"]', 3, 34, '6_years', '[\"north\",\"south\"]', 1, 1, 'Shlok Heights', '3 BHK Apartment', 'Mansarovar Road', NULL, NULL, NULL, '13', NULL, '13', 5, 400, '[\"44\",\"57\",\"63\",\"64\",\"110\"]', '[\"gated_community\",\"lift\"]', NULL, '2025-12-31', 1, 'approved', 1, '2025-01-06 05:12:07', '2025-09-13 08:07:31'),
-(110, 'Nilyam Parmeshwar', 3, NULL, NULL, 'nilyam-parmeshwar', 'residential', 'plot', 'buy', 'unfurnished', 'resale', 'ready', '[{\"id\":1,\"title\":\"2_bhk\",\"price\":\"6500000\",\"size\":\"1200\"},{\"id\":2,\"title\":\"3_bhk\",\"price\":\"1200000\",\"size\":\"100\"},\r\n{\"id\":3,\"title\":\"4_bhk\",\"price\":\"9000000\",\"size\":\"1000\"}]', '[\"3_baths\"]', 1, 34, '5_years', '[\"east\"]', 1, 1, 'test 333', 'hellow', 'IOC Road', NULL, NULL, NULL, 'hellow 2', '2', '5800', 5, 300, '[\"44\"]', '[\"gated_community\",\"lift\",\"swimming_pool\",\"gym\",\"security\",\"parking\",\"gas_pipeline\",\"play_area\",\"waste_management\",\"surveillance\",\"fire\",\"electrification\",\"water\",\"jogging\"]', '[\"gated_community\",\"lift\",\"swimming_pool\",\"gym\",\"security\",\"parking\",\"gas_pipeline\",\"play_area\",\"waste_management\",\"surveillance\",\"fire\",\"electrification\",\"water\",\"jogging\"]', '2025-09-10', 1, 'approved', 1, '2025-09-04 01:12:44', '2025-09-13 08:07:10'),
-(125, 'Keerthi Royal Palms', 2, '2025-09-12', '2025-11-11', 'keerthi-royal-palms', 'residential', 'apartment', 'buy', 'unfurnished', 'new', 'under', '[{\"id\":1,\"title\":\"2_bhks\",\"price\":\"\"},{\"id\":2,\"title\":\"3_bhks\",\"price\":\"\"}]', '[\"3_bath\"]', 3, 43, '1_year', '[\"east\"]', 1, 19, 'test', '2 BHK', 'Electronic city', NULL, NULL, NULL, 'test', '1', '1', 1, 1, '[]', '[\"gated_community\"]', '[\"dining_table\"]', NULL, 1, 'approved', 1, '2025-09-12 07:49:40', '2025-09-13 08:29:30'),
-(132, 'Kalash Complex', 2, '2025-09-13', '2025-11-12', 'kalash-complex', 'commercial', 'showroom', 'buy', 'unfurnished', 'new', 'under', '[{\"id\":1,\"title\":\"2_bhks\",\"price\":\"\"},{\"id\":2,\"title\":\"3_bhks\",\"price\":\"\"}]', '[]', 3, 43, '1_year', '[\"east\"]', 1, 1, 'test', '2 BHK', 'Mansarovar road', NULL, NULL, NULL, 'test', '1', '1', 1, 1, '[]', '[\"gated_community\"]', '[\"dining_table\"]', NULL, 1, 'approved', 1, '2025-09-12 23:12:36', '2025-09-13 08:07:03'),
-(135, 'Ratilal', 2, '2025-09-13', '2025-11-12', 'ratilal', 'residential', 'apartment', 'buy', 'unfurnished', 'new', 'under', '[{\"id\":1,\"title\":\"2_bhk\",\"price\":\"2500000\"},{\"id\":2,\"title\":\"3_bhk\",\"price\":\"\"}]', '[]', 3, 43, '1_year', '[\"east\"]', 1, 1, 'test', '2 BHK', 'Mansarovar', NULL, NULL, NULL, 'test', '1', '1', 1, 1, '[]', '[\"gated_community\"]', '[\"dining_table\"]', NULL, 1, 'approved', 0, '2025-09-13 07:14:33', '2025-09-13 08:27:51');
+INSERT INTO `properties` (`id`, `title`, `plan_id`, `start_date`, `end_date`, `slug`, `residence_types`, `property_types`, `category`, `furnish_types`, `sale_types`, `construction_types`, `rooms`, `bathrooms`, `user_id`, `builder_id`, `property_age`, `facings`, `city_id`, `area_id`, `description`, `keywords`, `location`, `rent`, `available`, `deposit`, `rera`, `year_build`, `total_area`, `towers`, `units`, `related_properties`, `amenities`, `furnishing`, `possession_date`, `brokerage`, `verification`, `created_at`, `updated_at`) VALUES
+(44, 'Shlok Heights', 3, NULL, NULL, 'shlok-heights', 'residential', 'studio', 'buy', 'unfurnished', 'resale', 'under', '[{\"id\":1,\"title\":\"4_bhk\",\"price\":\"7500000\",\"size\":\"1200\"},{\"id\":2,\"title\":\"5_bhk\",\"price\":\"9500000\",\"size\":\"1500\"}]', '[\"2_baths\",\"3_baths\"]', 2, 34, '6_years', '[\"north\",\"south\"]', 1, 1, 'Shlok Heights', '3 BHK Apartment', 'Mansarovar Road', NULL, NULL, NULL, '13', NULL, '13', NULL, NULL, '[\"51\",\"53\",\"55\"]', '[]', NULL, '2025-12-31', 1, 'approved', '2025-01-06 05:12:07', '2025-09-14 01:59:48'),
+(57, 'Navami Funique', 2, NULL, NULL, 'navami-funique', 'residential', 'apartment', 'rent', 'unfurnished', 'new', 'under', '[{\"id\":1,\"title\":\"2_bhk\",\"price\":\"1500000\",\"size\":\"2000\"},{\"id\":2,\"title\":\"3_bhk\",\"price\":\"2500000\",\"size\":\"3000\"}]', '[]', 2, 43, '1_year', '[]', 1, 1, 'Shlok Heights', '3 BHK Apartment', 'Ahmedabad', NULL, NULL, NULL, NULL, NULL, NULL, 5, 300, '[]', '[]', NULL, NULL, 0, 'approved', '2025-08-16 05:12:07', '2025-09-14 02:08:50'),
+(64, 'Om Elegance', 2, NULL, NULL, 'om-elegance', 'residential', 'apartment', 'buy', 'unfurnished', 'resale', 'under', '[{\"id\":1,\"title\":\"2_bhk\",\"price\":\"7500000\",\"size\":\"1200\"},{\"id\":2,\"title\":\"3_bhk\",\"price\":\"9500000\",\"size\":\"1500\"}]', '[\"2_baths\",\"3_baths\",\"4_baths\"]', 3, 42, '6_years', '[\"north\",\"south\"]', 1, 1, 'Shlok Heights', '3 BHK Apartment', 'Mansarovar Road', NULL, NULL, NULL, '13', NULL, '13', NULL, NULL, '[\"51\",\"53\",\"55\"]', '[]', NULL, '2025-12-31', 0, 'approved', '2025-01-06 05:12:07', '2025-09-14 02:10:44'),
+(65, 'Swastik Marvella', 3, NULL, NULL, 'swastik-marvella', 'commercial', 'retail_shop', 'buy', 'fully_furnished', 'resale', 'under', '[{\"id\":1,\"title\":\"2_bhk\",\"price\":\"6350000\",\"size\":\"1200\"},{\"id\":2,\"title\":\"3_bhk\",\"price\":\"7810000\",\"size\":\"1500\"}]', '[\"3_baths\"]', 3, 34, '6_years', '[\"north\",\"south\"]', 1, 1, 'Shlok Heights', '3 BHK Apartment', 'Mansarovar Road', NULL, NULL, NULL, '13', NULL, '13', 5, 400, '[\"44\",\"57\",\"63\",\"64\",\"110\"]', '[\"gated_community\",\"lift\"]', NULL, '2025-12-31', 1, 'approved', '2025-01-06 05:12:07', '2025-09-14 01:26:37'),
+(110, 'Nilyam Parmeshwar', 3, NULL, NULL, 'nilyam-parmeshwar', 'residential', 'plot', 'buy', 'unfurnished', 'resale', 'ready', '[{\"id\":1,\"title\":\"2_bhk\",\"price\":\"6500000\",\"size\":\"1200\"},{\"id\":2,\"title\":\"3_bhk\",\"price\":\"1200000\",\"size\":\"100\"},\r\n{\"id\":3,\"title\":\"4_bhk\",\"price\":\"9000000\",\"size\":\"1000\"}]', '[\"3_baths\"]', 1, 34, '5_years', '[\"east\"]', 1, 1, 'test 333', 'hellow', 'IOC Road', NULL, NULL, NULL, 'hellow 2', '2', '5800', 5, 300, '[\"44\"]', '[\"gated_community\",\"lift\",\"swimming_pool\",\"gym\",\"security\",\"parking\",\"gas_pipeline\",\"play_area\",\"waste_management\",\"surveillance\",\"fire\",\"electrification\",\"water\",\"jogging\"]', '[\"gated_community\",\"lift\",\"swimming_pool\",\"gym\",\"security\",\"parking\",\"gas_pipeline\",\"play_area\",\"waste_management\",\"surveillance\",\"fire\",\"electrification\",\"water\",\"jogging\"]', '2025-09-10', 1, 'approved', '2025-09-04 01:12:44', '2025-09-13 08:07:10'),
+(125, 'Keerthi Royal Palms', 2, '2025-09-12', '2025-11-11', 'keerthi-royal-palms', 'residential', 'apartment', 'buy', 'unfurnished', 'new', 'under', '[{\"id\":1,\"title\":\"2_bhks\",\"price\":\"\"},{\"id\":2,\"title\":\"3_bhks\",\"price\":\"\"}]', '[\"3_bath\"]', 3, 43, '1_year', '[\"east\"]', 1, 19, 'test', '2 BHK', 'Electronic city', NULL, NULL, NULL, 'test', '1', '1', 1, 1, '[]', '[\"gated_community\"]', '[\"dining_table\"]', NULL, 1, 'approved', '2025-09-12 07:49:40', '2025-09-14 02:10:44'),
+(132, 'Kalash Complex', 2, '2025-09-13', '2025-11-12', 'kalash-complex', 'commercial', 'showroom', 'buy', 'unfurnished', 'new', 'under', '[{\"id\":1,\"title\":\"2_bhks\",\"price\":\"\"},{\"id\":2,\"title\":\"3_bhks\",\"price\":\"\"}]', '[]', 3, 43, '1_year', '[\"east\"]', 1, 1, 'test', '2 BHK', 'Mansarovar road', NULL, NULL, NULL, 'test', '1', '1', 1, 1, '[]', '[\"gated_community\"]', '[\"dining_table\"]', NULL, 1, 'approved', '2025-09-12 23:12:36', '2025-09-14 02:10:44'),
+(135, 'Ratilal', 1, '2025-08-13', '2025-09-13', 'ratilal', 'residential', 'apartment', 'buy', 'unfurnished', 'new', 'under', '[{\"id\":1,\"title\":\"2_bhk\",\"price\":\"2500000\"},{\"id\":2,\"title\":\"3_bhk\",\"price\":\"\"}]', '[]', 3, 43, '1_year', '[\"east\"]', 1, 1, 'test', '2 BHK', 'Mansarovar', NULL, NULL, NULL, 'test', '1', '1', 1, 1, '[]', '[\"gated_community\"]', '[\"dining_table\"]', NULL, 1, 'pending', '2025-09-13 07:14:33', '2025-09-14 05:44:59'),
+(136, 'Ashok', 2, '2025-09-14', '2025-11-13', 'ashok', 'residential', 'apartment', 'buy', 'unfurnished', 'new', 'under', '[{\"id\":1,\"title\":\"2_bhk\",\"price\":\"2500000\"},{\"id\":2,\"title\":\"3_bhk\",\"price\":\"3500000\"}]', '[\"4_bath\"]', 3, 43, '1_year', '[\"east\"]', 1, 1, 'test', '2 bhk', 'Sindhi', NULL, NULL, NULL, 'test', '1', '1', 1, 1, '[]', '[\"gated_community\"]', '[\"dining_table\"]', NULL, 1, 'approved', '2025-09-14 02:12:09', '2025-09-14 02:15:03');
 
 -- --------------------------------------------------------
 
@@ -457,7 +458,8 @@ INSERT INTO `property_images` (`id`, `property_id`, `image`, `label`, `order`, `
 (1161, 110, 'ganesh-park_110_1757051106.pdf', NULL, NULL, '2025-09-05 00:15:06', '2025-09-09 04:35:19'),
 (1175, 125, 'keerthi-royal-palms_125_1757683180.JPG', 'Main', NULL, '2025-09-12 07:49:40', '2025-09-12 07:49:40'),
 (1181, 132, 'kalash-complex_132_1757738557.JPG', 'Video', NULL, '2025-09-12 23:12:36', '2025-09-12 23:12:37'),
-(1184, 135, 'ratilal_135_1757767473.JPG', 'Main', NULL, '2025-09-13 07:14:33', '2025-09-13 07:14:33');
+(1184, 135, 'ratilal_135_1757767473.JPG', 'Main', NULL, '2025-09-13 07:14:33', '2025-09-13 07:14:33'),
+(1185, 136, 'ashok_136_1757835729.JPG', 'Main', NULL, '2025-09-14 02:12:09', '2025-09-14 02:12:09');
 
 -- --------------------------------------------------------
 
@@ -622,7 +624,8 @@ INSERT INTO `temp_images` (`id`, `name`, `created_at`, `updated_at`) VALUES
 (434, '1757766700.JPG', '2025-09-13 07:01:40', '2025-09-13 07:01:40'),
 (435, '1757766747.JPG', '2025-09-13 07:02:27', '2025-09-13 07:02:27'),
 (436, '1757767028.JPG', '2025-09-13 07:07:08', '2025-09-13 07:07:08'),
-(437, '1757767467.JPG', '2025-09-13 07:14:27', '2025-09-13 07:14:27');
+(437, '1757767467.JPG', '2025-09-13 07:14:27', '2025-09-13 07:14:27'),
+(438, '1757835718.JPG', '2025-09-14 02:11:58', '2025-09-14 02:11:58');
 
 -- --------------------------------------------------------
 
@@ -652,9 +655,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `image`, `mobile`, `role`, `preferred_view`, `avatar_color`, `status`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Mukesh Bhavsar', 'mukeshbhavsar210@gmail.com', NULL, '$2y$12$Iy5Wh1TVAkCYAvaefrR71OEKD4QDjhnnWBxknqjwnioSSM6sAJMnO', '1-mukesh-bhavsar-1757149004.webp', '9978835005', 'Admin', 'table', NULL, 1, NULL, '2024-12-28 05:49:21', '2025-09-13 03:04:02'),
+(1, 'Mukesh Bhavsar', 'mukeshbhavsar210@gmail.com', NULL, '$2y$12$Iy5Wh1TVAkCYAvaefrR71OEKD4QDjhnnWBxknqjwnioSSM6sAJMnO', '1-mukesh-bhavsar-1757149004.webp', '9978835005', 'Admin', 'card', NULL, 1, NULL, '2024-12-28 05:49:21', '2025-09-14 00:12:53'),
 (2, 'Sona Bhavsar', 'sona@gmail.com', NULL, '$2y$12$Iy5Wh1TVAkCYAvaefrR71OEKD4QDjhnnWBxknqjwnioSSM6sAJMnO', '', '9978835005', 'User', 'card', NULL, 1, NULL, '2024-12-28 05:49:21', '2025-01-10 23:42:25'),
-(3, 'Dhruv Bhavsar', 'dhruvbhavsar210@gmail.com', NULL, '$2y$12$Iy5Wh1TVAkCYAvaefrR71OEKD4QDjhnnWBxknqjwnioSSM6sAJMnO', '3-dhruv-bhavsar-1757226175.JPG', '9916235005', 'Agent', 'card', NULL, 1, NULL, '2024-12-28 05:49:21', '2025-09-13 06:10:51'),
+(3, 'Dhruv Bhavsar', 'dhruvbhavsar210@gmail.com', NULL, '$2y$12$Iy5Wh1TVAkCYAvaefrR71OEKD4QDjhnnWBxknqjwnioSSM6sAJMnO', '3-dhruv-bhavsar-1757226175.JPG', '9916235005', 'Agent', 'card', NULL, 1, NULL, '2024-12-28 05:49:21', '2025-09-14 00:46:38'),
 (4, 'Gaurav', 'gaurav@gmail.com', NULL, '$2y$12$1SpADjHEpzBJ2OTXEQkwd.GNrM1Hrn.vGo7NyPsqXiaYBGTZwj3.C', '', '9978812345', 'Builder', 'card', '#33B5E5', 1, NULL, '2024-12-28 05:51:32', '2025-01-06 07:33:21'),
 (5, 'Priyanka', 'priyanka@gmail.com', NULL, '$2y$12$iQH/lmv1OmW/h8q3J6nlUOuL9A8uYw.4AQ1R2ruQckdV6u2l.eJZC', '5-priyanka-1757224247.JPG', '9913535005', 'Builder', 'card', NULL, 1, NULL, '2025-09-07 00:19:42', '2025-09-10 23:19:44');
 
@@ -861,7 +864,7 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
@@ -879,7 +882,7 @@ ALTER TABLE `plans`
 -- AUTO_INCREMENT for table `properties`
 --
 ALTER TABLE `properties`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=136;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=137;
 
 --
 -- AUTO_INCREMENT for table `property_applications`
@@ -891,7 +894,7 @@ ALTER TABLE `property_applications`
 -- AUTO_INCREMENT for table `property_images`
 --
 ALTER TABLE `property_images`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1185;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1186;
 
 --
 -- AUTO_INCREMENT for table `saved_properties`
@@ -903,7 +906,7 @@ ALTER TABLE `saved_properties`
 -- AUTO_INCREMENT for table `temp_images`
 --
 ALTER TABLE `temp_images`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=438;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=439;
 
 --
 -- AUTO_INCREMENT for table `users`

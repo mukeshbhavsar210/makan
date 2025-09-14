@@ -102,7 +102,7 @@
                 <div class="custom-checkbox-group required-group">
                     @foreach ($facings as $value => $label)
                         <label class="custom-checkbox">
-                            <input type="checkbox" class="facings" value="{{ $value }}" {{ in_array($value, $selectedFacings) ? 'checked' : '' }}>
+                            <input type="checkbox" class="facings" value="{{ $value }}">
                             <span class="btn-checkbox">{{ $label }}</span>
                         </label>
                     @endforeach
