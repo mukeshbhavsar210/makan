@@ -23,7 +23,6 @@
             if (empty($selectedRooms)) {
                 $selectedRooms = [
                     ['title' => '2_bhk', 'price' => '', 'size' => ''],
-                    ['title' => '3_bhk', 'price' => '', 'size' => ''],
                 ];
             }
 
@@ -60,7 +59,6 @@
             if (empty($selectedRooms)) {
                 $selectedRooms = [
                     ['title' => '2_bhk', 'price' => '', 'size' => ''],
-                    ['title' => '3_bhk', 'price' => '', 'size' => ''],
                 ];
             }
             $activeField = array_column($selectedRooms, 'title');

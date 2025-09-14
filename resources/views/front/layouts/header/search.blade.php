@@ -14,8 +14,7 @@
                         <path d="M16.6725 16.6412L21 21M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z" stroke="#0d6efd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                 </li>                
-                <li>           
-                                     
+                <li>                                                
                     @if($areaSelected)
                         <label class="custom-checkbox-label">{{ $areaSelected->name }}</label>
                     @endif                                          

@@ -1,16 +1,8 @@
 @extends('front.layouts.app')
-@section('hideHeader') @endsection
 @section('main')
 
-<div class="wrapper">
-<div class="container mt-5">
-    <ul class="breadcrumb">
-        <li><a href="{{ route('front.home') }}">Home</a></li>
-        <li><a href="http://127.0.0.1:8000/properties?city=1">{{ $property->city->name }}</a></li>
-        <li><a href="http://127.0.0.1:8000/properties?city=1&area=1">{{ $property->area->name }}</a></li>
-        <li>{{ $property->title }}</li>
-    </ul>
 
+<div class="container">
     <div class="property-individuals">
         @include('front.layouts.message')  
 
@@ -290,348 +282,348 @@
             </div>
         </div>
 
-        <div class="anchor-wrapper">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-9 col-12">
-                        <div class="card mb-4" id="overview" >
-                            <div class="card-body">
-                                <h3>Overview</h3>                            
-                                coming
-                            </div>                
-                        </div>
+    <div class="anchor-wrapper">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-9 col-12">
+                    <div class="card mb-4" id="overview" >
+                        <div class="card-body">
+                            <h3>Overview</h3>                            
+                            coming
+                        </div>                
+                    </div>
 
-                        <div class="card mb-4" id="highlights">
-                            <div class="card-body">
-                                <p>Property Location</p>
-                                {{ $property->location }}, {{ $areaSelected->name }}, {{ $citySelected->name }}.
-                            </div>                
-                        </div>
+                    <div class="card mb-4" id="highlights">
+                        <div class="card-body">
+                            <p>Property Location</p>
+                            {{ $property->location }},  {{ $property->area->name }}, {{ $property->city->name }}.
+                        </div>                
+                    </div>
 
-                        <div class="card mb-4" id="aroud-project">
-                            <h5 class="title">{{ $property->title }} Overview</h5>
-                            <div class="card-body">                            
-                                <div class="row">      
-                                    <div class="col-md-4 col-12">
-                                        <div class="details">
-                                            <div class="icon"></div>
-                                            <div class="text">
-                                                <p class="small-text">Sizes</p>
-                                                @php                                       
-                                                    $roomsArray = json_decode($property->rooms, true) ?? [];
-                                                @endphp
-
-                                                @if(!empty($roomsArray))
-                                                    @foreach($roomsArray as $room)
-                                                        {{ isset($room['size']) ? strtoupper(str_replace('_', ' ', $room['size'])) : '' }} -
-                                                    @endforeach
-                                                    sq.ft.
-                                                @endif     
-                                            </div>
-                                        </div>                                                                             
-                                    </div>
-
-                                    <div class="col-md-4 col-12">
-                                        <div class="details">
-                                            <div class="icon"></div>
-                                            <div class="text">
-                                                <p class="small-text">Project Size</p>                                        
-                                                5 Buildings - 699 units                                        
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-4 col-12">  
-                                        <div class="details">
-                                            <div class="icon"></div>
-                                            <div class="text">
-                                                <p class="small-text">Launch Date</p>                                 
-                                                @php
-                                                    $date = \Carbon\Carbon::parse($property->possession_date);
-                                                @endphp
-                                                {{ $date->year == now()->year ? $date->format('M, Y') : $date->format('M, Y') }}
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-4 col-12">
-                                        <div class="details">
-                                            <div class="icon"></div>
-                                            <div class="text">
-                                                <p class="small-text">Avg. Price</p>
-                                                @php
-                                                    $roomsArray = json_decode($property->rooms, true) ?? [];
-                                                    $totalPrice = 0;
-                                                    $totalSize  = 0;
-
-                                                    foreach ($roomsArray as $room) {
-                                                        $price = isset($room['price']) ? (float) $room['price'] : 0;
-                                                        $size  = isset($room['size']) ? (float) $room['size'] : 0;
-
-                                                        $totalPrice += $price;
-                                                        $totalSize  += $size;
-                                                    }
-
-                                                    $overallPricePerSqft = ($totalPrice > 0 && $totalSize > 0)
-                                                        ? round($totalPrice / $totalSize, 2)
-                                                        : 0;
-                                                @endphp
-
-                                                @if($overallPricePerSqft > 0)
-                                                    ₹{{ number_format($overallPricePerSqft) }}/sq.ft.
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-4 col-12">  
-                                        <div class="details">
-                                            <div class="icon"></div>
-                                            <div class="text">
-                                                <p class="small-text">Possession Starts</p>                                 
-                                                @php
-                                                    $date = \Carbon\Carbon::parse($property->possession_date);
-                                                @endphp
-                                                {{ $date->year == now()->year ? $date->format('M, Y') : $date->format('M, Y') }}
-                                            </div>
-                                        </div>
-                                    </div> 
-
-                                    <div class="col-md-4 col-12">
-                                        <div class="details">
-                                            <div class="icon"></div>
-                                            <div class="text">
-                                                <p class="small-text">Configurations</p>
-                                                @php                                       
-                                                    $roomsArray = json_decode($property->rooms, true) ?? [];
-                                                @endphp
-
-                                                @if(!empty($roomsArray))
-                                                    @foreach($roomsArray as $room)
-                                                        {{ isset($room['title']) ? preg_replace('/[^0-9]/', '', $room['title']) : '' }},
-                                                    @endforeach
-                                                @endif
-                                                BHK 
-                                                @php
-                                                    $types = json_decode($property->property_types, true) ?? [];
-                                                @endphp
-                                                {{ implode(', ', array_map('ucwords', $types)) }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>                
-                        </div>
-
-                        <div class="card mb-4" id="floor-plan">
-                            <h5 class="title">Price & Floor Plan</h5>
-
-                            <div class="card-body"> 
-                                 @php                                       
-                                    $roomsArray = json_decode($property->rooms, true) ?? [];
-                                    $propertyTypes = json_decode($property->property_types, true) ?? [];
-
-                                    $formatPrice = function ($price) {
-                                        if ($price >= 10000000) {
-                                            return number_format($price / 10000000, 1) . ' Cr';
-                                        } elseif ($price >= 100000) {
-                                            return number_format($price / 100000, 1) . ' Lacs';
-                                        } else {
-                                            return number_format($price);
-                                        }
-                                    };
-                                @endphp
-
-                                <ul class="nav nav-pills" id="pills-tab" role="tablist">
-                                    @if(!empty($roomsArray))
-                                        @foreach($roomsArray as $index => $room)
-                                            @php
-                                                $tabId = 'room-tab-'.$index;
-                                                $paneId = 'room-pane-'.$index;
+                    <div class="card mb-4" id="aroud-project">
+                        <h5 class="title">{{ $property->title }} Overview</h5>
+                        <div class="card-body">                            
+                            <div class="row">      
+                                <div class="col-md-4 col-12">
+                                    <div class="details">
+                                        <div class="icon"></div>
+                                        <div class="text">
+                                            <p class="small-text">Sizes</p>
+                                            @php                                       
+                                                $roomsArray = json_decode($property->rooms, true) ?? [];
                                             @endphp
 
-                                            <li class="nav-item" role="presentation">
-                                                <button class="nav-link {{ $loop->first ? 'active' : '' }}" id="{{ $tabId }}" data-bs-toggle="pill" 
-                                                    data-bs-target="#{{ $paneId }}" type="button" role="tab" aria-controls="{{ $paneId }}" aria-selected="{{ $loop->first ? 'true' : 'false' }}">
-                                                    {{ isset($room['title']) ? strtoupper(str_replace('_', ' ', $room['title'])) : '' }}
-                                                    @if(!empty($room['price']))
-                                                        <br>₹{{ $formatPrice($room['price']) }}
-                                                    @endif
-                                                </button>
-                                            </li>
-                                        @endforeach
-                                    @endif
-                                </ul>
-
-                                <div class="tab-content" id="roomTabContent">
-                                    @foreach($roomsArray as $index => $room)
-                                        @php $paneId = 'room-pane-'.$index; @endphp
-                                        <div class="tab-pane fade {{ $loop->first ? 'show active' : '' }}" id="{{ $paneId }}" role="tabpanel" aria-labelledby="room-tab-{{ $index }}">
-                                            <div class="room-item">
-                                                @if(!empty($room['size']))
-                                                    <p>{{ strtoupper(str_replace('_', ' ', $room['size'])) }} sq.ft.</p>
-                                                @endif
-
-                                                @if(!empty($room['price']))
-                                                    <p class="price">₹{{ $formatPrice($room['price']) }}</p>
-                                                @endif
-                                            </div>
+                                            @if(!empty($roomsArray))
+                                                @foreach($roomsArray as $room)
+                                                    {{ isset($room['size']) ? strtoupper(str_replace('_', ' ', $room['size'])) : '' }} -
+                                                @endforeach
+                                                sq.ft.
+                                            @endif     
                                         </div>
-                                    @endforeach
+                                    </div>                                                                             
                                 </div>
-                            </div>
-                        </div>
 
-                        <div class="card mb-4" id="floor-plan">
-                            <h5 class="title">Photos & Videos: Tour this project virtually</h5>
-
-                            <div class="card-body"> 
-                                <h6 class="mb-3">Project Tour & Photos</h6>
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        @if ($property->mainImage)
-                                            <a href="#" data-bs-toggle="modal" data-bs-target="#big-modal_{{ $property->id }}">
-                                                <img src="{{ asset('uploads/property/'.$property->mainImage->image) }}" alt="Main Image" width="100%" class="rounded" >
-                                            </a>                                            
-                                        @endif 
-
-                                        @include('front.home.results.modal')
+                                <div class="col-md-4 col-12">
+                                    <div class="details">
+                                        <div class="icon"></div>
+                                        <div class="text">
+                                            <p class="small-text">Project Size</p>                                        
+                                            5 Buildings - 699 units                                        
+                                        </div>
                                     </div>
+                                </div>
 
-                                    @foreach ($property->property_details_images->take(4) as $propertyImage)
-                                        <div class="col-md-3 position-relative">
-                                            <a href="#" data-bs-toggle="modal" data-bs-target="#big-modal_{{ $property->id }}">
-                                                <img src="{{ asset('uploads/property/'.$propertyImage->image) }}" alt="Image" width="100%" class="rounded">
-                                            </a>
-                                            
-                                            @if ($loop->last && $remaining > 0)
-                                                <div class="overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center bg-dark bg-opacity-50 text-white fw-bold fs-5">
-                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#big-modal_{{ $property->id }}">
-                                                        +{{ $remaining }} more
-                                                    </a>
-                                                </div>
+                                <div class="col-md-4 col-12">  
+                                    <div class="details">
+                                        <div class="icon"></div>
+                                        <div class="text">
+                                            <p class="small-text">Launch Date</p>                                 
+                                            @php
+                                                $date = \Carbon\Carbon::parse($property->possession_date);
+                                            @endphp
+                                            {{ $date->year == now()->year ? $date->format('M, Y') : $date->format('M, Y') }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4 col-12">
+                                    <div class="details">
+                                        <div class="icon"></div>
+                                        <div class="text">
+                                            <p class="small-text">Avg. Price</p>
+                                            @php
+                                                $roomsArray = json_decode($property->rooms, true) ?? [];
+                                                $totalPrice = 0;
+                                                $totalSize  = 0;
+
+                                                foreach ($roomsArray as $room) {
+                                                    $price = isset($room['price']) ? (float) $room['price'] : 0;
+                                                    $size  = isset($room['size']) ? (float) $room['size'] : 0;
+
+                                                    $totalPrice += $price;
+                                                    $totalSize  += $size;
+                                                }
+
+                                                $overallPricePerSqft = ($totalPrice > 0 && $totalSize > 0)
+                                                    ? round($totalPrice / $totalSize, 2)
+                                                    : 0;
+                                            @endphp
+
+                                            @if($overallPricePerSqft > 0)
+                                                ₹{{ number_format($overallPricePerSqft) }}/sq.ft.
                                             @endif
                                         </div>
-                                    @endforeach
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4 col-12">  
+                                    <div class="details">
+                                        <div class="icon"></div>
+                                        <div class="text">
+                                            <p class="small-text">Possession Starts</p>                                 
+                                            @php
+                                                $date = \Carbon\Carbon::parse($property->possession_date);
+                                            @endphp
+                                            {{ $date->year == now()->year ? $date->format('M, Y') : $date->format('M, Y') }}
+                                        </div>
+                                    </div>
+                                </div> 
+
+                                <div class="col-md-4 col-12">
+                                    <div class="details">
+                                        <div class="icon"></div>
+                                        <div class="text">
+                                            <p class="small-text">Configurations</p>
+                                            @php                                       
+                                                $roomsArray = json_decode($property->rooms, true) ?? [];
+                                            @endphp
+
+                                            @if(!empty($roomsArray))
+                                                @foreach($roomsArray as $room)
+                                                    {{ isset($room['title']) ? preg_replace('/[^0-9]/', '', $room['title']) : '' }},
+                                                @endforeach
+                                            @endif
+                                            BHK 
+                                            @php
+                                                $types = json_decode($property->property_types, true) ?? [];
+                                            @endphp
+                                            {{ implode(', ', array_map('ucwords', $types)) }}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+                        </div>                
+                    </div>
+
+                    <div class="card mb-4" id="floor-plan">
+                        <h5 class="title">Price & Floor Plan</h5>
+
+                        <div class="card-body"> 
+                                @php                                       
+                                $roomsArray = json_decode($property->rooms, true) ?? [];
+                                $propertyTypes = json_decode($property->property_types, true) ?? [];
+
+                                $formatPrice = function ($price) {
+                                    if ($price >= 10000000) {
+                                        return number_format($price / 10000000, 1) . ' Cr';
+                                    } elseif ($price >= 100000) {
+                                        return number_format($price / 100000, 1) . ' Lacs';
+                                    } else {
+                                        return number_format($price);
+                                    }
+                                };
+                            @endphp
+
+                            <ul class="nav nav-pills" id="pills-tab" role="tablist">
+                                @if(!empty($roomsArray))
+                                    @foreach($roomsArray as $index => $room)
+                                        @php
+                                            $tabId = 'room-tab-'.$index;
+                                            $paneId = 'room-pane-'.$index;
+                                        @endphp
+
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link {{ $loop->first ? 'active' : '' }}" id="{{ $tabId }}" data-bs-toggle="pill" 
+                                                data-bs-target="#{{ $paneId }}" type="button" role="tab" aria-controls="{{ $paneId }}" aria-selected="{{ $loop->first ? 'true' : 'false' }}">
+                                                {{ isset($room['title']) ? strtoupper(str_replace('_', ' ', $room['title'])) : '' }}
+                                                @if(!empty($room['price']))
+                                                    <br>₹{{ $formatPrice($room['price']) }}
+                                                @endif
+                                            </button>
+                                        </li>
+                                    @endforeach
+                                @endif
+                            </ul>
+
+                            <div class="tab-content" id="roomTabContent">
+                                @foreach($roomsArray as $index => $room)
+                                    @php $paneId = 'room-pane-'.$index; @endphp
+                                    <div class="tab-pane fade {{ $loop->first ? 'show active' : '' }}" id="{{ $paneId }}" role="tabpanel" aria-labelledby="room-tab-{{ $index }}">
+                                        <div class="room-item">
+                                            @if(!empty($room['size']))
+                                                <p>{{ strtoupper(str_replace('_', ' ', $room['size'])) }} sq.ft.</p>
+                                            @endif
+
+                                            @if(!empty($room['price']))
+                                                <p class="price">₹{{ $formatPrice($room['price']) }}</p>
+                                            @endif
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
                         </div>
+                    </div>
 
-                        <div class="card mb-4" id="amenities">
-                            <h5 class="title">Project Amenities</h5>
-                            <div class="card-body"> 
-                                @php
-                                    $amenitiesArray = json_decode($property->amenities, true) ?? [];
-                                @endphp
+                    <div class="card mb-4" id="floor-plan">
+                        <h5 class="title">Photos & Videos: Tour this project virtually</h5>
 
-                                @if(!empty($amenitiesArray))
-                                    <div class="row" id="amenities-wrapper">
-                                        @foreach($amenitiesArray as $index => $amenity)
-                                            <div class="col-md-2 mb-2 amenity-item {{ $index > 10 ? 'd-none extra-amenity' : '' }}">
-                                                <div class="amenities-data">
-                                                    <div class="icon"></div>
-                                                    {{ \Illuminate\Support\Str::limit(ucwords(str_replace('_', ' ', $amenity)), 15, '...') }}
-                                                </div>
-                                            </div>
-                                        @endforeach
+                        <div class="card-body"> 
+                            <h6 class="mb-3">Project Tour & Photos</h6>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    @if ($property->mainImage)
+                                        <a href="#" data-bs-toggle="modal" data-bs-target="#big-modal_{{ $property->id }}">
+                                            <img src="{{ asset('uploads/property/'.$property->mainImage->image) }}" alt="Main Image" width="100%" class="rounded" >
+                                        </a>                                            
+                                    @endif 
 
-                                        @if(count($amenitiesArray) > 11)
-                                            <div class="col-md-2 mb-2" id="show-more-box">
-                                                <div class="more-less">
-                                                    <a href="#" id="toggle-link">
-                                                        +{{ count($amenitiesArray) - 11 }}<br />More
-                                                    </a>
-                                                </div>
+                                    @include('front.home.results.modal')
+                                </div>
+
+                                @foreach ($property->property_details_images->take(4) as $propertyImage)
+                                    <div class="col-md-3 position-relative">
+                                        <a href="#" data-bs-toggle="modal" data-bs-target="#big-modal_{{ $property->id }}">
+                                            <img src="{{ asset('uploads/property/'.$propertyImage->image) }}" alt="Image" width="100%" class="rounded">
+                                        </a>
+                                        
+                                        @if ($loop->last && $remaining > 0)
+                                            <div class="overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center bg-dark bg-opacity-50 text-white fw-bold fs-5">
+                                                <a href="#" data-bs-toggle="modal" data-bs-target="#big-modal_{{ $property->id }}">
+                                                    +{{ $remaining }} more
+                                                </a>
                                             </div>
                                         @endif
                                     </div>
-                                @endif
+                                @endforeach
                             </div>
                         </div>
+                    </div>
 
-                        <div class="card mb-4" id="amenities">
-                            <h5 class="title">Contact Sellers</h5>
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-10 col-9">
-                                        <div class="developer-details">
-                                            @if ($property->builder && $property->builder->image)
-                                                <img src="{{ asset('uploads/developer/' . $property->builder->image) }}" class="logo" >
-                                                <div class="name">
-                                                    <p class="builder_name">{{ $property->builder->developer_name }}</p>
-                                                    <p class="mb-1">{{ $property->user->role }}</p>  
+                    <div class="card mb-4" id="amenities">
+                        <h5 class="title">Project Amenities</h5>
+                        <div class="card-body"> 
+                            @php
+                                $amenitiesArray = json_decode($property->amenities, true) ?? [];
+                            @endphp
 
-                                                     @php                                       
-                                                        $roomsArray = json_decode($property->rooms, true) ?? [];                                                        
-
-                                                        $formatPrice = function ($price) {
-                                                            if ($price >= 10000000) {
-                                                                return number_format($price / 10000000, 1) . ' Cr';
-                                                            } elseif ($price >= 100000) {
-                                                                return number_format($price / 100000, 1) . ' Lacs';
-                                                            } else {
-                                                                return number_format($price);
-                                                            }
-                                                        };
-                                                    @endphp
-
-                                                    @if(!empty($roomsArray))
-                                                        @foreach($roomsArray as $room)                                                            
-                                                            @if(!empty($room['price']))
-                                                                <b>₹ {{ $formatPrice($room['price']) }} -</b>
-                                                            @endif                                                            
-                                                        @endforeach
-                                                    @endif
-                                                </div>                                  
-                                            @else
-                                                <img src="{{ asset('admin-assets/img/default-150x150.png') }}" alt="" height="80" class="logo" />
-                                            @endif
+                            @if(!empty($amenitiesArray))
+                                <div class="row" id="amenities-wrapper">
+                                    @foreach($amenitiesArray as $index => $amenity)
+                                        <div class="col-md-2 mb-2 amenity-item {{ $index > 10 ? 'd-none extra-amenity' : '' }}">
+                                            <div class="amenities-data">
+                                                <div class="icon"></div>
+                                                {{ \Illuminate\Support\Str::limit(ucwords(str_replace('_', ' ', $amenity)), 15, '...') }}
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-2 col-3">
-                                        @if(Auth::check())
-                                            <a href="#" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#longModal_{{ $property->id }}">Contact</a>  
-                                        @else
-                                            <a href="http://127.0.0.1:8000/account/login" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-primary btn-sm">Contact</a>
-                                        @endif                                          
-                                    </div>
-                                </div>                                
-                            </div>
-                        </div>
+                                    @endforeach
 
-                        <div class="property-modal-developer">
-                            <div class="card">
-                                <div class="card-body">
-                                    <p>Contact Sellers in</p>
-                                    <div class="developer">
+                                    @if(count($amenitiesArray) > 11)
+                                        <div class="col-md-2 mb-2" id="show-more-box">
+                                            <div class="more-less">
+                                                <a href="#" id="toggle-link">
+                                                    +{{ count($amenitiesArray) - 11 }}<br />More
+                                                </a>
+                                            </div>
+                                        </div>
+                                    @endif
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+
+                    <div class="card mb-4" id="amenities">
+                        <h5 class="title">Contact Sellers</h5>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-10 col-9">
+                                    <div class="developer-details">
                                         @if ($property->builder && $property->builder->image)
-                                            <img src="{{ asset('uploads/builder/' . $property->builder->image) }}" class="logo" >
-                                            <p class="builder_name">{{ $property->builder->developer_name }}</p>
+                                            <img src="{{ asset('uploads/developer/' . $property->builder->image) }}" class="logo" >
+                                            <div class="name">
+                                                <p class="builder_name">{{ $property->builder->developer_name }}</p>
+                                                <p class="mb-1">{{ $property->user->role }}</p>  
+
+                                                    @php                                       
+                                                    $roomsArray = json_decode($property->rooms, true) ?? [];                                                        
+
+                                                    $formatPrice = function ($price) {
+                                                        if ($price >= 10000000) {
+                                                            return number_format($price / 10000000, 1) . ' Cr';
+                                                        } elseif ($price >= 100000) {
+                                                            return number_format($price / 100000, 1) . ' Lacs';
+                                                        } else {
+                                                            return number_format($price);
+                                                        }
+                                                    };
+                                                @endphp
+
+                                                @if(!empty($roomsArray))
+                                                    @foreach($roomsArray as $room)                                                            
+                                                        @if(!empty($room['price']))
+                                                            <b>₹ {{ $formatPrice($room['price']) }} -</b>
+                                                        @endif                                                            
+                                                    @endforeach
+                                                @endif
+                                            </div>                                  
                                         @else
                                             <img src="{{ asset('admin-assets/img/default-150x150.png') }}" alt="" height="80" class="logo" />
                                         @endif
                                     </div>
-                                    <div class="form">
-                                        <p class="small-font">Please share your contact</p>
-                                    </div>
                                 </div>
-                            </div>
-                            <div class="btm-text">
-                                <span>I agree to be contacted by Housing and agents via</span>, WhatsApp, SMS, phone, email etc</span>
-                                <button class="btn btn-primary">Get Contact Details</button>
-                            </div>
+                                <div class="col-md-2 col-3">
+                                    @if(Auth::check())
+                                        <a href="#" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#longModal_{{ $property->id }}">Contact</a>  
+                                    @else
+                                        <a href="http://127.0.0.1:8000/account/login" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-primary btn-sm">Contact</a>
+                                    @endif                                          
+                                </div>
+                            </div>                                
                         </div>
                     </div>
-                    <div class="col-md-3 col-12">1</div>
+
+                    <div class="property-modal-developer">
+                        <div class="card">
+                            <div class="card-body">
+                                <p>Contact Sellers in</p>
+                                <div class="developer">
+                                    @if ($property->builder && $property->builder->image)
+                                        <img src="{{ asset('uploads/builder/' . $property->builder->image) }}" class="logo" >
+                                        <p class="builder_name">{{ $property->builder->developer_name }}</p>
+                                    @else
+                                        <img src="{{ asset('admin-assets/img/default-150x150.png') }}" alt="" height="80" class="logo" />
+                                    @endif
+                                </div>
+                                <div class="form">
+                                    <p class="small-font">Please share your contact</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="btm-text">
+                            <span>I agree to be contacted by Housing and agents via</span>, WhatsApp, SMS, phone, email etc</span>
+                            <button class="btn btn-primary">Get Contact Details</button>
+                        </div>
+                    </div>
                 </div>
-                </div>
+                <div class="col-md-3 col-12">1</div>
+            </div>
             </div>
         </div>
+    </div>
 
-        <a href="#header" class="btn btn-primary">Top</a>
-        
-        {!! nl2br($property->description) !!}  
-    </div>    
+    <a href="#header" class="btn btn-primary">Top</a>
+    
+    {!! nl2br($property->description) !!}  
+</div>
 @endsection
 
 @section('customJs')

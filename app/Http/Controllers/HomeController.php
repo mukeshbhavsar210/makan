@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Property;
 use App\Models\City;
+use App\Models\Area;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Area;
 use Illuminate\Support\Facades\Mail;
 use App\Models\JobApplication;
 use App\Models\PropertyApplication;
@@ -73,20 +73,8 @@ class HomeController extends Controller {
                         END ASC
                     ")
                     ->orderBy('created_at', 'desc')->where('verification','approved');                            
-        $cities = City::where('status',1)->get();
-        $areas = Area::where('status',1)->get();    
-        $users = User::select('id', 'name', 'role')->get();                    
-        $cityId = $request->get('city');
-        $areaId = $request->get('area');        
-        $citySelected = $request->filled('city') ? City::where('slug', $request->city)->first() : null;
-        $areaSelected = $request->filled('area') ? Area::where('slug', $request->area)->first() : null;
-        $selectedAreas = $request->filled('area') ? Area::where('slug', $request->area)->first() : null;
-        $categoryWord = null;
-        $seenProperties = session('seen_properties', []); 
         
-        $city = null;
-        $areas = collect();
-        $area = null;
+        
 
         if ($request->filled('city')) {
             $city = \App\Models\City::where('slug', strtolower($request->city))->first();
@@ -95,14 +83,6 @@ class HomeController extends Controller {
         if ($request->filled('area')) {
             $areaSlugs = (array) $request->area;
             $areas = \App\Models\Area::whereIn('slug', array_map('strtolower', $areaSlugs))->get();
-        }
-
-        if ($cityId) {
-            $city = City::find($cityId);
-        }
-
-        if ($areaId) {
-            $area = Area::find($areaId);
         }
 
         //Filter using category               
@@ -280,17 +260,9 @@ class HomeController extends Controller {
             
         $data = [
             'properties' => $properties,   
-            'cities' => $cities,
-            'areas' => $areas,
-            'users' => $users,
-            'citySelected' => $citySelected,
-            'areaSelected' => $areaSelected,
-            'selectedAreas' => $selectedAreas,
-            'area' => $area,
-            'categoryWord' => $categoryWord,
             'savedPropertyIds' => $savedPropertyIds,
             'saveCount' => $saveCount,
-            'seenProperties' => $seenProperties,
+            
         ];        
 
         return view('front.home.results.listings', $data);
